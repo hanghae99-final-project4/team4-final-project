@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import axios from "axios";
 const MainPage = () => {
   const [message, setMessage] = useState("");
-
+  const messageSendHandler = () => {};
   const GetChats = async () => {
     try {
       const { data } = await axios.post("https://cheolsu.shop", "hi");
