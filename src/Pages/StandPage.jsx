@@ -1,5 +1,5 @@
 import React from "react";
-import StandPerson from "../Components/standSitdown/StandPerson";
+import StandPerson from "../Components/StandSitdown/StandPerson";
 import Header from "../Components/Header/Header";
 import Footer from "../Components/Footer/Footer";
 const StandPage = () => {
