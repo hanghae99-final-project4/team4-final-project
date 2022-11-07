@@ -10,4 +10,4 @@
 - 언어 및 프레임워크와 라이브러리 : 
 FE: React, Javascript, styled-component, tailwind
 BE: nodejs,Javascript,JWT,PASSPORT,mySQL,swagger,socketio
-# wyswhsl21
+
