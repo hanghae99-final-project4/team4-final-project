@@ -24,17 +24,19 @@ const Login3 = () => {
       <div>
         <div>하이하이</div>
         <article> 모범시민</article>
-        <button onClick={kakoLogin}>
-          <img src={Kakaologin} alt="kakao" />
-        </button>
-        <button>
-          <img src={NaverLogin} alt="naver" />
-        </button>
-        <button onClick={kakoLogin}>
-          <img src={Kakaologin} alt="kakao" />
-        </button>
-        {/* <button onClick={googleLogin}>구글 로그인</b?utton> */}
-        {/* <button onClick={naverLogin}>네이버 로그인</button> */}
+        <div className="flex flex-col">
+          <button onClick={kakoLogin}>
+            <img src={Kakaologin} alt="kakao" />
+          </button>
+          <button>
+            <img src={NaverLogin} alt="naver" className="w-[40px] h-[40px]" />
+          </button>
+          <button onClick={kakoLogin}>
+            <img src={Kakaologin} alt="kakao" />
+          </button>
+          {/* <button onClick={googleLogin}>구글 로그인</b?utton> */}
+          {/* <button onClick={naverLogin}>네이버 로그인</button> */}
+        </div>
       </div>
     </div>
   );
