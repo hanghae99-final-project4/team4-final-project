@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import ToggleSwitch from "./ToggleSwitch";
 
-const SitdownPerson = () => {
+const SitdownPerson = ({ isSit, setIsSit, isModal, setIsModal }) => {
+  console.log(isSit);
   return (
     <>
       <SitdownPage>
@@ -19,9 +20,11 @@ const SitdownPerson = () => {
           </ChattButtonDiv>
         </ChattingDiv>
         <ToggleSwitchDiv>
-          <ToggleSwitch />
+          <ToggleSwitch isSit={isSit} setIsSit={setIsSit} />
         </ToggleSwitchDiv>
-        <ShareDiv>나는 모범시민이기 때문에 자리를 공유하고 싶어요!</ShareDiv>
+        <ShareDiv onClick={() => setIsModal(!isModal)}>
+          나는 모범시민이기 때문에 자리를 공유하고 싶어요!
+        </ShareDiv>
         <ShareModalDiv>
           <StationDiv>해당역</StationDiv>
           <StationDiv>내리는 역</StationDiv>
@@ -92,6 +95,7 @@ const ShareDiv = styled.div`
   background-color: #0833d2;
   color: white;
   border-radius: 10px;
+  cursor: pointer;
 `;
 const ToggleSwitchDiv = styled.div`
   width: 300px;
