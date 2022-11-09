@@ -1,5 +1,41 @@
-import React from "react";
+import axios from "axios";
+import React, { useCallback, useRef } from "react";
 
+//섬네일
+// const SignUpthumbnail = () => {
+//     const inputRef = useRef < HTMLInputElement> | (null  null);
+
+//   //   const onUploadImage = useCallback(
+//   //     (e: React.ChangeEvent<HTMLInputElement>) => {
+//   //       if (!e.target.files) {
+//   //         return;
+//   //       }
+//   //       console.log(e.target.files[0].name);
+//   //     },
+//   //     []
+//   //   );
+
+//   const onUploadImageImageBtn = useCallback(() => {
+//     if (!inputRef.current) {
+//       return;
+//     }
+//     inputRef.current.click();
+//   }, []);
+
+//   return (
+//     <>
+//       <input
+//         type="file"
+//         name="thumbnail"
+//         ref={inputRef}
+//         onChange={onUploadImage}
+//       />
+//       <button label="이미지없로드" onClick={onUploadImageImageBtn} />
+//     </>
+//   );
+// };
+
+//회원가입
 const SignUp = () => {
   return (
     <>
@@ -14,7 +50,17 @@ const SignUp = () => {
                   for, id속성이 필요없어 */}
           {/* label이 button과 중처될 경우 input과 lingking이 되지 않음. */}
 
-          <input type="file" accept="image/*" />
+          {/* <SignUpthumbnail /> */}
+          <input
+            type="file"
+            name="thumbnail"
+            // ref={inputRef}
+            // onChange={onUploadImage}
+          />
+          <button
+            label="이미지없로드"
+            //   onClick={onUploadImageImageBtn}
+          />
         </div>
       </div>
     </>

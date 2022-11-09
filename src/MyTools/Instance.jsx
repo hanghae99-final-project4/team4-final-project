@@ -9,6 +9,6 @@ const instance = axios.create({
 
 export const retroApi = {
   post: (payload) => instance.post("/users", payload),
-  get: (payload) => instance.get("/users", payload),
+  get: (payload) => instance.get("/users"),
   delete: (payload) => instance.delete("/users"),
 };

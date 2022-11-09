@@ -1,19 +1,15 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  KAKAO_REDIRECT_URI,
-  KAKAO_REST_API_KEY,
-  KAKAO_CLIENT_SECRET,
-} from "./Login/KakaoLoginData";
+import { GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI } from "./Login/GoogleLoginData";
 import { Cookies } from "react-cookie";
 import axios from "axios";
 
-const KakaoLogin = () => {
+const GoogleLogin = () => {
   const location = useLocation();
   const navigate = useNavigate();
   //프론트에서 인가코드 받아서 서버에 넘겨줄 경우 -------
-  const KAKAO_CODE = location.search.split("=")[1];
-  console.log("인가코드:", KAKAO_CODE);
+  const GOOGLE_CODE = location.search.split("=")[1];
+  console.log("인가코드:", GOOGLE_CODE);
   const cookies = new Cookies();
   const token = cookies.get("token");
   //프론트에서 인가코드 받아서 서버에 넘겨줄 경우 -------
@@ -28,11 +24,11 @@ const KakaoLogin = () => {
   //   console.log(token);
 
   //token 저장
-  const getKakaoToken = async () => {
+  const getGoogleToken = async () => {
     //카카오에서 인가코드 받고 서버에 토큰 전달
     await axios
-      .post(
-        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&code=${KAKAO_CODE}`,
+      .get(
+        `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&client_id=${GOOGLE_CLIENT_ID}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -109,17 +105,15 @@ const KakaoLogin = () => {
 
   // useEffect(() => {
   //   if (!location.search) return;
-  //   getKakaoToken();
+  //   getGoogleToken();
   // }, []);
-
-  const getNaverToken = () => {};
 
   return (
     <>
-      <div>KakaoLogin</div>
-      <button onClick={() => getKakaoToken()}>토큰</button>
+      <div>GoogleLogin</div>
+      <button onClick={() => getGoogleToken()}>토큰</button>
     </>
   );
 };
 
-export default KakaoLogin;
+export default GoogleLogin;
