@@ -2,30 +2,59 @@ import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useState } from "react";
-//Ref 이나 그런거 미리 작성해놓기
+import useInput from "../../MyTools/Hooks/UseInput";
+//삼항연산자 엑박 안뜸 해보기 더미 넣기
+//보더값 주기
+
 const MyPage = () => {
-  const [img, setImg] = useState("");
+  const [files, setFiles] = useState([]);
+  const [check, setCheck] = useState(false);
   const [url, setUrl] = useState("");
+  const [form, OnChangeHandler, reset] = useInput([]);
+  console.log(files);
 
-  const imgSubmitHandler = () => {
+  async function imgSubmitHandler() {
     const formData = new FormData();
-    formData.append("file", img);
-
-    axios
-      .post("이미지 요청 주소", formData)
-      .then((res) => {
-        setImg(res.data.location);
-
-        alert("성공");
-      })
-      .catch((err) => {
-        alert("실패");
+    formData.append("profileImage", files);
+    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("gender", true);
+    formData.append("nickname", form.nickname);
+    formData.append("comments", form.comment);
+    for (var pair of formData.entries()) {
+      console.log(pair);
+    }
+    try {
+      const { data } = await axios.post("http://13.209.17.182/user", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-  };
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // .then((res) => {
+    //   setImg(res.data.location);
+
+    //   alert("성공");
+    // })
+    // .catch((err) => {
+    //   alert("실패");
+    // });
+  }
   const formSubmit = (e) => {
-    const img = e.target.files[0];
+    setFiles(e.target.files[0]);
     setUrl(URL.createObjectURL(e.target.files[0]));
   };
+  // 폼데이터를 객체로 한번에 보내주는거 만들기
+  // const formData = new FormData();
+  // formData.append("file", postPicture[0]);
+  // formData.append("postNickname", value.postNickname);
+  // formData.append("postGender", value.postGender);
+
+  console.log(url);
+  console.log(form);
 
   return (
     <Wrap>
@@ -40,20 +69,53 @@ const MyPage = () => {
         </div>
         <UploadImage
           type="file"
+          name="profile"
+          value={form.profile}
           accept="image/*"
+          multiple="multiple"
           id="img"
           onChange={formSubmit}
         ></UploadImage>
-        <button onClick={() => imgSubmitHandler()}>여기누르세요</button>
+        <button onClick={() => imgSubmitHandler()}>사진변경하기</button>
         <div className="information">
-          <div>닉네임</div>
-          <div>성별</div>
-          <input type="checkbox" name="남성" />
-          남성
-          <input type="checkbox" name="여성" />
-          여성
+          휴대전화 번호
+          <input
+            name="phoneNumber"
+            value={form.phoneNumber}
+            onChange={OnChangeHandler}
+          />
+          닉네임
+          <input
+            onChange={OnChangeHandler}
+            name="nickname"
+            value={form.nickname}
+          />
+          성별
+          <input
+            type="checkbox"
+            name="gender"
+            checked={check}
+            value={form.gender}
+            onChange={() => setCheck(true)}
+          />
+          여자
+          <input
+            type="checkbox"
+            name="gender"
+            checked={check}
+            value={form.gender}
+            onChange={() => setCheck(false)}
+          />
+          남자
           <br />
-          <textarea placeholder="Comment-plz">코멘트 적는 곳</textarea>
+          <textarea
+            placeholder="Comment-plz"
+            onChange={OnChangeHandler}
+            name="comment"
+            value={form.comment}
+          >
+            코멘트 적는 곳
+          </textarea>
         </div>
         {/* 폼데이터 객체로 한번에 보내줘야한다 */}
       </AttachPicture>
@@ -65,7 +127,6 @@ const MyPage = () => {
     </Wrap>
   );
 };
-
 const Wrap = styled.div`
   text-align: center;
   .logoutbox {
@@ -90,7 +151,7 @@ const AttachPicture = styled.div`
 `;
 
 const YellowBtn = styled.button`
-  text-align: center;
+  text-align: right;
   background: yellow;
   color: black;
   padding: 10px;
