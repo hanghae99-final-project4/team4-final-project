@@ -1,9 +1,37 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { NAVER_REDIRECT_URI } from "./Login/NaverLoginData";
-import { Cookies } from "react-cookie";
+import {
+  NAVER_CLIENT_SECRET,
+  NAVER_REDIRECT_URI,
+} from "./Login/NaverLoginData";
+import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
 
+// const NaverLoginBtn = () => {
+//   const code = new URL(window.location.href).searchParams.get("code"); // 현재 URL에서 코드만 추출
+//   const [cookies, setCookie] = useCookies();
+//   const navigate = useNavigate();
+
+//   // 컴포넌트가 마운트되면 로그인 로직 실행
+//   useEffect(() => {
+//     const NaverRedirect = async () => {
+//       const res = await axios.get(
+//         NAVER_REDIRECT_URI +
+//           `/api/member/login/naver?code=${code}&state=${NAVER_CLIENT_SECRET}`
+//       ); // 이 부분은 서버 API에 따라 바뀔 수 있으니 API 명세서를 잘 확인하세요.
+//       const ACCESS_TOKEN = res.headers["authorization"];
+//       const REFRESH_TOKEN = res.headers["refresh-token"];
+//       setCookie("accessToken", ACCESS_TOKEN);
+//       setCookie("refreshToken", REFRESH_TOKEN);
+//     };
+//     NaverRedirect();
+//     navigate("/", { replace: true }); // 로그인 완료시 메인으로 이동
+//   }, []);
+
+//   return;
+// };
+
+// export default NaverLoginBtn;
 const NaverLogin = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,14 +62,15 @@ const NaverLogin = () => {
   const getNaverToken = async () => {
     //네이버에서 인가코드 받고 서버에 토큰 전달
     await axios
-      .get(
-        `https://nid.naver.com/naverLogin?client_id=${NAVER_CLIENT_ID}&response_type=code&redirect_uri=${NAVER_REDIRECT_URI}&state=${NAVER_CLIENT_SECRET}`,
+      .post(
+        `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       )
+      .then((res) => res.json())
       .then((res) => {
         console.log(res);
         // if (res.data.access_token) {

@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 
 export const NAVER_CLIENT_ID = "dbKJcbdQXEBfwicqfW6z";
-export const NAVER_REDIRECT_URI = "http://localhost:3000/naverLogin";
+export const NAVER_REDIRECT_URI = "http://127.0.0.1:3000/auth/naver/callback";
 export const NAVER_CLIENT_SECRET = "f5wG2upOco";
 
 // const { naver } = window;
