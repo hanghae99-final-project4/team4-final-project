@@ -6,36 +6,6 @@ import BlankImg from "../Assets/Empty_img.jpg";
 // const SignUpthumbnail = () => {
 //     const inputRef = useRef
 
-//   //   const onUploadImage = useCallback(
-//   //     (e) => {
-//   //       if (!e.target.files) {
-//   //         return;
-//   //       }
-//   //       console.log(e.target.files[0].name);
-//   //     },
-//   //     []
-//   //   );
-
-//   const onUploadImageImageBtn = useCallback(() => {
-//     if (!inputRef.current) {
-//       return;
-//     }
-//     inputRef.current.click();
-//   }, []);
-
-//   return (
-//     <>
-//       <input
-//         type="file"
-//         name="thumbnail"
-//         ref={inputRef}
-//         onChange={onUploadImage}
-//       />
-//       <button label="이미지없로드" onClick={onUploadImageImageBtn} />
-//     </>
-//   );
-// };
-
 //회원가입
 const SignUp = () => {
   const [form, onChangeValue, reset] = useInput({
@@ -51,7 +21,7 @@ const SignUp = () => {
   //파일 미리볼 url을 저장해줄 state
   const [files, setFiles] = useState([]);
   const [check, setCheck] = useState(false);
-  const [url, setUrl] = useState("");
+  // const [url, setUrl] = useState("");
   // const [imageFile, setImageFile] = useState(null);
   const [fileImg, setFileImg] = useState([]);
 
@@ -132,7 +102,7 @@ const SignUp = () => {
   //이미지 파일 미리보기
   console.log(fileImg);
   const showImage = useMemo(() => {
-    if (!fileImg && fileImg == null) {
+    if (!fileImg && fileImg == "") {
       return <img src={BlankImg} alt="emptyProfile" />;
     }
     //db에
