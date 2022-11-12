@@ -15,7 +15,7 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login3 />} />
-        <Route path="/kakaoLogin" element={<KakaoLogin />} />
+        <Route path="/auth/kakao/callback" element={<KakaoLogin />} />
         <Route path="/googleLogin" element={<GoogleLogin />} />
         <Route path="/auth/naver/callback" element={<NaverLogin />} />
         {/* <Route path="/naverLogin" element={<NaverLoginBtn />} /> */}

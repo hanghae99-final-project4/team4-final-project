@@ -90,8 +90,8 @@ const SignUp = () => {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => alert("접속!"))
+      .catch((err) => alert("접속불가!"));
   };
   //---------------------------------------
   const onClickFilesInput = (e) => {

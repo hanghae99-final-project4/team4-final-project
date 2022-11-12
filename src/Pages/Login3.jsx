@@ -13,7 +13,7 @@ import {
 import { Link } from "react-router-dom";
 // import { NaverLogin } from "react-naver-login";
 const Login3 = () => {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
   // const KAKAO_AUTH_URL = `https://kauth.kakao.com/kakaoLogin`;
   // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&scope=openid%20profile%20email&redirect_uri=${GOOGLE_REDIRECT_URI}`;
   const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&client_id=${GOOGLE_CLIENT_ID}`;
@@ -25,6 +25,11 @@ const Login3 = () => {
 
   const googleLogin = () => {
     window.location.href = GOOGLE_AUTH_URL;
+    // if (token) {
+    //   window.location.href('/')
+    // }else{
+    // alert("로그인!")
+    // }
   };
 
   const naverLogin = () => {
