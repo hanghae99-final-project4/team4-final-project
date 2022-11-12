@@ -53,7 +53,7 @@ import { trainApi } from "../MyTools/Instance";
 //     `http://15.164.250.6:3000/oauth/token?code=${KAKAO_CODE}`,
 //     {
 //       headers: {
-//         "Content-Type": "application/x-www-form-urlencoded",
+//         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"",
 //       },
 //     }
 //   )
