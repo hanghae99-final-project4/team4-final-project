@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   NAVER_CLIENT_SECRET,
   NAVER_REDIRECT_URI,
-} from "./Login/NaverLoginData";
+} from "./LoginData/NaverLoginData";
 import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
 
@@ -46,6 +46,7 @@ const NaverLogin = () => {
   console.log("인가코드:", NAVER_CLIENT_ID, "시크릿코드", NAVER_CLIENT_SECRET);
   const cookies = new Cookies();
   const token = cookies.get("token");
+
   //프론트에서 인가코드 받아서 서버에 넘겨줄 경우 -------
 
   //서버에서 인가코드 받고 토큰 프론트로 넘겨줄 경우-------

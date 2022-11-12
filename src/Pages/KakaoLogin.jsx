@@ -4,7 +4,7 @@ import {
   KAKAO_REDIRECT_URI,
   KAKAO_REST_API_KEY,
   KAKAO_CLIENT_SECRET,
-} from "./Login/KakaoLoginData";
+} from "./LoginData/KakaoLoginData";
 import { Cookies, useCookies } from "react-cookie";
 import axios from "axios";
 import { trainApi } from "../MyTools/Instance";
@@ -115,8 +115,7 @@ const KakaoLogin = () => {
   const navigate = useNavigate();
   const [tokens, setTokens, removeCookie] = useCookies(["token"]);
 
-  const getKakaoToken = async (e) => {
-    e.preventDefault();
+  const getKakaoToken = async () => {
     // console.log(token);
     // await axios
     //   .get("http://http://15.164.250.6:3000/auth/kakao/callback", {

@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Kakaologin from "../Assets/Kakao_login.png";
 import NaverLoginimg from "../Assets/Naver_login_long.png";
 import GoogleLogin from "../Assets/Google_login_long.png";
-import { KAKAO_REDIRECT_URI, KAKAO_REST_API_KEY } from "./Login/KakaoLoginData";
-import { GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI } from "./Login/GoogleLoginData";
+import {
+  KAKAO_REDIRECT_URI,
+  KAKAO_REST_API_KEY,
+} from "./LoginData/KakaoLoginData";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_REDIRECT_URI,
+} from "./LoginData/GoogleLoginData";
 import {
   NAVER_CLIENT_ID,
   NAVER_REDIRECT_URI,
   NAVER_CLIENT_SECRET,
-} from "./Login/NaverLoginData";
+} from "./LoginData/NaverLoginData";
 import { Link } from "react-router-dom";
+
 // import { NaverLogin } from "react-naver-login";
 const Login3 = () => {
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
@@ -39,13 +46,25 @@ const Login3 = () => {
   // const naverLogin = () => {
   //     window.location.href = NAVER_AUTH_URL;
   //   };
+  //네이버로그인버튼 커스텀
+  // useEffect(() => {
+  //   initNaverLoginBtn();
+  // }, []);
+
+  // const initializeNaverLogin = () => {
+  //   const naverLoginBtn = new naver.LoginWithNaverId();
+  //   ({
+  //     loginButton: { color: "green", type: 1, height: 50 },
+  //   });
+  //   naverLoginBtn.init();
+  // };
 
   return (
     <Login className="flex flex-col justify-center items-center">
       <div className="w-[500px] bg-black flex items-center">
         <div>하이하이</div>
         <article>
-          <p>모범시민</p>
+          <p>환승시민</p>
           <div className="flex flex-col">
             <div>
               <button onClick={kakoLogin}>
@@ -53,7 +72,7 @@ const Login3 = () => {
               </button>
             </div>
             <div>
-              <Link to={NAVER_REDIRECT_URI}>
+              {/* <Link to={NAVER_REDIRECT_URI}>
                 <button onClick={naverLogin} className=" h-[45px]">
                   <img
                     src={NaverLoginimg}
@@ -61,7 +80,8 @@ const Login3 = () => {
                     className="w-[100%] h-[100%]"
                   />
                 </button>
-              </Link>
+              </Link> */}
+              <button id="naverIdLogin"></button>
               {/* <NaverLogin></NaverLogin> */}
               <button onClick={googleLogin} className="w-[300px]">
                 <img
@@ -72,7 +92,7 @@ const Login3 = () => {
               </button>
             </div>
             {/* <button onClick={googleLogin}>구글 로그인</b?utton> */}
-            {/* <button onClick={naverLogin}>네이버 로그인</button> */}
+            <button onClick={naverLogin}>네이버 로그인</button>
           </div>
         </article>
       </div>

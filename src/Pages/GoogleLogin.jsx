@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI } from "./Login/GoogleLoginData";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_REDIRECT_URI,
+} from "./LoginData/GoogleLoginData";
 import { Cookies } from "react-cookie";
 import axios from "axios";
 
