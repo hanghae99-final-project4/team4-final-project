@@ -1,2 +1,3 @@
-export const GOOGLE_CLIENT_ID = "4d9db3bef0e669fddbc092a4c8e5931f";
-export const GOOGLE_REDIRECT_URI = "http://localhost:3000/auth/kakao/callback";
+export const GOOGLE_CLIENT_ID = "tfirsuat10l3gd3g970b25hkooek9cfd";
+export const GOOGLE_REDIRECT_URI =
+  "http://15.164.250.6:3000/auth/kakao/callback";

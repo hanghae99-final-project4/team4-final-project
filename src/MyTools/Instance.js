@@ -1,22 +1,23 @@
 import axios from "axios";
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const token = document.cookie.replace("token=", "");
-const accesstoken = token && jwt_decode(token);
+const accesstoken = token && jwtDecode(token);
 const id = accesstoken.userId;
 
 //instance 쓸 때는 headers값 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 const instance = axios.create({
-  baseURL: "https://overcalm.shop/",
+  baseURL: "http://15.164.250.6:3000//auth/kakao/callback",
+  // baseURL: "http://localhost:3000",
   headers: {
     Authorization: `Bearer ${token}`,
   },
 });
 
 export const trainApi = {
-  postSignUps: (payload) => instance.post("/signup", payload),
-  // postLogin: (payload) => instance.post("/auth/kakao/callback", payload),
+  getLogin: (payload) => instance.get("/auth/kakao/callback"),
+  // postSignUps: (payload) => instance.post("/signup", payload),
   // mypage: (payload) => instance.get(`/mypages/${id}`),
   // personal: (payload) => instance.put(`/mypages/${id}/edit`, payload),
 

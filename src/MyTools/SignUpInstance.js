@@ -1,13 +1,14 @@
 import axios from "axios";
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const token = document.cookie.replace("token=", "");
-const accesstoken = token && jwt_decode(token);
+const accesstoken = token && jwtDecode(token);
 const id = accesstoken.userId;
 
 //instance 쓸 때는 headers값 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 const instance = axios.create({
+  //추가입력 정보는 일단 로컬로만
   baseURL: "http://13.209.17.182/",
   headers: {
     Authorization: `Bearer ${token}`,
