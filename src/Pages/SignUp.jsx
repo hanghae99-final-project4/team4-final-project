@@ -1,5 +1,7 @@
 import axios from "axios";
+import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInput";
 import BlankImg from "../Assets/Empty_img.jpg";
 //섬네일
@@ -102,7 +104,7 @@ const SignUp = () => {
   //이미지 파일 미리보기
   console.log(fileImg);
   const showImage = useMemo(() => {
-    if (!fileImg && fileImg == "") {
+    if (!fileImg && fileImg === "") {
       return <img src={BlankImg} alt="emptyProfile" />;
     }
     //db에

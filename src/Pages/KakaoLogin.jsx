@@ -1,154 +1,130 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  KAKAO_REDIRECT_URI,
-  KAKAO_REST_API_KEY,
-  KAKAO_CLIENT_SECRET,
-} from "./LoginData/KakaoLoginData";
-import { Cookies, useCookies } from "react-cookie";
+import React from "react";
 import axios from "axios";
+import { useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { trainApi } from "../MyTools/Instance";
-// import jwtDecode from "jwt-decode";
+import { Cookies, useCookies } from "react-cookie";
+import jwtDecode from "jwt-decode";
 
 const KakaoLogin = () => {
-  //instance 안 쓴다면 각 페이지별로 적어줘야함.
+  const navigator = useNavigate();
+  const cookies = new Cookies();
+  const [tokens, setTokens] = useCookies(["token"]);
   // const token = document.cookie.replace("token=", "");
   // const accesstoken = token && jwtDecode(token);
-  // const id = accesstoken.userId;
-  //---------------------------------------
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  // 프론트에서 인가코드 받아서 서버에 넘겨줄 경우 -------
-  const KAKAO_CODE = location.search.split("=")[1];
-  console.log("인가코드:", KAKAO_CODE);
-  // const KAKAO_CODE = new URL(window.location.href).searchParams.get("code");
-  // console.log(KAKAO_CLIENT_ID);
-  // console.log("인가코드",KAKAO_CODE);
-  //------------------------------------------------------
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-  //프론트에서 인가코드 받아서 서버에 넘겨줄 경우 -------
-
-  // const cookies = new Cookies();
-  // const token = cookies.get("token");
-  // console.log(token);
-  // const headers = {
-  //   Authorization: `${token}`,
+  // const setCookie = (name, value, option) => {
+  //   return cookies.set(name, value, { ...option });
   // };
-  // console.log(headers);
-  //   console.log(token);
-
-  //token 저장
-  const getKakaoToken = async () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    //   const headers = {
-    //     Authorization: `Bearer ${token}`,
-    //   };
-    //카카오에서 인가코드 받고 서버에 토큰 전달
-    await axios
-      .post(
-        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&code=${KAKAO_CODE}`,
-        // `http://15.164.250.6:3000/oauth/token?code=${KAKAO_CODE}`,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        // if (res.data.access_token) {
-        //   cookies.set("token", res.data.access_token);
-        //   // cookies.set("userId",res.data.userId);
-        //   alert("접속하셨습니다.");
-        //   window.loacation.replace("/");
-        // }
-        // console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("접속에 실패하셨습니다");
-        // navigate("/");
-      });
-
-    //서버에서 프론트로 토큰 전달해줄 때
-    // const getKakaoToken = async () => {
-    //   console.log("1");
-    // const headers = {
-    //   "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    // };
-
-    // const headers = {
-    //   Authorization: `${token}`,
-    // };
-    // const body = {
-    //   body: `grant_type=authorization_code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&code=${KAKAO_CODE}`,
-    // };
-    //카카오에서 인가코드 받고 서버에 토큰 전달
-    // headers: {
-    //   Authorization: `Bearer ${kakaoToken}`,
-    // },
-    // await axios
-    //   .get("http://15.164.250.6:3000/auth/kakao", {
-    //     // headers,
-    //     headers: {
-    //       //   // "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     // if (data.data.access_token) {
-    //     //   cookies.set("token", data.data.access_token);
-    //     //   alert("접속하셨습니다.");
-    //     // navigate("/");
-    //     // }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // };
-    // const KakaoLogin = () => {
-    //   const location = useLocation();
-    //   const navigate = useNavigate();
-    //   const [tokens, setTokens, removeCookie] = useCookies(["token"]);
-
-    //   const getKakaoToken = async () => {
-    //     // console.log(token);
-    //     // await axios
-    //     //   .get("https://overcalm.shop/auth/kakao/callback", {
-    //     await trainApi
-    //       // .postLogin({})
-    //       .getLogin()
-    //       .then((res) => {
-    //         console.log(res);
-    //         if (res.data.access_token) {
-    //           setTokens("token", res.data.accessToken);
-    //           setTokens("userId", res.data.userId);
-    //           // cookies.set("token", res.data.access_token);
-    //           alert("로그인이 되셨습니다.");
-    //           // navigate("/main");
-    //         }
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //         alert("다시 로그인 해 주셔유.");
-    //       });
-  };
 
   // useEffect(() => {
-  //   if (!location.search) return;
-  //   getKakaoToken();
+  //   setCookie("jwtToken", 123);
+  // }, []);
+  //   const accesstoken = token && jwtDecode(token);
+  //   const id = accesstoken.userId;
+
+  // useEffect(() => {
+  // 인가코드 확인하기
+  const code = new URL(window.location.href).searchParams.get("code");
+  console.log("인가코드", code);
+
+  //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
+  // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
+  //이중 axios or 연속 axios
+  //   console.log(1);
+  //   try {
+  //     console.log(1);
+  // useEffect(() => {
+  //   // cookies.set("token", 1);
+  //   setCookie("token", 1);
   // }, []);
 
-  return (
-    <>
-      <div>KakaoLogin</div>
-      <button onClick={() => getKakaoToken()}>토큰</button>
-    </>
-  );
+  // useEffect(() => {
+  //   getToken();
+  // }, []);
+
+  // const getToken = async () => {
+  //   try {
+  //     const data = await axios.get(
+  //       `http://15.164.250.6:3000/auth/kakao/callback?code=${code}`
+  //     );
+  //     console.log(data);
+  //     console.log(data.data);
+  //     console.log(data.data.jwtToken);
+  //     setCookie("token", 1);
+  //     setCookie("tok32132en", 14324324);
+  //     setCookie("to", data.data.jwtToken);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  // setCookie("123", 123);
+  axios
+    .get(
+      `http://15.164.250.6:3000/auth/kakao/callback?code=${code}`
+
+      //       {
+      //   headers: {
+      //     Authorization: `${token}`,
+      //   },
+      // }
+    )
+    .then((res) => {
+      console.log(res);
+      console.log(res.data);
+      console.log(res.data.jwtToken);
+      // console.log(accesstoken);
+
+      // const setCookie = (name, value, option) => {
+      //   return cookies.set(name, value, { ...option });
+      // };
+
+      const token = res.data.jwtToken;
+      // const accessToken = res.data.jwtToken;
+      // localStorage.setItem("token", token);
+      setTokens("token", token);
+      // setCookie("token", token);
+
+      // setCookie("token", accessToken);
+      // console.log(accessToken);
+      // cookies.set("token", accessToken);
+      // console.log(accessToken);
+      // if (res.data.accessToken) {
+      // cookies.set("token", res.data.accessToken);
+      // cookies.set("userId",res.data.userId);
+
+      // }
+      //   console.log(accessToken);
+      //   //refresh 토큰할 시,
+      //   //const refreshToken = res.data.refrush_Token
+      //   // if (accessToken) {
+
+      alert("로그인!");
+      window.location.replace("/main");
+      // } else {
+      //   return <></>;
+      // }
+      //     //     // window.location.replace("/main");
+      //     //     //     } else {
+      //     //     //       alert("로그인 실패");
+      //     //     //     }
+      //     //     //   ? window.location.replace("/main")
+      //     //     //   : alert("로그인 실패");
+
+      //     //     //   refresh토큰 오면
+      //     //     //   cookies.set('reToken', refreshToken)
+      //     //   })
+      //     //   // );
+      //     //   .catch((err) => {
+      //     //     console.log(err);
+    });
+  //refresh 토큰 시
+  //   const refreshToken = cookies.set('token', refreshToken);
+  // trainApi.postRetoken({refreshToken}).then((res)=> {
+  //   console.log(res)  });
+
+  //   navigator("/main")
+  // }, []);
+  return <div>빠른로딩중..</div>;
 };
 
 export default KakaoLogin;

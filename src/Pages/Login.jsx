@@ -4,27 +4,32 @@ import Kakaologin from "../Assets/Kakao_login.png";
 import NaverLoginimg from "../Assets/Naver_login_long.png";
 import data_naver from "../Assets/data_naver.svg";
 import GoogleLogin from "../Assets/Google_login_long.png";
-import {
-  KAKAO_REDIRECT_URI,
-  KAKAO_REST_API_KEY,
-} from "./LoginData/KakaoLoginData";
+// import {
+//   KAKAO_REDIRECT_URI,
+//   KAKAO_REST_API_KEY,
+// } from "./LoginData/KakaoLoginData";
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_REDIRECT_URI,
-} from "./LoginData/GoogleLoginData";
+} from "../Components/IntroMain/Oauth";
 import {
   NAVER_CLIENT_ID,
   NAVER_REDIRECT_URI,
   NAVER_CLIENT_SECRET,
-} from "./LoginData/NaverLoginData";
+} from "../Components/IntroMain/Oauth";
 import { Link } from "react-router-dom";
+import { KAKAO_CALLBACK_URL } from "../Components/IntroMain/Oauth";
+import { KAKAO_KEY } from "../Components/IntroMain/Oauth";
 
 // import { NaverLogin } from "react-naver-login";
-const Login3 = () => {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+const Login = () => {
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${KAKAO_CALLBACK_URL}&response_type=code`;
+  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
   // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&scope=openid%20profile%20email&redirect_uri=${GOOGLE_REDIRECT_URI}`;
   const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&client_id=${GOOGLE_CLIENT_ID}`;
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_SECRET}&redirect_uri=${NAVER_REDIRECT_URI}`;
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=randomState&redirect_uri=${NAVER_REDIRECT_URI}`;
+  // const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=randomState&redirect_uri=${NAVER_REDIRECT_URI}`;
+
   // const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_SECRET}&redirect_uri=CALLBACK_URL`;
 
   const kakoLogin = () => {
@@ -48,7 +53,7 @@ const Login3 = () => {
   // };
 
   return (
-    <Login className="flex flex-col justify-center items-center font-sans">
+    <Login1 className="flex flex-col justify-center items-center font-sans">
       <div className="w-[500px] bg-white flex-col items-center rounded-[10px] border ">
         <h1 className="mt-[10px] text-center text-[1.2rem] font-bold">
           환승시민
@@ -75,24 +80,27 @@ const Login3 = () => {
                 </button>
               </Link> */}
 
-              <Link to={naverLogin}>
-                <button className="w-[300px] h-[45px] text-[16px] rounded-[4px] bg-[#03C75A] text-[#fff] cursor-pointer font-sans">
-                  <div className="flex flex-center justify-center items-center">
-                    <div className="flex justify-center items-center mx-[0] my-[auto]">
-                      <div className="w-[45px] h-[45px] flex flex-row justify-center items-center">
-                        <img
-                          src={data_naver}
-                          alt="snsNaver"
-                          className="flex cursor-pointer text-center"
-                        />
-                      </div>
-                      <span className="text-center leading-[48px]">
-                        네이버로 시작하기
-                      </span>
+              {/* <Link to={naverLogin}> */}
+              <button
+                onClick={naverLogin}
+                className="w-[300px] h-[45px] text-[16px] rounded-[4px] bg-[#03C75A] text-[#fff] cursor-pointer font-sans"
+              >
+                <div className="flex flex-center justify-center items-center">
+                  <div className="flex justify-center items-center mx-[0] my-[auto]">
+                    <div className="w-[45px] h-[45px] flex flex-row justify-center items-center">
+                      <img
+                        src={data_naver}
+                        alt="snsNaver"
+                        className="flex cursor-pointer leading-[20px] text-center"
+                      />
                     </div>
+                    <span className="text-center leading-[48px]">
+                      네이버로 시작하기
+                    </span>
                   </div>
-                </button>
-              </Link>
+                </div>
+              </button>
+              {/* </Link> */}
               {/* <div>이거뭐야</div> */}
               {/* <button id="naverIdLogin"></button> */}
               {/* <NaverLogin></NaverLogin> */}
@@ -101,7 +109,7 @@ const Login3 = () => {
                 <img
                   src={GoogleLogin}
                   alt="google"
-                  className="w-[100%] h-full"
+                  className="w-[300px] h-[3rem]"
                 />
               </button>
             </div>
@@ -110,13 +118,13 @@ const Login3 = () => {
           </div>
         </article>
       </div>
-    </Login>
+    </Login1>
   );
 };
 
-export default Login3;
+export default Login;
 
-const Login = styled.div`
+const Login1 = styled.div`
   width: 100%;
   height: 500px;
   margin: 0 auto;
