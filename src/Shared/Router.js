@@ -2,8 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ChatPage from "../Pages/ChatPage";
 import MainPage from "../Pages/MainPage";
-import SitdownPage from "../Pages/SitdownPage";
-import StandPage from "../Pages/StandPage";
 import ConversPage from "../Pages/ConversPage";
 import ChattingPage from "../Pages/ChattingPage";
 const Router = () => {
