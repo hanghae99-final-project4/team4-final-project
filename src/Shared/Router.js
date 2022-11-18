@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MainPage from "../Pages/MainPage";
 import SignUp from "../Pages/SignUp";
 import Login from "../Pages/Login";
 import GoogleLogin from "../Pages/GoogleLogin";
