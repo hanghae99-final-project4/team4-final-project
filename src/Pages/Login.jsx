@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import Kakaologin from "../Assets/Kakao_login.png";
+import Kakaologin from "../Assets/kakao_login.png";
 import NaverLoginimg from "../Assets/Naver_login_long.png";
 import data_naver from "../Assets/data_naver.svg";
 import GoogleLogin from "../Assets/Google_login_long.png";

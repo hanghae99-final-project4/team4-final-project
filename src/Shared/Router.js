@@ -7,6 +7,9 @@ import KakaoLogin from "../Pages/KakaoLogin";
 import NaverLogin from "../Pages/NaverLogin";
 import ChatPage from "../Pages/ChatPage";
 import MainPage from "../Pages/MainPage";
+import MyPage from "../Components/Profile/Mypage";
+import ProfilePic from "../Components/Profile/ProfilePic";
+import Disclaimer from "../Components/Agreement/Disclaimer";
 import ConversPage from "../Pages/ConversPage";
 import ChattingPage from "../Pages/ChattingPage";
 
@@ -15,6 +18,9 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="profilepic" element={<ProfilePic />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/auth/kakao/callback" element={<KakaoLogin />} />
         <Route path="/auth/google/callback" element={<GoogleLogin />} />
         <Route path="/auth/naver/callback" element={<NaverLogin />} />
