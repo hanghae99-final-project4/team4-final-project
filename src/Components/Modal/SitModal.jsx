@@ -5,6 +5,7 @@ const SitModal = ({ isModal, setIsModal }) => {
   return (
     <ModalCtn>
       <ModalWrap>
+      
         <StationInfoDiv>
           <TheStDiv>해당 역</TheStDiv>
           <DropStationDiv>내리는 역</DropStationDiv>

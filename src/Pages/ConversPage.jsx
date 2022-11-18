@@ -8,7 +8,7 @@ const socket = io("https://cheolsu.shop/");
 
 const ConversPage = () => {
   const initialState = {
-    nickname: "상현",
+    nickname: "재우",
     msg: "",
     gender: "남성",
     train: 0,
@@ -32,9 +32,9 @@ const ConversPage = () => {
     window.localStorage.setItem(keyName, objString);
   }
   const conversHandler = () => {
-    setItemWithExpireTime("train", message.train, 3000);
-    setItemWithExpireTime("nickname", message.nickname, 3000);
-    setItemWithExpireTime("dropstation", message.dropstation, 3000);
+    setItemWithExpireTime("train", message.train, 3000000000);
+    setItemWithExpireTime("nickname", message.nickname, 30000000000);
+    setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
     reset("");
     navigate("/chattingpage");
   };
