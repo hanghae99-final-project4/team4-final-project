@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ToggleSwitch() {
+export default function ToggleSwitch({ isSit, setIsSit }) {
+  const ToggleSwitchHandler = () => {
+    setIsSit(!isSit);
+  };
   return (
-    <Toggle>
+    <Toggle onClick={ToggleSwitchHandler}>
       <main>
-        <input class="l" type="checkbox" />
+        <input className="l" type="checkbox" />
       </main>
     </Toggle>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ToggleSwitch from "./ToggleSwitch";
 
-const StandPerson = () => {
+const StandPerson = ({ isSit, setIsSit }) => {
   return (
     <>
       <StandPage>
@@ -22,7 +22,7 @@ const StandPerson = () => {
           </ChattButtonDiv>
         </ChattingDiv>
         <ToggleSwitchDiv>
-          <ToggleSwitch />
+          <ToggleSwitch isSit={isSit} setIsSit={setIsSit} />
         </ToggleSwitchDiv>
         <ShareDiv>자리를 공유받고 싶어요!</ShareDiv>
         <ShareModalDiv>
