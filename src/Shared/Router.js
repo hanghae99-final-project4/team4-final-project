@@ -4,6 +4,7 @@ import MainPage from "../Pages/MainPage";
 import SitdownPage from "../Pages/SitdownPage";
 import StandPage from "../Pages/StandPage";
 import MyPage from "../Components/Profile/Mypage";
+import ProfilePic from "../Components/Profile/ProfilePic";
 import Disclaimer from "../Components/Agreement/Disclaimer";
 
 const Router = () => {
@@ -14,6 +15,7 @@ const Router = () => {
         <Route path="/sitdownpage" element={<SitdownPage />} />
         <Route path="/standpage" element={<StandPage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="profilepic" element={<ProfilePic />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
       </Routes>
     </BrowserRouter>
