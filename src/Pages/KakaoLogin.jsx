@@ -117,13 +117,13 @@ const KakaoLogin = () => {
         //     //   .catch((err) => {
         //     //     console.log(err);
       });
+    window.location.replace("/main");
     //refresh 토큰 시
     //   const refreshToken = cookies.set('token', refreshToken);
     // trainApi.postRetoken({refreshToken}).then((res)=> {
     //   console.log(res)  });
 
-    //   navigator("/main")
-    window.location.replace("/main");
+    // navigator("/main");
   }, []);
   return <div>빠른로딩중..</div>;
 };
