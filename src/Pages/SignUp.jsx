@@ -88,7 +88,7 @@ const SignUp = () => {
       console.log(pair);
     }
     await axios
-      .post(`"${yjUrl}"`, fd, {
+      .post(`"${yjUrl}/user"`, fd, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
