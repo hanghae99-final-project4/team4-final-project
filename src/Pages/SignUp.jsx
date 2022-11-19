@@ -77,6 +77,7 @@ const SignUp = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     // inputRef.current.click();
+    const yjUrl = process.env.REACT_APP_YJ_HOST;
     const fd = new FormData();
     console.log(fd);
     fd.append("profileImage", fileImg.files);
@@ -87,7 +88,7 @@ const SignUp = () => {
       console.log(pair);
     }
     await axios
-      .post("http://54.180.149.56/user", fd, {
+      .post(`"${yjUrl}"`, fd, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
