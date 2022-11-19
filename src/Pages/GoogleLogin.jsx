@@ -49,7 +49,7 @@ const GoogleLogin = () => {
     // setCookie("123", 123);
     axios
       .get(
-        `http://15.164.250.6:3000/auth/google/callback?code=${code}`
+        `${process.env.REACT_APP_YH_S_HOST}/auth/google/callback?code=${code}`
 
         //       {
         //   headers: {

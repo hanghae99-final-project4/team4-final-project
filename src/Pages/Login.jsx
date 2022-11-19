@@ -1,33 +1,32 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Kakaologin from "../Assets/Kakao_login.png";
-import NaverLoginimg from "../Assets/Naver_login_long.png";
 import data_naver from "../Assets/data_naver.svg";
 import GoogleLogin from "../Assets/Google_login_long.png";
 // import {
 //   KAKAO_REDIRECT_URI,
 //   KAKAO_REST_API_KEY,
 // } from "./LoginData/KakaoLoginData";
-import {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_REDIRECT_URI,
-} from "../Components/IntroMain/Oauth";
-import {
-  NAVER_CLIENT_ID,
-  NAVER_REDIRECT_URI,
-  NAVER_CLIENT_SECRET,
-} from "../Components/IntroMain/Oauth";
-import { Link } from "react-router-dom";
-import { KAKAO_CALLBACK_URL } from "../Components/IntroMain/Oauth";
-import { KAKAO_KEY } from "../Components/IntroMain/Oauth";
+// import {
+//   GOOGLE_CLIENT_ID,
+//   GOOGLE_REDIRECT_URI,
+// } from "../Components/IntroMain/Oauth";
+// import {
+//   NAVER_CLIENT_ID,
+//   NAVER_REDIRECT_URI,
+//   NAVER_CLIENT_SECRET,
+// } from "../Components/IntroMain/Oauth";
+// import { Link } from "react-router-dom";
+// import { KAKAO_CALLBACK_URL } from "../Components/IntroMain/Oauth";
+// import { KAKAO_KEY } from "../Components/IntroMain/Oauth";
 
 // import { NaverLogin } from "react-naver-login";
 const Login = () => {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${KAKAO_CALLBACK_URL}&response_type=code`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_CALLBACK_URL}&response_type=code`;
   // const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
   // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&scope=openid%20profile%20email&redirect_uri=${GOOGLE_REDIRECT_URI}`;
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&client_id=${GOOGLE_CLIENT_ID}`;
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=randomState&redirect_uri=${NAVER_REDIRECT_URI}`;
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
   // const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=randomState&redirect_uri=${NAVER_REDIRECT_URI}`;
 
   // const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_SECRET}&redirect_uri=CALLBACK_URL`;

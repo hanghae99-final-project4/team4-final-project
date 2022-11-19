@@ -61,7 +61,7 @@ const NaverLogin = () => {
     // setCookie("123", 123);
     axios
       .get(
-        `http://15.164.250.6:3000/auth/naver/callback?code=${code}&state=${state}`
+        `${process.env.REACT_APP_YH_S_HOST}/auth/naver/callback?code=${code}&state=${state}`
 
         //       {
         //   headers: {
@@ -118,14 +118,15 @@ const NaverLogin = () => {
         //     //   .catch((err) => {
         //     //     console.log(err);
         // window.location.replace("/main");
+        // navigator("/main");
       });
     //refresh 토큰 시
     //   const refreshToken = cookies.set('token', refreshToken);
     // trainApi.postRetoken({refreshToken}).then((res)=> {
     //   console.log(res)  });
 
-    //   navigator("/main")
     // window.location.replace("/main");
+    navigator("/main");
   }, []);
   return <div>빠른로딩중..</div>;
 };
