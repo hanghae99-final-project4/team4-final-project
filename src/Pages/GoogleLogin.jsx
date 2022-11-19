@@ -26,7 +26,7 @@ const GoogleLogin = () => {
     // 인가코드 확인하기
     const code = new URL(window.location.href).searchParams.get("code");
     console.log("인가코드", code);
-
+    const yhURL = process.env.REACT_APP_YH_S_HOST;
     //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
     // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
     //이중 axios or 연속 axios
@@ -49,7 +49,7 @@ const GoogleLogin = () => {
     // setCookie("123", 123);
     axios
       .get(
-        `${process.env.REACT_APP_YH_S_HOST}/auth/google/callback?code=${code}`
+        `${yhURL}/auth/google/callback?code=${code}`
 
         //       {
         //   headers: {

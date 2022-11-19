@@ -19,14 +19,15 @@ const SignUp = () => {
 
   console.log(form);
   // ();
-  const inputRef = useRef();
+  const inputRef = useRef([]);
   //파일 미리볼 url을 저장해줄 state
   const [files, setFiles] = useState([]);
   const [check, setCheck] = useState(false);
   // const [url, setUrl] = useState("");
   // const [imageFile, setImageFile] = useState(null);
-  const [fileImg, setFileImg] = useState([]);
-
+  let [fileImg, setFileImg] = useState([]);
+  // const [fileImg, setFileImg] = useState([]);
+  console.log(fileImg);
   //파일 저장
   // const saveFileImg = (e) => {
   //   setFileImg(URL.createObjectURL(e.target.files[0]));
@@ -36,11 +37,14 @@ const SignUp = () => {
   const onImgChange = async (e) => {
     const fileList = e.target.files[0];
     console.log(fileList);
+    console.log(fileList.name);
     // 하나의 파일만을 올릴 것이기 때문에 fileList배열에는
     //[0]번째 인덱스에 해당하는 공간에만 파일이 존재
     // console.log(fileList);
-
+    //fileList모양
+    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
+    console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
@@ -99,86 +103,94 @@ const SignUp = () => {
   //---------------------------------------
   const onClickFilesInput = (e) => {
     e.preventDefault();
-    inputRef.current.click();
+    inputRef.current?.click();
   };
 
-  //이미지 파일 미리보기
+  //이미지 파일 미리보기 - 이미지가 null값이면
   console.log(fileImg);
   const showImage = useMemo(() => {
-    if (!fileImg && fileImg === "") {
+    if (!fileImg && fileImg == null) {
       return <img src={BlankImg} alt="emptyProfile" />;
+    } else if (fileImg !== null) {
+      //
+      return (
+        <img
+          src={fileImg.thumbnail}
+          alt={fileImg.type}
+          onClick={onClickFilesInput}
+        />
+      );
     }
-    //db에
-    // axios.get()
-    return (
-      <img
-        src={fileImg.thumbnail}
-        alt={fileImg.type}
-        onClick={onClickFilesInput}
-      />
-    );
   }, [fileImg]);
 
   return (
     <>
-      <h1>사진첨부</h1>
-      <div>
-        <div className="w-[150px] h-[150px]">{showImage}</div>
+      <div className="w-[325px] rounded-[5px] border mx-[auto] my-[25%]">
+        <h1>프로필을 설정해주세요!</h1>
+        <div className="w-[100%] mx-[auto] my-[0px] border flex flex-col items-center">
+          <div className="w-[150px] h-[150px]">{showImage}</div>
 
-        <div>
-          <form>
-            <div>
-              {/* 이미지 업로드 */}
-              <input
-                type="file"
-                id="img"
-                name="profile"
-                value={form.profileImg}
-                accept="image/*"
-                multiple="multiple"
-                ref={inputRef}
-                onChange={onImgChange}
-              />
-              {/* <button
+          <div className="w-[100%] rounded-[1px] border">
+            <form>
+              <div>
+                {/* 이미지 업로드 */}
+                <input
+                  type="file"
+                  id="img"
+                  name="profile"
+                  value={form.profileImg}
+                  accept="image/*"
+                  ref={inputRef}
+                  onChange={onImgChange}
+                  className=""
+                />
+                {/* <button
                 label="이미지 업로드"
                 onClick={onUploadImageButtonClick}
               ></button> */}
-              <button type="button" onClick={onClickFilesInput}></button>
-            </div>
-            <label>휴대전화번호</label>
-            <input
-              name="phoneNumber"
-              type="text"
-              value={form.phoneNumber}
-              onChange={onChangeValue}
-            />
-            <div>
-              <label>닉네임</label>
+                <button type="button" onClick={onClickFilesInput}>
+                  파일업로드
+                </button>
+              </div>
+              <div className="flex flex-col">
+                <label className="sm:text-sm">닉네임</label>
+                <input
+                  name="nickname"
+                  type="text"
+                  value={form.nickname}
+                  placeholder="닉네임 입력"
+                  onChange={onChangeValue}
+                  className="border-b-[1px] focus:border-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="sm:text-sm">휴대전화번호</label>
+                <input
+                  name="phoneNumber"
+                  type="text"
+                  value={form.phoneNumber}
+                  onChange={onChangeValue}
+                />
+              </div>
+              <div className="sm:text-sm">성별</div>
               <input
-                name="nickname"
-                type="text"
-                value={form.nickname}
-                onChange={onChangeValue}
+                type="checkbox"
+                name="gender"
+                value={form.gender}
+                onChange={() => setCheck(false)}
               />
-            </div>
-            <div>성별</div>
-            <input
-              type="checkbox"
-              name="gender"
-              value={form.gender}
-              onChange={() => setCheck(false)}
-            />
-            남성
-            <input
-              type="checkbox"
-              // checked={check}
-              name="gender"
-              value={form.gender}
-              onChange={() => setCheck(true)}
-            />
-            여성
-            <button onClick={(e) => onSubmit(e)}>전송</button>
-          </form>
+              남성
+              <input
+                type="checkbox"
+                // checked={check}
+                name="gender"
+                value={form.gender}
+                onChange={() => setCheck(true)}
+              />
+              여성
+              <button onClick={(e) => onSubmit(e)}>전송</button>
+            </form>
+          </div>
         </div>
       </div>
     </>
