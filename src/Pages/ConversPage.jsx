@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useInput from "../MyTools/Hooks/UseInput";
 import styled from "styled-components";
 
-const socket = io("https://cheolsu.shop/");
+const socket = io("https://mijutaehwan.shop/");
 
 const ConversPage = () => {
   const initialState = {
