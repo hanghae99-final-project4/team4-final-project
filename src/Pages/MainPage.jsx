@@ -1,12 +1,10 @@
 import React from "react";
 
+import { useState } from "react";
+import axios from "axios";
+
 const MainPage = () => {
-  return (
-    <div>
-      MainPage
-      <input type="checkbox"></input>
-    </div>
-  );
+  return <></>;
 };
 
 export default MainPage;
