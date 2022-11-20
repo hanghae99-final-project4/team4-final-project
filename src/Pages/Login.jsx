@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Kakaologin from "../Assets/Kakao_login.png";
 import data_naver from "../Assets/data_naver.svg";
+import Naverlogo from "../Assets/Naverlogo.svg";
 import GoogleLogin from "../Assets/Google_login_long.png";
+import logo from "../Assets/logo.svg";
 // import {
 //   KAKAO_REDIRECT_URI,
 //   KAKAO_REST_API_KEY,
@@ -52,24 +54,27 @@ const Login = () => {
   // };
 
   return (
-    <Login1 className="flex flex-col justify-center items-center font-sans">
-      <div className="w-[500px] bg-white flex-col items-center rounded-[10px] border ">
-        <h1 className="mt-[10px] text-center text-[1.2rem] font-bold">
-          환승시민
-        </h1>
+    <Login1 className=" flex flex-col justify-center items-center font-sans">
+      <LoginBox className="py-[30px] px-[30px] flex-col items-center rounded-[10px] border ">
+        <h1 className="hidden text-center text-[1.2rem] font-bold">환승시민</h1>
         <br />
         <article className="justify-center items-center">
-          <div className="flex flex-col justify-center items-center mx-[auto] my-[0px]">
-            <p className="mx-[auto] my-[0px]">지하철에서</p>
-            <p>새로운 인연을 만나보아요.</p>
+          <div className="text-[1.5rem] flex flex-col justify-center items-center mx-[auto] my-[0px]">
+            <h2 className="mx-[auto] my-[0px] text-center">
+              지하철에서 <br />
+              새로운 인연을 만나보아요.
+            </h2>
+            <p></p>
           </div>
-          <div>
-            <div className="flex flex-col justify-center items-center">
-              <button onClick={kakoLogin}>
-                <img src={Kakaologin} alt="kakao" />
-              </button>
+          <div className="mt-[40px] flex flex-col justify-center">
+            {<img src={logo} alt="logo" className="mx-[auto] my-[0px]" />}
+            <div>
+              <div className=" gap-[10px] flex flex-col justify-center items-center">
+                <button onClick={kakoLogin} className="w-[250px]">
+                  <img src={Kakaologin} alt="kakao" />
+                </button>
 
-              {/* <Link to={NAVER_REDIRECT_URI}>
+                {/* <Link to={NAVER_REDIRECT_URI}>
                 <button onClick={naverLogin} className=" h-[45px]">
                   <img
                     src={NaverLoginimg}
@@ -79,44 +84,44 @@ const Login = () => {
                 </button>
               </Link> */}
 
-              {/* <Link to={naverLogin}> */}
-              <button
-                onClick={naverLogin}
-                className="w-[300px] h-[45px] text-[16px] rounded-[4px] bg-[#03C75A] text-[#fff] cursor-pointer font-sans"
-              >
-                <div className="flex flex-center justify-center items-center">
-                  <div className="flex justify-center items-center mx-[0] my-[auto]">
-                    <div className="w-[45px] h-[45px] flex flex-row justify-center items-center">
-                      <img
-                        src={data_naver}
-                        alt="snsNaver"
-                        className="flex cursor-pointer leading-[20px] text-center"
-                      />
+                {/* <Link to={naverLogin}> */}
+                <button
+                  onClick={naverLogin}
+                  className="w-[250px] h-[38px] text-[16px] rounded-[4px] bg-[#03C75A] text-[#fff] cursor-pointer font-sans"
+                >
+                  <div className="flex flex-row justify-center items-center">
+                    <div className="flex justify-center items-center mx-[0] my-[auto]">
+                      <div className="w-[45px] h-[38px] flex flex-row justify-center items-center">
+                        <img
+                          src={data_naver}
+                          alt="snsNaver"
+                          className="flex cursor-pointer"
+                        />
+                      </div>
+                      <span className="text-center">네이버로 시작하기</span>
                     </div>
-                    <span className="text-center leading-[48px]">
-                      네이버로 시작하기
-                    </span>
                   </div>
-                </div>
-              </button>
-              {/* </Link> */}
-              {/* <div>이거뭐야</div> */}
-              {/* <button id="naverIdLogin"></button> */}
-              {/* <NaverLogin></NaverLogin> */}
+                </button>
+                {/* </Link> */}
+                {/* <div>이거뭐야</div> */}
+                {/* <button id="naverIdLogin"></button> */}
+                {/* <NaverLogin></NaverLogin> */}
 
-              <button onClick={googleLogin} className="w-[300px]">
-                <img
-                  src={GoogleLogin}
-                  alt="google"
-                  className="w-[300px] h-[3rem]"
-                />
-              </button>
+                <button onClick={googleLogin} className="w-[250px]">
+                  <img
+                    src={GoogleLogin}
+                    alt="google"
+                    className="w-[full] h-[3rem]"
+                  />
+                </button>
+              </div>
+
+              {/* <button onClick={googleLogin}>구글 로그인</b?utton> */}
+              {/* <button onClick={naverLogin}>네이버 로그인</button> */}
             </div>
-            {/* <button onClick={googleLogin}>구글 로그인</b?utton> */}
-            {/* <button onClick={naverLogin}>네이버 로그인</button> */}
           </div>
         </article>
-      </div>
+      </LoginBox>
     </Login1>
   );
 };
@@ -127,4 +132,10 @@ const Login1 = styled.div`
   width: 100%;
   height: 500px;
   margin: 0 auto;
+`;
+
+const LoginBox = styled.div`
+  @media screen and (max-width: 375px) {
+    font-size: 1rem;
+  } ;
 `;
