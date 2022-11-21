@@ -9,7 +9,7 @@ const useInput = (initialForm) => {
   }, []);
   //useInput(초기값=initialForm)일 때 reset은 SetForm을 불러오는  콜백함수
   const reset = useCallback(() => setForm(initialForm), [initialForm]);
-  return [form, handler, reset];
+  return [form, setForm, handler, reset];
 };
 
 export default useInput;
