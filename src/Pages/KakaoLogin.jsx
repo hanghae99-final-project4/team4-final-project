@@ -41,7 +41,7 @@ const KakaoLogin = () => {
       }
       alert(`${msg}`);
       // window.location.replace("/main");
-      navigator("/signup");
+      // navigator("/signup");
     });
   return (
     <div className="mx-[auto] my-[0px]">
