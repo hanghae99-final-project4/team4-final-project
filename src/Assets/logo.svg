@@ -1,0 +1,20 @@
+<svg width="212" height="110" viewBox="0 0 212 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect y="61" width="56" height="30" rx="15" fill="#F9ACCA" fill-opacity="0.7"/>
+<rect x="36" y="38" width="53" height="53" rx="20" fill="#79DEE2" fill-opacity="0.7"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M144 91C144 76.6406 132.359 65 118 65C103.641 65 92 76.6406 92 91H144Z" fill="#B7ADF6" fill-opacity="0.7"/>
+<ellipse cx="147" cy="66" rx="20" ry="25" fill="#FDAA02" fill-opacity="0.7"/>
+<path d="M169.166 52.6506C172.925 45.5661 183.075 45.5661 186.834 52.6506L199.653 76.8134C203.187 83.4737 198.359 91.5 190.819 91.5H165.181C157.641 91.5 152.813 83.4737 156.347 76.8134L169.166 52.6506Z" fill="#6BF200" fill-opacity="0.7"/>
+<rect x="80" width="22" height="91" rx="11" fill="#FB5002" fill-opacity="0.7"/>
+<circle cx="8.5" cy="70.5" r="1.5" fill="black"/>
+<circle cx="12.5" cy="70.5" r="1.5" fill="black"/>
+<circle cx="69.5" cy="45.5" r="1.5" fill="black"/>
+<circle cx="73.5" cy="45.5" r="1.5" fill="black"/>
+<circle cx="181.5" cy="63.5" r="1.5" fill="black"/>
+<circle cx="185.5" cy="63.5" r="1.5" fill="black"/>
+<ellipse cx="116" cy="72" rx="1" ry="2" fill="black"/>
+<ellipse cx="122" cy="72" rx="1" ry="2" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M84 8C84 9.10457 84.8954 10 86 10C87.1046 10 88 9.10457 88 8H87C87 8.55228 86.5523 9 86 9C85.4477 9 85 8.55228 85 8H84Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M148 49C148 47.8954 147.105 47 146 47C144.895 47 144 47.8954 144 49L145 49C145 48.4477 145.448 48 146 48C146.552 48 147 48.4477 147 49L148 49Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M89 8C89 9.10457 89.8954 10 91 10C92.1046 10 93 9.10457 93 8H92C92 8.55228 91.5523 9 91 9C90.4477 9 90 8.55228 90 8H89Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M143 49C143 47.8954 142.105 47 141 47C139.895 47 139 47.8954 139 49L140 49C140 48.4477 140.448 48 141 48C141.552 48 142 48.4477 142 49L143 49Z" fill="black"/>
+</svg>
