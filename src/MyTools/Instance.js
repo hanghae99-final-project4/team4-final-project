@@ -9,7 +9,7 @@ const code = new URL(window.location.href).searchParams.get("code");
 //instance 쓸 때는 headers값 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_YH_S_HOST,
+  baseURL: process.env.REACT_APP_YH_HOST,
   // baseURL: "http://localhost:3000",
   //용환님 서버 : process.env.REACT_APP_YH_S_HOST
   headers: {

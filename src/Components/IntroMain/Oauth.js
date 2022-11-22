@@ -18,8 +18,8 @@
 // export const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${GOOGLE_REDIRECT_URI}&client_id=${GOOGLE_CLIENT_ID}`;
 
 // //naver data
-// export const NAVER_CLIENT_ID = "dbKJcbdQXEBfwicqfW6z";
-// export const NAVER_REDIRECT_URI = "http://localhost:3000/auth/naver/callback";
-// export const NAVER_CLIENT_SECRET = "f5wG2upOco";
+export const NAVER_CLIENT_ID = "dbKJcbdQXEBfwicqfW6z";
+export const NAVER_REDIRECT_URI = "http://localhost:3000/auth/naver/callback";
+export const NAVER_CLIENT_SECRET = "f5wG2upOco";
 
 // export const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_CLIENT_SECRET}&redirect_uri=${NAVER_REDIRECT_URI}`;
