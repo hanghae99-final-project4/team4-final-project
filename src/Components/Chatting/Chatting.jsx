@@ -7,7 +7,7 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
-const socket = io("https://cheolsu.shop/");
+const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
   const initialState = {

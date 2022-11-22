@@ -54,7 +54,7 @@ const SignUp = () => {
     //[0]번째 인덱스에 해당하는 공간에만 파일이 존재
     // console.log(fileList);
     //fileList모양
-    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
+    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
     console.log(url);
     setFileImg({

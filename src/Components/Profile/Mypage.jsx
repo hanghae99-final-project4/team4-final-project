@@ -52,21 +52,21 @@ const MyPage = () => {
   // 구글링할때 어디에 존재하는 토큰을 가져올때 검색해보기
   // 리턴 밑에 잘 분배해서 뿌려주면된다
 
-  useEffect(() => {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-    axios(`${process.env.REACT_APP_YJ_HOST}/user`, requestOptions)
-      .then((response) => response.json())
+  // useEffect(() => {
+  //   const requestOptions = {
+  //     method: "GET",
+  //     redirect: "follow",
+  //   };
+  //   axios(`${process.env.REACT_APP_YJ_HOST}/user`, requestOptions)
+  //     .then((response) => response.json())
 
-      // []
-      // setRepresentProfile([]) 배열로 들어오면 이걸 그대로 써라
-      // 셋리프레젠트프리필에 넣어주라
-      // 셋 이미지
-      .then((result) => setPhotos(result))
-      .catch((error) => console.log("error".error));
-  }, []);
+  //     // []
+  //     // setRepresentProfile([]) 배열로 들어오면 이걸 그대로 써라
+  //     // 셋리프레젠트프리필에 넣어주라
+  //     // 셋 이미지
+  //     .then((result) => setPhotos(result))
+  //     .catch((error) => console.log("error".error));
+  // }, []);
 
   console.log(url);
   console.log(representProfile);
