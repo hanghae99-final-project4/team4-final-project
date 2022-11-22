@@ -3,19 +3,23 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import useInput from "../MyTools/Hooks/UseInput";
 import styled from "styled-components";
-
+import axios from "axios";
+import { Cookies } from "react-cookie";
+const cookies = new Cookies();
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
-
+const token = cookies.get("token");
+console.log(token);
 const ConversPage = () => {
   const initialState = {
-    nickname: "재우",
+    nickname: "",
     msg: "",
-    gender: "남성",
-    train: 0,
+    gender: "",
+    train: "",
     dropstation: "",
     from: false,
   };
   const navigate = useNavigate();
+  const yunJi = process.env.REACT_APP_YJ_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   console.log(message);
   function setItemWithExpireTime(keyName, keyValue, tts) {
@@ -38,6 +42,22 @@ const ConversPage = () => {
     reset("");
     navigate("/chattingpage");
   };
+  useEffect(() => {
+    async function getNickname() {
+      const { data } = await axios.get(
+        `${yunJi}/profile`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setMessage(data.body);
+    }
+    getNickname();
+  }, []);
+  console.log(message);
 
   return (
     <CoversCtn>
@@ -50,7 +70,7 @@ const ConversPage = () => {
             value={message.nickname}
             style={{ fontSize: "25px", fontWeight: "600" }}
           >
-            닉네임:{initialState.nickname}
+            닉네임:{message.nickname}
           </NicknameDiv>
           <GenderDiv
             value={message.gender}
@@ -58,7 +78,7 @@ const ConversPage = () => {
             onChange={onChangeHandler}
             style={{ fontSize: "25px", fontWeight: "600" }}
           >
-            성별:{initialState.gender}
+            성별:{message.gender}
           </GenderDiv>
         </UserProfileInfoDiv>
       </ProfileBox>
