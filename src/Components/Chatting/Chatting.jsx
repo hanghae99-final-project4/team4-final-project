@@ -7,7 +7,7 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
-const socket = io("https://mijutaehwan.shop/");
+const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
   const initialState = {
@@ -181,7 +181,7 @@ const Chatting = () => {
     }
     console.log(file);
     try {
-      const { data } = await axios.post("https://cheolsu.shop/1", formData, {
+      const { data } = await axios.post("", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

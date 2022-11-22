@@ -4,7 +4,7 @@ import Kakaologo from "../Assets/Kakaologo.svg";
 import data_naver from "../Assets/data_naver.svg";
 import Naverlogo from "../Assets/Naverlogo.svg";
 import Googlelogo from "../Assets/Googlelogo.svg";
-import logo from "../Assets/Logo.svg";
+import logo from "../Assets/logo.svg";
 import FooterNext from "../Components/Footer/FooterNext";
 import {
   NAVER_CLIENT_ID,
