@@ -21,7 +21,7 @@ const Chatting = () => {
   const [success, setSuccess] = useState(false);
   const [room, setRoom] = useState(null);
   const [chatArr, setChatArr] = useState([]);
-  const [message, onChangeHandler, reset] = useInput(initialState);
+  const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
   const navigate = useNavigate();
   const name = JSON.parse(localStorage.getItem("nickname")).value;

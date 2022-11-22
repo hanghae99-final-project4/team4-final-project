@@ -16,7 +16,7 @@ const ConversPage = () => {
     from: false,
   };
   const navigate = useNavigate();
-  const [message, onChangeHandler, reset] = useInput(initialState);
+  const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   console.log(message);
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
