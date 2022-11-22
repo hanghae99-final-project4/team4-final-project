@@ -40,7 +40,11 @@ const KakaoLogin = () => {
         setTokens("token", token, { path: "/" });
       }
       // alert(`${msg}`);
+<<<<<<< HEAD
 
+=======
+      // window.location.replace("/main");
+>>>>>>> 923e10ba44b9ed3e1e43d837ec55c90b1eaf4ed1
       navigator("/signup");
     });
   return (
