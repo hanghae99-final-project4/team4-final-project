@@ -14,12 +14,18 @@
 # misc
 .DS_Store
 .env.local
+.env
 .env.development.local
+.env.development
 .env.test.local
 .env.production.local
+.env.production
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 #db.json
 db.json
+
+#Oauth.js
+Oauth.js
