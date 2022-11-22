@@ -10,6 +10,7 @@ const KakaoLogin = () => {
   const navigator = useNavigate();
   const cookies = new Cookies();
   const [tokens, setTokens] = useCookies(["token"]);
+  console.log(tokens);
   // const token = document.cookie.replace("token=", "");
   // const accesstoken = token && jwtDecode(token);
   // const setCookie = (name, value, option) => {
@@ -123,7 +124,7 @@ const KakaoLogin = () => {
     //   console.log(res)  });
 
     //   navigator("/main")
-    window.location.replace("/main");
+    // navigator("/mypage");
   }, []);
   return <div>빠른로딩중..</div>;
 };
