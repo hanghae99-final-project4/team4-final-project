@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
-import useInput from "../MyTools/Hooks/UseInput";
+import useInput from "../MyTools/Hooks/UseInputOrigin";
 import BlankImg from "../Assets/Empty_img.jpg";
 import jwtDecode from "jwt-decode";
 //섬네일
@@ -16,7 +16,7 @@ const SignUp = () => {
   const token = cookies.get("token");
   console.log(token);
   const headers = {
-    Authorization: `${token}`,
+    authorization: `${token}`,
   };
   //꺼낸 토큰 디코딩하기
   // const accesstoken = jwtDecode(token);
@@ -29,7 +29,7 @@ const SignUp = () => {
   console.log(fileImg);
   const [check, setCheck] = useState(false);
   const [form, onChangeValue, reset] = useInput({
-    profileImg: "",
+    representProfile: "",
     phoneNumber: "",
     authCode: "",
     nickname: "",
@@ -54,7 +54,7 @@ const SignUp = () => {
     //[0]번째 인덱스에 해당하는 공간에만 파일이 존재
     // console.log(fileList);
     //fileList모양
-    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
+    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
     console.log(url);
     setFileImg({
@@ -93,8 +93,12 @@ const SignUp = () => {
         authCode: form.authCode,
       });
       console.log(data);
+      const msg = data.msg;
+      alert(msg);
     } catch (err) {
       console.log(err);
+      const msg = err.msg;
+      alert(msg);
     }
   };
 
@@ -108,7 +112,7 @@ const SignUp = () => {
 
     const fd = new FormData();
     console.log(fd);
-    fd.append("profileImage", fileImg.files);
+    fd.append("representProfile", fileImg.files);
     fd.append("phoneNumber", form.phoneNumber);
     fd.append("gender", true);
     fd.append("nickname", form.nickname);
@@ -119,11 +123,17 @@ const SignUp = () => {
       .post(`${yjUrl}/user`, fd, {
         headers: {
           "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => alert("전송!"))
-      .catch((err) => alert("전송불가!"));
+      .then((res) => {
+        const msg = res.msg;
+        alert(msg);
+      })
+      .catch((err) => {
+        const msg = err.msg;
+        alert(msg);
+      });
   };
   //---------------------------------------
   const onClickFilesInput = (e) => {
@@ -166,16 +176,12 @@ const SignUp = () => {
                   type="file"
                   id="img"
                   name="profile"
-                  value={form.profileImg}
+                  value={form.representProfile}
                   accept="image/*"
                   ref={inputRef}
                   onChange={onImgChange}
                   className="hidden"
                 />
-                {/* <button
-                label="이미지 업로드"
-                onClick={onUploadImageButtonClick}
-              ></button> */}
                 <button
                   type="button"
                   onClick={onClickFilesInput}
@@ -207,9 +213,10 @@ const SignUp = () => {
                   <button onClick={(e) => onNumberRequest(e)}>인증요청</button>
                   <input
                     type="text"
-                    name="auth"
+                    name="authCode"
                     value={form.authCode}
                     placeholder="인증번호를 입력해주세요"
+                    onChange={onChangeValue}
                     className="border-b-[1px]"
                   />
                   <button onClick={(e) => onAuthNumber(e)}>인증확인</button>
