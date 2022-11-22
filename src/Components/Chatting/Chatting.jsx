@@ -20,7 +20,7 @@ const Chatting = () => {
   const [file, setFile] = useState([]);
   const [success, setSuccess] = useState(false);
   const [room, setRoom] = useState(null);
-  const [chatArr, setChatArr] = useState([initialState]);
+  const [chatArr, setChatArr] = useState([]);
   const [message, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
   const navigate = useNavigate();
@@ -181,7 +181,7 @@ const Chatting = () => {
     }
     console.log(file);
     try {
-      const { data } = await axios.post("https://cheolsu.shop/1", formData, {
+      const { data } = await axios.post("", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -244,7 +244,7 @@ const Chatting = () => {
           <ChatMainDiv ref={boxRef}>
             <ChatBox>
               {" "}
-              {chatArr.map((item, index) => (
+              {chatArr?.map((item, index) => (
                 <UserChatDiv
                   style={
                     name === item.nickname
@@ -269,12 +269,18 @@ const Chatting = () => {
                   )}
 
                   <UserChat>
-                    {item.url?.split(".")[5] == "mp4" ? (
-                      <ChatVideo src={item?.url} />
+                    {/* 맨 처음에는 메시지가 없기때문에 문제가 되는군 */}
+                    {/* 삼항연산자 중첩해서 사용하니, 코드가 가독성이 많이 떨어지는 것 같다 */}
+                    {/* 차라리 이미지 확장자를 따로 변수에 넣어 &&연산자를 사용하는 것이 가장 좋을것 같다/ */}
+                    {item.msg ? (
+                      <ChatDiv>{item.msg}</ChatDiv>
+                    ) : item.url?.split(".")[5] == "mp4" ? (
+                      // <ChatVideo src={item?.url} />
+                      <div>mp4</div>
                     ) : (
-                      <ChatImg src={item?.url} />
+                      // <ChatImg src={item?.url} />
+                      <div>img</div>
                     )}
-                    <ChatDiv>{item.msg}</ChatDiv>
                   </UserChat>
                 </UserChatDiv>
               ))}{" "}
@@ -350,11 +356,11 @@ const UserChatDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  border: 1px solid green;
+  border: none;
 `;
 
 const ChatBox = styled.div`
-  border: 1px solid black;
+  border: none;
   overflow-y: scroll;
   width: 100%;
   height: 100%;
