@@ -39,7 +39,7 @@ const KakaoLogin = () => {
       if (token) {
         setTokens("token", token, { path: "/" });
       }
-      alert(`${msg}`);
+      // alert(`${msg}`);
       // window.location.replace("/main");
       navigator("/signup");
     });
