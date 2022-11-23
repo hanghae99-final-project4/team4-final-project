@@ -77,11 +77,10 @@ const SignUp = () => {
       const { data } = await axios.post(`${yjUrl}/auth2/phone`, {
         phoneNumber: form.phoneNumber,
       });
-      console.log(data);
+      // console.log(data);
       alert(data.msg);
     } catch (err) {
-      console.log(err);
-      console.log(err.response.data.errorMessage);
+      // console.log(err);
       const errMsg = err.response.data.errorMessage;
       alert(errMsg);
     }
@@ -96,18 +95,18 @@ const SignUp = () => {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
-      console.log(data);
+      // console.log(data);
       const msg = data.msg;
       alert(msg);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       const msg = err.response.data.error;
       alert(msg);
     }
   };
 
   //업로드 버튼 (2) - 다른 버전
-  console.log(inputRef);
+  // console.log(inputRef);
 
   //업로드 버튼(1) 클릭시
   const onSubmit = async (e) => {
@@ -131,17 +130,17 @@ const SignUp = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         const msg = res.data.msg;
         alert(msg);
         navigator("/disclaimer");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
 
         const status = err.response.status;
-        console.log(status);
+        // console.log(status);
         const msg = err.response.data.msg;
         alert(msg);
         return;
