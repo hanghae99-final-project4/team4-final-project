@@ -111,6 +111,7 @@ const Chatting = () => {
 
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
+    socket.emit("nickname", JSON.parse(localStorage.getItem("nickname")).value);
     socket.emit("randomjoin", {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
@@ -275,11 +276,11 @@ const Chatting = () => {
                     {item.msg ? (
                       <ChatDiv>{item.msg}</ChatDiv>
                     ) : item.url?.split(".")[5] == "mp4" ? (
-                      // <ChatVideo src={item?.url} />
-                      <div>mp4</div>
+                      <ChatVideo src={item?.url} />
                     ) : (
-                      // <ChatImg src={item?.url} />
-                      <div>img</div>
+                      // <div>mp4</div>
+                      <ChatImg src={item?.url} />
+                      // <div>img</div>
                     )}
                   </UserChat>
                 </UserChatDiv>
