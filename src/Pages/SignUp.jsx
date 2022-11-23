@@ -97,7 +97,7 @@ const SignUp = () => {
       alert(msg);
     } catch (err) {
       console.log(err);
-      const msg = err.msg;
+      const msg = err.errorMessage;
       alert(msg);
     }
   };
@@ -238,6 +238,16 @@ const SignUp = () => {
                 />
                 여성
                 <div>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      cookies.remove({ url: "/signup", name: "token" });
+                      navigator("/login");
+                    }}
+                    className="float-left"
+                  >
+                    취소
+                  </button>
                   <button onClick={(e) => onSubmit(e)}>전송</button>
                 </div>
               </div>
