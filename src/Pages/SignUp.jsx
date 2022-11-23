@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 
 //추가정보기입란
 const SignUp = () => {
-  const navigator = useNavigate();
   //취소버튼시 로그아웃하면서 로그인창으로
   const [, , removeCookie] = useCookies(["token"]);
   //cookie에서 토큰꺼내기
@@ -135,7 +134,7 @@ const SignUp = () => {
 
         const msg = res.data.msg;
         alert(msg);
-        navigator("/disclaimer");
+        navigator("/subwaypage");
       })
       .catch((err) => {
         // console.log(err);
@@ -146,7 +145,6 @@ const SignUp = () => {
         alert(msg);
         return;
       });
-    navigator;
   };
   //---------------------------------------
   const onClickFilesInput = (e) => {
@@ -250,7 +248,7 @@ const SignUp = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       removeCookie("token", { path: "/" });
-                      navigator(-3);
+                      navigator(-2);
                     }}
                     className="float-left"
                   >

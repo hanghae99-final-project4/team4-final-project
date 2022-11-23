@@ -3,8 +3,9 @@ import SubwayIcon from "../../Element/SubwayIcon";
 import styled from "styled-components";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useInput from "../../MyTools/Hooks/UseInput";
-
+import { useNavigate } from "react-router-dom";
 const Subway = () => {
+  const navigate = useNavigate();
   const initialState = {
     station: "",
   };
@@ -25,10 +26,14 @@ const Subway = () => {
     console.log(e.nativeEvent.offsetX);
     console.log(e.nativeEvent.offsetY);
   };
+  const Locate = () => {
+    console.log("눌림");
+    navigate("/converspage");
+  };
   console.log(subway);
   return (
     <SubwayDiv>
-      <div>
+      <div onClick={Locate}>
         <SubwayIcon />
       </div>
       <TransformWrapper initialScale={1} minScale={1} maxScale={10}>
