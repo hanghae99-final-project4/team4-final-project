@@ -12,7 +12,7 @@ const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
   const initialState = {
     url: "https://anths3.s3.ap-northeast-2.amazonaws.com/myproject/1668428140925.jpg",
-    nickname: "재우",
+    nickname: "",
     msg: "",
   };
 
