@@ -5,6 +5,7 @@ import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInputOrigin";
 import BlankImg from "../Assets/Empty_img.jpg";
 import jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 //섬네일
 // const SignUpthumbnail = () => {
 //     const inputRef = useRef
@@ -18,6 +19,7 @@ const SignUp = () => {
   const headers = {
     authorization: `${token}`,
   };
+  const navigator = useNavigate();
   //꺼낸 토큰 디코딩하기
   // const accesstoken = jwtDecode(token);
   // console.log(accesstoken);
@@ -134,6 +136,7 @@ const SignUp = () => {
         const msg = err.msg;
         alert(msg);
       });
+    navigator;
   };
   //---------------------------------------
   const onClickFilesInput = (e) => {
