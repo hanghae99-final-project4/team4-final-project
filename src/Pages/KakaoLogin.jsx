@@ -36,11 +36,11 @@ const KakaoLogin = () => {
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
-      // const haveInfo = res.data
+      // const doneInfo = res.data.doneAdditionalInfo
       if (token) {
         setTokens("token", token, { path: "/" });
       }
-      //else{
+      //else if( doneInfo === true){
       //
       //}
       //
@@ -51,6 +51,9 @@ const KakaoLogin = () => {
     .catch((err) => {
       console.log(err);
     });
+  //     doneAdditionalInfo
+  // :
+  // true
   return (
     <div className="mx-[auto] my-[0px]">
       <img src={FirstLogo} alt="firstlogo" />
