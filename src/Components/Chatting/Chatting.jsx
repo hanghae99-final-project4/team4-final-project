@@ -21,7 +21,7 @@ const Chatting = () => {
   const [success, setSuccess] = useState(false);
   const [room, setRoom] = useState(null);
   const [chatArr, setChatArr] = useState([]);
-  const [message, onChangeHandler, reset] = useInput(initialState);
+  const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
   const navigate = useNavigate();
   const name = JSON.parse(localStorage.getItem("nickname")).value;
@@ -120,8 +120,8 @@ const Chatting = () => {
       console.log(message.msg);
     });
 
-    socket.on("재우", (message) => {
-      console.log(message, "재우임");
+    socket.on(`${name}`, (message) => {
+      console.log(message, `${name}`);
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });

@@ -21,6 +21,7 @@ const Subway = () => {
     console.log(e.target);
   };
   const charterOnClick = (e) => {
+    console.log(e);
     console.log(e.nativeEvent.offsetX);
     console.log(e.nativeEvent.offsetY);
   };
@@ -40,15 +41,15 @@ const Subway = () => {
               onClick={(e) => subwayCoordinate(e)}
             />
           </div>
-
-          <SeoulStationDiv
-            onClick={() => setSubway({ station: "서울" })}
-          ></SeoulStationDiv>
-          <SeoulCityHall
-            onClick={() => setSubway({ station: "시청" })}
-          ></SeoulCityHall>
         </TransformComponent>
       </TransformWrapper>
+
+      <SeoulStationDiv
+        onClick={() => setSubway({ station: "서울" })}
+      ></SeoulStationDiv>
+      <SeoulCityHall
+        onClick={() => setSubway({ station: "시청" })}
+      ></SeoulCityHall>
     </SubwayDiv>
   );
 };

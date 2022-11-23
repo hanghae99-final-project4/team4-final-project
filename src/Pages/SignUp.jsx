@@ -5,12 +5,16 @@ import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInputOrigin";
 import BlankImg from "../Assets/Empty_img.jpg";
 import jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 //섬네일
 // const SignUpthumbnail = () => {
 //     const inputRef = useRef
 
 //추가정보기입란
 const SignUp = () => {
+  const navigator = useNavigate();
+  //취소버튼시 로그아웃하면서 로그인창으로
+  const [, , removeCookie] = useCookies(["token"]);
   //cookie에서 토큰꺼내기
   const cookies = new Cookies();
   const token = cookies.get("token");
@@ -73,11 +77,10 @@ const SignUp = () => {
       const { data } = await axios.post(`${yjUrl}/auth2/phone`, {
         phoneNumber: form.phoneNumber,
       });
-      console.log(data);
+      // console.log(data);
       alert(data.msg);
     } catch (err) {
-      console.log(err);
-      console.log(err.response.data.errorMessage);
+      // console.log(err);
       const errMsg = err.response.data.errorMessage;
       alert(errMsg);
     }
@@ -92,18 +95,18 @@ const SignUp = () => {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
-      console.log(data);
+      // console.log(data);
       const msg = data.msg;
       alert(msg);
     } catch (err) {
-      console.log(err);
-      const msg = err.msg;
+      // console.log(err);
+      const msg = err.response.data.error;
       alert(msg);
     }
   };
 
   //업로드 버튼 (2) - 다른 버전
-  console.log(inputRef);
+  // console.log(inputRef);
 
   //업로드 버튼(1) 클릭시
   const onSubmit = async (e) => {
@@ -127,12 +130,20 @@ const SignUp = () => {
         },
       })
       .then((res) => {
-        const msg = res.msg;
+        // console.log(res);
+
+        const msg = res.data.msg;
         alert(msg);
+        navigator("/disclaimer");
       })
       .catch((err) => {
-        const msg = err.msg;
+        // console.log(err);
+
+        const status = err.response.status;
+        // console.log(status);
+        const msg = err.response.data.msg;
         alert(msg);
+        return;
       });
   };
   //---------------------------------------
@@ -163,11 +174,6 @@ const SignUp = () => {
         <h1 className="text-center">회원정보를 입력해주세요!</h1>
         <div className="w-[100%] mx-[auto] my-[0px] border flex flex-col items-center">
           <div className="w-[150px] h-[150px]">{showImage}</div>
-          {/* <img
-            src={showImage}
-            alt=""
-            className="w-[150px] h-[150px]"
-          /> */}
           <div className="w-[100%] rounded-[1px] border">
             <form>
               <div>
@@ -238,6 +244,16 @@ const SignUp = () => {
                 />
                 여성
                 <div>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeCookie("token", { path: "/" });
+                      navigator(-3);
+                    }}
+                    className="float-left"
+                  >
+                    취소
+                  </button>
                   <button onClick={(e) => onSubmit(e)}>전송</button>
                 </div>
               </div>
