@@ -28,8 +28,4 @@ yarn-error.log*
 db.json
 
 #Oauth.js
-<<<<<<< HEAD
 Oauth.js
-=======
-Oauth.js
->>>>>>> ce377e7ac56b06ac93e7271e94a84a62b70694ed
