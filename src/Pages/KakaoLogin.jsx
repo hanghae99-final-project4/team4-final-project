@@ -39,13 +39,15 @@ const KakaoLogin = () => {
       if (token) {
         setTokens("token", token, { path: "/" });
       }
-      // alert(`${msg}`);
       // window.location.replace("/main");
       navigator("/signup");
+      // alert(`${msg}`);
+    })
+    .catch((err) => {
+      console.log(err);
     });
   return (
     <div className="mx-[auto] my-[0px]">
-      빠른로딩중..
       <img src={FirstLogo} alt="firstlogo" />
     </div>
   );
