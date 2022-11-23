@@ -36,9 +36,14 @@ const KakaoLogin = () => {
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
+      // const haveInfo = res.data
       if (token) {
         setTokens("token", token, { path: "/" });
       }
+      //else{
+      //
+      //}
+      //
       // window.location.replace("/main");
       navigator("/signup");
       // alert(`${msg}`);
