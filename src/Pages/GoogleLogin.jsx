@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { trainApi } from "../MyTools/Instance";
 import { Cookies, useCookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
+import logo from "../Assets/Logo.svg";
 
 const GoogleLogin = () => {
   const navigator = useNavigate();
@@ -59,7 +60,7 @@ const GoogleLogin = () => {
 
   return (
     <div className="mx-[auto] my-[0px]">
-      <img src={FirstLogo} alt="firstlogo" />
+      <img src={logo} alt="firstlogo" />
     </div>
   );
 };
