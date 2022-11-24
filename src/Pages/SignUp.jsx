@@ -105,6 +105,14 @@ const SignUp = () => {
     }
   };
 
+  //인증확인 더블클릭시
+  const onDoubleClick = (e) => {
+    e.preventDefault();
+    alert("비정상적인 활동이 발견됐습니다. 다시 로그인해 주세요.");
+    removeCookie("token", { path: "/" });
+    navigator(-2);
+  };
+
   //업로드 버튼 (2) - 다른 버전
   // console.log(inputRef);
 
@@ -203,6 +211,8 @@ const SignUp = () => {
                     name="nickname"
                     type="text"
                     value={form.nickname}
+                    minLength="2"
+                    maxLength="10"
                     placeholder="닉네임 입력"
                     onChange={onChangeValue}
                     className="border-b-[1px] focus:border-indigo-500"
@@ -216,7 +226,12 @@ const SignUp = () => {
                     value={form.phoneNumber}
                     onChange={onChangeValue}
                   />
-                  <button onClick={(e) => onNumberRequest(e)}>인증요청</button>
+                  <button
+                    onDoubleClick={onDoubleClick}
+                    onClick={(e) => onNumberRequest(e)}
+                  >
+                    인증요청
+                  </button>
                   <input
                     type="text"
                     name="authCode"
