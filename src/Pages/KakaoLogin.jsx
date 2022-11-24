@@ -33,11 +33,11 @@ const KakaoLogin = () => {
       // }
     )
     .then((res) => {
-      // console.log(res);
-      // console.log(res.data);
-      // console.log(res.data.doneAdditionalInfo);
-      // console.log(res.data.jwtToken);
-      // console.log(res.data.message);
+      console.log(res);
+      console.log(res.data);
+      console.log(res.data.doneAdditionalInfo);
+      console.log(res.data.jwtToken);
+      console.log(res.data.message);
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
