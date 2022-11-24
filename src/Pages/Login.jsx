@@ -6,11 +6,6 @@ import Naverlogo from "../Assets/Naverlogo.svg";
 import Googlelogo from "../Assets/Googlelogo.svg";
 import logo from "../Assets/Logo.svg";
 import FooterNext from "../Components/Footer/FooterNext";
-import {
-  NAVER_CLIENT_ID,
-  NAVER_REDIRECT_URI,
-  NAVER_CLIENT_SECRET,
-} from "../Components/IntroMain/Oauth";
 
 const Login = () => {
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_CALLBACK_URL}&response_type=code`;
