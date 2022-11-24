@@ -28,7 +28,7 @@ const SignUp = () => {
 
   const [files, setFiles] = useState([]);
   console.log(files);
-  const yjUrl = process.env.REACT_APP_YJ_HOST;
+  const thURL = process.env.REACT_APP_TH_S_HOST;
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
@@ -71,16 +71,16 @@ const SignUp = () => {
 
   const onNumberRequest = async (e) => {
     e.preventDefault();
-    console.log(1);
+    // console.log(1);
 
     try {
-      const { data } = await axios.post(`${yjUrl}/auth2/phone`, {
+      const { data } = await axios.post(`${thURL}/auth2/phone`, {
         phoneNumber: form.phoneNumber,
       });
       // console.log(data);
       alert(data.msg);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       const errMsg = err.response.data.errorMessage;
       alert(errMsg);
     }
@@ -91,7 +91,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post(`${yjUrl}/auth2/compare`, {
+      const { data } = await axios.post(`${thURL}/auth2/compare`, {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
@@ -123,7 +123,7 @@ const SignUp = () => {
       console.log(pair);
     }
     await axios
-      .post(`${yjUrl}/user`, fd, {
+      .post(`${thURL}/user`, fd, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -139,7 +139,7 @@ const SignUp = () => {
       .catch((err) => {
         // console.log(err);
 
-        const status = err.response.status;
+        // const status = err.response.status;
         // console.log(status);
         const msg = err.response.data.msg;
         alert(msg);
