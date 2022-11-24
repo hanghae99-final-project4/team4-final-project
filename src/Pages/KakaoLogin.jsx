@@ -31,21 +31,25 @@ const KakaoLogin = () => {
     .then((res) => {
       console.log(res);
       console.log(res.data);
+      console.log(res.data.doneAdditionalInfo);
       console.log(res.data.jwtToken);
       console.log(res.data.message);
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
-      // const doneInfo = res.data.doneAdditionalInfo
+
+      const doneInfo = res.data.doneAdditionalInfo;
       if (token) {
         setTokens("token", token, { path: "/" });
       }
-      //else if( doneInfo === true){
-      //
-      //}
+      if (doneInfo === true) {
+        navigator("/subwaypage");
+      } else {
+        navigator("/signup");
+      }
       //
       // window.location.replace("/main");
-      navigator("/signup");
+
       // alert(`${msg}`);
     })
     .catch((err) => {
