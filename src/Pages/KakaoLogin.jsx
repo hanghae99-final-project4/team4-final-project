@@ -31,21 +31,33 @@ const KakaoLogin = () => {
     .then((res) => {
       console.log(res);
       console.log(res.data);
+      console.log(res.data.doneAdditionalInfo);
       console.log(res.data.jwtToken);
       console.log(res.data.message);
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
+
+      const doneInfo = res.data.doneAdditionalInfo;
       if (token) {
         setTokens("token", token, { path: "/" });
       }
+      if (doneInfo === true) {
+        navigator("/subwaypage");
+      } else {
+        navigator("/signup");
+      }
+      //
       // window.location.replace("/main");
-      navigator("/signup");
+
       // alert(`${msg}`);
     })
     .catch((err) => {
       console.log(err);
     });
+  //     doneAdditionalInfo
+  // :
+  // true
   return (
     <div className="mx-[auto] my-[0px]">
       <img src={FirstLogo} alt="firstlogo" />
