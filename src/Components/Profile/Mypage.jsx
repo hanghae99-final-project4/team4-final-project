@@ -8,6 +8,7 @@ import ProfileModal from "../Modal/ProfileModal";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
+import HomeMenu from "../HomeMenu/HomeMenu";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -243,6 +244,7 @@ const MyPage = () => {
           thumb={thumb}
         />
       )}
+      <HomeMenu />
     </Wrap>
   );
 };

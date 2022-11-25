@@ -7,11 +7,13 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
+import HomeMenu from "../HomeMenu/HomeMenu";
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
   const profile = JSON.parse(localStorage.getItem("profile")).value;
+  const roomkey = JSON.parse(localStorage?.getItem("roomkey"))?.value;
   const initialState = {
     url: profile,
     nickname: name,
@@ -33,7 +35,19 @@ const Chatting = () => {
   console.log(room);
   console.log(message);
   console.log(chatArr);
+  function setItemWithExpireTime(keyName, keyValue, tts) {
+    // localStorage에 저장할 객체
+    const obj = {
+      value: keyValue,
+      expire: Date.now() + tts,
+    };
 
+    // 객체를 JSON 문자열로 변환
+    const objString = JSON.stringify(obj);
+
+    // setItem
+    window.localStorage.setItem(keyName, objString);
+  }
   const scrollEvent = _.debounce(() => {
     console.log("scroll");
     const scrollTop = boxRef.current.scrollTop; //요소의 상단에서 맨 위에 표시 되는 콘텐츠까지의 거리를 측정한 것입니다.
@@ -115,6 +129,11 @@ const Chatting = () => {
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
     socket.emit("nickname", JSON.parse(localStorage.getItem("nickname")).value);
+    if (roomkey !== undefined) {
+      socket.emit("leaveRoom", roomkey);
+      localStorage.removeItem("roomkey");
+    }
+    console.log(roomkey);
     socket.emit("randomjoin", {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
@@ -131,6 +150,7 @@ const Chatting = () => {
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
       setRoom(message.roomkey);
+      setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
       //roomkey 들어오면 success 값 true
       if (
         message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
@@ -175,19 +195,21 @@ const Chatting = () => {
   //submithandler
   const SubmitHandler = (e) => {
     e.preventDefault();
-    socket.emit("persnalchat", {
-      roomkey: room,
-      msg: message.msg,
-      nickname: message.nickname,
-      profile: message.url,
-    });
-    console.log("chatting", {
-      roomkey: room,
-      name: message.nickname,
-      msg: message.msg,
-      profile: message.url,
-    });
-    reset(initialState);
+    if (message.msg !== "") {
+      socket.emit("persnalchat", {
+        roomkey: room,
+        msg: message.msg,
+        nickname: message.nickname,
+        profile: message.url,
+      });
+      console.log("chatting", {
+        roomkey: room,
+        name: message.nickname,
+        msg: message.msg,
+        profile: message.url,
+      });
+      reset(initialState);
+    }
   };
   //이미지 비디오 보내는 로직
   async function postSend() {
@@ -211,7 +233,6 @@ const Chatting = () => {
       console.log(message);
     });
   }
-  console.log(file[0]?.preview);
   const sendHandler = () => {
     //   const formData = new FormData();
     //   formData.append("image", postPicture[0]);
@@ -278,9 +299,19 @@ const Chatting = () => {
                       <UserProfileImg style={{ display: "none" }} />
                       <div style={{ display: "none" }}></div>
                     </UserProfileDiv>
-                  ) : (
+                  ) : // profile 이 없는 사람은 기본 프로필 설정 삼항 연산자
+                  item.profile !== undefined ? (
                     <UserProfileDiv>
                       <UserProfileImg src={item.profile} />
+                      <div>{item.nickname}</div>
+                    </UserProfileDiv>
+                  ) : (
+                    <UserProfileDiv>
+                      <UserProfileImg
+                        src={
+                          "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg"
+                        }
+                      />
                       <div>{item.nickname}</div>
                     </UserProfileDiv>
                   )}
@@ -314,6 +345,9 @@ const Chatting = () => {
             />
             <ChatSendBtn onClick={(e) => SubmitHandler(e)}>전송</ChatSendBtn>
           </FooterDiv>
+          <MenuDiv>
+          <HomeMenu />
+              </MenuDiv>
         </>
       ) : (
         <div>
@@ -334,6 +368,9 @@ const Chatting = () => {
           <button onClick={() => postSend()}>post 보내기</button>
           <input value={message.msg} onChange={onChangeHandler} name="msg" />
           <button onClick={() => sendHandler()}>제출</button>
+          <MenuDiv>
+            <HomeMenu />
+          </MenuDiv>
         </div>
       )}
     </div>
@@ -362,7 +399,7 @@ const FooterDiv = styled.form`
   justify-content: space-between;
   align-items: center;
   position: relative;
-  bottom: -115px;
+  bottom: -70px;
   background-color: #d9d9d9;
   height: 60px;
 `;
@@ -429,4 +466,7 @@ const ChatVideo = styled.video`
   height: 300px;
   border-radius: 10%;
   border: none;
+`;
+const MenuDiv = styled.div`
+  display: flex;
 `;
