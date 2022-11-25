@@ -19,7 +19,7 @@ const ConversPage = () => {
     from: false,
   };
   const navigate = useNavigate();
-  const yunJi = process.env.REACT_APP_YJ_HOST;
+  const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   console.log(message);
   function setItemWithExpireTime(keyName, keyValue, tts) {
@@ -37,6 +37,7 @@ const ConversPage = () => {
   }
   const conversHandler = () => {
     setItemWithExpireTime("train", message.train, 3000000000);
+    setItemWithExpireTime("profile", message.representProfile, 3000000000);
     setItemWithExpireTime("nickname", message.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
     reset("");
@@ -45,7 +46,7 @@ const ConversPage = () => {
   useEffect(() => {
     async function getNickname() {
       const { data } = await axios.get(
-        `${yunJi}/profile`,
+        `${thURL}/profile`,
 
         {
           headers: {
@@ -53,6 +54,7 @@ const ConversPage = () => {
           },
         }
       );
+      console.log(data)
       setMessage(data.body);
     }
     getNickname();
@@ -62,7 +64,7 @@ const ConversPage = () => {
   return (
     <CoversCtn>
       <ProfileBox>
-        <ProfileImg src="https://ifh.cc/g/YOrnMQ.jpg" />
+        <ProfileImg src={message.representProfile} />
         <UserProfileInfoDiv>
           <NicknameDiv
             onChange={onChangeHandler}

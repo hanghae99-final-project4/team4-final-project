@@ -17,12 +17,15 @@ const NaverLogin = () => {
   const code = new URL(window.location.href).searchParams.get("code");
   const state = new URL(window.location.href).searchParams.get("state");
   console.log("인가코드", code);
-  const yhURL = process.env.REACT_APP_YH_HOST;
+  // const yhURL = process.env.REACT_APP_YH_HOST;
+  const thURL = process.env.REACT_APP_TH_S_HOST;
+  // const thURL = process.env.REACT_APP_TH_HOST;
+  console.log(1);
   //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
   // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
   axios
     .get(
-      `${yhURL}/auth/naver/callback?code=${code}&state=${state}`
+      `${thURL}/auth/naver/callback?code=${code}&state=${state}`
       //       {
       //   headers: {
       //     Authorization: `${token}`,
@@ -37,14 +40,22 @@ const NaverLogin = () => {
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
+      const doneInfo = res.data.doneAdditionalInfo;
       if (token) {
         setTokens("token", token, { path: "/" });
       }
+      if (doneInfo === true) {
+        navigator("/subwaypage");
+      } else {
+        navigator("/signup");
+      }
       alert(`${msg}`);
-      // window.location.replace("/main");
-      navigator("/signup");
     });
-  // }, []);
+  //   .catch((err) => {
+  //     console.log(1);
+  //     console.log(err);
+  //   });
+  // // }, []);
   return (
     <div className="mx-[auto] my-[0px]">
       빠른로딩중..
