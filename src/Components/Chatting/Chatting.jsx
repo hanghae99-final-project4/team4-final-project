@@ -345,7 +345,9 @@ const Chatting = () => {
             />
             <ChatSendBtn onClick={(e) => SubmitHandler(e)}>전송</ChatSendBtn>
           </FooterDiv>
+          <MenuDiv>
           <HomeMenu />
+              </MenuDiv>
         </>
       ) : (
         <div>
