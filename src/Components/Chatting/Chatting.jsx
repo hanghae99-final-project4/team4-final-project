@@ -11,9 +11,10 @@ const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
+  const profile = JSON.parse(localStorage.getItem("profile")).value;
   const initialState = {
-    url: "https://anths3.s3.ap-northeast-2.amazonaws.com/myproject/1668428140925.jpg",
-    nickname: `${name}`,
+    url: profile,
+    nickname: name,
     msg: "",
   };
 
@@ -117,6 +118,7 @@ const Chatting = () => {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
       dropstation: JSON.parse(localStorage.getItem("dropstation")).value,
+      profile: JSON.parse(localStorage.getItem("profile")).value,
     });
     socket.on("maching", (message) => {
       console.log(message.msg);
@@ -129,12 +131,15 @@ const Chatting = () => {
       socket.emit("joinFair", { roomkey: message.roomkey });
       setRoom(message.roomkey);
       //roomkey 들어오면 success 값 true
-      if (room !== undefined) {
+      if (
+        message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." ||
+        message.roomkey !== null
+      ) {
         setSuccess(true);
       } else {
-        return;
+        alert(message.fail);
       }
-      console.log("success true");
+      console.log("success", success);
 
       //메시지 들어온대로 렌더 해주기
       socket.on("broadcast", (message) => {
@@ -168,11 +173,13 @@ const Chatting = () => {
       roomkey: room,
       msg: message.msg,
       nickname: message.nickname,
+      profile: message.url,
     });
     console.log("chatting", {
       roomkey: room,
       name: message.nickname,
       msg: message.msg,
+      profile: message.url,
     });
     reset(initialState);
   };
@@ -267,7 +274,7 @@ const Chatting = () => {
                     </UserProfileDiv>
                   ) : (
                     <UserProfileDiv>
-                      <UserProfileImg src="https://ifh.cc/g/YOrnMQ.jpg" />
+                      <UserProfileImg src={message.url} />
                       <div>{item.nickname}</div>
                     </UserProfileDiv>
                   )}
