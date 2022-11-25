@@ -19,7 +19,7 @@ const ConversPage = () => {
     from: false,
   };
   const navigate = useNavigate();
-  const yunJi = process.env.REACT_APP_YJ_HOST;
+  const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   console.log(message);
   function setItemWithExpireTime(keyName, keyValue, tts) {
@@ -45,7 +45,7 @@ const ConversPage = () => {
   useEffect(() => {
     async function getNickname() {
       const { data } = await axios.get(
-        `${yunJi}/profile`,
+        `${thURL}/profile`,
 
         {
           headers: {

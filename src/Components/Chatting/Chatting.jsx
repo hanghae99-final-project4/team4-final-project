@@ -10,9 +10,10 @@ import _ from "lodash";
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
+  const name = JSON.parse(localStorage.getItem("nickname")).value;
   const initialState = {
     url: "https://anths3.s3.ap-northeast-2.amazonaws.com/myproject/1668428140925.jpg",
-    nickname: "",
+    nickname: `${name}`,
     msg: "",
   };
 
@@ -24,7 +25,7 @@ const Chatting = () => {
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
   const navigate = useNavigate();
-  const name = JSON.parse(localStorage.getItem("nickname")).value;
+
   const boxRef = useRef(null);
   const scrollRef = useRef();
   console.log(name);
@@ -128,8 +129,10 @@ const Chatting = () => {
       socket.emit("joinFair", { roomkey: message.roomkey });
       setRoom(message.roomkey);
       //roomkey 들어오면 success 값 true
-      if (message.roomkey !== null) {
+      if (room !== undefined) {
         setSuccess(true);
+      } else {
+        return;
       }
       console.log("success true");
 
