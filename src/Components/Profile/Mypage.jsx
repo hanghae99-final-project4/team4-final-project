@@ -8,6 +8,7 @@ import ProfileModal from "../Modal/ProfileModal";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
 import jwtDecode from "jwt-decode";
+import HomeMenu from "../HomeMenu/HomeMenu";
 
 //마이프로필 수정하기를 만들어라
 //state값 줘서 false였다가 true 일때 작동해야한다
@@ -268,6 +269,7 @@ const MyPage = () => {
           thumb={thumb}
         />
       )}
+      <HomeMenu />
     </Wrap>
   );
 };

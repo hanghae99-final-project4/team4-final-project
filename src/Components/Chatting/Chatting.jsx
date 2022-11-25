@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
+import HomeMenu from "../HomeMenu/HomeMenu";
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
@@ -344,6 +345,7 @@ const Chatting = () => {
             />
             <ChatSendBtn onClick={(e) => SubmitHandler(e)}>전송</ChatSendBtn>
           </FooterDiv>
+          <HomeMenu />
         </>
       ) : (
         <div>
@@ -364,6 +366,9 @@ const Chatting = () => {
           <button onClick={() => postSend()}>post 보내기</button>
           <input value={message.msg} onChange={onChangeHandler} name="msg" />
           <button onClick={() => sendHandler()}>제출</button>
+          <MenuDiv>
+            <HomeMenu />
+          </MenuDiv>
         </div>
       )}
     </div>
@@ -392,7 +397,7 @@ const FooterDiv = styled.form`
   justify-content: space-between;
   align-items: center;
   position: relative;
-  bottom: -115px;
+  bottom: -70px;
   background-color: #d9d9d9;
   height: 60px;
 `;
@@ -459,4 +464,7 @@ const ChatVideo = styled.video`
   height: 300px;
   border-radius: 10%;
   border: none;
+`;
+const MenuDiv = styled.div`
+  display: flex;
 `;

@@ -5,6 +5,7 @@ import useInput from "../MyTools/Hooks/UseInput";
 import styled from "styled-components";
 import axios from "axios";
 import { Cookies } from "react-cookie";
+import HomeMenu from "../Components/HomeMenu/HomeMenu";
 const cookies = new Cookies();
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const token = cookies.get("token");
@@ -54,7 +55,7 @@ const ConversPage = () => {
           },
         }
       );
-      console.log(data)
+      console.log(data);
       setMessage(data.body);
     }
     getNickname();
@@ -99,12 +100,16 @@ const ConversPage = () => {
       <div style={{ fontSize: "24px" }}>소중한 만남 시작하시겠습니까?</div>
 
       <StartCoversBtn onClick={conversHandler}>대화 시작</StartCoversBtn>
+      <MenuDiv>
+        <HomeMenu />
+      </MenuDiv>
     </CoversCtn>
   );
 };
 
 export default ConversPage;
 const CoversCtn = styled.div`
+  overflow-y: scroll;
   width: 100%;
   height: 100vh;
   background-color: #e6e6e6;
@@ -171,6 +176,7 @@ const DropStation = styled.input`
   font-size: 24px;
 `;
 const StartCoversBtn = styled.button`
+  margin-top: 0px;
   width: 300px;
   height: 45px;
   border-radius: 10px;
@@ -178,4 +184,8 @@ const StartCoversBtn = styled.button`
   border: none;
   font-size: 20px;
   background-color: #aff4c6;
+`;
+const MenuDiv = styled.div`
+  display: flex;
+  justify-content: center;
 `;
