@@ -32,6 +32,7 @@ const Chatting = () => {
   console.log(name);
   console.log(room);
   console.log(message);
+  console.log(chatArr);
 
   const scrollEvent = _.debounce(() => {
     console.log("scroll");
@@ -132,10 +133,11 @@ const Chatting = () => {
       setRoom(message.roomkey);
       //roomkey 들어오면 success 값 true
       if (
-        message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." ||
+        message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
         message.roomkey !== null
       ) {
         setSuccess(true);
+        console.log("실행됨", success);
       } else {
         alert(message.fail);
       }
@@ -150,7 +152,11 @@ const Chatting = () => {
         getItemWithExpireTime("dropstation");
         setChatArr((chatArr) => [
           ...chatArr,
-          { nickname: message.name, msg: message.msg },
+          {
+            nickname: message.name,
+            msg: message.msg,
+            profile: message.profile,
+          },
         ]);
       });
     });
@@ -274,7 +280,7 @@ const Chatting = () => {
                     </UserProfileDiv>
                   ) : (
                     <UserProfileDiv>
-                      <UserProfileImg src={message.url} />
+                      <UserProfileImg src={item.profile} />
                       <div>{item.nickname}</div>
                     </UserProfileDiv>
                   )}
