@@ -21,6 +21,9 @@ const MyPage = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   console.log(token);
+  const accesstoken = jwtDecode(token);
+  // console.log(accesstoken.snsId);
+  const SnsId = accesstoken.snsI;
   const headers = {
     Authorization: `bearer ${token}`,
   };
