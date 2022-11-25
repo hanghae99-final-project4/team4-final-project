@@ -24,9 +24,9 @@ const MyPage = () => {
   const [representProfile, setRepresentProfile] = useState([]);
   const [form, OnChangeHandler, reset] = useInput([]);
   const cookies = new Cookies();
-  const token = cookies.get("token");
-  console.log(token);
-  
+  // const token = cookies.get("token");
+  // console.log(token);
+
   // //쿠키내용물 보기
   // console.log(cookies);
   // //cookie에서 토큰꺼내기
