@@ -37,6 +37,7 @@ const ConversPage = () => {
   }
   const conversHandler = () => {
     setItemWithExpireTime("train", message.train, 3000000000);
+    setItemWithExpireTime("profile", message.representProfile, 3000000000);
     setItemWithExpireTime("nickname", message.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
     reset("");
@@ -62,7 +63,7 @@ const ConversPage = () => {
   return (
     <CoversCtn>
       <ProfileBox>
-        <ProfileImg src="https://ifh.cc/g/YOrnMQ.jpg" />
+        <ProfileImg src={message.representProfile} />
         <UserProfileInfoDiv>
           <NicknameDiv
             onChange={onChangeHandler}
