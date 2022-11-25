@@ -53,6 +53,7 @@ const ConversPage = () => {
           },
         }
       );
+      console.log(data)
       setMessage(data.body);
     }
     getNickname();
