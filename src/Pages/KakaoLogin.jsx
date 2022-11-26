@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Cookies, useCookies } from "react-cookie";
 import FirstLogo from "../Assets/FirstLogo.svg";
+import { trainApi } from "../MyTools/Instance";
 
 const KakaoLogin = () => {
   const navigator = useNavigate();
@@ -13,7 +14,7 @@ const KakaoLogin = () => {
   // useEffect(() => {
   // 인가코드 확인하기
   const code = new URL(window.location.href).searchParams.get("code");
-  console.log("인가코드", code);
+  // console.log("인가코드", code);
   // const yhURL = process.env.REACT_APP_YH_HOST;
   const thURL = process.env.REACT_APP_TH_S_HOST;
   // const thURL = process.env.REACT_APP_YJ_HOST;
@@ -21,6 +22,8 @@ const KakaoLogin = () => {
   // console.log(1);
   //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
   // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
+
+  trainApi.getLogin().then;
   axios
     .get(
       `${thURL}/auth/kakao/callback?code=${code}`
