@@ -6,15 +6,9 @@ import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
 import ProfileModal from "../Modal/ProfileModal";
 import { CloseCircleFilled } from "@ant-design/icons";
-import { Cookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
+import { Cookies, useCookies } from "react-cookie";
 import HomeMenu from "../HomeMenu/HomeMenu";
-
-//마이프로필 수정하기를 만들어라
-//state값 줘서 false였다가 true 일때 작동해야한다
-// get 리스폰즈값을 받으면 배열에 저장해서 그 배열을 맵을 돌려서 아이템값을 지정해줘라
-// get요청을 하면 보내준다 닉네임같은걸 그값을 유저프로필이라는 스테이트를 만들어서 셋 유저 프로필을 그 값을 넣어준다
-// 그럼 그값이 들어간다 맞는 장소에 값을 넣어주면 띄어진다
+import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -23,54 +17,45 @@ const MyPage = () => {
   const [check, setCheck] = useState(false);
   const [url, setUrl] = useState("");
   const [representProfile, setRepresentProfile] = useState([]);
-  const [form, OnChangeHandler, reset] = useInput([]);
+  const [form, setForm, OnChangeHandler, reset] = useInput([]);
+  const [, , removeCookie] = useCookies(["token"]);
+  // const [, , removeCookie] = useCookies(["kakaoToken"]);
   const cookies = new Cookies();
+  const token = cookies.get("token");
+  const navigator = useNavigate();
 
-  // //쿠키내용물 보기
-  // console.log(cookies);
-  // //cookie에서 토큰꺼내기
-  // const token = cookies.get("jwtToken");
-  // console.log(token);
-  // //꺼낸 토큰 디코딩하기
-  // const accesstoken = jwtDecode(token);
-  // // console.log(accesstoken.snsId);
-  // const SnsId = accesstoken.snsId;
-  // //레스폰스값으로 받아와서 꺼내서 써라
+  console.log(token);
 
-  //악시오스를 써라 //리퀘스트로 뭘 보내라\
-  // 악시오스 겟을 쓰는게 더 났다 겟할때 요청url말고 보낼수있는 인자
-  // 인증토큰(엑세스토큰) 어디다 저장하기로했나? 이걸 물어보기
-  // 리프레시토큰 엑세스 토큰 소셜로그인 사용하면...
-  // 로그인될때 어디 저장되는지 알아야함
-  // 세션이나 로컬에 저장이 될거임
-  // getItemtoken? 토큰 가져오는 코드 한줄 쓰고
-  // 악시오스 겟 할때 데이터에 실어서 보낼거다
-  // 어싱크 어웨이트
+  const thURl = process.env.REACT_APP_YJ_HOST;
 
-  // 물어볼것
-  // 로컷 스토리지에 토큰이 있냐? 어디에 존재하냐?
-  // 어떤 키값으로 되어있냐? 여쭤보기
-  // 구글링할때 어디에 존재하는 토큰을 가져올때 검색해보기
-  // 리턴 밑에 잘 분배해서 뿌려주면된다
+  useEffect(() => {
+    async function getProfile() {
+      const { data } = await axios.get(`${thURl}/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      setForm(data.body);
+    }
+    getProfile();
+  }, []);
 
-  // useEffect(() => {
-  //   const requestOptions = {
-  //     method: "GET",
-  //     redirect: "follow",
-  //   };
-  //   axios(`${process.env.REACT_APP_YJ_HOST}/user`, requestOptions)
-  //     .then((response) => response.json())
-
-  //     // []
-  //     // setRepresentProfile([]) 배열로 들어오면 이걸 그대로 써라
-  //     // 셋리프레젠트프리필에 넣어주라
-  //     // 셋 이미지
-  //     .then((result) => setPhotos(result))
-  //     .catch((error) => console.log("error".error));
-  // }, []);
-
-  console.log(url);
-  console.log(representProfile);
+  // const onGetInfo = async () => {
+  //   try {
+  //     //headers에 토큰넣어서 get하면 해당 토큰에 대한 정보들 받아올 수 있음.
+  //     const { data } = await axios.get(`${thURl}/profile`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     //get한 data
+  //     console.log(data);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  //get(name, [options])
 
   async function imgSubmitHandler() {
     const formData = new FormData();
@@ -78,24 +63,20 @@ const MyPage = () => {
       formData.append("profileImage", files[i].file);
     }
     formData.append("representProfile", representProfile[0].file);
-
     formData.append("phoneNumber", form.phoneNumber);
-    formData.append("gender", true);
     formData.append("nickname", form.nickname);
     formData.append("statusmessage", form.statusmessage);
+
     for (var pair of formData.entries()) {
       console.log(pair);
     }
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_YJ_HOST}/user`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { data } = await axios.post(`${thURl}/profile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -113,7 +94,6 @@ const MyPage = () => {
         url: URL?.createObjectURL(photoList[i]),
       });
     }
-    //리스폰스 윤지님한테 받아오기
 
     //포스팅한 포스트의 개수 제한!
 
@@ -159,7 +139,6 @@ const MyPage = () => {
       </div>
     );
   });
-  /// profile x 누르면 삭제 기능
   const removeProfile = (deleteUrl) => {
     setFiles(files.filter((item) => item.url !== deleteUrl));
   };
@@ -171,7 +150,16 @@ const MyPage = () => {
       <MyinfoDiv>
         <div className="logoutbox">
           <span style={{ fontSize: "20" }}>나의 정보</span>
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <LogoutBtn
+            onClick={(e) => {
+              e.preventDefault();
+              removeCookie("token", { path: "/" });
+              navigator("/");
+              // removeCookie("kakaoToken", { path: "/" });
+            }}
+          >
+            로그아웃
+          </LogoutBtn>
         </div>
       </MyinfoDiv>
 
@@ -181,17 +169,17 @@ const MyPage = () => {
             <ImgPreview
               style={{ transform: "scale(1)", borderRadius: "10px" }}
               id="img-preview"
-              src={representProfile[0]?.url}
+              src={form.representProfile}
             />
           </div>
           <UploadImage
+            maxSize={314572800}
             type="file"
             name="profile"
             ref={inputRef}
             value={form.profile}
             accept="image/*"
             multiple
-            //useEffect해서 이미지 url에 파일을 넣겠다 해야함
             onChange={(e) => formSubmit(e)}
           ></UploadImage>
           <RechangeImgBtn onClick={() => setIsModal(!isModal)}>
@@ -206,11 +194,9 @@ const MyPage = () => {
             </span>
             <input
               name="phoneNumber"
-              //
               value={form.phoneNumber}
               // 폰넘버를 겟에서 받아온 그걸 적어라
               onChange={OnChangeHandler}
-              //
             />
           </PhoneNumDiv>
           <NicnameDiv>
@@ -254,6 +240,7 @@ const MyPage = () => {
       <div>
         <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
       </div>
+      <div></div>
       <div className="client">
         <button>고객유의사항</button>
         <button>고객이용가이드</button>
@@ -392,3 +379,41 @@ const RechangeImgBtn = styled.button`
 `;
 
 export default MyPage;
+
+//악시오스를 써라 //리퀘스트로 뭘 보내라\
+// 악시오스 겟을 쓰는게 더 났다 겟할때 요청url말고 보낼수있는 인자
+// 인증토큰(엑세스토큰) 어디다 저장하기로했나? 이걸 물어보기
+// 리프레시토큰 엑세스 토큰 소셜로그인 사용하면...
+// 로그인될때 어디 저장되는지 알아야함
+// 세션이나 로컬에 저장이 될거임
+// getItemtoken? 토큰 가져오는 코드 한줄 쓰고
+// 악시오스 겟 할때 데이터에 실어서 보낼거다
+// 어싱크 어웨이트
+
+// 물어볼것
+// 로컷 스토리지에 토큰이 있냐? 어디에 존재하냐?
+// 어떤 키값으로 되어있냐? 여쭤보기
+// 구글링할때 어디에 존재하는 토큰을 가져올때 검색해보기
+// 리턴 밑에 잘 분배해서 뿌려주면된다
+
+// useEffect(() => {
+//   const requestOptions = {
+//     method: "GET",
+//     redirect: "follow",
+//   };
+//   axios(`${process.env.REACT_APP_YJ_HOST}/user`, requestOptions)
+//     .then((response) => response.json())
+
+//     // []
+//     // setRepresentProfile([]) 배열로 들어오면 이걸 그대로 써라
+//     // 셋리프레젠트프리필에 넣어주라
+//     // 셋 이미지
+//     .then((result) => setPhotos(result))
+//     .catch((error) => console.log("error".error));
+// }, []);
+
+// get 리스폰즈값을 받으면 배열에 저장해서 그 배열을 맵을 돌려서 아이템값을 지정해줘라
+// get요청을 하면 보내준다 닉네임같은걸 그값을 유저프로필이라는 스테이트를 만들어서 셋 유저 프로필을 그 값을 넣어준다
+// 그럼 그값이 들어간다 맞는 장소에 값을 넣어주면 띄어진다
+//쿠키의 바디값이 뭔지 알아야함!!
+//리스폰스값
