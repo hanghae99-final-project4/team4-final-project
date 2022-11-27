@@ -2,9 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { trainApi } from "../MyTools/Instance";
 import { Cookies, useCookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
 import FirstLogo from "../Assets/FirstLogo.svg";
 
 const KakaoLogin = () => {
@@ -18,8 +16,9 @@ const KakaoLogin = () => {
   console.log("인가코드", code);
   // const yhURL = process.env.REACT_APP_YH_HOST;
   const thURL = process.env.REACT_APP_TH_S_HOST;
+  // const thURL = process.env.REACT_APP_YJ_HOST;
   // const thURL = process.env.REACT_APP_TH_HOST;
-  console.log(1);
+  // console.log(1);
   //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
   // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
   axios
@@ -58,8 +57,8 @@ const KakaoLogin = () => {
   // });
 
   return (
-    <div className="mx-[auto] my-[0px]">
-      <img src={FirstLogo} alt="firstlogo" />
+    <div className="flex justify-center items-center min-h-screen">
+      <img src={FirstLogo} alt="firstlogo" className="block m-[auto]" />
     </div>
   );
 };
