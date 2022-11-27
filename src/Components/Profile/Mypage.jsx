@@ -6,9 +6,9 @@ import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
 import ProfileModal from "../Modal/ProfileModal";
 import { CloseCircleFilled } from "@ant-design/icons";
-import { Cookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
+import { Cookies, useCookies } from "react-cookie";
 import HomeMenu from "../HomeMenu/HomeMenu";
+import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -17,38 +17,44 @@ const MyPage = () => {
   const [check, setCheck] = useState(false);
   const [url, setUrl] = useState("");
   const [representProfile, setRepresentProfile] = useState([]);
-  const [form, OnChangeHandler, reset] = useInput([]);
-
+  const [form, setForm, OnChangeHandler, reset] = useInput([]);
+  const [, , removeCookie] = useCookies(["token"]);
+  // const [, , removeCookie] = useCookies(["kakaoToken"]);
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const navigator = useNavigate();
+
   console.log(token);
-  const accesstoken = jwtDecode(token);
-  // console.log(accesstoken.snsId);
-  const SnsId = accesstoken.snsI;
-  const headers = {
-    Authorization: `bearer ${token}`,
-  };
 
-  const onGetInfo = async () => {
-    try {
-      //headers에 토큰넣어서 get하면 해당 토큰에 대한 정보들 받아올 수 있음.
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_YJ_HOST}/user`,
-        {
-          headers,
-        }
-      );
-      //get한 data
+  const thURl = process.env.REACT_APP_YJ_HOST;
+
+  useEffect(() => {
+    async function getProfile() {
+      const { data } = await axios.get(`${thURl}/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(data);
-    } catch (err) {
-      console.log(err);
+      setForm(data.body);
     }
-  };
+    getProfile();
+  }, []);
 
-  console.log(url);
-  console.log(representProfile);
-  //악시오스 댄 리스폰스값을 겟해서 오는 정보가 있을거다
-  //
+  // const onGetInfo = async () => {
+  //   try {
+  //     //headers에 토큰넣어서 get하면 해당 토큰에 대한 정보들 받아올 수 있음.
+  //     const { data } = await axios.get(`${thURl}/profile`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     //get한 data
+  //     console.log(data);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
   //get(name, [options])
 
   async function imgSubmitHandler() {
@@ -58,22 +64,19 @@ const MyPage = () => {
     }
     formData.append("representProfile", representProfile[0].file);
     formData.append("phoneNumber", form.phoneNumber);
-    formData.append("gender", true);
     formData.append("nickname", form.nickname);
     formData.append("statusmessage", form.statusmessage);
+
     for (var pair of formData.entries()) {
       console.log(pair);
     }
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_YJ_HOST}/user`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { data } = await axios.post(`${thURl}/profile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -91,7 +94,6 @@ const MyPage = () => {
         url: URL?.createObjectURL(photoList[i]),
       });
     }
-    //리스폰스 윤지님한테 받아오기
 
     //포스팅한 포스트의 개수 제한!
 
@@ -148,7 +150,16 @@ const MyPage = () => {
       <MyinfoDiv>
         <div className="logoutbox">
           <span style={{ fontSize: "20" }}>나의 정보</span>
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <LogoutBtn
+            onClick={(e) => {
+              e.preventDefault();
+              removeCookie("token", { path: "/" });
+              navigator("/");
+              // removeCookie("kakaoToken", { path: "/" });
+            }}
+          >
+            로그아웃
+          </LogoutBtn>
         </div>
       </MyinfoDiv>
 
@@ -158,10 +169,11 @@ const MyPage = () => {
             <ImgPreview
               style={{ transform: "scale(1)", borderRadius: "10px" }}
               id="img-preview"
-              src={representProfile[0]?.url}
+              src={form.representProfile}
             />
           </div>
           <UploadImage
+            maxSize={314572800}
             type="file"
             name="profile"
             ref={inputRef}
@@ -367,17 +379,6 @@ const RechangeImgBtn = styled.button`
 `;
 
 export default MyPage;
-
-// //쿠키내용물 보기
-// console.log(cookies);
-// //cookie에서 토큰꺼내기
-// const token = cookies.get("jwtToken");
-// console.log(token);
-// //꺼낸 토큰 디코딩하기
-// const accesstoken = jwtDecode(token);
-// // console.log(accesstoken.snsId);
-// const SnsId = accesstoken.snsId;
-// //레스폰스값으로 받아와서 꺼내서 써라
 
 //악시오스를 써라 //리퀘스트로 뭘 보내라\
 // 악시오스 겟을 쓰는게 더 났다 겟할때 요청url말고 보낼수있는 인자
