@@ -1,40 +1,32 @@
 import axios from "axios";
 import styled from "styled-components";
-import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
-import useInput from "../MyTools/Hooks/UseInputOrigin";
+import useOnput from "../MyTools/Hooks/UseOnput";
 import BlankImg from "../Assets/Empty_img.jpg";
-import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
 import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
-//섬네일
-// const SignUpthumbnail = () => {
-//     const inputRef = useRef
+import { getCookie } from "../MyTools/Hooks/MyCookie";
 
-//추가정보기입란
 const SignUp = () => {
-  //취소버튼시 로그아웃하면서 로그인창으로
   const [, , removeCookie] = useCookies(["token"]);
-  //cookie에서 토큰꺼내기
+
   const cookies = new Cookies();
-  const token = cookies.get("token");
-  // console.log(token);
-  const headers = {
-    authorization: `${token}`,
-  };
+  const token = getCookie("token");
+  console.log(token);
+
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
   console.log(files);
-  //서버 체인져
+
   const thURL = process.env.REACT_APP_TH_S_HOST;
-  // const thURL = process.env.REACT_APP_YJ_HOST;
+
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
-  const [form, onChangeValue, reset] = useInput({
+  const [form, onChangeValue, reset] = useOnput({
     representProfile: "",
     phoneNumber: "",
     authCode: "",
@@ -43,44 +35,32 @@ const SignUp = () => {
   });
   const [disable, setDisable] = useState(false);
 
-  // console.log(form);
-  //input값 접근
   const inputRef = useRef([]);
-  //파일 미리볼 url을 저장해줄 state
-  //파일 저장
 
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
-    // console.log(fileList);
-    // console.log(fileList.name);
-    // 하나의 파일만을 올릴 것이기 때문에 fileList배열에는
-    //[0]번째 인덱스에 해당하는 공간에만 파일이 존재
-    // console.log(fileList);
-    //fileList모양
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
     console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
-      // type: fileList[0].type.slice(0, 5),
     });
   };
 
   //인증요청
   const onNumberRequest = async (e) => {
     e.preventDefault();
-    // console.log(1);
 
     try {
       const { data } = await axios.post(`${thURL}/auth2/phone`, {
         phoneNumber: form.phoneNumber,
       });
-      // console.log(data);
+      console.log(data);
       alert(data.msg);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       const errMsg = err.response.data.error;
       alert(errMsg);
     }
@@ -99,31 +79,29 @@ const SignUp = () => {
       const msg = data.msg;
       alert(msg);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       const errMsg = err.response.data.error;
       alert(errMsg);
     }
   };
 
   //업로드 버튼(1) 클릭시
+  console.log("0_token", token);
   const onSubmit = async (e) => {
     e.preventDefault();
-    // if (
-    //   form.phoneNumber === "" ||
-    //   form.authCode === "" ||
-    // ) {
-    //   return alert("모든 항목을 입력해주세요");
-    // } else {
+
+    console.log("1_token", token);
     const fd = new FormData();
     console.log(fd);
     fd.append("representProfile", fileImg.files);
     fd.append("phoneNumber", form.phoneNumber);
     fd.append("gender", true);
     fd.append("nickname", form.nickname);
-    // fd.append("authCode", form.authCode);
+
     for (let pair of fd.entries()) {
       console.log(pair);
     }
+    console.log("2_token", token);
     await axios
       .post(`${thURL}/user`, fd, {
         headers: {
@@ -132,18 +110,14 @@ const SignUp = () => {
         },
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
 
         const msg = res.data.msg;
         alert(msg);
-        navigator("/subwaypage");
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
 
-        // const status = err.response.status;
-        // console.log(status);
-        // const msg = err.response.data.error;
         const msg = err.response.data.msg;
         const er = err.response.data.error;
         msg ? alert(msg) : er ? alert(er) : <></>;
@@ -157,8 +131,6 @@ const SignUp = () => {
     inputRef.current?.click();
   };
 
-  //이미지 파일 미리보기 - 이미지가 null값이면
-  // console.log(fileImg);
   const showImage = useMemo(() => {
     if (!fileImg && fileImg == null) {
       return <img src={BlankImg} alt="emptyProfile" />;

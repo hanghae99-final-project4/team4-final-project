@@ -61,6 +61,6 @@ instance.interceptors.response.use(
     */
     //originReq = originRequest
     const originReq = error.config;
-    if (err.response.status === 401) return Promise.reject(error);
+    if (error.response.status === 401) return Promise.reject(error);
   }
 );

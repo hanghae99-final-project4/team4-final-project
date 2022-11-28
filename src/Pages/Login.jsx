@@ -33,11 +33,14 @@ const Login = () => {
         </h1>
         <br />
         <article className="py-[90px] justify-center items-center">
-          <div className="w-[263px] h-[58px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
+          <div className="w-[262px] leading-[22px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
             <h2 className="w-[full] mx-[auto] my-[0px] font-bold text-[1.3rem] text-center">
               지하철에서 <br />
               새로운 인연을 만나보아요.
             </h2>
+            <p className="block w-[276px] text-center text-[0.8rem]">
+              가입하신 정보를 바탕으로 자동 1:1매칭이 이루어집니다
+            </p>
           </div>
           <div className="w-[340px] mt-[56px] mx-[auto] my-[0px] flex flex-col justify-center">
             {<img src={logo} alt="logo" className="mx-[auto] my-[0px]" />}
