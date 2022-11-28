@@ -3,7 +3,8 @@ import axios from "axios";
 import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Cookies, useCookies } from "react-cookie";
-import FirstLogo from "../Assets/FirstLogo.svg";
+import jwtDecode from "jwt-decode";
+import FirstLogo from "../Assets/Logo.svg";
 
 const GoogleLogin = () => {
   const navigator = useNavigate();

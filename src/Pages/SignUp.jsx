@@ -8,20 +8,22 @@ import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
 import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
-import { getCookie } from "../MyTools/Hooks/MyCookie";
+import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
 
 const SignUp = () => {
   const [, , removeCookie] = useCookies(["token"]);
 
   const cookies = new Cookies();
-  const token = getCookie("token");
+  const token = cookies.get("token");
+  // const token = getCookie("token");/
   console.log(token);
 
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
   console.log(files);
 
-  const thURL = process.env.REACT_APP_TH_S_HOST;
+  // const thURL = process.env.REACT_APP_TH_S_HOST;
+  const yhURL = process.env.REACT_APP_YH_HOST;
 
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
@@ -54,7 +56,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post(`${thURL}/auth2/phone`, {
+      const { data } = await trainApi.postAuthPhone({
         phoneNumber: form.phoneNumber,
       });
       console.log(data);
@@ -71,7 +73,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post(`${thURL}/auth2/compare`, {
+      const { data } = await trainApi.postAuthCode({
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
@@ -102,14 +104,11 @@ const SignUp = () => {
       console.log(pair);
     }
     console.log("2_token", token);
-    await axios
-      .post(`${thURL}/user`, fd, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    await trainApi2
+      .postForm(fd)
+      //res 값으로 request에서 에러 처리를
       .then((res) => {
+        //new토큰이 들어온 자리
         console.log(res);
 
         const msg = res.data.msg;
