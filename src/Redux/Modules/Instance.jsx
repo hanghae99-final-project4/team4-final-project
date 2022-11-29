@@ -271,7 +271,7 @@ instanceF.interceptors.response.use(
       // const newToken = res.data.newToken;
       // const msg = res.data.data.msg;
       // console.log(newToken);
-      // console.log(msg);
+
       // setCookie("token", newToken, { path: "/" });
       // res.headers["Authorization"] = `Bearer ${newToken}`;
     }
