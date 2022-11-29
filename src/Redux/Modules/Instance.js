@@ -90,7 +90,7 @@ instance.interceptors.response.use(
       console.log(config.config.data.newJwtToken);
       const newToken = config.config.data.newJwtToken;
       console.log(newToken);
-      setCookie("token", newToken);
+      setCookie("token", newToken, { path: "/" });
       return axios({
         ...config.config,
         headers: {
@@ -179,7 +179,8 @@ instanceF.interceptors.response.use(
     //위에 콘솔은 config.data.newJwtToken에 있어
     // 응답 데이터 가공.
     if (config.status === 201) {
-      setCookie("token", newToken);
+      cookies.remove("token", { path: "/" });
+      setCookie("token", newToken, { path: "/" });
       return axios({
         ...config.config,
         headers: {
@@ -188,7 +189,7 @@ instanceF.interceptors.response.use(
       }).then((res) => {
         console.log(newToken);
 
-        // cookies.set("token", config.data.newJwtToken);
+        cookies.set("token", config.data.newJwtToken);
       });
     } else {
       return config;
@@ -207,8 +208,8 @@ instanceF.interceptors.response.use(
     // console.log(error.response.data.errorMessage);
     // const statusValue = error.response.status;
     if (error.response.status === 401) {
-      cookies.remove("token", { path: "/" });
-      // window.location.replace("/");
+      cookies.remove("token", token, { path: "/" });
+      window.location.replace("/");
       //   // cookies.get("token");
       //   // cookies.set("token", error.data.newToken);
       //   // alert(`${err}`);
