@@ -78,12 +78,12 @@ instance.interceptors.response.use(
     console.log(accessToken);
     //status(200),인증되었습니다 response지나감
     console.log(config); //status(200) 지나감.
-    console.log(config.data); //msg: 인증되었..body값들어옴.
+    console.log(config.data); //msg:..body값들어옴.
     console.log(config.config.headers); //토큰 Bearer 어쩌구전부 들어옴
-    console.log(config.config.headers.Authorization); //"Bearer "만 찍히는 게 정상.
+    console.log(config.config.headers.Authorization); //Bearer 저쩌구
     console.log(config.config.data); //post로 보내는 data값을 나타내.
     // const ok = config.config.data.ok;
-    console.log(token);
+    console.log(accessToken);
     // 응답 데이터 가공.
     if (config.status === 201) {
       console.log("성공 201찍혀 89줄");
@@ -107,8 +107,12 @@ instance.interceptors.response.use(
     // return response;
   },
   (error) => {
+    //일반요청에러 400대
     console.log("res 에러 처리 109줄");
-    console.log(error);
+    console.log(error); //400에러 지나감
+    console.log(error.response.status); //status(400)에러
+    console.log(error.response.data); //백에서보낸errorbody값
+    console.log(error.response.data.error); //백에서보낸 errorbody키값
     /*
     http status가 401 경우 응답 에러 직전 호출.
     .catch() 으로 이어짐.
@@ -131,32 +135,20 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+//폼데이터 인터셉터
 instanceF.interceptors.request.use(
   async (config) => {
     //여기 config는 위에거 복붙하면 됨 신경노노
-    const accessToken = cookies.get("token");
-    console.log(accessToken);
+    const token = cookies.get("token");
+    // console.log(token);
     // 요청 성공 직전 수행할 일
-    console.log(config);
+    console.log("폼데이터,인터셉터정보 145줄", config); //여기부터 요청시작
     console.log(config.headers);
     console.log(config.headers.Authorization);
-    // const cookies = new Cookies();
-    // const accessToken = cookies.get("token");
 
-    // config.headers.Authorization = `Bearer ${accessToken}`;
-    config.headers.Authorization = `Bearer ${cookies.get("token")}`;
-
-    console.log("accTokenPm1155", token); //이건 무의미.신경노노
-
-    //token
-
-    // config.headers["Authorization"] = `${token}` ? `${token}` : null;
-    //browser token
-    // const newToken = config.data.newToken;
-    // const newActoken = Cookies.set("newToken");
-
-    // config.headers["expireIn"] = expireTime ? `${expireTime}` : null;
+    config.headers["Authorization"] = `Bearer ${token}`;
+    console.log("토큰 여기까지 찍혀 146줄", token);
+    // console.log("accTokenPm1155", token);
 
     return config;
   },
@@ -176,15 +168,15 @@ instanceF.interceptors.response.use(
   (config) => {
     const accessToken = cookies.get("token");
     console.log(accessToken); //현재 장착되어있는 토큰
-    console.log(config); //201 지나감
+    console.log(config); //201 값
     console.log(config.data); //백에서 보내준 body값: newToken
     console.log(config.config.headers); //현재토큰 Author~on: Bearer ~
     console.log(config.config.headers.Authorization); //현재 토큰 Bearer ~
     console.log(config.config.data); //백에 보내서 비음
     // const ok = config.config.data.ok;
-    const newToken = config.config.data.newJwtToken;
-    console.log(newToken); //당연히 안 뜸
-    //위에 콘솔은 당연히 안 뜸 config.data.newJwtToken에 있어서
+    const newToken = config.data.newJwtToken;
+    console.log(newToken);
+    //위에 콘솔은 config.data.newJwtToken에 있어
     // 응답 데이터 가공.
     if (config.status === 201) {
       setCookie("token", newToken);
@@ -196,9 +188,7 @@ instanceF.interceptors.response.use(
       }).then((res) => {
         console.log(newToken);
 
-        console.log(res);
-        console.log(res.data.data);
-        cookies.set("token", config.data.newJwtToken);
+        // cookies.set("token", config.data.newJwtToken);
       });
     } else {
       return config;
