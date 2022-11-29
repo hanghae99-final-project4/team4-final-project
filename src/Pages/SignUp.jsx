@@ -108,10 +108,12 @@ const SignUp = () => {
       .postForm(fd)
       //res 값으로 request에서 에러 처리를
       .then((res) => {
+        //new토큰이 들어온 자리
         console.log(res);
 
         const msg = res.data.msg;
         alert(msg);
+        navigator("/subwaypage");
       })
       .catch((err) => {
         console.log(err);
