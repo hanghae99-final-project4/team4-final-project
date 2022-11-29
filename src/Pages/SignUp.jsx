@@ -51,6 +51,15 @@ const SignUp = () => {
     });
   };
 
+  //인증확인 더블클릭시
+  const onDoubleClick = (e) => {
+    e.preventDefault();
+    return;
+    // alert("비정상적인 활동이 발견됐습니다. 다시 로그인해 주세요.");
+    // removeCookie("token", { path: "/" });
+    // navigator(-2);
+  };
+
   //인증요청
   const onNumberRequest = async (e) => {
     e.preventDefault();
@@ -113,7 +122,7 @@ const SignUp = () => {
 
         const msg = res.data.msg;
         alert(msg);
-        navigator("/subwaypage");
+        // navigator("/subwaypage");
       })
       .catch((err) => {
         console.log(err);
