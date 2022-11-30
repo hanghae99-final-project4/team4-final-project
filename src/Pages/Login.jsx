@@ -28,24 +28,27 @@ const Login = () => {
   return (
     <Login1 className="p-[0px] flex flex-col justify-center items-center font-sans">
       <LoginBox className="relative flex-col items-center rounded-[10px]">
-        <h1 className="h-[45px] flex justify-center items-center bg-[#D9D9D9] text-center text-[1.2rem] font-bold">
-          환승시민
-        </h1>
         <br />
         <article className="py-[90px] justify-center items-center">
-          <div className="w-[276px] h-[90px] leading-[22px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
-            <h2 className="w-[full] mx-[auto] my-[0px] font-bold text-[1.3rem] text-center">
+          <div className="w-[276px] h-[90px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
+            <h2 className="w-[full] mx-[auto] my-[0px] leading-[33px] font-bold text-[1.3rem] text-center">
               {/* 지하철에서 <br />
               새로운 인연을 만나보아요. */}
               <p>지하철에서</p>
               <p>새로운 인연을 만나보아요</p>
             </h2>
-            <p className="block text-center text-[0.6rem]">
+            <p className="block text-center text-[0.6rem] leading-[16px]">
               가입하신 정보를 바탕으로 자동 1:1매칭이 이루어집니다
             </p>
           </div>
-          <div className="w-[340px] mt-[56px] mx-[auto] my-[0px] flex flex-col justify-center">
-            {<img src={logo} alt="logo" className="mx-[auto] my-[0px]" />}
+          <div className="w-[248] mt-[56px] mx-[auto] my-[0px] flex flex-col justify-center">
+            {
+              <img
+                src={logo}
+                alt="logo"
+                className="w-[248px] h-[131px] mx-[auto] my-[0px]"
+              />
+            }
             <div>
               <div className="gap-[10px] flex flex-col justify-center items-center">
                 {/* 카카오로그인 */}
@@ -90,3 +93,5 @@ const LoginBox = styled.div`
     font-size: 1.3rem;
   } ;
 `;
+
+/* 기입하신 정보를 바탕으로 자동 1:1매칭이 이루어집니다 */

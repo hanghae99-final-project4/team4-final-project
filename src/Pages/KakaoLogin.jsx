@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Cookies, useCookies } from "react-cookie";
 import FirstLogo from "../Assets/FirstLogo.svg";
-import { trainApi } from "../MyTools/Instance";
 
 const KakaoLogin = () => {
   const navigator = useNavigate();
@@ -39,7 +38,7 @@ const KakaoLogin = () => {
       console.log(res);
       console.log(res.data);
       // console.log(res.data.doneAdditionalInfo);
-      console.log(res.data.jwtToken);
+      // console.log(res.data.jwtToken);
       // console.log(res.data.newToken);
       // console.log(res.data.message);
 
@@ -56,11 +55,10 @@ const KakaoLogin = () => {
         navigator("/signup");
       }
       alert(`${msg}`);
+    })
+    .catch((err) => {
+      console.log("err 61줄");
     });
-  // .catch((err) => {
-  //   // console.log(1);
-  //   // console.log(err);
-  // });
 
   return (
     <div className="flex justify-center items-center min-h-screen">

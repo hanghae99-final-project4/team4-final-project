@@ -10,6 +10,7 @@ import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
 import FooterNext from "../Components/Footer/FooterNext";
+import useInput from "../MyTools/Hooks/UseInput";
 
 const AuthCode = () => {
   const [, , removeCookie] = useCookies(["token"]);
@@ -29,36 +30,23 @@ const AuthCode = () => {
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
-  const [form, onChangeValue, reset] = useOnput({
+  const [form, setForm, onChangeValue, reset] = useInput({
     representProfile: "",
     phoneNumber: "",
     authCode: "",
     nickname: "",
-    gender: check,
+    gender: "",
   });
   const [disable, setDisable] = useState(false);
 
   const inputRef = useRef([]);
 
-  //파일 target
-  const onImgChange = (e) => {
-    const fileList = e.target.files[0];
-    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
-    const url = URL.createObjectURL(fileList);
-    console.log(url);
-    setFileImg({
-      files: fileList,
-      thumbnail: url,
-    });
-  };
-
   //인증확인 더블클릭시
   const onDoubleClick = (e) => {
     e.preventDefault();
-    return;
-    // alert("비정상적인 활동이 발견됐습니다. 다시 로그인해 주세요.");
-    // removeCookie("token", { path: "/" });
-    // navigator(-2);
+    alert("비정상적인 활동이 발견됐습니다. 다시 로그인해 주세요.");
+    removeCookie("token", { path: "/" });
+    navigator(-2);
   };
 
   //인증요청
@@ -107,7 +95,7 @@ const AuthCode = () => {
     console.log(fd);
     fd.append("representProfile", fileImg.files);
     fd.append("phoneNumber", form.phoneNumber);
-    fd.append("gender", true);
+    fd.append("gender", form.gender);
     fd.append("nickname", form.nickname);
 
     for (let pair of fd.entries()) {
@@ -156,13 +144,15 @@ const AuthCode = () => {
     }
   }, [fileImg]);
 
+  //초기값
+
   return (
     <>
       <InfoBox className=" flex-col items-center">
         <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
           <div className="h-[45px] flex justify-center items-center bg-[#D9D9D9] text-center text-[1.2rem] font-bold"></div>
           <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
-            <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
+            <h1 className="text-[20px]">기본 정보를 입력해주세요!</h1>
             <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
               <div className="w-[100%] rounded-[10px]">
                 <form className="flex flex-col gap-[30px] ">
@@ -226,6 +216,24 @@ const AuthCode = () => {
                           </button>
                         </div>
                       </div>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        name="gender"
+                        id="male"
+                        value="true"
+                        onChange={onChangeValue}
+                      />
+                      <label htmlFor="radio">남성</label>
+                      <input
+                        type="radio"
+                        name="gender"
+                        id="male"
+                        value="false"
+                        onChange={onChangeValue}
+                      />
+                      <label htmlFor="radio1">여성</label>
                     </div>
                   </div>
                 </form>

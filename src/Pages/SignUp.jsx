@@ -122,7 +122,7 @@ const SignUp = () => {
 
         const msg = res.data.msg;
         alert(msg);
-        // navigator("/subwaypage");
+        navigator("/subwaypage");
       })
       .catch((err) => {
         console.log(err);
@@ -255,27 +255,23 @@ const SignUp = () => {
                       <div className="flex justify-center">
                         <div className="float-left mr-[61px]">
                           <input
-                            type="checkbox"
+                            type="radio"
                             name="gender"
-                            // checked={check}
-                            value={form.gender}
-                            // onChange={() => setCheck(true)}
-                            onChange={() => setDisable(true)}
-                            disabled={disable}
+                            id="male"
+                            value="true"
+                            onChange={onChangeValue}
                           />
-                          남성
+                          <label htmlFor="radio">남성</label>
                         </div>
                         <div>
                           <input
-                            type="checkbox"
-                            // checked={check}
+                            type="radio"
                             name="gender"
-                            value={form.gender}
-                            // onChange={() => setCheck(false)}
-                            onChange={() => setDisable(true)}
-                            disabled={disable}
+                            id="male"
+                            value="false"
+                            onChange={onChangeValue}
                           />
-                          여성
+                          <label htmlFor="radio1">여성</label>
                         </div>
                       </div>
                       <div>
