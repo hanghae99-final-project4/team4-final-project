@@ -10,30 +10,16 @@ const KakaoLogin = () => {
   const cookies = new Cookies();
   const [tokens, setTokens] = useCookies(["token"]);
 
-  // useEffect(() => {
   // 인가코드 확인하기
   const code = new URL(window.location.href).searchParams.get("code");
   // console.log("인가코드", code);
-  // const yhURL = process.env.REACT_APP_YH_HOST;
-  // const thURL = process.env.REACT_APP_TH_S_HOST;
   const thURL = process.env.REACT_APP_YH_HOST;
-  // const thURL = process.env.REACT_APP_TH_HOST;
-  // console.log(1);
+
   //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
   // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
 
   axios
-    .get(
-      `${thURL}/auth/kakao/callback?code=${code}`
-      // trainApi
-      //   .getLogin()
-      // `${yhURL}/auth/kakao/callback?code=${code}`
-      //       {
-      //   headers: {
-      //     Authorization: `${token}`,
-      //   },
-      // }
-    )
+    .get(`${thURL}/auth/kakao/callback?code=${code}`)
     .then((res) => {
       console.log(res);
       console.log(res.data);
