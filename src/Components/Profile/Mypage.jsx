@@ -9,6 +9,7 @@ import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies, useCookies } from "react-cookie";
 import HomeMenu from "../HomeMenu/HomeMenu";
 import { useNavigate } from "react-router-dom";
+import { trainApi } from "../../Redux/Modules/instance";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -26,11 +27,11 @@ const MyPage = () => {
 
   // console.log(token);
 
-  const thURl = process.env.REACT_APP_TH_S_HOST;
+  const thURL = process.env.REACT_APP_TH_S_HOST;
 
   useEffect(() => {
     async function getProfile() {
-      const { data } = await axios.get(`${thURl}/profile`, {
+      const { data } = await axios.get(`${thURL}/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,6 +41,7 @@ const MyPage = () => {
     }
     getProfile();
   }, [form?.representProfile]);
+  console.log(representProfile);
 
   async function imgSubmitHandler() {
     const formData = new FormData();
@@ -55,7 +57,7 @@ const MyPage = () => {
       console.log(pair);
     }
     try {
-      const { data } = await axios.post(`${thURl}/profile`, formData, {
+      const { data } = await axios.post(`${thURL}/profile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -243,6 +245,7 @@ const MyPage = () => {
         <SaveBtn onClick={() => imgSubmitHandler()}>저장</SaveBtn>
       </div>
 
+      <div>취소</div>
       <Customer>
         <button className="button1">고객유의사항</button>
 
@@ -291,6 +294,7 @@ const Wrap = styled.div`
   }
 `;
 
+// 흰색 박스입니다.
 const AttachPicture = styled.div`
   .information {
     width: 400px;
@@ -300,7 +304,7 @@ const AttachPicture = styled.div`
   width: 700px;
   height: 350px;
   padding: 60px;
-  border-radius: 10px;
+  border-radius: 100px;
   border: none;
   background-color: #ffffff;
   z-index: 999;
