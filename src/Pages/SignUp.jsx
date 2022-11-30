@@ -115,6 +115,7 @@ const SignUp = () => {
     console.log("2_token", token);
     await trainApi2
       .postForm(fd)
+
       //res 값으로 request에서 에러 처리를
       .then((res) => {
         //new토큰이 들어온 자리

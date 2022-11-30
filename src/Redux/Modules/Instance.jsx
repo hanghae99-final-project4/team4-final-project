@@ -11,13 +11,14 @@ const code = new URL(window.location.href).searchParams.get("code");
 //인스턴스 - api 전역관리
 const hURL = process.env.REACT_APP_YH_HOST;
 
+//일반데이터 Instance
 const instance = axios.create({
   baseURL: `${hURL}`,
   headers: {
     Authorization: `Bearer ${token}`,
   },
 });
-
+//폼데이터 Instance
 const instanceF = axios.create({
   baseURL: `${hURL}`,
   headers: {
@@ -30,6 +31,10 @@ const instanceF = axios.create({
 export const trainApi2 = {
   //signup
   postForm: (payload) => instanceF.post(`/user`, payload),
+  // postProficForm: (payload) => instanceF.post(`/profile`, payload),
+  // post: (payload) => instance.post("/url", payload),
+  // get: () => instance.put("/url"),
+  // delete: () => instance.delete("/url"),
 };
 
 //일반데이터api
@@ -163,7 +168,7 @@ instanceF.interceptors.response.use(
     console.log("폼데이터 res 인터셉터정보 167줄");
     const accessToken = cookies.get("token");
     console.log(accessToken); //현재 장착되어있는 토큰
-    console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
+    console.log("status(200)대 정보", config); //200,201 값,
 
     const newToken = config.data.newJwtToken;
     console.log(newToken);
@@ -175,7 +180,7 @@ instanceF.interceptors.response.use(
     }
     //새토큰갈아끼우는곳
     if (config.status === 201) {
-      console.log("성공 201찍혀 182줄");
+      console.log("성공 201찍혀 183줄");
       setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
       return axios({
         ...config.config,
@@ -193,11 +198,11 @@ instanceF.interceptors.response.use(
     .catch() 으로 이어짐.
     */
     //폼데이터 response 400대 혹은 그 외 에러
-    console.log("폼데이터 res 에러 처리 200줄");
+    console.log("폼데이터 res 에러 처리 201줄");
     console.log(error); //400에러 지나감
     console.log(error.response.status); //status(400)대에러
     // console.log(error.response.data); //백에서보낸errorbody값
-
+    console.log(error.response.data.newJwtToken);
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     const statusValue = error.response.status;
@@ -211,7 +216,7 @@ instanceF.interceptors.response.use(
       //만료됐을 때
       // console.log("401에러-만료되서 새 토큰 발행하는겨");
       //newToken발행하는 미들웨어로
-      // console.log(newToken);
+      console.log(newToken);
       setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
       return axios({
         ...error.config,
