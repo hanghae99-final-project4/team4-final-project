@@ -51,16 +51,6 @@ export const trainApi = {
 
 instance.interceptors.request.use(
   async (config) => {
-    // const token = cookies.get("token");
-    // console.log(token);
-    // 요청 성공 직전 수행할 일
-    // console.log("인터셉터정보 55줄", config); //여기부터 요청시작
-    // console.log(config.headers);
-    // console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.
-
-    // config.headers["Authorization"] = `Bearer ${token}`;
-    // console.log("토큰 여기까지 찍혀 60줄", token);
-
     return config;
   },
   (error) => {
@@ -84,44 +74,6 @@ instance.interceptors.response.use(
     console.log("토큰 여기까지 찍혀 151줄", token);
 
     return config;
-
-    // // const navigator = useNavigate();
-    // console.log("폼데이터 res 인터셉터정보 184줄");
-    // const accessToken = cookies.get("token");
-    // console.log(accessToken); //현재 장착되어있는 토큰
-    // console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
-    // console.log(config.data); //백에서 보내준 body값: newToken
-    // console.log(config.config.headers); //현재토큰 Author~on: Bearer ~
-    // console.log(config.config.headers.Authorization); //현재 토큰 Bearer ~
-    // console.log(config.config.data); //백에 보내서 비음
-    // // const ok = config.config.data.ok;
-    // const newToken = config.data.newJwtToken;
-    // console.log(newToken);
-    // //위에 콘솔은 config.data.newJwtToken에 있어
-    // // 응답 데이터 가공.
-    // if (config.status === 200) {
-    //   console.log("status 200번대");
-    // }
-    // if (config.status === 201) {
-    //   //새토큰갈아끼우는곳
-    //   console.log("성공 201찍혀 95줄");
-    //   setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
-    //   return axios({
-    //     ...config.config,
-    //     headers: {
-    //       Authorization: `Bearer ${newToken}`, //2.새토큰장착
-    //     },
-    //   });
-    // .then((res) => {
-    // console.log(res);
-    // console.log(res.data.msg);
-    // const msg = res.data.msg;
-    // alert(msg);
-    // navigator("/subwaypage");
-    // window.location.replace("/subwaypage");
-    // cookies.set("token", config.data.newJwtToken); 이건 필요하면 쓰고 아님 말규
-    // });
-    // }
   },
   (error) => {
     /*
@@ -132,17 +84,11 @@ instance.interceptors.response.use(
     console.log("폼데이터 res 에러 처리 220줄");
     console.log(error); //400에러 지나감
     console.log(error.response.status); //status(400)에러
-    console.log(error.response.data); //백에서보낸errorbody값
-    //error.response.data.newJwtToken
-    // console.log(error.config);
-    // console.log(error.config.headers);//현재토큰
-    console.log(error.response.status); //401
-    // const token = cookies.get("token");
+
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     console.log(newToken);
-    // const msg = error.response.data.message;
-    // error.headers["Authorization"] = `Bearer ${token}`;
+
     const statusValue = error.response.status;
     if (statusValue === 401 && ok !== 6) {
       console.log("status 401찍혀 210줄");
@@ -168,15 +114,6 @@ instance.interceptors.response.use(
 //폼데이터 인터셉터
 instanceF.interceptors.request.use(
   async (config) => {
-    // const token = cookies.get("token");
-    // console.log(token);
-    // 요청 성공 직전 수행할 일
-    // console.log("폼데이터 인터셉터정보 166줄", config); //여기부터 요청시작
-    // console.log(config.headers);
-
-    // config.headers["Authorization"] = `Bearer ${token}`;
-    // console.log("토큰 여기까지 찍혀 151줄", token);
-
     return config;
   },
   (error) => {
@@ -199,35 +136,12 @@ instanceF.interceptors.response.use(
     console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
     console.log(config.data); //백에서 보내준 body값: newToken
     console.log(config.config.headers); //현재토큰 Author~on: Bearer ~
-    console.log(config.config.headers.Authorization); //현재 토큰 Bearer ~
-    console.log(config.config.data); //백에 보내서 비음
+    // console.log(config.config.headers.Authorization); //현재 토큰 Bearer ~
+    // console.log(config.config.data); //백에 보내서 비음
     // const ok = config.config.data.ok;
     const newToken = config.data.newJwtToken;
     console.log(newToken);
-    //위에 콘솔은 config.data.newJwtToken에 있어
-    // 응답 데이터 가공.
-    // if (config.status === 200) {
-    //   console.log("status 200번대");
-    // }
-    // if (config.status === 201) {
-    //   //새토큰갈아끼우는곳
-    //   console.log("성공 201찍혀 95줄");
-    //   setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
-    //   return axios({
-    //     ...config.config,
-    //     headers: {
-    //       Authorization: `Bearer ${newToken}`, //2.새토큰장착
-    //     },
-    //   });
-    // }
-    // console.log(res);
-    // console.log(res.data.msg);
-    // const msg = res.data.msg;
-    // alert(msg);
-    // navigator("/subwaypage");
-    // window.location.replace("/subwaypage");
-    // cookies.set("token", config.data.newJwtToken); 이건 필요하면 쓰고 아님 말규
-    // } else {
+
     const token = cookies.get("token");
     // console.log(token);
     // 요청 성공 직전 수행할 일
@@ -238,7 +152,6 @@ instanceF.interceptors.response.use(
     console.log("토큰 여기까지 찍혀 151줄", token);
 
     return config;
-    // }
   },
   (error) => {
     /*
@@ -246,22 +159,14 @@ instanceF.interceptors.response.use(
     .catch() 으로 이어짐.
     */
     //폼데이터 response 400대 혹은 그 외 에러
-    // const navigator = useNavigate();
     console.log("폼데이터 res 에러 처리 220줄");
     console.log(error); //400에러 지나감
     console.log(error.response.status); //status(400)에러
-    console.log(error.response.data); //백에서보낸errorbody값
-    //error.response.data.newJwtToken
 
-    // console.log(error.config);
-    // console.log(error.config.headers);//현재토큰
-    console.log(error.response.status); //401
-    // const token = cookies.get("token");
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     console.log(newToken);
-    // const msg = error.response.data.message;
-    // error.headers["Authorization"] = `Bearer ${token}`;
+
     const statusValue = error.response.status;
     if (statusValue === 401 && ok !== 6) {
       console.log("status 401찍혀 210줄");
@@ -279,13 +184,6 @@ instanceF.interceptors.response.use(
           Authorization: `Bearer ${newToken}`, //2.새토큰장착
         },
       });
-
-      // const newToken = res.data.newToken;
-      // const msg = res.data.data.msg;
-      // console.log(newToken);
-
-      // setCookie("token", newToken, { path: "/" });
-      // res.headers["Authorization"] = `Bearer ${newToken}`;
     }
 
     return Promise.reject(error);

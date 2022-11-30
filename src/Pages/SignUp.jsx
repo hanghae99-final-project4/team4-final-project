@@ -130,8 +130,16 @@ const SignUp = () => {
 
         const msg = err.response.data.msg;
         const er = err.response.data.error;
-        msg ? alert(msg) : er ? alert(er) : <></>;
-        return;
+
+        return msg ? (
+          alert(msg)
+        ) : er ? (
+          alert(er)
+        ) : err.response.status === 422 ? (
+          alert("필수 유저 정보를 입력해주세요.")
+        ) : (
+          <></>
+        );
       });
     // }
   };
