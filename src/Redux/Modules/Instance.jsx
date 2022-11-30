@@ -80,7 +80,7 @@ instance.interceptors.response.use(
     console.log(config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
     console.log(config.data); //백에서 보내준 body값: newToken
     console.log(config.config.headers); //현재토큰 Author~on: Bearer ~
-    console.log(config.config.headers.Authorization); //현재 토큰 Bearer ~
+    console.log("현재토큰", config.config.headers.Authorization); //현재 토큰 Bearer ~
     console.log(config.config.data); //백에 보내서 비음
     // const ok = config.config.data.ok;
     const newToken = config.data.newJwtToken;
@@ -88,7 +88,7 @@ instance.interceptors.response.use(
     //위에 콘솔은 config.data.newJwtToken에 있어
     // 응답 데이터 가공.
     if (config.status === 200) {
-      console.log("status 200번대");
+      console.log("status 200번대 ----여기서 브라우저 response값으로 넘어감");
     }
     if (config.status === 201) {
       //새토큰갈아끼우는곳
@@ -245,7 +245,7 @@ instanceF.interceptors.response.use(
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     // const msg = error.response.data.message;
-
+    error.headers["Authorization"] = `Bearer ${token}`;
     const statusValue = error.response.status;
     if (statusValue === 401 && ok !== 6) {
       console.log("status 401찍혀 249줄");
@@ -256,17 +256,19 @@ instanceF.interceptors.response.use(
       console.log("401에러");
       //newToken발행하는 미들웨어로
       console.log(newToken);
-      if (newToken) {
-        setCookie("token", newToken);
-        return axios({
-          headers: {
-            Authorization: `Bearer ${newToken}`,
-          },
-        }).then((res) => {
-          console.log(res);
-          cookies.set("token", newToken);
-        });
-      }
+      setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
+      return axios({
+        ...error.config,
+        headers: {
+          Authorization: `Bearer ${newToken}`, //2.새토큰장착
+        },
+      }).then((res) => {
+        console.log(res);
+        console.log(res.data.msg);
+        const msg = res.data.msg;
+        alert(msg);
+        navigator("/subwaypage");
+      });
 
       // const newToken = res.data.newToken;
       // const msg = res.data.data.msg;
