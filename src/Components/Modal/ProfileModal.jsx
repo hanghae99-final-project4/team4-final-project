@@ -19,11 +19,17 @@ const ProfileModal = ({
 
         <ProfileSetBtn onClick={() => PictureUpload()}>
           프로필 설정하기
+<<<<<<< HEAD
           프로필 사진 바꾸기
         </ProfileSetBtn>
         <ProfileCloseBtn onClick={() => setIsModal(!isModal)}>
           나가기
           저장 후 나가기
+=======
+        </ProfileSetBtn>
+        <ProfileCloseBtn onClick={() => setIsModal(!isModal)}>
+          나가기
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
         </ProfileCloseBtn>
       </ModalWrap>
     </ModalCtn>
@@ -32,7 +38,6 @@ const ProfileModal = ({
 
 export default ProfileModal;
 
-//프로필 프리뷰 사진 5장 고르는 곳입니다.
 const ModalCtn = styled.div`
   width: 100%;
   height: 100%;
@@ -41,6 +46,7 @@ const ModalCtn = styled.div`
   box-sizing: border-box;
   display: ${(isModal) => (isModal ? "block" : "none")};
   position: fixed;
+
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -48,15 +54,20 @@ const ModalCtn = styled.div`
   background: rgba(0, 0, 0, 0.4);
   z-index: 999;
 `;
-
 const ModalWrap = styled.div`
   position: relative;
   border-radius: 5px;
   left: 450px;
+<<<<<<< HEAD
   left: 300px;
   top: 200px;
   width: 1100px;
   width: 800px;
+=======
+  top: 200px;
+
+  width: 1100px;
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
   height: 500px;
   background-color: white;
   display: flex;
@@ -64,32 +75,36 @@ const ModalWrap = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-//이미지 5장 움직 일 수 있는 곳입니다.
 const ModalProfileDiv = styled.div`
   width: 375px;
+<<<<<<< HEAD
   width: 800px;
+=======
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
   height: 300px;
   display: flex;
-  gap: 20px;
   flex-direction: row;
-  align-items: center;
   position: relative;
   right: 170px;
+<<<<<<< HEAD
   right: -80px;
+=======
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
 `;
 
-// 저장 하기 버튼입니다.
 const ProfileCloseBtn = styled.button`
   position: relative;
   bottom: -150px;
   width: 150px;
   height: 50px;
+<<<<<<< HEAD
   border: 2px solid #71c9dd;
   border-radius: 30px;
   right: 500px;
   font-size: 14px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+=======
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
 `;
 const ProfileSetBtn = styled.button`
   width: 150px;
@@ -97,10 +112,6 @@ const ProfileSetBtn = styled.button`
   position: relative;
   bottom: -150px;
   left: -100px;
-  border: 2px solid #71c9dd;
-  border-radius: 30px;
-  font-size: 14px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
  8  
 src/Components/Profile/CustomerNotice.jsx

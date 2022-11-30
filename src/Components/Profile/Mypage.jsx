@@ -41,8 +41,12 @@ const MyPage = () => {
     }
     getProfile();
 <<<<<<< HEAD
+<<<<<<< HEAD
   }, [form?.representProfile]);
   console.log(representProfile);
+=======
+  }, []);
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
 =======
   }, []);
 >>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
@@ -246,12 +250,17 @@ const MyPage = () => {
       <div>
         <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         {/* </div>
+=======
+      </div>
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
       <div></div>
       <div className="client">
         <button>고객유의사항</button>
         <button>고객이용가이드</button>
+<<<<<<< HEAD
       </div> */}
 
         <div>취소</div>
@@ -270,6 +279,9 @@ const MyPage = () => {
 <<<<<<< HEAD
 
 =======
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
+=======
+      </div>
 >>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
       {isModal && (
         <ProfileModal
