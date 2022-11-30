@@ -27,15 +27,11 @@ const MyPage = () => {
 
   console.log(token);
 
-<<<<<<< HEAD
-  const thURL = process.env.REACT_APP_TH_S_HOST;
-=======
   const thURl = process.env.REACT_APP_YJ_HOST;
->>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
 
   useEffect(() => {
     async function getProfile() {
-      const { data } = await axios.get(`${thURL}/profile`, {
+      const { data } = await axios.get(`${thURl}/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,11 +40,8 @@ const MyPage = () => {
       setForm(data.body);
     }
     getProfile();
-<<<<<<< HEAD
   }, [form?.representProfile]);
   console.log(representProfile);
-=======
-  }, []);
 
   // const onGetInfo = async () => {
   //   try {
@@ -65,7 +58,6 @@ const MyPage = () => {
   //   }
   // };
   //get(name, [options])
->>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
 
   async function imgSubmitHandler() {
     const formData = new FormData();
@@ -81,7 +73,7 @@ const MyPage = () => {
       console.log(pair);
     }
     try {
-      const { data } = await axios.post(`${thURL}/profile`, formData, {
+      const { data } = await axios.post(`${thURl}/profile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -249,22 +241,26 @@ const MyPage = () => {
       </AttachPicture>
       <div>
         <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
+
+        {/* </div>
+      <div></div>
+      <div className="client">
+        <button>고객유의사항</button>
+        <button>고객이용가이드</button>
+      </div> */}
+
+        <div>취소</div>
+        <Customer>
+          <button className="button1">고객유의사항</button>
+          <button className="button2">고객이용가이드</button>
+        </Customer>
       </div>
       <div></div>
       <div className="client">
         <button>고객유의사항</button>
         <button>고객이용가이드</button>
       </div>
-<<<<<<< HEAD
 
-      <div>취소</div>
-      <Customer>
-        <button className="button1">고객유의사항</button>
-
-        <button className="button2">고객이용가이드</button>
-      </Customer>
-=======
->>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
       {isModal && (
         <ProfileModal
           isModal={isModal}
