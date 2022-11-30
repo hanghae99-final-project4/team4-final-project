@@ -40,8 +40,12 @@ const MyPage = () => {
       setForm(data.body);
     }
     getProfile();
+<<<<<<< HEAD
   }, [form?.representProfile]);
   console.log(representProfile);
+=======
+  }, []);
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
 
   // const onGetInfo = async () => {
   //   try {
@@ -241,6 +245,7 @@ const MyPage = () => {
       </AttachPicture>
       <div>
         <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
+<<<<<<< HEAD
 
         {/* </div>
       <div></div>
@@ -254,13 +259,18 @@ const MyPage = () => {
           <button className="button1">고객유의사항</button>
           <button className="button2">고객이용가이드</button>
         </Customer>
+=======
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
       </div>
       <div></div>
       <div className="client">
         <button>고객유의사항</button>
         <button>고객이용가이드</button>
       </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 8351c17 (이상현: Mypage CSS 작업, 라우터 변경, ConversPage 코드 수정)
       {isModal && (
         <ProfileModal
           isModal={isModal}
