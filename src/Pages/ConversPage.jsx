@@ -9,7 +9,7 @@ import HomeMenu from "../Components/HomeMenu/HomeMenu";
 const cookies = new Cookies();
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const token = cookies.get("token");
-
+console.log(token);
 const ConversPage = () => {
   const initialState = {
     nickname: "",
@@ -56,7 +56,7 @@ const ConversPage = () => {
         }
       );
       console.log(data);
-      setMessage(data.user);
+      setMessage(data.body);
     }
     getNickname();
   }, []);
