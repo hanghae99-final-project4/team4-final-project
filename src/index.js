@@ -5,12 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./Redux/Config/configstore";
+import GlobalStyle from "./Pages/GlobalStyle";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <>
+    <GlobalStyle />
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function

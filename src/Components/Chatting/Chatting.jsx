@@ -8,6 +8,8 @@ import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
 import HomeMenu from "../HomeMenu/HomeMenu";
+import LoadingIcon from "../../Element/LoadingIcon";
+import Header from "../Header/Header";
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
@@ -275,7 +277,8 @@ const Chatting = () => {
   // };
 
   return (
-    <div>
+    <div style={{ margin: "auto" }}>
+      <Header />
       {success ? (
         <>
           <SitdownHeader styled={{ fontSize: "16" }}>채팅방</SitdownHeader>
@@ -346,32 +349,33 @@ const Chatting = () => {
             <ChatSendBtn onClick={(e) => SubmitHandler(e)}>전송</ChatSendBtn>
           </FooterDiv>
           <MenuDiv>
-          <HomeMenu />
-              </MenuDiv>
-        </>
-      ) : (
-        <div>
-          Chatting
-          <PostDiv {...getRootProps()}>
-            <PostPictureDiv className="preview">{thumb}</PostPictureDiv>
-            <input
-              {...getInputProps()}
-              value={message.picture}
-              name="picture"
-              multiple="multiple"
-              maxSize={300000000}
-              accept="image/*,video/*"
-              onChange={(e) => encodeFileToBase64(e.target.files[0])}
-              type="file"
-            />
-          </PostDiv>
-          <button onClick={() => postSend()}>post 보내기</button>
-          <input value={message.msg} onChange={onChangeHandler} name="msg" />
-          <button onClick={() => sendHandler()}>제출</button>
-          <MenuDiv>
             <HomeMenu />
           </MenuDiv>
-        </div>
+        </>
+      ) : (
+        <>
+          <LoadingDiv>
+            <LoadingIcon />
+            {/* <PostDiv {...getRootProps()}>
+              <PostPictureDiv className="preview">{thumb}</PostPictureDiv>
+              <input
+                {...getInputProps()}
+                value={message.picture}
+                name="picture"
+                multiple="multiple"
+                maxSize={300000000}
+                accept="image/*,video/*"
+                onChange={(e) => encodeFileToBase64(e.target.files[0])}
+                type="file"
+              />
+            </PostDiv> */}
+            {/* <button onClick={() => postSend()}>post 보내기</button>
+            <input value={message.msg} onChange={onChangeHandler} name="msg" />
+            <button onClick={() => sendHandler()}>제출</button> */}
+
+            <HomeMenu />
+          </LoadingDiv>
+        </>
       )}
     </div>
   );
@@ -469,4 +473,16 @@ const ChatVideo = styled.video`
 `;
 const MenuDiv = styled.div`
   display: flex;
+`;
+
+const LoadingDiv = styled.div`
+  margin: auto;
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media only screen and (min-width: 375px) {
+  }
 `;
