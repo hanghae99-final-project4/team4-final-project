@@ -2,16 +2,13 @@ import axios from "axios";
 import styled from "styled-components";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
+import useOnput from "../MyTools/Hooks/UseOnput";
 import BlankImg from "../Assets/Empty_img.jpg";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
 import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
-import useInput from "../MyTools/Hooks/UseInput";
-import dbOk from "../Assets/NameOk/NameOk.svg";
-import male from "../Assets/Gender/Male.svg";
-import female from "../Assets/Gender/Female.svg";
 
 const AddInfo = () => {
   const [, , removeCookie] = useCookies(["token"]);
@@ -31,7 +28,7 @@ const AddInfo = () => {
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
-  const [form, setForm, onChangeValue, reset] = useInput({
+  const [form, onChangeValue, reset] = useOnput({
     representProfile: "",
     phoneNumber: "",
     authCode: "",
@@ -158,7 +155,6 @@ const AddInfo = () => {
     }
   }, [fileImg]);
 
-  const [isClick, setClick] = useState(false);
   return (
     <>
       <InfoBox className=" flex-col items-center">
@@ -191,25 +187,18 @@ const AddInfo = () => {
                     </button>
                   </div>
                   <div className="flex flex-col gap-[4px]">
-                    <div className="w-[130px] flex flex-col">
-                      <label className="text-[1rem] font-bold">닉네임</label>
-                      <div className="w-[130px] flex flex-row">
-                        <input
-                          name="nickname"
-                          type="text"
-                          value={form.nickname}
-                          minLength="1"
-                          maxLength="10"
-                          placeholder="닉네임 입력"
-                          onChange={onChangeValue}
-                          className="w-[155px] h-[30px] text-[1.2rem] rounded-[4px] border-b-[1px] focus:border-indigo-500"
-                        />
-                        <div className="float-right">
-                          <button>
-                            <img src={dbOk} alt="doubleOk" />
-                          </button>
-                        </div>
-                      </div>
+                    <div className="flex flex-col">
+                      <label className="text-[0.8rem] font-bold">닉네임</label>
+                      <input
+                        name="nickname"
+                        type="text"
+                        value={form.nickname}
+                        minLength="1"
+                        maxLength="10"
+                        placeholder="닉네임 입력"
+                        onChange={onChangeValue}
+                        className="w-[155px] h-[30px] text-[1rem] rounded-[4px] border-b-[1px] focus:border-indigo-500"
+                      />
                     </div>
                     {/* onfocus또는 focus css로 포커스되면 뜨게 */}
                     {form.nickname.length === 0 ? (
@@ -223,39 +212,37 @@ const AddInfo = () => {
                     )}
 
                     <div className="flex flex-col gap-[10px]">
-                      <div className="text-[1rem] font-bold mt-[30px]">
+                      <div className="text-[0.8rem] font-bold mt-[30px]">
                         성별
                       </div>
-                      <div className="flex justify-center gap-[61px]">
-                        <div className="float-left flex flex-col">
-                          <label htmlFor="male">
-                            <img src={male} alt="male" />
-                            <input
-                              type="radio"
-                              name="gender"
-                              id="male"
-                              value="true"
-                              onChange={onChangeValue}
-                              className=" w-[61px] h-[95px]"
-                            />
-                          </label>
+                      <div className="flex justify-center">
+                        <div className="float-left mr-[61px]">
+                          <input
+                            type="checkbox"
+                            name="gender"
+                            // checked={check}
+                            value={form.gender}
+                            // onChange={() => setCheck(true)}
+                            onChange={() => setDisable(true)}
+                            disabled={disable}
+                          />
+                          남성
                         </div>
-                        <div className="flex flex-col">
-                          <label htmlFor="female">
-                            <img src={female} alt="female" />
-
-                            <input
-                              type="radio"
-                              name="gender"
-                              id="male"
-                              value="false"
-                              onChange={onChangeValue}
-                            />
-                          </label>
+                        <div>
+                          <input
+                            type="checkbox"
+                            // checked={check}
+                            name="gender"
+                            value={form.gender}
+                            // onChange={() => setCheck(false)}
+                            onChange={() => setDisable(true)}
+                            disabled={disable}
+                          />
+                          여성
                         </div>
                       </div>
                       <div>
-                        <h2 className="text-[1rem] font-bold mt-[30px]">
+                        <h2 className="text-[0.8rem] font-bold mt-[30px]">
                           카테고리
                         </h2>
                         <div className="text-[#D9D9D9] font-bold">

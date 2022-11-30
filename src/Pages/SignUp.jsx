@@ -256,23 +256,27 @@ const SignUp = () => {
                       <div className="flex justify-center">
                         <div className="float-left mr-[61px]">
                           <input
-                            type="radio"
+                            type="checkbox"
                             name="gender"
-                            id="male"
-                            value="true"
-                            onChange={onChangeValue}
+                            // checked={check}
+                            value={form.gender}
+                            // onChange={() => setCheck(true)}
+                            onChange={() => setDisable(true)}
+                            disabled={disable}
                           />
-                          <label htmlFor="radio">남성</label>
+                          남성
                         </div>
                         <div>
                           <input
-                            type="radio"
+                            type="checkbox"
+                            // checked={check}
                             name="gender"
-                            id="male"
-                            value="false"
-                            onChange={onChangeValue}
+                            value={form.gender}
+                            // onChange={() => setCheck(false)}
+                            onChange={() => setDisable(true)}
+                            disabled={disable}
                           />
-                          <label htmlFor="radio1">여성</label>
+                          여성
                         </div>
                       </div>
                       <div>
