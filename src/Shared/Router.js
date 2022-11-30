@@ -13,6 +13,8 @@ import Disclaimer from "../Components/Agreement/Disclaimer";
 import ConversPage from "../Pages/ConversPage";
 import ChattingPage from "../Pages/ChattingPage";
 import SubwayPage from "../Pages/SubwayPage";
+import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
+import CustomerNotice from "../Components/Profile/CustomerNotice";
 
 const Router = () => {
   return (
@@ -31,6 +33,8 @@ const Router = () => {
         <Route path="/converspage" element={<ConversPage />} />
         <Route path="/chattingpage" element={<ChattingPage />} />
         <Route path="/subwaypage" element={<SubwayPage />} />
+        <Route path="/customerUserGuide" element={<CustomerUserGuide />} />
+        <Route path="/customerNotice" element={<CustomerNotice />} />
       </Routes>
     </BrowserRouter>
   );
