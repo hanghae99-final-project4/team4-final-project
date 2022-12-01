@@ -12,7 +12,7 @@ const cookies = new Cookies();
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const token = cookies.get("token");
-console.log(token);
+// console.log(token);
 const ConversPage = () => {
   const initialState = {
     nickname: "",
@@ -90,7 +90,7 @@ const ConversPage = () => {
               </span>
               <StationInfo
                 placeholder="칸 정보 입력"
-                value={message.train}
+                value={message?.train}
                 name="train"
                 onChange={onChangeHandler}
               />
@@ -102,7 +102,7 @@ const ConversPage = () => {
               </span>
               <DropStation
                 placeholder="내리는 역 입력"
-                value={message.dropstation}
+                value={message?.dropstation}
                 name="dropstation"
                 onChange={onChangeHandler}
               />
@@ -130,14 +130,15 @@ const ConversPage = () => {
             </StartCoversBtn>
           </ButtonDiv>
         </ProfileBox>
+        <HomeMenu />
       </CoversCtn>
-      <HomeMenu />
     </>
   );
 };
 
 export default ConversPage;
 const CoversCtn = styled.div`
+  overflow: hidden;
   width: 100%;
   height: 100%;
   margin: auto;
@@ -149,7 +150,7 @@ const CoversCtn = styled.div`
 
   @media only screen and (min-width: 375px) {
     width: 375px;
-    height: 875px;
+    height: 812px;
 
     display: flex;
     flex-direction: column;

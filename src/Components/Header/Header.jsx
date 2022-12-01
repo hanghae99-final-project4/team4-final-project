@@ -16,13 +16,12 @@ const Header = () => {
 export default Header;
 const MainHeader = styled.div`
   background-color: #c3f4ff;
-  height: 60px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
   font-weight: 400;
   line-height: 21.78px;
-  align-items: center;
-  justify-content: center;
+  width: 100vw;
 `;
