@@ -10,6 +10,7 @@ import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
 import FooterNext from "../Components/Footer/FooterNext";
+import Headers from "../Components/Headers/Headers01";
 
 const AuthCode = () => {
   const [, , removeCookie] = useCookies(["token"]);
@@ -160,7 +161,6 @@ const AuthCode = () => {
     <>
       <InfoBox className=" flex-col items-center">
         <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
-          <div className="h-[45px] flex justify-center items-center bg-[#D9D9D9] text-center text-[1.2rem] font-bold"></div>
           <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
             <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
             <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">

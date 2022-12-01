@@ -40,6 +40,7 @@ export const trainApi = {
   // getLogin: () => instance.get(`/auth/kakao/callback?code=${code}`),
   postAuthPhone: (payload) => instance.post(`/auth2/phone`, payload),
   postAuthCode: (payload) => instance.post(`/auth2/compare`, payload),
+  postAuthNumber: (payload) => instance.post(`/user`, payload),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.get("/url"),
   // get: () => instance.put("/url"),

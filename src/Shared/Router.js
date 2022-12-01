@@ -15,6 +15,7 @@ import ChattingPage from "../Pages/ChattingPage";
 import SubwayPage from "../Pages/SubwayPage";
 import AuthCode from "../Pages/AuthCode";
 import AddInfo from "../Pages/AddInfo";
+import Mypagecopy from "../Components/Profile/Mypagecopy";
 
 const Router = () => {
   return (
@@ -23,7 +24,7 @@ const Router = () => {
         <Route path="/" element={<Login />} />
         <Route path="/authcode" element={<AuthCode />} />
         <Route path="/addinfo" element={<AddInfo />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypagecopy" element={<Mypagecopy />} />
         <Route path="profilepic" element={<ProfilePic />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/auth/kakao/callback" element={<KakaoLogin />} />

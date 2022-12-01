@@ -2,7 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
-import useOnput from "../MyTools/Hooks/UseOnput";
+import useInput from "../MyTools/Hooks/UseInput";
 import BlankImg from "../Assets/Empty_img.jpg";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
@@ -28,7 +28,7 @@ const SignUp = () => {
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
-  const [form, onChangeValue, reset] = useOnput({
+  const [form, setForm, onChangeValue, reset] = useInput({
     representProfile: "",
     phoneNumber: "",
     authCode: "",
@@ -336,3 +336,5 @@ const InfoBox = styled.div`
     font-size: 1.3rem;
   } ;
 `;
+
+/* Rectangle 169 */
