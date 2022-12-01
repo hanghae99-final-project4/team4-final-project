@@ -21,7 +21,7 @@ const InfoCategory = () => {
   const categoryList02 = category2.map((item, index) => (
     <div
       key={index}
-      className="float-left w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
+      className="float-left active:bg-[#C3F4FF] w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
     >
       {item}
     </div>

@@ -33,8 +33,8 @@ const Login = () => {
         </h1>
         <br />
         <article className="py-[90px] justify-center items-center">
-          <div className="w-[276px] h-[90px] leading-[22px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
-            <h2 className="w-[full] mx-[auto] my-[0px] font-bold text-[1.3rem] text-center">
+          <div className="w-[276px] h-[90px] leading-[33px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
+            <h2 className="w-[full] mx-[auto] my-[0px] font-500 text-[1.3rem] text-center">
               {/* 지하철에서 <br />
               새로운 인연을 만나보아요. */}
               <p>지하철에서</p>
