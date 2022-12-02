@@ -16,7 +16,7 @@ const Login = () => {
   const kakoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
-  //이러언
+
   const googleLogin = () => {
     window.location.href = GOOGLE_AUTH_URL;
   };
