@@ -1,11 +1,11 @@
 import React from "react";
 
 const InfoCategory = () => {
-  const category = ["#운동", "#자격증", "#취업"];
+  const category = ["# 운동", "# 자격증", "# 취업"];
 
-  const category2 = ["#틱톡", "#취준생", "#여행"];
+  const category2 = ["# 틱톡", "# 취준생", "# 여행"];
 
-  const category3 = ["#대학생", "#패션", "#알바"];
+  const category3 = ["# 대학생", "# 패션", "# 알바"];
 
   console.log(category);
 
