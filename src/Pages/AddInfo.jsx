@@ -15,9 +15,6 @@ import maleColor from "../Assets/Gender/MaleColor.svg";
 import femaleColor from "../Assets/Gender/FemaleColor.svg";
 import Headers01 from "../Components/Headers/Headers01";
 import InfoCategory from "../Components/InfoCatagory/InfoCategory";
-import FrontHeader from "../Components/Header/FrontHeader";
-import nameok from "../Assets/NameOk/NameOk.svg";
-import FooterNext from "../Components/Footer/FooterNext";
 
 const SignUp = () => {
   const navigator = useNavigate();
@@ -121,7 +118,7 @@ const SignUp = () => {
   };
 
   const showImage = useMemo(() => {
-    if (fileImg === []) {
+    if (fileImg === undefined) {
       return <img src={BlankImg} alt="emptyProfile" />;
     } else if (fileImg !== undefined) {
       return (
@@ -137,11 +134,10 @@ const SignUp = () => {
 
   return (
     <>
-      <InfoBox className=" flex-col items-center font-sans">
+      <InfoBox className=" flex-col items-center">
         <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
-          <FrontHeader msg="회원가입" />
           <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
-            <h1 className="text-[20px] font-bold">프로필을 설정해주세요!</h1>
+            <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
             <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
               <div className="w-[120px] h-[120px] mb-[2px]">{showImage}</div>
               <div className="w-[100%] rounded-[10px]">
@@ -161,14 +157,14 @@ const SignUp = () => {
                     <button
                       type="button"
                       onClick={onClickFilesInput}
-                      className="w-[100px] h-[20px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-[20px] mx-[auto] my-[0px] text-[0.7rem]"
+                      className="w-[100px] h-[20px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] mx-[auto] my-[0px] text-[0.7rem]"
                     >
                       사진첨부
                     </button>
                   </div>
                   <div className="flex flex-col gap-[4px]">
                     <div className="flex flex-col">
-                      <label className="text-[0.9rem] font-bold">닉네임</label>
+                      <label className="text-[1rem] font-bold">닉네임</label>
                       <div className="w-[230px]">
                         <input
                           name="nickname"
@@ -176,21 +172,19 @@ const SignUp = () => {
                           value={form.nickname}
                           minLength="1"
                           maxLength="10"
-                          placeholder="닉네임"
+                          placeholder="닉네임 입력"
                           onChange={onChangeValue}
-                          className="w-[155px] h-[30px] text-[1rem] rounded-[4px] border-b-[2px] focus:border-indigo-500"
+                          className="w-[155px] h-[30px] text-[1rem] rounded-[4px] border-b-[1px] focus:border-indigo-500"
                         />
-                        <div className=" w-[74px] h-[30px] float-right flex justify-center items-center rounded-[20px]">
-                          <button onClick={(e) => authOk(e)}>
-                            <img src={nameok} alt="" />
-                          </button>
+                        <div className=" w-[74px] h-[30px] float-right flex justify-center items-center bg-[#C3F4FF] rounded-[20px] text-[0.8rem]">
+                          <button onClick={(e) => authOk(e)}>중복확인</button>
                         </div>
                       </div>
                     </div>
                     {/* onfocus또는 focus css로 포커스되면 뜨게 */}
                     {form.nickname.length === 0 ? (
-                      <div className="text-[#FF0000] text-[0.8rem]">
-                        1~10자 이내로 적어주세요
+                      <div className="text-[#FB5002] text-[0.8rem]">
+                        닉네임은 1자 이상 10자 이하로 적어주세요
                       </div>
                     ) : form.nickname.length <= 0 ? (
                       <></>
@@ -199,7 +193,7 @@ const SignUp = () => {
                     )}
 
                     <div className="flex flex-col gap-[10px]">
-                      <div className="text-[0.9rem] font-bold mt-[30px]">
+                      <div className="text-[1rem] font-bold mt-[30px]">
                         성별
                       </div>
                       <div className="flex justify-center">
@@ -234,13 +228,14 @@ const SignUp = () => {
                         </div>
                       </div>
                       <div>
-                        <h2 className="text-[0.9rem] font-bold">카테고리</h2>
+                        <h2 className="text-[1rem] font-bold">카테고리</h2>
                         <div className="w-[313px] text-black font-bold">
                           <InfoCategory />
                         </div>
                       </div>
-                      <div className="flex justify-center items-center">
-                        {/* <button
+                      <div className="absolute bottom-0">
+                        <div className="w-[335px]">
+                          <button
                             onClick={(e) => {
                               e.preventDefault();
                               removeCookie("token", { path: "/" });
@@ -249,14 +244,14 @@ const SignUp = () => {
                             className="w-[160px] float-left"
                           >
                             <img src={cancle} alt="cancle" />
-                          </button> */}
-                        {/* <button
+                          </button>
+                          <button
                             onClick={(e) => onSubmit(e)}
                             className="w-[160px] float-right"
                           >
                             <img src={next} alt="next" />
-                          </button> */}
-                        <FooterNext />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
