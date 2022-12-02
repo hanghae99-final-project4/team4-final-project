@@ -276,12 +276,10 @@ const MyPage = () => {
   );
 };
 const Wrap = styled.div`
-  /* @media screen and (min-width: 320px) and (max-width: 375px) {
-    font-size: 1.3rem;
-  } */
   justify-content: center;
   align-items: center;
   background-color: #e6e6e6;
+
   // 프로필 테두리
   .profilebutton {
     box-sizing: border-box;
@@ -330,6 +328,10 @@ const Wrap = styled.div`
 
 // 흰색 박스입니다.
 const AttachPicture = styled.div`
+  /* @media only screen and (min-width: 375px) {
+    width: 375px;
+    height: 812px;
+  } */
   .information {
     width: 400px;
     border: none;
