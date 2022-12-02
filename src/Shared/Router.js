@@ -15,6 +15,7 @@ import ChattingPage from "../Pages/ChattingPage";
 import SubwayPage from "../Pages/SubwayPage";
 import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
 import CustomerNotice from "../Components/Profile/CustomerNotice";
+import ColorPage from "../Pages/ColorPage";
 
 const Router = () => {
   return (
@@ -35,6 +36,7 @@ const Router = () => {
         <Route path="/subwaypage" element={<SubwayPage />} />
         <Route path="/customerUserGuide" element={<CustomerUserGuide />} />
         <Route path="/customerNotice" element={<CustomerNotice />} />
+        <Route path="/colorpage" element={<ColorPage />} />
       </Routes>
     </BrowserRouter>
   );

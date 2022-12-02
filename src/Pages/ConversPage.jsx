@@ -6,10 +6,12 @@ import styled from "styled-components";
 import axios from "axios";
 import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
+import Header from "../Components/Header/Header";
+
 const cookies = new Cookies();
+
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const token = cookies.get("token");
-
 const ConversPage = () => {
   const initialState = {
     nickname: "",
@@ -44,6 +46,9 @@ const ConversPage = () => {
     reset("");
     navigate("/chattingpage");
   };
+  const CanselHandler = () => {
+    navigate("/subwaypage");
+  };
   useEffect(() => {
     async function getNickname() {
       const { data } = await axios.get(
@@ -63,129 +68,182 @@ const ConversPage = () => {
   console.log(message);
 
   return (
-    <CoversCtn>
-      <ProfileBox>
-        <ProfileImg src={message.representProfile} />
-        <UserProfileInfoDiv>
-          <NicknameDiv
-            onChange={onChangeHandler}
-            name="nickname"
-            value={message.nickname}
-            style={{ fontSize: "25px", fontWeight: "600" }}
-          >
-            닉네임:{message.nickname}
-          </NicknameDiv>
-          <GenderDiv
-            value={message.gender}
-            name="gender"
-            onChange={onChangeHandler}
-            style={{ fontSize: "25px", fontWeight: "600" }}
-          >
-            성별:{message.gender}
-          </GenderDiv>
-        </UserProfileInfoDiv>
-      </ProfileBox>
-      <div style={{ fontSize: "30px" }}>몇 호선 몇번 칸에 계신지 써주세요</div>
-      <StationInfo
-        value={message.train}
-        name="train"
-        onChange={onChangeHandler}
-      />
-      <div style={{ fontSize: "30px" }}>내리는 역을 써주세요</div>
-      <DropStation
-        value={message.dropstation}
-        name="dropstation"
-        onChange={onChangeHandler}
-      />
-      <div style={{ fontSize: "24px" }}>소중한 만남 시작하시겠습니까?</div>
+    <>
+      <Header />
+      <CoversCtn>
+        <ProfileBox>
+          <InfoDiv style={{ fontSize: "30px" }}>
+            <span style={{ fontWeight: "700", fontSize: "20px" }}>
+              몇 호선, 몇번 칸에 계신가요!
+            </span>
+            <span
+              style={{ color: "#828282", fontWeight: "300", fontSize: "12px" }}
+            >
+              기입하신 정보를 바탕으로 자동 1:1 매칭이 이루어집니다.
+            </span>
+          </InfoDiv>
+          <StationDiv>
+            <SquareInfo>
+              <span style={{ fontSize: "14px", fontWeight: "1000" }}>
+                칸 정보
+              </span>
+              <StationInfo
+                placeholder="칸 정보 입력"
+                value={message?.train}
+                name="train"
+                onChange={onChangeHandler}
+              />
+            </SquareInfo>
 
-      <StartCoversBtn onClick={conversHandler}>대화 시작</StartCoversBtn>
-      <MenuDiv>
+            <DropStationInfo>
+              <span style={{ fontSize: "14px", fontWeight: "1000" }}>
+                내리는 역
+              </span>
+              <DropStation
+                placeholder="내리는 역 입력"
+                value={message?.dropstation}
+                name="dropstation"
+                onChange={onChangeHandler}
+              />
+            </DropStationInfo>
+          </StationDiv>
+          <SpanDiv>
+            <span
+              style={{ fontSize: "20px", fontWeight: "600", marginTop: "px" }}
+            >
+              소중한 만남을 시작하시겠습니까?
+            </span>
+          </SpanDiv>
+          <ButtonDiv>
+            <CanselBtn
+              style={{ fontWeight: "700", fontSize: "20px", color: "#5B5B5B" }}
+              onClick={CanselHandler}
+            >
+              취소
+            </CanselBtn>
+            <StartCoversBtn
+              style={{ fontWeight: "700", fontSize: "20px", color: "#5B5B5B" }}
+              onClick={conversHandler}
+            >
+              다음
+            </StartCoversBtn>
+          </ButtonDiv>
+        </ProfileBox>
         <HomeMenu />
-      </MenuDiv>
-    </CoversCtn>
+      </CoversCtn>
+    </>
   );
 };
 
 export default ConversPage;
 const CoversCtn = styled.div`
-  overflow-y: scroll;
+  overflow: hidden;
   width: 100%;
-  height: 100vh;
-  background-color: #e6e6e6;
+  height: 100%;
+  margin: auto;
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
+
+  @media only screen and (min-width: 375px) {
+    width: 375px;
+    height: 812px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* margin-left: 15px; */
+  }
 `;
 const ProfileBox = styled.div`
-  width: 800px;
-  height: 300px;
+  width: 100%;
+  height: 415px;
   border: none;
-  display: flex;
-  flex-direction: row;
-`;
-const ProfileImg = styled.img`
-  width: 300px;
-  height: 300px;
-  border-radius: 10px;
-`;
-const UserProfileInfoDiv = styled.div`
-  border: none;
-  width: 500px;
-  height: 300px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
+  @media only screen and (min-width: 375px) {
+    margin-left: 15px;
+  }
 `;
-const NicknameDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 40px;
-`;
-const GenderDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 40px;
-`;
+
 const StationInfo = styled.input`
   background-color: white;
-  border-radius: 10px;
-  width: 800px;
+
+  width: 325.5px;
   height: 50px;
-  border: none;
+  border-bottom: 1px solid #000000;
   outline: none;
-  font-size: 24px;
+  font-size: 16px;
 `;
 const DropStation = styled.input`
   background-color: white;
-  border-radius: 10px;
-  width: 800px;
+
+  width: 325.5px;
   height: 50px;
-  border: none;
+  border-bottom: 1px solid #000000;
   outline: none;
-  font-size: 24px;
+  font-size: 16px;
 `;
 const StartCoversBtn = styled.button`
   margin-top: 0px;
-  width: 300px;
-  height: 45px;
-  border-radius: 10px;
+  width: 160px;
+  height: 60px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   border: none;
   font-size: 20px;
-  background-color: #aff4c6;
+  background-color: #c3f4ff;
+`;
+const CanselBtn = styled.button`
+  margin-top: 0px;
+  width: 160px;
+  height: 60px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  border: none;
+  font-size: 20px;
+  background-color: white;
+`;
+const ButtonDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+  gap: 10px;
+  @media only screen and (min-width: 375px) {
+    margin-left: 10px;
+  }
 `;
 const MenuDiv = styled.div`
   display: flex;
   justify-content: center;
+`;
+const InfoDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 45px;
+`;
+const StationDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+`;
+const SquareInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const DropStationInfo = styled.div`
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+`;
+const SpanDiv = styled.div`
+  margin-top: 71.5px;
+  @media only screen and (min-width: 375px) {
+    margin-left: 33px;
+  }
 `;
