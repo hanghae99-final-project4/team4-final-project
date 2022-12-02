@@ -52,15 +52,15 @@ export const trainApi = {
 
 instance.interceptors.request.use(
   async (config) => {
-    const token = cookies.get("token");
-    console.log(token);
+    // const token = cookies.get("token");
+    // console.log(token);
     // 요청 성공 직전 수행할 일
-    console.log("인터셉터정보 55줄", config); //여기부터 요청시작
-    console.log(config.headers);
-    console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.
+    // console.log("인터셉터정보 55줄", config); //여기부터 요청시작
+    // console.log(config.headers);
+    // console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.
 
-    config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 60줄", token);
+    // config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log("토큰 여기까지 찍혀 60줄", token);
 
     return config;
   },
@@ -169,14 +169,14 @@ instance.interceptors.response.use(
 //폼데이터 인터셉터
 instanceF.interceptors.request.use(
   async (config) => {
-    const token = cookies.get("token");
-    console.log(token);
+    // const token = cookies.get("token");
+    // console.log(token);
     // 요청 성공 직전 수행할 일
-    console.log("폼데이터 인터셉터정보 166줄", config); //여기부터 요청시작
-    console.log(config.headers);
+    // console.log("폼데이터 인터셉터정보 166줄", config); //여기부터 요청시작
+    // console.log(config.headers);
 
-    config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 151줄", token);
+    // config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log("토큰 여기까지 찍혀 151줄", token);
 
     return config;
   },
@@ -205,7 +205,6 @@ instanceF.interceptors.response.use(
     // const ok = config.config.data.ok;
     const newToken = config.data.newJwtToken;
     console.log(newToken);
-
     //위에 콘솔은 config.data.newJwtToken에 있어
     // 응답 데이터 가공.
     // if (config.status === 200) {
@@ -281,6 +280,13 @@ instanceF.interceptors.response.use(
           Authorization: `Bearer ${newToken}`, //2.새토큰장착
         },
       });
+
+      // const newToken = res.data.newToken;
+      // const msg = res.data.data.msg;
+      // console.log(newToken);
+
+      // setCookie("token", newToken, { path: "/" });
+      // res.headers["Authorization"] = `Bearer ${newToken}`;
     }
 
     return Promise.reject(error);
