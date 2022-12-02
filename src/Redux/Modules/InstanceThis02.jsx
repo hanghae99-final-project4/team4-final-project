@@ -14,16 +14,16 @@ const yhURL = process.env.REACT_APP_YH_HOST;
 //일반데이터 Instance
 const instance = axios.create({
   baseURL: `${yhURL}`,
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
+  // headers: {
+  //   Authorization: `Bearer ${token}`,
+  // },
 });
 //폼데이터 Instance
 const instanceF = axios.create({
   baseURL: `${yhURL}`,
   headers: {
     "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${token}`,
+    // Authorization: `Bearer ${token}`,
   },
 });
 
@@ -52,6 +52,16 @@ export const trainApi = {
 
 instance.interceptors.request.use(
   async (config) => {
+    const token = cookies.get("token");
+    console.log(cookies.get("token"));
+    // 요청 성공 직전 수행할 일
+    console.log("인터셉터정보 55줄", config); //여기부터 요청시작
+    console.log(config.headers);
+    console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.
+
+    config.headers["Authorization"] = `Bearer ${token}`;
+    console.log("토큰 여기까지 찍혀 60줄", token);
+
     return config;
   },
   (error) => {
@@ -65,13 +75,23 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   // response 받기 전 가공해서 넘기는 거 맞아
   (config) => {
+    // const navigator = useNavigate();
+    // const navigator = useNavigate();
+    console.log("폼데이터 res 인터셉터정보 184줄");
     const token = cookies.get("token");
-    // console.log(token);
-    // 요청 성공 직전 수행할 일
+    console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
+    console.log(config.data); //백에서 보내준 body값: newToken
+    console.log(config.config.headers); //현재토큰 Author~on: Bearer ~
+
+    const newToken = config.data.newJwtToken;
+    console.log(newToken);
+
+    console.log(token);
+
     console.log("폼데이터 인터셉터정보 166줄", config); //여기부터 요청시작
     console.log(config.headers);
 
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers["authorization"] = `Bearer ${token}`;
     console.log("토큰 여기까지 찍혀 151줄", token);
 
     return config;
@@ -85,11 +105,17 @@ instance.interceptors.response.use(
     console.log("폼데이터 res 에러 처리 220줄");
     console.log(error); //400에러 지나감
     console.log(error.response.status); //status(400)에러
-
+    console.log(error.response.data); //백에서보낸errorbody값
+    //error.response.data.newJwtToken
+    // console.log(error.config);
+    // console.log(error.config.headers);//현재토큰
+    console.log(error.response.status); //401
+    // const token = cookies.get("token");
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     console.log(newToken);
-
+    // const msg = error.response.data.message;
+    // error.headers["Authorization"] = `Bearer ${token}`;
     const statusValue = error.response.status;
     if (statusValue === 401 && ok !== 6) {
       console.log("status 401찍혀 210줄");
@@ -104,7 +130,7 @@ instance.interceptors.response.use(
       return axios({
         ...error.config,
         headers: {
-          Authorization: `Bearer ${newToken}`, //2.새토큰장착
+          authorization: `Bearer ${newToken}`, //2.새토큰장착
         },
       });
     }
@@ -115,6 +141,16 @@ instance.interceptors.response.use(
 //폼데이터 인터셉터
 instanceF.interceptors.request.use(
   async (config) => {
+    const token = cookies.get("token");
+    console.log(token);
+    // 요청 성공 직전 수행할 일
+    console.log("인터셉터정보 55줄", config); //여기부터 요청시작
+    console.log(config.headers);
+    console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.
+
+    config.headers["Authorization"] = `Bearer ${token}`;
+    console.log("토큰 여기까지 찍혀 60줄", token);
+
     return config;
   },
   (error) => {
@@ -132,24 +168,20 @@ instanceF.interceptors.response.use(
   (config) => {
     // const navigator = useNavigate();
     console.log("폼데이터 res 인터셉터정보 184줄");
-    const accessToken = cookies.get("token");
-    console.log(accessToken); //현재 장착되어있는 토큰
+    const token = cookies.get("token");
     console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
     console.log(config.data); //백에서 보내준 body값: newToken
     console.log(config.config.headers); //현재토큰 Author~on: Bearer ~
-    // console.log(config.config.headers.Authorization); //현재 토큰 Bearer ~
-    // console.log(config.config.data); //백에 보내서 비음
-    // const ok = config.config.data.ok;
+
     const newToken = config.data.newJwtToken;
     console.log(newToken);
 
-    const token = cookies.get("token");
-    // console.log(token);
-    // 요청 성공 직전 수행할 일
+    console.log(token);
+
     console.log("폼데이터 인터셉터정보 166줄", config); //여기부터 요청시작
     console.log(config.headers);
 
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers["authorization"] = `Bearer ${token}`;
     console.log("토큰 여기까지 찍혀 151줄", token);
 
     return config;
@@ -160,14 +192,22 @@ instanceF.interceptors.response.use(
     .catch() 으로 이어짐.
     */
     //폼데이터 response 400대 혹은 그 외 에러
+    // const navigator = useNavigate();
     console.log("폼데이터 res 에러 처리 220줄");
     console.log(error); //400에러 지나감
     console.log(error.response.status); //status(400)에러
+    console.log(error.response.data); //백에서보낸errorbody값
+    //error.response.data.newJwtToken
 
+    // console.log(error.config);
+    // console.log(error.config.headers);//현재토큰
+    console.log(error.response.status); //401
+    // const token = cookies.get("token");
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     console.log(newToken);
-
+    // const msg = error.response.data.message;
+    // error.headers["Authorization"] = `Bearer ${token}`;
     const statusValue = error.response.status;
     if (statusValue === 401 && ok !== 6) {
       console.log("status 401찍혀 210줄");
@@ -182,7 +222,7 @@ instanceF.interceptors.response.use(
       return axios({
         ...error.config,
         headers: {
-          Authorization: `Bearer ${newToken}`, //2.새토큰장착
+          authorization: `Bearer ${newToken}`, //2.새토큰장착
         },
       });
     }
