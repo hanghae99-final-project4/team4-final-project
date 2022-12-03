@@ -16,6 +16,7 @@ import SubwayPage from "../Pages/SubwayPage";
 import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
 import CustomerNotice from "../Components/Profile/CustomerNotice";
 import ColorPage from "../Pages/ColorPage";
+import AgreePage from "../Components/Profile/AgreePage";
 
 const Router = () => {
   return (
@@ -37,6 +38,7 @@ const Router = () => {
         <Route path="/customerUserGuide" element={<CustomerUserGuide />} />
         <Route path="/customerNotice" element={<CustomerNotice />} />
         <Route path="/colorpage" element={<ColorPage />} />
+        <Route path="/agreepage" element={<AgreePage />} />
       </Routes>
     </BrowserRouter>
   );

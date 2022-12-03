@@ -132,7 +132,7 @@ const MyPage = () => {
   console.log(form);
 
   return (
-    <Wrap>
+    <>
       <MyinfoDiv>
         <div className="logoutbox">
           <span style={{ fontSize: "20" }}>나의 정보</span>
@@ -148,131 +148,133 @@ const MyPage = () => {
           </LogoutBtn>
         </div>
       </MyinfoDiv>
-      <div className="profilebutton">
-        <div className="profilename">프로필</div>
-      </div>
-      <AttachPicture>
-        <ProfileImgDiv>
-          <div className="img-preview">
-            <ImgPreview
-              style={{ transform: "scale(1)", borderRadius: "10px" }}
-              id="img-preview"
-              src={form?.representProfile}
-            />
-          </div>
-
-          <UploadImage
-            maxSize={314572800}
-            type="file"
-            name="profile"
-            ref={inputRef}
-            value={form?.profile}
-            accept="image/*"
-            multiple
-            onChange={(e) => formSubmit(e)}
-          ></UploadImage>
-          <RechangeImgBtn onClick={() => setIsModal(!isModal)}>
-            사진 첨부
-          </RechangeImgBtn>
-        </ProfileImgDiv>
-
-        <div className="information">
-          <PhoneNumDiv>
-            <span style={{ fontSize: "20", fontWeight: "600" }}>휴대폰</span>
-            <input
-              name="phoneNumber"
-              value={form?.phoneNumber}
-              // 폰넘버를 겟에서 받아온 그걸 적어라
-              onChange={OnChangeHandler}
-            />
-          </PhoneNumDiv>
-          <NicknameDiv>
-            <span style={{ fontSize: "20", fontWeight: "600" }}>닉네임</span>
-            <input
-              onChange={OnChangeHandler}
-              name="nickname"
-              value={form?.nickname}
-            />
-          </NicknameDiv>
-          <GenderDiv>
-            {form?.gender === true ? (
-              //여자면 여자 그림 남자면 남자 그림 svg 코드 가져오기
-              <>
-                성별
-                <input
-                  type="checkbox"
-                  name="gender"
-                  checked={check}
-                  value={form.gender}
-                />
-                여자
-                <input
-                  type="checkbox"
-                  name="gender"
-                  checked={check}
-                  value={form.gender}
-                />
-                남자
-              </>
-            ) : (
-              <>
-                성별
-                <input
-                  type="checkbox"
-                  name="gender"
-                  checked={check}
-                  value={form?.gender}
-                />
-                여자
-                <input
-                  type="checkbox"
-                  name="gender"
-                  checked={check}
-                  value={form?.gender}
-                />
-                남자
-              </>
-            )}
-          </GenderDiv>
-
-          <CommentDiv>
-            <CommentTextArea
-              placeholder="상태메시지"
-              onChange={OnChangeHandler}
-              name="statusmessage"
-              value={form?.statusmessage}
-            ></CommentTextArea>
-          </CommentDiv>
+      <Wrap>
+        <div className="profilebutton">
+          <div className="profilename">프로필</div>
         </div>
-      </AttachPicture>
-      <div>
-        {/* <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
+        <AttachPicture>
+          <ProfileImgDiv>
+            <div className="img-preview">
+              <ImgPreview
+                style={{ transform: "scale(1)", borderRadius: "10px" }}
+                id="img-preview"
+                src={form?.representProfile}
+              />
+            </div>
+
+            <UploadImage
+              maxSize={314572800}
+              type="file"
+              name="profile"
+              ref={inputRef}
+              value={form?.profile}
+              accept="image/*"
+              multiple
+              onChange={(e) => formSubmit(e)}
+            ></UploadImage>
+            <RechangeImgBtn onClick={() => setIsModal(!isModal)}>
+              사진 첨부
+            </RechangeImgBtn>
+          </ProfileImgDiv>
+
+          <div className="information">
+            <PhoneNumDiv>
+              <span style={{ fontSize: "20", fontWeight: "600" }}>휴대폰</span>
+              <input
+                name="phoneNumber"
+                value={form?.phoneNumber}
+                // 폰넘버를 겟에서 받아온 그걸 적어라
+                onChange={OnChangeHandler}
+              />
+            </PhoneNumDiv>
+            <NicknameDiv>
+              <span style={{ fontSize: "20", fontWeight: "600" }}>닉네임</span>
+              <input
+                onChange={OnChangeHandler}
+                name="nickname"
+                value={form?.nickname}
+              />
+            </NicknameDiv>
+            <GenderDiv>
+              {form?.gender === true ? (
+                //여자면 여자 그림 남자면 남자 그림 svg 코드 가져오기
+                <>
+                  성별
+                  <input
+                    type="checkbox"
+                    name="gender"
+                    checked={check}
+                    value={form.gender}
+                  />
+                  여자
+                  <input
+                    type="checkbox"
+                    name="gender"
+                    checked={check}
+                    value={form.gender}
+                  />
+                  남자
+                </>
+              ) : (
+                <>
+                  성별
+                  <input
+                    type="checkbox"
+                    name="gender"
+                    checked={check}
+                    value={form?.gender}
+                  />
+                  여자
+                  <input
+                    type="checkbox"
+                    name="gender"
+                    checked={check}
+                    value={form?.gender}
+                  />
+                  남자
+                </>
+              )}
+            </GenderDiv>
+
+            <CommentDiv>
+              <CommentTextArea
+                placeholder="상태메시지"
+                onChange={OnChangeHandler}
+                name="statusmessage"
+                value={form?.statusmessage}
+              ></CommentTextArea>
+            </CommentDiv>
+          </div>
+        </AttachPicture>
+        <div>
+          {/* <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
       </div>
       <div></div>
       <div className="client">
         <button>고객유의사항</button>
         <button>고객이용가이드</button> */}
-        <SaveBtn onClick={() => imgSubmitHandler()}>저장</SaveBtn>
-      </div>
+          <SaveBtn onClick={() => imgSubmitHandler()}>저장</SaveBtn>
+        </div>
+        <CancelBtn>취소</CancelBtn>
+        <Customer>
+          <button className="button1">고객유의사항</button>
 
-      <Customer>
-        <button className="button1">고객유의사항</button>
-
-        <button className="button2">고객이용가이드</button>
-      </Customer>
-      {isModal && (
-        <ProfileModal
-          isModal={isModal}
-          setIsModal={setIsModal}
-          url={url}
-          setUrl={setUrl}
-          inputRef={inputRef}
-          files={files}
-          thumb={thumb}
-        />
-      )}
-      <HomeMenu />
-    </Wrap>
+          <button className="button2">고객이용가이드</button>
+        </Customer>
+        {isModal && (
+          <ProfileModal
+            isModal={isModal}
+            setIsModal={setIsModal}
+            url={url}
+            setUrl={setUrl}
+            inputRef={inputRef}
+            files={files}
+            thumb={thumb}
+          />
+        )}
+        <HomeMenu />
+      </Wrap>
+    </>
   );
 };
 const Wrap = styled.div`
@@ -282,6 +284,11 @@ const Wrap = styled.div`
 
   // 프로필 테두리
   .profilebutton {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    // 👆 프로필 글씨체 중앙으로 바꾸는 코드
     box-sizing: border-box;
     width: 114px;
     height: 44px;
@@ -301,7 +308,6 @@ const Wrap = styled.div`
       font-weight: 700;
       font-size: 20px;
       line-height: 24px;
-
       color: #5b5b5b;
     }
   }
@@ -349,13 +355,23 @@ const AttachPicture = styled.div`
   flex-direction: row;
 `;
 
+// 맨위 나의정보 옆에 로그아웃 버튼입니다.
 const LogoutBtn = styled.button`
-  background: #71c9dd;
+  /* background: #71c9dd; */
   border: none;
   border-radius: 10px;
   color: black;
   width: 90px;
-  height: 40px;
+  /* height: 40px; */
+  /* display: flex; */
+  justify-content: end;
+  // 이곳은 텍스트만 움직임
+  // 건드리면 텍스만 바뀜
+  /* text-align: right; */
+
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
 `;
 
 // 사진 첨부 프리뷰입니다.
@@ -379,7 +395,17 @@ const ViewImage = styled.button`
   margin-top: 350px;
 `;
 // 나의정보, 로그아웃 최상단 버튼입니다.
-const MyinfoDiv = styled.div``;
+const MyinfoDiv = styled.div`
+  background-color: #c3f4ff;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.78px;
+  width: 100vw;
+`;
 
 const PhoneNumDiv = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -419,8 +445,22 @@ const CommentTextArea = styled.textarea`
   width: 350px;
   height: 111px;
 `;
+
+// 저장 버튼
 const SaveBtn = styled.button`
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: #71c9dd;
+  border-radius: 10px;
+  border: none;
+  width: 700px;
+  height: 40px;
+`;
+
+// 취소 버튼
+const CancelBtn = styled.button`
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-top: 20px;
+  background-color: #f5f5f5;
   border-radius: 10px;
   border: none;
   width: 700px;
@@ -451,10 +491,17 @@ const Customer = styled.div`
   width: 700px;
   display: flex;
   .button1 {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 110px;
+    height: 30px;
+
     border: 2px solid #71c9dd;
     border-radius: 20px;
   }
   .button2 {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 110px;
+    height: 30px;
     border: 2px solid #71c9dd;
     border-radius: 20px;
   }

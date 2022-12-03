@@ -8,7 +8,7 @@ const Header = () => {
       {" "}
       <MainHeader>
         <HeaderIcon />
-        환승시민
+        나의정보
       </MainHeader>
     </div>
   );
