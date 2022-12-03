@@ -8,8 +8,7 @@ import { Cookies } from "react-cookie";
 
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
-import { trainApi } from "../Redux/Modules/instance";
-
+import { trainApi } from "../Redux/Modules/Instance";
 
 const cookies = new Cookies();
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
@@ -50,7 +49,6 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-
       const { data } = await trainApi.getConvers();
       console.log(data);
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
@@ -13,7 +14,7 @@ import Header from "../Header/Header";
 import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
-import { trainApi2 } from "../../Redux/Modules/instance";
+import { trainApi2 } from "../../Redux/Modules/Instance";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
@@ -190,7 +191,6 @@ const Chatting = () => {
     }
     console.log(file);
     try {
-
       const { data } = await trainApi2.chattingForm();
 
       console.log("잘받음", data);
