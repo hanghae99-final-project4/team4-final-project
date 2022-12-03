@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 const HomeMenu = () => {
   const navigator = useNavigate();
   return (
-    <footer className="w-full absolute bottom-[0px] h-[50px] bg-[#FFFFF] flex flex-auto justify-center items-center">
-      <div className="w-[375px] h-[50px] bg-[#ffffff]">
+    <footer className="w-full absolute bottom-[0px] h-[50px] bg-[#C3F4FF] flex flex-auto justify-center items-center">
+      <div className="w-[375px] h-[50px] bg-[#C3F4FF]">
         <button
           onClick={(e) => {
             e.preventDefault();
