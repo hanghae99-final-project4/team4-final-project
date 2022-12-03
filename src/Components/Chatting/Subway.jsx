@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useNavigate } from "react-router-dom";
-import HomeMenu from "../HomeMenu/HomeMenu";
 const Subway = () => {
   const navigate = useNavigate();
   const initialState = {
@@ -56,7 +55,6 @@ const Subway = () => {
       <SeoulCityHall
         onClick={() => setSubway({ station: "시청" })}
       ></SeoulCityHall>
-      <HomeMenu />
     </SubwayDiv>
   );
 };
