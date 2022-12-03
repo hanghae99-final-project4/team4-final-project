@@ -93,7 +93,7 @@ instance.interceptors.response.use(
     console.log(config.status);
     config.config.headers["Authorization"] = `Bearer ${token}`;
 
-    return config.response;
+    return config;
   },
   (error) => {
     /*
@@ -137,7 +137,7 @@ instanceF.interceptors.request.use(
   async (config) => {
     const token = cookies.get("token");
     // 요청 성공 직전 수행할 일
-    console.log("일반데이터 인터셉터정보 131줄", config); //여기부터 요청시작
+    console.log("폼데이터 인터셉터정보 131줄", config); //여기부터 요청시작
     console.log("현재장착된 토큰", config.headers);
     console.log(config.headers.Authorization); //
 
