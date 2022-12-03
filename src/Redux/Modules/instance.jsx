@@ -4,55 +4,58 @@ import { Cookies, useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
 
 const token = document.cookie.replace("token=", "");
+console.log(token);
 const cookies = new Cookies();
 const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
-const yhURL = process.env.REACT_APP_TH_S_HOST;
+const hURL = process.env.REACT_APP_YH_HOST;
 
 //일반데이터 Instance
 const instance = axios.create({
-  baseURL: `${yhURL}`,
+  baseURL: `${hURL}`,
   headers: {
     Authorization: `Bearer ${token}`,
   },
 });
 //폼데이터 Instance
 const instanceF = axios.create({
-  baseURL: `${yhURL}`,
+  baseURL: `${hURL}`,
   headers: {
     "Content-Type": "multipart/form-data",
     Authorization: `Bearer ${token}`,
   },
 });
 
+//폼데이터 api
 export const trainApi2 = {
   //signup
-  postForm: (payload) => instanceF.post(`/user`, payload),
-  chattingForm: (payload) => instanceF.post("/uploadFile", payload),
+  postForm: (payload) => instanceF.post("/user", payload),
   postProficForm: (payload) => instanceF.post("/profile", payload),
   postProfile: (payload) => instanceF.post("/profile", payload),
-  // postProficForm: (payload) => instanceF.post(`/profile`, payload),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.put("/url"),
   // delete: () => instance.delete("/url"),
 };
 
+//일반데이터api
 export const trainApi = {
   // getLogin: () => instance.get(`/auth/kakao/callback?code=${code}`),
-  postAuthPhone: (payload) => instance.post(`/auth2/phone`, payload),
-  postAuthCode: (payload) => instance.post(`/auth2/compare`, payload),
-  getConvers: () => instance.get("/profile"),
   postName: (payload) => instance.post("/", payload),
+  postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
+  postAuthCode: (payload) => instance.post("/auth2/compare", payload),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.get("/url"),
   // get: () => instance.put("/url"),
   // delete: () => instance.delete("/url"),
 };
-// const token = cookies.get("token", token);
-//인터셉터로 갱신된 토큰 교환
-// const cookies = new Cookies();
+
+//인스턴스 사용예제
+//ex)
+//trainApi2.postForm('/user', payload)
+//.then((res) => console.log(res) //response값 처리)
+//.catch((err) => console.log(err) //error값 처리)
 
 //=======================
 
@@ -90,7 +93,7 @@ instance.interceptors.response.use(
     console.log(config.status);
     config.config.headers["Authorization"] = `Bearer ${token}`;
 
-    return config;
+    return config.response;
   },
   (error) => {
     /*
