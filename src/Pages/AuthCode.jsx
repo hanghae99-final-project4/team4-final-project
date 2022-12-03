@@ -89,6 +89,9 @@ const AuthCode = () => {
       });
       console.log(data);
       const msg = data.msg;
+      if (msg === "인증되었습니다") {
+        navigator("/addinfo");
+      }
       alert(msg);
     } catch (err) {
       console.log(err);
@@ -142,9 +145,9 @@ const AuthCode = () => {
   };
 
   const showImage = useMemo(() => {
-    if (!fileImg && fileImg == null) {
-      return <img src={BlankImg} alt="emptyProfile" />;
-    } else if (fileImg !== null) {
+    if (fileImg) {
+      return <img src="../Assets/Empty_img.jpg" alt="emptyProfile" />;
+    } else if (!fileImg) {
       return (
         <img
           src={fileImg.thumbnail}
@@ -218,19 +221,19 @@ const AuthCode = () => {
                           onChange={onChangeValue}
                           className="w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
                         />
-                        <button
-                          onClick={(e) => onAuthNumber(e)}
-                          className="w-[74px] h-[30px] py-[5px] px-[10px] bg-[#C3F4FF] rounded-[15px] text-[0.8rem] font-bold"
-                        >
-                          인증확인
-                        </button>
                       </div>
                     </div>
                   </div>
+
                   <div className="flex flex-col gap-[10px]">
                     <div className="absolute bottom-0">
                       <div className="w-[335px] flex flex-col gap-[5px]">
-                        <OkBtn onClick={(e) => onSubmit(e)}>확인</OkBtn>
+                        <OkBtn
+                          onClick={(e) => onAuthNumber(e)}
+                          className="w-[74px] h-[30px] py-[5px] px-[10px] bg-[#C3F4FF] rounded-[15px] text-[0.8rem] font-bold"
+                        >
+                          확인
+                        </OkBtn>
                         <CancelBtn
                           onClick={(e) => {
                             e.preventDefault();

@@ -3,8 +3,9 @@ import axios from "axios";
 import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Cookies, useCookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
-import FirstLogo from "../Assets/Logo.svg";
+
+import FirstLogo from "../Assets/FirstLogo.svg";
+import { trainApi2 } from "../Redux/Modules/Instance";
 
 const GoogleLogin = () => {
   const navigator = useNavigate();

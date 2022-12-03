@@ -54,7 +54,7 @@ const SignUp = () => {
   const authOk = async (e) => {
     e.preventDefault();
     await trainApi
-      .postAuthNumber({
+      .postAuthCode({
         nickname: form.nickname,
       })
       .then((res) => {
@@ -119,13 +119,20 @@ const SignUp = () => {
 
   const showImage = useMemo(() => {
     if (fileImg === undefined) {
-      return <img src={BlankImg} alt="emptyProfile" />;
-    } else if (fileImg !== undefined) {
+      return (
+        <img
+          src={BlankImg}
+          alt={fileImg.type}
+          className="w-[120px] h-[120px]"
+          onClick={onClickFilesInput}
+        />
+      );
+    } else if (fileImg) {
       return (
         <img
           src={fileImg.thumbnail}
           alt={fileImg.type}
-          className="w-[120px] h-[120px] bg-[#D9D9D9] rounded-[5px]"
+          className="w-[120px] h-[120px]"
           onClick={onClickFilesInput}
         />
       );
