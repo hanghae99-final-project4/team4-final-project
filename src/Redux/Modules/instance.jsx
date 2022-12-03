@@ -31,6 +31,8 @@ export const trainApi2 = {
   //signup
   postForm: (payload) => instanceF.post(`/user`, payload),
   chattingForm: (payload) => instanceF.post("/uploadFile", payload),
+  postProficForm: (payload) => instanceF.post("/profile", payload),
+  postProfile: (payload) => instanceF.post("/profile", payload),
   // postProficForm: (payload) => instanceF.post(`/profile`, payload),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.put("/url"),
@@ -42,6 +44,7 @@ export const trainApi = {
   postAuthPhone: (payload) => instance.post(`/auth2/phone`, payload),
   postAuthCode: (payload) => instance.post(`/auth2/compare`, payload),
   getConvers: () => instance.get("/profile"),
+  postName: (payload) => instance.post("/", payload),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.get("/url"),
   // get: () => instance.put("/url"),
