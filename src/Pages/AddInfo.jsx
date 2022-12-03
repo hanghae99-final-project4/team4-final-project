@@ -6,7 +6,7 @@ import useInput from "../MyTools/Hooks/UseInput";
 import BlankImg from "../Assets/Empty_img.jpg";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
-import cancle from "../Assets/CancleBtn.svg";
+import cancle from "../Assets/SmallCancel.svg";
 import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
 import male from "../Assets/Gender/Male.svg";

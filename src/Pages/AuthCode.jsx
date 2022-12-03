@@ -6,11 +6,10 @@ import useOnput from "../MyTools/Hooks/UseOnput";
 import BlankImg from "../Assets/Empty_img.jpg";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
-import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
 import FooterNext from "../Components/Footer/FooterNext";
-import Headers from "../Components/Headers/Headers01";
+import FrontHeader from "../Components/Header/FrontHeader";
 
 const AuthCode = () => {
   const [, , removeCookie] = useCookies(["token"]);
@@ -160,33 +159,55 @@ const AuthCode = () => {
   return (
     <>
       <InfoBox className=" flex-col items-center">
-        <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
-          <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
-            <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
+        <div className="relative h-[770px] rounded-[5px] mx-[auto] my-[0px]">
+          <FrontHeader msg="회원가입" />
+          <div className="w-[375px] after:rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
+            <h1 className="text-[1.4rem] font-bold">
+              기본 정보를 입력해주세요!
+            </h1>
             <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
               <div className="w-[100%] rounded-[10px]">
-                <form className="flex flex-col gap-[30px] ">
-                  <div className="flex flex-col gap-[4px]">
-                    <div className="flex flex-col gap-[10px]">
-                      <div className="flex gap-[10px] mt-[30px]">
-                        <input
-                          name="phoneNumber"
-                          type="text"
-                          value={form.phoneNumber}
-                          placeholder="휴대폰 11자리"
-                          onChange={onChangeValue}
-                          className="float-left w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
-                        />
-                        <button
-                          onClick={(e) => onNumberRequest(e)}
-                          className="flex justify-center"
-                        >
-                          <img
-                            src={infoReq}
-                            alt="inforeq"
-                            className="w-[74px] h-[30px]"
+                <form className="flex flex-col">
+                  <div className="flex flex-col justify-center items-center gap-[10px]">
+                    <div className=" flex flex-col gap-[10px] mt-[30px]">
+                      <div className="w-[330px] mx-[auto] my-[0px] flex flex-col justify-center ">
+                        <h2 className="text-[0.8rem] font-[600]">
+                          휴대폰 인증
+                        </h2>
+                        <div className="w-[330px] flex flex-row items-center gap-[8px] text-[0.8rem] border-b-[1px] ">
+                          <input
+                            type="radio"
+                            className="float-left w-[18px] h-[18px]"
                           />
-                        </button>
+
+                          <label htmlFor="allCheck">
+                            <p className="text-[1rem]">
+                              본인 확인을 위한 약관 모두 동의
+                            </p>
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex gap-[10px]">
+                          <input
+                            name="phoneNumber"
+                            type="text"
+                            value={form.phoneNumber}
+                            placeholder="휴대폰 11자리"
+                            onChange={onChangeValue}
+                            className="float-left w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
+                          />
+                          <button
+                            onClick={(e) => onNumberRequest(e)}
+                            className="flex justify-center"
+                          >
+                            <img
+                              src={infoReq}
+                              alt="inforeq"
+                              className="w-[74px] h-[30px]"
+                            />
+                          </button>
+                        </div>
                       </div>
                       <div className="flex gap-[10px]">
                         <input
@@ -205,26 +226,20 @@ const AuthCode = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-[10px]">
-                      <div className="absolute bottom-0">
-                        <div className="w-[335px]">
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              removeCookie("token", { path: "/" });
-                              navigator(-2);
-                            }}
-                            className="w-[160px] float-left"
-                          >
-                            <img src={cancle} alt="cancle" />
-                          </button>
-                          <button
-                            onClick={(e) => onSubmit(e)}
-                            className="w-[160px] float-right"
-                          >
-                            <img src={next} alt="next" />
-                          </button>
-                        </div>
+                  </div>
+                  <div className="flex flex-col gap-[10px]">
+                    <div className="absolute bottom-0">
+                      <div className="w-[335px] flex flex-col gap-[5px]">
+                        <OkBtn onClick={(e) => onSubmit(e)}>확인</OkBtn>
+                        <CancelBtn
+                          onClick={(e) => {
+                            e.preventDefault();
+                            removeCookie("token", { path: "/" });
+                            navigator(-2);
+                          }}
+                        >
+                          취소
+                        </CancelBtn>
                       </div>
                     </div>
                   </div>
@@ -234,7 +249,6 @@ const AuthCode = () => {
           </div>
         </div>
       </InfoBox>
-      <FooterNext />
     </>
   );
 };
@@ -243,8 +257,40 @@ export default AuthCode;
 
 const InfoBox = styled.div`
   width: 100%;
-  height: 812px;
-  @media screen and (min-width: 320px) and (max-width: 375px) {
+  height: 770px;
+  @media only screen and (min-width: 375px) {
     font-size: 1.3rem;
   } ;
+`;
+
+/* 취소 */
+
+const CancelBtn = styled.button`
+  width: 320px;
+  height: 48px;
+
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  line-height: 27px;
+  color: #5b5b5b;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+`;
+
+const OkBtn = styled.button`
+  width: 320px;
+  height: 48px;
+
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  line-height: 27px;
+  color: #5b5b5b;
+
+  background-color: #c3f4ff;
+
+  font-size: 1.2rem;
+  font-weight: 700;
 `;
