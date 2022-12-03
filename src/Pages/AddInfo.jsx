@@ -9,36 +9,35 @@ import infoReq from "../Assets/InfoReq.svg";
 import cancle from "../Assets/SmallCancel.svg";
 import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
+import male from "../Assets/Gender/Male.svg";
+import female from "../Assets/Gender/Female.svg";
+import maleColor from "../Assets/Gender/MaleColor.svg";
+import femaleColor from "../Assets/Gender/FemaleColor.svg";
+import Headers01 from "../Components/Headers/Headers01";
+import InfoCategory from "../Components/InfoCatagory/InfoCategory";
 
 const SignUp = () => {
-  const [, , removeCookie] = useCookies(["token"]);
-
+  const navigator = useNavigate();
   const cookies = new Cookies();
   const token = cookies.get("token");
   // const token = getCookie("token");/
-  console.log(token);
-
-  const navigator = useNavigate();
+  const [, , removeCookie] = useCookies(["token"]);
   const [files, setFiles] = useState([]);
-  console.log(files);
-
-  // const thURL = process.env.REACT_APP_TH_S_HOST;
-  const yhURL = process.env.REACT_APP_YH_HOST;
-
   let [fileImg, setFileImg] = useState([]);
-  console.log(fileImg);
   const [check, setCheck] = useState(false);
   const [form, setForm, onChangeValue, reset] = useInput({
     representProfile: "",
-    phoneNumber: "",
-    authCode: "",
     nickname: "",
-    gender: check,
+    gender: "",
+    category: [],
   });
-  const [disable, setDisable] = useState(false);
-
+  const [isGender, setIsGender] = useState(false);
   const inputRef = useRef([]);
+  const yhURL = process.env.REACT_APP_YH_HOST;
 
+  console.log(token);
+  console.log(files);
+  console.log(fileImg);
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
@@ -51,49 +50,19 @@ const SignUp = () => {
     });
   };
 
-  //인증확인 더블클릭시
-  const onDoubleClick = (e) => {
+  //닉네임 중복
+  const authOk = async (e) => {
     e.preventDefault();
-    return;
-    // alert("비정상적인 활동이 발견됐습니다. 다시 로그인해 주세요.");
-    // removeCookie("token", { path: "/" });
-    // navigator(-2);
-  };
-
-  //인증요청
-  const onNumberRequest = async (e) => {
-    e.preventDefault();
-
-    try {
-      const { data } = await trainApi.postAuthPhone({
-        phoneNumber: form.phoneNumber,
+    await trainApi
+      .postAuthCode({
+        nickname: form.nickname,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      console.log(data);
-      alert(data.msg);
-    } catch (err) {
-      console.log(err);
-      const errMsg = err.response.data.error;
-      alert(errMsg);
-    }
-  };
-  //인증확인
-
-  const onAuthNumber = async (e) => {
-    e.preventDefault();
-
-    try {
-      const { data } = await trainApi.postAuthCode({
-        phoneNumber: form.phoneNumber,
-        authCode: form.authCode,
-      });
-      console.log(data);
-      const msg = data.msg;
-      alert(msg);
-    } catch (err) {
-      console.log(err);
-      const errMsg = err.response.data.error;
-      alert(errMsg);
-    }
   };
 
   //업로드 버튼(1) 클릭시
@@ -105,8 +74,7 @@ const SignUp = () => {
     const fd = new FormData();
     console.log(fd);
     fd.append("representProfile", fileImg.files);
-    fd.append("phoneNumber", form.phoneNumber);
-    fd.append("gender", true);
+    fd.append("gender", form.gender);
     fd.append("nickname", form.nickname);
 
     for (let pair of fd.entries()) {
@@ -150,14 +118,21 @@ const SignUp = () => {
   };
 
   const showImage = useMemo(() => {
-    if (!fileImg && fileImg == null) {
-      return <img src={BlankImg} alt="emptyProfile" />;
-    } else if (fileImg !== null) {
+    if (fileImg === undefined) {
+      return (
+        <img
+          src={BlankImg}
+          alt={fileImg.type}
+          className="w-[120px] h-[120px]"
+          onClick={onClickFilesInput}
+        />
+      );
+    } else if (fileImg) {
       return (
         <img
           src={fileImg.thumbnail}
           alt={fileImg.type}
-          className="w-[120px] h-[120px] bg-[#D9D9D9] rounded-[5px]"
+          className="w-[120px] h-[120px]"
           onClick={onClickFilesInput}
         />
       );
@@ -168,13 +143,12 @@ const SignUp = () => {
     <>
       <InfoBox className=" flex-col items-center">
         <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
-          <div className="h-[45px] flex justify-center items-center bg-[#D9D9D9] text-center text-[1.2rem] font-bold"></div>
           <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
             <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
             <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
               <div className="w-[120px] h-[120px] mb-[2px]">{showImage}</div>
               <div className="w-[100%] rounded-[10px]">
-                <form className="flex flex-col gap-[30px] ">
+                <form className="flex flex-col gap-[20px] ">
                   <div className="flex flex-col">
                     {/* 이미지 업로드 */}
                     <input
@@ -190,24 +164,29 @@ const SignUp = () => {
                     <button
                       type="button"
                       onClick={onClickFilesInput}
-                      className="w-[120px] h-[30px] bg-[#C3F4FF] rounded-[5px] mx-[auto] my-[0px] text-[0.8rem] font-bold"
+                      className="w-[100px] h-[20px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] mx-[auto] my-[0px] text-[0.7rem]"
                     >
-                      파일업로드
+                      사진첨부
                     </button>
                   </div>
                   <div className="flex flex-col gap-[4px]">
                     <div className="flex flex-col">
-                      <label className="text-[0.8rem] font-bold">닉네임</label>
-                      <input
-                        name="nickname"
-                        type="text"
-                        value={form.nickname}
-                        minLength="1"
-                        maxLength="10"
-                        placeholder="닉네임 입력"
-                        onChange={onChangeValue}
-                        className="w-[155px] h-[30px] text-[1rem] rounded-[4px] border-b-[1px] focus:border-indigo-500"
-                      />
+                      <label className="text-[1rem] font-bold">닉네임</label>
+                      <div className="w-[230px]">
+                        <input
+                          name="nickname"
+                          type="text"
+                          value={form.nickname}
+                          minLength="1"
+                          maxLength="10"
+                          placeholder="닉네임 입력"
+                          onChange={onChangeValue}
+                          className="w-[155px] h-[30px] text-[1rem] rounded-[4px] border-b-[1px] focus:border-indigo-500"
+                        />
+                        <div className=" w-[74px] h-[30px] float-right flex justify-center items-center bg-[#C3F4FF] rounded-[20px] text-[0.8rem]">
+                          <button onClick={(e) => authOk(e)}>중복확인</button>
+                        </div>
+                      </div>
                     </div>
                     {/* onfocus또는 focus css로 포커스되면 뜨게 */}
                     {form.nickname.length === 0 ? (
@@ -219,80 +198,46 @@ const SignUp = () => {
                     ) : (
                       <div></div>
                     )}
+
                     <div className="flex flex-col gap-[10px]">
-                      <div className="flex gap-[10px] mt-[30px]">
-                        <input
-                          name="phoneNumber"
-                          type="text"
-                          value={form.phoneNumber}
-                          placeholder="휴대폰 11자리"
-                          onChange={onChangeValue}
-                          className="float-left w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
-                        />
-                        <button
-                          onClick={(e) => onNumberRequest(e)}
-                          className="flex justify-center"
-                        >
-                          <img
-                            src={infoReq}
-                            alt="inforeq"
-                            className="w-[74px] h-[30px]"
-                          />
-                        </button>
-                      </div>
-                      <div className="flex gap-[10px]">
-                        <input
-                          type="text"
-                          name="authCode"
-                          value={form.authCode}
-                          placeholder="인증번호 입력"
-                          onChange={onChangeValue}
-                          className="w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
-                        />
-                        <button
-                          onClick={(e) => onAuthNumber(e)}
-                          className="w-[74px] h-[30px] py-[5px] px-[10px] bg-[#C3F4FF] rounded-[15px] text-[0.8rem] font-bold"
-                        >
-                          인증확인
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-[10px]">
-                      <div className="text-[0.8rem] font-bold mt-[30px]">
+                      <div className="text-[1rem] font-bold mt-[30px]">
                         성별
                       </div>
                       <div className="flex justify-center">
                         <div className="float-left mr-[61px]">
-                          <input
-                            type="checkbox"
-                            name="gender"
-                            // checked={check}
-                            value={form.gender}
-                            // onChange={() => setCheck(true)}
-                            onChange={() => setDisable(true)}
-                            disabled={disable}
-                          />
-                          남성
+                          <label htmlFor="male">
+                            <img src={isGender ? male : maleColor} alt="male" />
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="male"
+                              value="true"
+                              onChange={onChangeValue}
+                              className=" w-[61px]"
+                            />
+                          </label>
                         </div>
-                        <div>
-                          <input
-                            type="checkbox"
-                            // checked={check}
-                            name="gender"
-                            value={form.gender}
-                            // onChange={() => setCheck(false)}
-                            onChange={() => setDisable(true)}
-                            disabled={disable}
-                          />
-                          여성
+                        <div className="flex flex-col">
+                          <label htmlFor="female">
+                            <img
+                              src={isGender ? female : femaleColor}
+                              alt="female"
+                            />
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="male"
+                              value="false"
+                              onChange={onChangeValue}
+                              className=" w-[61px]"
+                            />
+                          </label>
                         </div>
                       </div>
                       <div>
-                        <h2 className="text-[0.8rem] font-bold mt-[30px]">
-                          카테고리
-                        </h2>
-                        <div className="text-[#D9D9D9] font-bold">
-                          서비스 준비중입니다.
+                        <h2 className="text-[1rem] font-bold">카테고리</h2>
+                        <div className="w-[313px] text-black font-bold">
+                          <InfoCategory />
                         </div>
                       </div>
                       <div className="absolute bottom-0">
@@ -333,8 +278,5 @@ const InfoBox = styled.div`
   width: 100%;
   height: 812px;
   @media screen and (min-width: 320px) and (max-width: 375px) {
-    font-size: 1.3rem;
   } ;
 `;
-
-/* Rectangle 169 */
