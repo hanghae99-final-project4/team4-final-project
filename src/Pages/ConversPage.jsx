@@ -7,6 +7,7 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
+import { trainApi } from "../Redux/Modules/instance";
 
 const cookies = new Cookies();
 
@@ -52,15 +53,7 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await axios.get(
-        `${thURL}/profile`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const { data } = await trainApi.getConvers();
       console.log(data);
       setMessage(data.body);
     }

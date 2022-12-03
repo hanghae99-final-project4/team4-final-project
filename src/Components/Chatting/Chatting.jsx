@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
@@ -13,6 +12,7 @@ import Header from "../Header/Header";
 import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
+import { trainApi2 } from "../../Redux/Modules/instance";
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
@@ -205,12 +205,7 @@ const Chatting = () => {
     }
     console.log(file);
     try {
-      const { data } = await axios.post(`${thURL}/uploadFile`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await trainApi2.chattingForm();
       console.log("잘받음", data);
       setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
     } catch (error) {
