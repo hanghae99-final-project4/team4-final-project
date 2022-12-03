@@ -13,17 +13,13 @@ import Disclaimer from "../Components/Agreement/Disclaimer";
 import ConversPage from "../Pages/ConversPage";
 import ChattingPage from "../Pages/ChattingPage";
 import SubwayPage from "../Pages/SubwayPage";
-import AuthCode from "../Pages/AuthCode";
-import AddInfo from "../Pages/AddInfo";
-import Mypagecopy from "../Components/Profile/Mypagecopy";
+import ColorPage from "../Pages/ColorPage";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/authcode" element={<AuthCode />} />
-        <Route path="/addinfo" element={<AddInfo />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="profilepic" element={<ProfilePic />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
@@ -36,6 +32,7 @@ const Router = () => {
         <Route path="/converspage" element={<ConversPage />} />
         <Route path="/chattingpage" element={<ChattingPage />} />
         <Route path="/subwaypage" element={<SubwayPage />} />
+        <Route path="/colorpage" element={<ColorPage />} />
       </Routes>
     </BrowserRouter>
   );
