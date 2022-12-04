@@ -15,7 +15,7 @@ import ChattingPage from "../Pages/ChattingPage";
 import SubwayPage from "../Pages/SubwayPage";
 import AuthCode from "../Pages/AuthCode";
 import AddInfo from "../Pages/AddInfo";
-import Mypagecopy from "../Components/Profile/Mypagecopy";
+// import Mypagecopy from "../Components/Profile/Mypagecopy";
 
 const Router = () => {
   return (

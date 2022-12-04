@@ -13,7 +13,7 @@ import Header from "../Header/Header";
 import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
-import { trainApi2 } from "../../Redux/Modules/instance";
+import { trainApi2 } from "../../Redux/Modules/Instance";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
