@@ -1,4 +1,4 @@
-////src/Redux/Modules/Instance.js
+////src/Redux/Modules/Instance.js////
 import axios from "axios";
 import { Cookies, useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
