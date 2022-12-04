@@ -8,7 +8,7 @@ import logo from "../Assets/Logo.svg";
 const Login = () => {
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_CALLBACK_URL}&response_type=code`;
   // const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
-  // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&scope=openid%20profile%20email&redirect_uri=${Gprocess.env.REACT_APP_GOOGLE_REDIRECT_URI}`;
+  // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&scope=openid%20profile%20email&redirect_uri=${GOOGLE_REDIRECT_URI}`;
   const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
   // const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
@@ -28,17 +28,16 @@ const Login = () => {
   return (
     <Login1 className="p-[0px] flex flex-col justify-center items-center font-sans">
       <LoginBox className="relative flex-col items-center rounded-[10px]">
+        <h1 className="h-[45px] flex justify-center items-center bg-[#D9D9D9] text-center text-[1.2rem] font-bold">
+          환승시민
+        </h1>
+        <br />
         <article className="py-[90px] justify-center items-center">
-          <div className="w-[276px] h-[90px] leading-[33px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
-            <h2 className="w-[full] mx-[auto] my-[0px] font-500 text-[1.3rem] text-center">
-              {/* 지하철에서 <br />
-              새로운 인연을 만나보아요. */}
-              <p>지하철에서</p>
-              <p>새로운 인연을 만나보아요</p>
+          <div className="w-[263px] h-[58px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
+            <h2 className="w-[full] mx-[auto] my-[0px] font-bold text-[1.3rem] text-center">
+              지하철에서 <br />
+              새로운 인연을 만나보아요.
             </h2>
-            <p className="block text-center text-[0.6rem]">
-              가입하신 정보를 바탕으로 자동 1:1매칭이 이루어집니다
-            </p>
           </div>
           <div className="w-[340px] mt-[56px] mx-[auto] my-[0px] flex flex-col justify-center">
             {<img src={logo} alt="logo" className="mx-[auto] my-[0px]" />}

@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
@@ -13,10 +12,9 @@ import Header from "../Header/Header";
 import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
-import { trainApi2 } from "../../Redux/Modules/instance";
+import { trainApi2 } from "../../Redux/Modules/Instance";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
-
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
   const profile = JSON.parse(localStorage.getItem("profile")).value;
@@ -48,7 +46,7 @@ const Chatting = () => {
   console.log(message);
   console.log(chatArr);
   console.log(file);
-  console.log(file.name);
+
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -207,7 +205,7 @@ const Chatting = () => {
     }
     console.log(file);
     try {
-      const { data } = await trainApi2.chattingForm();
+      const { data } = await trainApi2.chattingForm(formData);
       console.log("잘받음", data);
       setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
     } catch (error) {
@@ -593,5 +591,3 @@ const UserProfileName = styled.div`
 const AllChatDiv = styled.div`
   position: relative;
 `;
-
-/////// merge

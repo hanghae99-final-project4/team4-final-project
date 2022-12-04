@@ -4,62 +4,54 @@ import { Cookies, useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
 
 const token = document.cookie.replace("token=", "");
-console.log(token);
 const cookies = new Cookies();
+// const token = cookies.get("token");
+console.log(token);
 const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
-const hURL = process.env.REACT_APP_YH_HOST;
+const yhURL = process.env.REACT_APP_TH_S_HOST;
 
 //일반데이터 Instance
 const instance = axios.create({
-  baseURL: `${hURL}`,
+  baseURL: `${yhURL}`,
   headers: {
     Authorization: `Bearer ${token}`,
   },
 });
 //폼데이터 Instance
 const instanceF = axios.create({
-  baseURL: `${hURL}`,
+  baseURL: `${yhURL}`,
   headers: {
     "Content-Type": "multipart/form-data",
     Authorization: `Bearer ${token}`,
   },
 });
 
-//폼데이터 api
 export const trainApi2 = {
   //signup
   postForm: (payload) => instanceF.post("/user", payload),
-  postProficForm: (payload) => instanceF.post("/profile", payload),
-  postProfile: (payload) => instanceF.post("/profile", payload),
+  chattingForm: (formData) => instanceF.post("/uploadFile", formData),
+
+  // postProficForm: (payload) => instanceF.post(`/profile`, payload),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.put("/url"),
   // delete: () => instance.delete("/url"),
 };
 
-//일반데이터api
 export const trainApi = {
   // getLogin: () => instance.get(`/auth/kakao/callback?code=${code}`),
-  postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
+  getConvers: () => instance.get("/profile"),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.get("/url"),
   // get: () => instance.put("/url"),
   // delete: () => instance.delete("/url"),
 };
-
-//인스턴스 사용예제
-//ex)
-//trainApi2.postForm('/user', payload)
-//.then((res) => console.log(res) //response값 처리)
-//.catch((err) => console.log(err) //error값 처리)
-
-//=======================
-
-//인터셉터로 갱신된 토큰 교환
+// const token = cookies.get("token", token);
+// /인터셉터로 갱신된 토큰 교환
 instance.interceptors.request.use(
   async (config) => {
     const token = cookies.get("token");
@@ -68,9 +60,12 @@ instance.interceptors.request.use(
     console.log("현재장착된 토큰", config.headers);
     console.log(config.headers.Authorization); //
 
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    };
     console.log("토큰 여기까지 찍혀 62줄", token);
-
+    console.log("토큰장착완료", config.headers);
     return config;
   },
   (error) => {
@@ -79,27 +74,27 @@ instance.interceptors.request.use(
   }
 );
 /*
-  2. 응답 인터셉터 추가 2개의 콜백 함수를 받음.
+2. 응답 인터셉터 추가 2개의 콜백 함수를 받음.
 */
 instance.interceptors.response.use(
   //response 받기 전 가공해서 넘기는 거 맞아
   (config) => {
-    console.log("res 인터셉터정보 87줄");
-    // const token = cookies.get("token");
-    console.log(token); //현재 장착되어있는 토큰
-    console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
-    console.log("body-data값", config.data); //백에서 보내준 body값: newToken
-    console.log(config.config.headers); //현재토큰 Author~on: Bearer
-    console.log(config.status);
-    config.config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log("res 인터셉터정보 87줄");
+    // // const token = cookies.get("token");
+    // console.log(token); //현재 장착되어있는 토큰
+    // console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
+    // console.log("body-data값", config.data); //백에서 보내준 body값: newToken
+    // console.log(config.config.headers); //현재토큰 Author~on: Bearer
+    // console.log(config.status);
+    // config.config.headers["Authorization"] = `Bearer ${token}`;
 
-    return config.response;
+    return config;
   },
   (error) => {
     /*
-    http status가 401 경우 응답 에러 직전 호출.
-    .catch() 으로 이어짐.
-    */
+http status가 401 경우 응답 에러 직전 호출.
+.catch() 으로 이어짐.
+*/
     //폼데이터 response 400대 혹은 그 외 에러
     console.log("일반데이터 res 에러 처리 110줄");
     console.log(error); //400에러 지나감
@@ -137,12 +132,15 @@ instanceF.interceptors.request.use(
   async (config) => {
     const token = cookies.get("token");
     // 요청 성공 직전 수행할 일
-    console.log("일반데이터 인터셉터정보 131줄", config); //여기부터 요청시작
+    console.log("폼데이터 인터셉터정보 131줄", config); //여기부터 요청시작
     console.log("현재장착된 토큰", config.headers);
     console.log(config.headers.Authorization); //
 
-    config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 144줄", token);
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    };
+    console.log("토큰 여기까지 찍혀 62줄", token);
 
     return config;
   },
@@ -152,28 +150,28 @@ instanceF.interceptors.request.use(
   }
 );
 /*
-  2. 응답 인터셉터 추가
-  2개의 콜백 함수를 받음.
+2. 응답 인터셉터 추가
+2개의 콜백 함수를 받음.
 */ //참고로 instanceF는 FormData용
 instanceF.interceptors.response.use(
   //response 받기 전 가공해서 response로 내보내는 게 맞음
   (config) => {
-    const token = cookies.get("token");
-    // 요청 성공 직전 수행할 일
-    console.log("일반데이터 인터셉터정보 163줄", config); //여기부터 요청시작
-    console.log(config.headers);
-    console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
+    // const token = cookies.get("token");
+    // // 요청 성공 직전 수행할 일
+    // console.log("일반데이터 인터셉터정보 163줄", config); //여기부터 요청시작
+    // console.log(config.headers);
+    // console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
 
-    config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 159줄", token);
+    // config.config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log("토큰 여기까지 찍혀 159줄", token);
 
     return config;
   },
   (error) => {
     /*
-    http status가 401 경우 응답 에러 직전 호출.
-    .catch() 으로 이어짐.
-    */
+http status가 401 경우 응답 에러 직전 호출.
+.catch() 으로 이어짐.
+*/
     //폼데이터 response 400대 혹은 그 외 에러
     console.log("폼데이터 res 에러 처리 169줄");
     console.log(error); //400에러 지나감

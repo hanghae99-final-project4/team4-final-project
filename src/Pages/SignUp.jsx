@@ -1,34 +1,40 @@
 import axios from "axios";
 import styled from "styled-components";
+import { useEffect } from "react";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
-import useInput from "../MyTools/Hooks/UseInput";
+import useInput from "../MyTools/Hooks/UseInputOrigin";
 import BlankImg from "../Assets/Empty_img.jpg";
+import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
-import cancle from "../Assets/SmallCancel.svg";
+import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
-import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
+//섬네일
+// const SignUpthumbnail = () => {
+//     const inputRef = useRef
 
+//추가정보기입란
 const SignUp = () => {
+  //취소버튼시 로그아웃하면서 로그인창으로
   const [, , removeCookie] = useCookies(["token"]);
-
+  //cookie에서 토큰꺼내기
   const cookies = new Cookies();
   const token = cookies.get("token");
-  // const token = getCookie("token");/
-  console.log(token);
-
+  // console.log(token);
+  const headers = {
+    authorization: `${token}`,
+  };
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
   console.log(files);
-
-  // const thURL = process.env.REACT_APP_TH_S_HOST;
-  const yhURL = process.env.REACT_APP_YH_HOST;
-
+  //서버 체인져
+  const thURL = process.env.REACT_APP_TH_S_HOST;
+  // const thURL = process.env.REACT_APP_YJ_HOST;
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
-  const [form, setForm, onChangeValue, reset] = useInput({
+  const [form, onChangeValue, reset] = useInput({
     representProfile: "",
     phoneNumber: "",
     authCode: "",
@@ -37,41 +43,44 @@ const SignUp = () => {
   });
   const [disable, setDisable] = useState(false);
 
+  // console.log(form);
+  //input값 접근
   const inputRef = useRef([]);
+  //파일 미리볼 url을 저장해줄 state
+  //파일 저장
 
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
+    // console.log(fileList);
+    // console.log(fileList.name);
+    // 하나의 파일만을 올릴 것이기 때문에 fileList배열에는
+    //[0]번째 인덱스에 해당하는 공간에만 파일이 존재
+    // console.log(fileList);
+    //fileList모양
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
     console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
+      // type: fileList[0].type.slice(0, 5),
     });
-  };
-
-  //인증확인 더블클릭시
-  const onDoubleClick = (e) => {
-    e.preventDefault();
-    return;
-    // alert("비정상적인 활동이 발견됐습니다. 다시 로그인해 주세요.");
-    // removeCookie("token", { path: "/" });
-    // navigator(-2);
   };
 
   //인증요청
   const onNumberRequest = async (e) => {
     e.preventDefault();
+    // console.log(1);
 
     try {
-      const { data } = await trainApi.postAuthPhone({
+      const { data } = await axios.post(`${thURL}/auth2/phone`, {
         phoneNumber: form.phoneNumber,
       });
-      console.log(data);
+      // console.log(data);
       alert(data.msg);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       const errMsg = err.response.data.error;
       alert(errMsg);
     }
@@ -82,7 +91,7 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const { data } = await trainApi.postAuthCode({
+      const { data } = await axios.post(`${thURL}/auth2/compare`, {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
@@ -90,56 +99,55 @@ const SignUp = () => {
       const msg = data.msg;
       alert(msg);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       const errMsg = err.response.data.error;
       alert(errMsg);
     }
   };
 
   //업로드 버튼(1) 클릭시
-  console.log("0_token", token);
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("1_token", token);
+    // if (
+    //   form.phoneNumber === "" ||
+    //   form.authCode === "" ||
+    // ) {
+    //   return alert("모든 항목을 입력해주세요");
+    // } else {
     const fd = new FormData();
     console.log(fd);
     fd.append("representProfile", fileImg.files);
     fd.append("phoneNumber", form.phoneNumber);
     fd.append("gender", true);
     fd.append("nickname", form.nickname);
-
+    // fd.append("authCode", form.authCode);
     for (let pair of fd.entries()) {
       console.log(pair);
     }
-    console.log("2_token", token);
-    await trainApi2
-      .postForm(fd)
-
-      //res 값으로 request에서 에러 처리를
+    await axios
+      .post(`${thURL}/user`, fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
-        //new토큰이 들어온 자리
-        console.log(res);
+        // console.log(res);
 
         const msg = res.data.msg;
         alert(msg);
         navigator("/subwaypage");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
 
+        // const status = err.response.status;
+        // console.log(status);
+        // const msg = err.response.data.error;
         const msg = err.response.data.msg;
         const er = err.response.data.error;
-
-        return msg ? (
-          alert(msg)
-        ) : er ? (
-          alert(er)
-        ) : err.response.status === 422 ? (
-          alert("필수 유저 정보를 입력해주세요.")
-        ) : (
-          <></>
-        );
+        msg ? alert(msg) : er ? alert(er) : <></>;
+        return;
       });
     // }
   };
@@ -149,6 +157,8 @@ const SignUp = () => {
     inputRef.current?.click();
   };
 
+  //이미지 파일 미리보기 - 이미지가 null값이면
+  // console.log(fileImg);
   const showImage = useMemo(() => {
     if (!fileImg && fileImg == null) {
       return <img src={BlankImg} alt="emptyProfile" />;
@@ -336,5 +346,3 @@ const InfoBox = styled.div`
     font-size: 1.3rem;
   } ;
 `;
-
-/* Rectangle 169 */

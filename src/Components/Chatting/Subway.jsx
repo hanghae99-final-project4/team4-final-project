@@ -4,10 +4,7 @@ import styled from "styled-components";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useNavigate } from "react-router-dom";
-
 import HomeMenu from "../HomeMenu/HomeMenu";
-import Subwaymap from "../../Element/Subwaymap";
-
 const Subway = () => {
   const navigate = useNavigate();
   const initialState = {
@@ -43,13 +40,12 @@ const Subway = () => {
       <TransformWrapper initialScale={1} minScale={1} maxScale={10}>
         <TransformComponent>
           <div onClick={charterOnClick}>
-            {/* <img
+            <img
               src="https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png"
               style={{ border: "1px solid black" }}
               ref={subwayRef}
               onClick={(e) => subwayCoordinate(e)}
-            /> */}
-            <Subwaymap />
+            />
           </div>
         </TransformComponent>
       </TransformWrapper>
@@ -60,6 +56,7 @@ const Subway = () => {
       <SeoulCityHall
         onClick={() => setSubway({ station: "시청" })}
       ></SeoulCityHall>
+      <HomeMenu />
     </SubwayDiv>
   );
 };
