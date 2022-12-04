@@ -2,7 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
-import useOnput from "../MyTools/Hooks/UseOnput";
+import useInput from "../MyTools/Hooks/UseInput";
 import BlankImg from "../Assets/Empty_img.jpg";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
@@ -29,14 +29,13 @@ const AuthCode = () => {
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
   const [check, setCheck] = useState(false);
-  const [form, onChangeValue, reset] = useOnput({
+  const [form, setForm, onChangeValue, reset] = useInput({
     representProfile: "",
     phoneNumber: "",
     authCode: "",
     nickname: "",
     gender: check,
   });
-  const [disable, setDisable] = useState(false);
 
   const inputRef = useRef([]);
 
@@ -164,16 +163,16 @@ const AuthCode = () => {
       <InfoBox className=" flex-col items-center">
         <div className="relative h-[770px] rounded-[5px] mx-[auto] my-[0px]">
           <FrontHeader msg="회원가입" />
-          <div className="w-[375px] after:rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
+          <div className="w-[375px] min-h-screen rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
             <h1 className="text-[1.4rem] font-bold">
               기본 정보를 입력해주세요!
             </h1>
-            <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
-              <div className="w-[100%] rounded-[10px]">
+            <div className="w-[100%] mx-[auto] mt-[50%] mb-[0px] flex flex-col items-center">
+              <div className="w-[100%] rounded-[10px]  ">
                 <form className="flex flex-col">
                   <div className="flex flex-col justify-center items-center gap-[10px]">
                     <div className=" flex flex-col gap-[10px] mt-[30px]">
-                      <div className="w-[330px] mx-[auto] my-[0px] flex flex-col justify-center ">
+                      <div className="w-[330px] mx-[auto] my-[0px] flex flex-col justify-center gap-[4px]">
                         <h2 className="text-[0.8rem] font-[600]">
                           휴대폰 인증
                         </h2>
@@ -191,19 +190,16 @@ const AuthCode = () => {
                         </div>
                       </div>
                       <div>
-                        <div className="flex gap-[10px]">
+                        <div className="w-[330px] flex gap-[10px] ">
                           <input
                             name="phoneNumber"
                             type="text"
                             value={form.phoneNumber}
                             placeholder="휴대폰 11자리"
                             onChange={onChangeValue}
-                            className="float-left w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
+                            className="float-left w-[240px] text-[1rem] border-b-[1px] focus:border-indigo-500"
                           />
-                          <button
-                            onClick={(e) => onNumberRequest(e)}
-                            className="flex justify-center"
-                          >
+                          <button onClick={(e) => onNumberRequest(e)}>
                             <img
                               src={infoReq}
                               alt="inforeq"
@@ -217,7 +213,7 @@ const AuthCode = () => {
                           type="text"
                           name="authCode"
                           value={form.authCode}
-                          placeholder="인증번호 입력"
+                          placeholder="인증 번호 입력"
                           onChange={onChangeValue}
                           className="w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
                         />
@@ -226,8 +222,8 @@ const AuthCode = () => {
                   </div>
 
                   <div className="flex flex-col gap-[10px]">
-                    <div className="absolute bottom-0">
-                      <div className="w-[335px] flex flex-col gap-[5px]">
+                    <div>
+                      <div className="w-[335px] mt-[100px] flex flex-col items-center gap-[5px]">
                         <OkBtn
                           onClick={(e) => onAuthNumber(e)}
                           className="w-[74px] h-[30px] py-[5px] px-[10px] bg-[#C3F4FF] rounded-[15px] text-[0.8rem] font-bold"

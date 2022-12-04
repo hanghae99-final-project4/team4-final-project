@@ -4,8 +4,9 @@ import { Cookies, useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
 
 const token = document.cookie.replace("token=", "");
-console.log(token);
 const cookies = new Cookies();
+// const token = cookies.get("token");
+console.log(token);
 const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
@@ -50,6 +51,14 @@ export const trainApi = {
   // get: () => instance.put("/url"),
   // delete: () => instance.delete("/url"),
 };
+
+//인스턴스 사용예제
+//ex)
+//trainApi2.postForm('/user', payload)
+//.then((res) => console.log(res) //response값 처리)
+//.catch((err) => console.log(err) //error값 처리)
+
+//=======================
 
 //인스턴스 사용예제
 //ex)
@@ -137,7 +146,7 @@ instanceF.interceptors.request.use(
   async (config) => {
     const token = cookies.get("token");
     // 요청 성공 직전 수행할 일
-    console.log("폼데이터 인터셉터정보 131줄", config); //여기부터 요청시작
+    console.log("일반데이터 인터셉터정보 131줄", config); //여기부터 요청시작
     console.log("현재장착된 토큰", config.headers);
     console.log(config.headers.Authorization); //
 
@@ -164,7 +173,7 @@ instanceF.interceptors.response.use(
     console.log(config.headers);
     console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
 
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.config.headers["Authorization"] = `Bearer ${token}`;
     console.log("토큰 여기까지 찍혀 159줄", token);
 
     return config;
