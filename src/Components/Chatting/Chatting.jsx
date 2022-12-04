@@ -7,15 +7,26 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
+import HomeMenu from "../HomeMenu/HomeMenu";
+import LoadingIcon from "../../Element/LoadingIcon";
+import Header from "../Header/Header";
+import ImageFormIcon from "../../Element/ImageFormIcon";
+import CounterProfileModal from "../Modal/CounterProfileModal";
+import { Cookies } from "react-cookie";
+import { trainApi2 } from "../../Redux/Modules/instance";
+
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 
 const Chatting = () => {
+  const name = JSON.parse(localStorage.getItem("nickname")).value;
+  const profile = JSON.parse(localStorage.getItem("profile")).value;
+  const roomkey = JSON.parse(localStorage?.getItem("roomkey"))?.value;
   const initialState = {
-    url: "https://anths3.s3.ap-northeast-2.amazonaws.com/myproject/1668428140925.jpg",
-    nickname: "",
+    url: profile,
+    nickname: name,
     msg: "",
   };
-
+  const [isModal, setIsModal] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
   const [file, setFile] = useState([]);
   const [success, setSuccess] = useState(false);
@@ -24,13 +35,33 @@ const Chatting = () => {
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
   const navigate = useNavigate();
-  const name = JSON.parse(localStorage.getItem("nickname")).value;
+
   const boxRef = useRef(null);
   const scrollRef = useRef();
+  const inputRef = useRef();
+  const cookies = new Cookies();
+  const token = cookies.get("token");
+  const thURL = process.env.REACT_APP_TH_S_HOST;
+  console.log(isModal);
   console.log(name);
   console.log(room);
   console.log(message);
+  console.log(chatArr);
+  console.log(file);
+  console.log(file.name);
+  function setItemWithExpireTime(keyName, keyValue, tts) {
+    // localStorage에 저장할 객체
+    const obj = {
+      value: keyValue,
+      expire: Date.now() + tts,
+    };
 
+    // 객체를 JSON 문자열로 변환
+    const objString = JSON.stringify(obj);
+
+    // setItem
+    window.localStorage.setItem(keyName, objString);
+  }
   const scrollEvent = _.debounce(() => {
     console.log("scroll");
     const scrollTop = boxRef.current.scrollTop; //요소의 상단에서 맨 위에 표시 되는 콘텐츠까지의 거리를 측정한 것입니다.
@@ -72,50 +103,24 @@ const Chatting = () => {
     return obj.value;
   }
 
-  //form data 로직
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-
-    setFile(
-      acceptedFiles.map((file) =>
-        Object.assign(file, { preview: URL.createObjectURL(file) })
-      )
-    );
-  }, []);
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-  });
-  //encode
-  const encodeFileToBase64 = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result);
-        console.log(reader);
-        resolve();
-      };
-    });
+  //상대방 프로필
+  const CounterUserHandler = () => {
+    setIsModal(true);
   };
-  //preview!!
-  const thumb = file?.map((file, index) => {
-    return (
-      <img
-        key={index}
-        style={{ width: "100%", height: "200px" }}
-        src={file.preview}
-        alt="preview-img"
-      />
-    );
-  });
 
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
     socket.emit("nickname", JSON.parse(localStorage.getItem("nickname")).value);
+    if (roomkey !== undefined) {
+      socket.emit("leaveRoom", roomkey);
+      localStorage.removeItem("roomkey");
+    }
+    console.log(roomkey);
     socket.emit("randomjoin", {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
       dropstation: JSON.parse(localStorage.getItem("dropstation")).value,
+      profile: JSON.parse(localStorage.getItem("profile")).value,
     });
     socket.on("maching", (message) => {
       console.log(message.msg);
@@ -127,11 +132,18 @@ const Chatting = () => {
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
       setRoom(message.roomkey);
+      setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
       //roomkey 들어오면 success 값 true
-      if (message.roomkey !== null) {
+      if (
+        message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
+        message.roomkey !== null
+      ) {
         setSuccess(true);
+        console.log("실행됨", success);
+      } else {
+        alert(message.fail);
       }
-      console.log("success true");
+      console.log("success", success);
 
       //메시지 들어온대로 렌더 해주기
       socket.on("broadcast", (message) => {
@@ -142,7 +154,11 @@ const Chatting = () => {
         getItemWithExpireTime("dropstation");
         setChatArr((chatArr) => [
           ...chatArr,
-          { nickname: message.name, msg: message.msg },
+          {
+            nickname: message.name,
+            msg: message.msg,
+            profile: message.profile,
+          },
         ]);
       });
     });
@@ -161,33 +177,39 @@ const Chatting = () => {
   //submithandler
   const SubmitHandler = (e) => {
     e.preventDefault();
-    socket.emit("persnalchat", {
-      roomkey: room,
-      msg: message.msg,
-      nickname: message.nickname,
-    });
-    console.log("chatting", {
-      roomkey: room,
-      name: message.nickname,
-      msg: message.msg,
-    });
-    reset(initialState);
+    if (file?.name !== undefined) {
+      postSend();
+      setFile([]);
+    }
+    if (message.msg !== "") {
+      socket.emit("persnalchat", {
+        roomkey: room,
+        msg: message.msg,
+        nickname: message.nickname,
+        profile: message.url,
+      });
+      console.log("chatting", {
+        roomkey: room,
+        name: message.nickname,
+        msg: message.msg,
+        profile: message.url,
+      });
+      reset(initialState);
+    }
   };
   //이미지 비디오 보내는 로직
   async function postSend() {
     const formData = new FormData();
-    formData.append("image", file[0]);
+    formData.append("image", file);
+    formData.append("name", name);
     for (const key of formData.entries()) {
       console.log(key);
     }
     console.log(file);
     try {
-      const { data } = await axios.post("", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const { data } = await trainApi2.chattingForm();
       console.log("잘받음", data);
+      setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
     } catch (error) {
       console.log(error);
     }
@@ -195,7 +217,6 @@ const Chatting = () => {
       console.log(message);
     });
   }
-  console.log(file[0]?.preview);
   const sendHandler = () => {
     //   const formData = new FormData();
     //   formData.append("image", postPicture[0]);
@@ -238,87 +259,145 @@ const Chatting = () => {
   // };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Header />
       {success ? (
         <>
-          <SitdownHeader styled={{ fontSize: "16" }}>채팅방</SitdownHeader>
-          <ChatMainDiv ref={boxRef}>
-            <ChatBox>
-              {" "}
-              {chatArr?.map((item, index) => (
-                <UserChatDiv
-                  style={
-                    name === item.nickname
-                      ? {
-                          position: "relative",
-                          right: "-80%",
-                        }
-                      : { position: "relative", right: "0px" }
-                  }
-                  key={index}
-                >
-                  {name === item.nickname ? (
-                    <UserProfileDiv>
-                      <UserProfileImg style={{ display: "none" }} />
-                      <div style={{ display: "none" }}></div>
-                    </UserProfileDiv>
-                  ) : (
-                    <UserProfileDiv>
-                      <UserProfileImg src="https://ifh.cc/g/YOrnMQ.jpg" />
-                      <div>{item.nickname}</div>
-                    </UserProfileDiv>
-                  )}
+          <div>
+            <AllChatDiv>
+              <ChatMainDiv ref={boxRef}>
+                {isModal && (
+                  <CounterProfileModal
+                    isModal={isModal}
+                    setIsModal={setIsModal}
+                  />
+                )}
 
-                  <UserChat>
-                    {/* 맨 처음에는 메시지가 없기때문에 문제가 되는군 */}
-                    {/* 삼항연산자 중첩해서 사용하니, 코드가 가독성이 많이 떨어지는 것 같다 */}
-                    {/* 차라리 이미지 확장자를 따로 변수에 넣어 &&연산자를 사용하는 것이 가장 좋을것 같다/ */}
-                    {item.msg ? (
-                      <ChatDiv>{item.msg}</ChatDiv>
-                    ) : item.url?.split(".")[5] == "mp4" ? (
-                      <ChatVideo src={item?.url} />
-                    ) : (
-                      // <div>mp4</div>
-                      <ChatImg src={item?.url} />
-                      // <div>img</div>
-                    )}
-                  </UserChat>
-                </UserChatDiv>
-              ))}{" "}
-              <div ref={scrollRef} />
-            </ChatBox>
-          </ChatMainDiv>
+                <ChatBox>
+                  {" "}
+                  {chatArr?.map((item, index) => (
+                    <div
+                      style={
+                        name === item.nickname
+                          ? {
+                              width: "100%",
+                              paddingLeft: "42%",
 
-          <FooterDiv>
-            <ChatInput
-              type="text"
-              value={message.msg}
-              name="msg"
-              onChange={onChangeHandler}
-            />
-            <ChatSendBtn onClick={(e) => SubmitHandler(e)}>전송</ChatSendBtn>
-          </FooterDiv>
+                              display: "flex",
+                              justifyContent: "flex-end",
+                            }
+                          : {
+                              width: "100%",
+                            }
+                      }
+                    >
+                      <UserChatDiv key={index}>
+                        {/* 수신 발신 삼항 연산식 */}
+                        {name === item.nickname ? (
+                          <UserProfileDiv>
+                            <UserProfileImg style={{ display: "none" }} />
+                            <div style={{ display: "none" }}></div>
+                          </UserProfileDiv>
+                        ) : // profile 이 없는 사람은 기본 프로필 설정 삼항 연산자
+
+                        item.profile !== undefined ? (
+                          <UserProfileDiv>
+                            <UserProfileImg
+                              onClick={CounterUserHandler}
+                              src={item.profile}
+                            />
+                            <UserProfileName>{item.nickname}</UserProfileName>
+                          </UserProfileDiv>
+                        ) : (
+                          <UserProfileDiv>
+                            <UserProfileImg
+                              onClick={CounterUserHandler}
+                              src={
+                                "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg"
+                              }
+                            />
+                            <UserProfileName>{item.nickname}</UserProfileName>
+                          </UserProfileDiv>
+                        )}
+
+                        {/* 맨 처음에는 메시지가 없기때문에 문제가 되는군 */}
+                        {/* 삼항연산자 중첩해서 사용하니, 코드가 가독성이 많이 떨어지는 것 같다 */}
+                        {/* 차라리 이미지 확장자를 따로 변수에 넣어 &&연산자를 사용하는 것이 가장 좋을것 같다/ */}
+                        {item.msg ? (
+                          <ChatDiv
+                            className={name === item.nickname && "owner"}
+                          >
+                            {item.msg}
+                          </ChatDiv>
+                        ) : item.url?.split(".")[5] == "mp4" ? (
+                          <ChatVideo src={item?.url} />
+                        ) : (
+                          // <div>mp4</div>
+                          <ChatImg imgurl={item?.url} />
+                          // <div>img</div>
+                        )}
+                      </UserChatDiv>
+                    </div>
+                  ))}{" "}
+                  <div ref={scrollRef} />
+                </ChatBox>
+              </ChatMainDiv>
+
+              <FooterDiv>
+                <Forminput
+                  ref={inputRef}
+                  type="file"
+                  name="picture"
+                  value={file.picture}
+                  accept="image/*,video/*"
+                  multiple
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <ImageFormIcon inputRef={inputRef} />
+                <ChatInput
+                  type="text"
+                  value={message.msg}
+                  name="msg"
+                  onChange={onChangeHandler}
+                />
+                <ChatSendBtn onClick={(e) => SubmitHandler(e)}>
+                  전송
+                </ChatSendBtn>
+              </FooterDiv>
+            </AllChatDiv>
+          </div>
+
+          <HomeMenu />
         </>
       ) : (
-        <div>
-          Chatting
-          <PostDiv {...getRootProps()}>
-            <PostPictureDiv className="preview">{thumb}</PostPictureDiv>
-            <input
-              {...getInputProps()}
-              value={message.picture}
-              name="picture"
-              multiple="multiple"
-              maxSize={300000000}
-              accept="image/*,video/*"
-              onChange={(e) => encodeFileToBase64(e.target.files[0])}
-              type="file"
-            />
-          </PostDiv>
-          <button onClick={() => postSend()}>post 보내기</button>
-          <input value={message.msg} onChange={onChangeHandler} name="msg" />
-          <button onClick={() => sendHandler()}>제출</button>
-        </div>
+        <>
+          <LoadingDiv>
+            <LoadingIcon />
+            {/* <PostDiv {...getRootProps()}>
+              <PostPictureDiv className="preview">{thumb}</PostPictureDiv>
+              <input
+                {...getInputProps()}
+                value={message.picture}
+                name="picture"
+                multiple="multiple"
+                maxSize={300000000}
+                accept="image/*,video/*"
+                onChange={(e) => encodeFileToBase64(e.target.files[0])}
+                type="file"
+              />
+            </PostDiv> */}
+            {/* <button onClick={() => postSend()}>post 보내기</button>
+            <input value={message.msg} onChange={onChangeHandler} name="msg" />
+            <button onClick={() => sendHandler()}>제출</button> */}
+          </LoadingDiv>
+          <HomeMenu />
+        </>
       )}
     </div>
   );
@@ -334,32 +413,46 @@ const PostPictureDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
+//전체 채팅방
 const ChatMainDiv = styled.div`
-  height: 700px;
+  overflow-y: hidden;
+  height: 608px;
+  width: 375px;
+  padding: 0 16px;
 `;
 const SitdownHeader = styled.div`
-  background-color: #d9d9d9;
+  background-color: #f5f5f5;
   height: 60px;
 `;
 const FooterDiv = styled.form`
   display: flex;
+  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
   justify-content: space-between;
   align-items: center;
   position: relative;
-  bottom: -115px;
-  background-color: #d9d9d9;
-  height: 60px;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  bottom: 0px;
+  background-color: #ffffff;
+  height: 68px;
+  width: 375px;
 `;
+const Forminput = styled.input`
+  display: none;
+`;
+//닉네임 + 말풍선 div
 const UserChatDiv = styled.div`
-  border: none;
+  margin-top: 10px;
+  /* border: 3px solid black;
   width: 300px;
-  height: 100px;
+  min-height: 104px;
+  height: 173px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  border: none;
+  border: none; */
 `;
-
+//전체 채팅방
 const ChatBox = styled.div`
   border: none;
   overflow-y: scroll;
@@ -367,50 +460,138 @@ const ChatBox = styled.div`
   height: 100%;
   overflow-x: hidden;
 `;
+//프로필 이미지
 const UserProfileImg = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 5px;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
   border: none;
 `;
+//이름 + 프로필 이미지 div
 const UserProfileDiv = styled.div`
-  width: 100px;
+  width: 200px;
+  height: 50px;
   display: flex;
-  border: none;
+
   flex-direction: row;
   justify-content: space-between;
 `;
-const UserChat = styled.div`
-  height: 0px;
-`;
+
+// 말풍선
 const ChatDiv = styled.div`
-  width: 100px;
+  margin-top: 20px;
+  padding: 10px 30px;
+  width: 201px;
+  min-height: 50px;
+  position: relative;
+  border-radius: 2em;
+  font-size: 13px;
   border: none;
   background-color: #e6e6e6;
+  //발신 메시지일때 말풍선 색깔
+  &.owner {
+    background-color: #dcf9ff;
+    ::after {
+      content: "";
+      position: absolute;
+      top: 0;
+
+      left: 80%;
+      width: 0;
+      height: 0;
+      border: 20px solid transparent;
+      border-bottom-color: #dcf9ff;
+      border-top: 0;
+      border-right: 0;
+      margin-left: -10px;
+      margin-top: -20px;
+    }
+  }
+
+  ::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 20%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-bottom-color: #eaeaea;
+    border-top: 0;
+    border-left: 0;
+    margin-left: -10px;
+    margin-top: -20px;
+  }
 `;
+//채팅 칸
 const ChatInput = styled.input`
+  padding-left: 10px;
+  font-size: 16px;
   outline: none;
   border: none;
-  width: 500px;
-  height: 30px;
+  background-color: #eaeaea;
+  border-radius: 30px;
+  position: relative;
+  left: 0%;
+  width: 250px;
+  height: 40px;
 `;
+//전송버튼
 const ChatSendBtn = styled.button`
-  background-color: #ffffff;
-  border-radius: 5px;
+  background-color: #dcf9ff;
+  margin-right: 13px;
+  border-radius: 20px;
   cursor: pointer;
   border: none;
-  width: 45px;
-  height: 30px;
+  width: 52px;
+  height: 40px;
 `;
-const ChatImg = styled.img`
+//이미지 div
+const ChatImg = styled.div`
+  background-size: cover;
+  background-repeat: repeat;
+  background-image: ${({ imgurl }) => `url(${imgurl})`};
+  background-position: center;
   width: 300px;
   height: 300px;
   border-radius: 10%;
   border: none;
+  @media only screen and (min-width: 375px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
+
 const ChatVideo = styled.video`
   width: 300px;
   height: 300px;
   border-radius: 10%;
   border: none;
 `;
+
+const LoadingDiv = styled.div`
+  margin: auto;
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media only screen and (min-width: 375px) {
+  }
+`;
+const UserProfileName = styled.div`
+  width: 120px;
+  height: 19px;
+  border: none;
+  position: relative;
+  top: 35%;
+  margin-right: 28px;
+  font-size: 16px;
+`;
+//전체 채팅 화면
+const AllChatDiv = styled.div`
+  position: relative;
+`;
+
+/////// merge

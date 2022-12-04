@@ -5,6 +5,11 @@ import useInput from "../MyTools/Hooks/UseInput";
 import styled from "styled-components";
 import axios from "axios";
 import { Cookies } from "react-cookie";
+
+import HomeMenu from "../Components/HomeMenu/HomeMenu";
+import Header from "../Components/Header/Header";
+import { trainApi } from "../Redux/Modules/Instance";
+
 const cookies = new Cookies();
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const token = cookies.get("token");
@@ -44,15 +49,9 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await axios.get(
-        `${yunJi}/profile`,
+      const { data } = await trainApi.getConvers();
+      console.log(data);
 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
       setMessage(data.body);
     }
     getNickname();
