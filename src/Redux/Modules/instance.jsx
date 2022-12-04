@@ -5,6 +5,8 @@ import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
 
 const token = document.cookie.replace("token=", "");
 const cookies = new Cookies();
+// const token = cookies.get("token");
+console.log(token);
 const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
@@ -58,9 +60,12 @@ instance.interceptors.request.use(
     console.log("현재장착된 토큰", config.headers);
     console.log(config.headers.Authorization); //
 
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    };
     console.log("토큰 여기까지 찍혀 62줄", token);
-
+    console.log("토큰장착완료", config.headers);
     return config;
   },
   (error) => {
@@ -74,14 +79,14 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   //response 받기 전 가공해서 넘기는 거 맞아
   (config) => {
-    console.log("res 인터셉터정보 87줄");
-    // const token = cookies.get("token");
-    console.log(token); //현재 장착되어있는 토큰
-    console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
-    console.log("body-data값", config.data); //백에서 보내준 body값: newToken
-    console.log(config.config.headers); //현재토큰 Author~on: Bearer
-    console.log(config.status);
-    config.config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log("res 인터셉터정보 87줄");
+    // // const token = cookies.get("token");
+    // console.log(token); //현재 장착되어있는 토큰
+    // console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
+    // console.log("body-data값", config.data); //백에서 보내준 body값: newToken
+    // console.log(config.config.headers); //현재토큰 Author~on: Bearer
+    // console.log(config.status);
+    // config.config.headers["Authorization"] = `Bearer ${token}`;
 
     return config;
   },
@@ -131,8 +136,11 @@ instanceF.interceptors.request.use(
     console.log("현재장착된 토큰", config.headers);
     console.log(config.headers.Authorization); //
 
-    config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 144줄", token);
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    };
+    console.log("토큰 여기까지 찍혀 62줄", token);
 
     return config;
   },
@@ -148,14 +156,14 @@ instanceF.interceptors.request.use(
 instanceF.interceptors.response.use(
   //response 받기 전 가공해서 response로 내보내는 게 맞음
   (config) => {
-    const token = cookies.get("token");
-    // 요청 성공 직전 수행할 일
-    console.log("일반데이터 인터셉터정보 163줄", config); //여기부터 요청시작
-    console.log(config.headers);
-    console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
+    // const token = cookies.get("token");
+    // // 요청 성공 직전 수행할 일
+    // console.log("일반데이터 인터셉터정보 163줄", config); //여기부터 요청시작
+    // console.log(config.headers);
+    // console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
 
-    config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 159줄", token);
+    // config.config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log("토큰 여기까지 찍혀 159줄", token);
 
     return config;
   },
