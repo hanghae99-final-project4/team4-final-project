@@ -9,7 +9,7 @@ import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies, useCookies } from "react-cookie";
 import HomeMenu from "../HomeMenu/HomeMenu";
 import { useNavigate } from "react-router-dom";
-import { trainApi } from "../../Redux/Modules/instance";
+import { trainApi, trainApi2 } from "../../Redux/Modules/instance";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -56,17 +56,18 @@ const MyPage = () => {
     for (var pair of formData.entries()) {
       console.log(pair);
     }
-    try {
-      const { data } = await axios.post(`${thURL}/profile`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+
+    await trainApi2
+      .postProfile(formData)
+      .then((res) => {
+        console.log(res);
+        alert(res.data.msg);
+      })
+      .catch((err) => {
+        console.log(err);
+        const errMsg = err.response.data.error;
+        alert(errMsg);
       });
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   //photo 집어넣으면 생성 되게끔 최대 5개 제한
