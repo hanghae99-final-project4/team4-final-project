@@ -34,10 +34,7 @@ export const trainApi2 = {
   postProfile: (payload) => instanceF.post("/profile", payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
 
-  // postProficForm: (payload) => instanceF.post(`/profile`, payload),
-  // post: (payload) => instance.post("/url", payload),
-  // get: () => instance.put("/url"),
-  // delete: () => instance.delete("/url"),
+
 };
 
 export const trainApi = {
@@ -46,10 +43,7 @@ export const trainApi = {
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
   getConvers: () => instance.get("/profile"),
-  // post: (payload) => instance.post("/url", payload),
-  // get: () => instance.get("/url"),
-  // get: () => instance.put("/url"),
-  // delete: () => instance.delete("/url"),
+
 };
 // const token = cookies.get("token", token);
 // /인터셉터로 갱신된 토큰 교환
