@@ -609,5 +609,5 @@ const UserInput = styled.input`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
-//사진첨부마진 너무 먹고있다
+//사진첨부마진 너무 먹고있다-
 // 부모 먼저 보고 타고타고 내려와야한다
