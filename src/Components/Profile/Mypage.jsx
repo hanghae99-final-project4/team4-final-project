@@ -132,6 +132,7 @@ const MyPage = () => {
   console.log(url);
   console.log(form);
 
+  //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
     <>
       <MyinfoDiv>
@@ -181,7 +182,7 @@ const MyPage = () => {
           <div className="information">
             <PhoneNumDiv>
               <span style={{ fontSize: "20", fontWeight: "600" }}>휴대폰</span>
-              <input
+              <PhoneNumberInput
                 name="phoneNumber"
                 value={form?.phoneNumber}
                 // 폰넘버를 겟에서 받아온 그걸 적어라
@@ -279,12 +280,21 @@ const MyPage = () => {
   );
 };
 const Wrap = styled.div`
+  @media only screen and (min-width: 375px) {
+    width: 375px;
+    height: 812px;
+  }
   justify-content: center;
   align-items: center;
   background-color: #e6e6e6;
+  position: absolute;
 
   // 프로필 테두리
   .profilebutton {
+    @media only screen and (min-width: 375px) {
+      width: 114px;
+      height: 44px;
+    }
     align-items: center;
     justify-content: center;
     display: flex;
@@ -297,6 +307,7 @@ const Wrap = styled.div`
     top: 126px;
     border: 2px solid #71c9dd;
     border-radius: 30px;
+
     // 프로필 이름
     .profilename {
       width: 56px;
@@ -335,13 +346,16 @@ const Wrap = styled.div`
 
 // 흰색 박스입니다.
 const AttachPicture = styled.div`
-  /* @media only screen and (min-width: 375px) {
-    width: 375px;
-    height: 812px;
-  } */
+  @media only screen and (min-width: 375px) {
+    width: 343px;
+    height: 194px;
+  }
+
   .information {
-    width: 400px;
+    width: 343px;
+    height: 194px;
     border: none;
+    position: relative;
   }
   color: black;
   width: 700px;
@@ -377,11 +391,17 @@ const LogoutBtn = styled.button`
 
 // 사진 첨부 프리뷰입니다.
 const ImgPreview = styled.img`
+  @media only screen and (min-width: 375px) {
+    width: 100px;
+    height: 100px;
+  }
+
   border-style: solid;
   border: none;
-  width: 200px;
+  width: 50px;
   height: 200px;
   margin-right: 50px;
+  position: relative;
 `;
 
 const UploadImage = styled.input`
@@ -391,6 +411,7 @@ const UploadImage = styled.input`
 const ViewImage = styled.button`
   /* height: 30px;
   position: absolute;
+  //포지션 쓸때 잘 봐야함
   left: 50%; */
   right: 35%;
   margin-top: 350px;
@@ -408,13 +429,23 @@ const MyinfoDiv = styled.div`
   width: 100vw;
 `;
 
+// 여기서부터 휴대폰, 닉네임, 성별, 상태메세지
 const PhoneNumDiv = styled.div`
+  @media only screen and (min-width: 375px) {
+    width: 140px;
+    height: 30px;
+  }
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: row;
+
   gap: 20px;
 `;
 const NicknameDiv = styled.div`
+  @media only screen and (min-width: 375px) {
+    width: 140px;
+    height: 30px;
+  }
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: row;
@@ -425,19 +456,35 @@ const NicknameDiv = styled.div`
     outline: 1px solid blue;
   }
 `;
+// 성별
+
+//각각 갭 따로따로 넣어라
 const GenderDiv = styled.div`
+  @media only screen and (min-width: 375px) {
+    width: 30px;
+    height: 22px;
+  }
   display: flex;
-  flex-direction: row;
+  justify-content: left;
   gap: 20px;
   margin-top: 20px;
 `;
 const CommentDiv = styled.div`
+  @media only screen and (min-width: 375px) {
+    width: 196px;
+    height: 60px;
+  }
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: row;
   gap: 20px;
+  /* width: 95%; */
 `;
 const CommentTextArea = styled.textarea`
+  @media only screen and (min-width: 375px) {
+    width: 196px;
+    height: 60px;
+  }
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: row;
@@ -449,6 +496,10 @@ const CommentTextArea = styled.textarea`
 
 // 저장 버튼
 const SaveBtn = styled.button`
+  @media only screen and (min-width: 375px) {
+    width: 320px;
+    height: 48px;
+  }
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: #71c9dd;
   border-radius: 10px;
@@ -459,6 +510,10 @@ const SaveBtn = styled.button`
 
 // 취소 버튼
 const CancelBtn = styled.button`
+  @media only screen and (min-width: 375px) {
+    width: 320px;
+    height: 48px;
+  }
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 20px;
   background-color: #f5f5f5;
@@ -474,11 +529,16 @@ const ProfileImgDiv = styled.div`
 `;
 
 // 사진 첨부 버튼입니다.
+// 사진 첨부 버튼을 줄여야 휴대폰, 닉네임 사이 갭이 줄여짐
 const RechangeImgBtn = styled.button`
+  @media only screen and (min-width: 375px) {
+    width: 100px;
+    height: 20px;
+  }
   width: 200px;
   height: 40px;
   margin-top: 20px;
-  margin-right: 50px;
+  margin-right: 10px;
   background-color: #757575;
   color: white;
   border: none;
@@ -487,25 +547,52 @@ const RechangeImgBtn = styled.button`
 
 //고객유의사항, 고객이용가이드입니다.
 const Customer = styled.div`
+  @media only screen and (min-width: 375px) {
+    width: 300px;
+    height: 30px;
+  }
   justify-content: space-between;
   margin-top: 30px;
   width: 700px;
   display: flex;
+
   .button1 {
+    @media only screen and (min-width: 375px) {
+      width: 110px;
+      height: 30px;
+    }
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     width: 110px;
     height: 30px;
 
     border: 2px solid #71c9dd;
     border-radius: 20px;
+
+    font-size: 14px;
+    line-height: 17px;
   }
   .button2 {
+    @media only screen and (min-width: 375px) {
+      width: 110px;
+      height: 30px;
+    }
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     width: 110px;
     height: 30px;
     border: 2px solid #71c9dd;
     border-radius: 20px;
+
+    font-size: 14px;
+    line-height: 17px;
   }
 `;
 
 export default MyPage;
+
+const PhoneNumberInput = styled.div`
+  width: 140px;
+  height: 30px;
+`;
+
+//사진첨부마진 너무 먹고있다
+// 부모 먼저 보고 타고타고 내려와야한다
