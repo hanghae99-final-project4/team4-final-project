@@ -8,7 +8,6 @@ import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
 import { trainApi } from "../Redux/Modules/Instance";
-const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const cookies = new Cookies();
 
 const token = cookies.get("token");

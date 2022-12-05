@@ -30,6 +30,8 @@ const instanceF = axios.create({
 export const trainApi2 = {
   //signup
   postForm: (payload) => instanceF.post("/user", payload),
+  postProficForm: (payload) => instanceF.post("/profile", payload),
+  postProfile: (payload) => instanceF.post("/profile", payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
 
   // postProficForm: (payload) => instanceF.post(`/profile`, payload),
@@ -40,6 +42,7 @@ export const trainApi2 = {
 
 export const trainApi = {
   // getLogin: () => instance.get(`/auth/kakao/callback?code=${code}`),
+  postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
   getConvers: () => instance.get("/profile"),

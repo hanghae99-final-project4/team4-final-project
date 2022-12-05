@@ -32,6 +32,8 @@ const Chatting = () => {
   const [chatArr, setChatArr] = useState([]);
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
+  const [counter, setCounter] = useState([]);
+  const [counterUser, setCounterUser] = useState([]);
   const navigate = useNavigate();
 
   const boxRef = useRef(null);
@@ -104,6 +106,16 @@ const Chatting = () => {
   //상대방 프로필
   const CounterUserHandler = () => {
     setIsModal(true);
+    console.log(counter);
+    socket.emit("counteruser", {
+      fair: counter.fair,
+      ownself: counter.ownself,
+    });
+    socket.on(`${name}`, (message) => {
+      console.log(message);
+      setCounterUser(message);
+    });
+    console.log(counterUser);
   };
 
   ///매칭 순서대로 randomjoin => maching => name
@@ -126,6 +138,7 @@ const Chatting = () => {
 
     socket.on(`${name}`, (message) => {
       console.log(message, `${name}`);
+      setCounter(message);
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
@@ -272,6 +285,12 @@ const Chatting = () => {
               <ChatMainDiv ref={boxRef}>
                 {isModal && (
                   <CounterProfileModal
+                    gender={counterUser?.gender}
+                    statusmessage={counterUser?.statusmessage}
+                    nickname={counterUser?.nickname}
+                    representProfile={counterUser?.representProfile}
+                    setCounterUser={setCounterUser}
+                    couterUser={counterUser}
                     isModal={isModal}
                     setIsModal={setIsModal}
                   />
@@ -352,6 +371,7 @@ const Chatting = () => {
                   ref={inputRef}
                   type="file"
                   name="picture"
+                  maxSize={300000000}
                   value={file.picture}
                   accept="image/*,video/*"
                   multiple
