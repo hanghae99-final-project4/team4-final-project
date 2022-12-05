@@ -11,18 +11,18 @@ const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
-const hURL = process.env.REACT_APP_YH_HOST;
+const yhURL = process.env.REACT_APP_TH_S_HOST;
 
 //일반데이터 Instance
 const instance = axios.create({
-  baseURL: `${hURL}`,
+  baseURL: `${yhURL}`,
   headers: {
     Authorization: `Bearer ${token}`,
   },
 });
 //폼데이터 Instance
 const instanceF = axios.create({
-  baseURL: `${hURL}`,
+  baseURL: `${yhURL}`,
   headers: {
     "Content-Type": "multipart/form-data",
     Authorization: `Bearer ${token}`,
@@ -35,6 +35,8 @@ export const trainApi2 = {
   postForm: (payload) => instanceF.post("/user", payload),
   postProficForm: (payload) => instanceF.post("/profile", payload),
   postProfile: (payload) => instanceF.post("/profile", payload),
+  chattingForm: (formData) => instanceF.post("/uploadFile", formData),
+  
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.put("/url"),
   // delete: () => instance.delete("/url"),
@@ -46,6 +48,7 @@ export const trainApi = {
   postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
+  getConvers: () => instance.get("/profile"),
   // post: (payload) => instance.post("/url", payload),
   // get: () => instance.get("/url"),
   // get: () => instance.put("/url"),
