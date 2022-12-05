@@ -1,76 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
 
 const InfoCategory = () => {
-  const category = ["# 운동", "자격증", "취업"];
-  const category2 = ["# 틱톡", "# 취준생", "# 여행"];
-  const category3 = ["# 대학생", "# 패션", "# 알바"];
+  const category = ["#운동", "#자격증", "#취업"];
+
+  const category2 = ["#틱톡", "#취준생", "#여행"];
+
+  const category3 = ["#대학생", "#패션", "#알바"];
+
   console.log(category);
 
-  const [isSelect, setSelect, onChange, reset] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const categoryList = category.map((item, index) => (
+    <div
+      key={index}
+      className="float-left w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
+    >
+      {item}
+    </div>
+  ));
 
-  const getButton = (id) => {
-    return (
-      <div
-        className={`${
-          isSelect[id] ? "bg-white" : "bg-[#C3F4FF]"
-        } w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]`}
-        onClick={(e) => {
-          e.preventDefault();
-          setSelect([
-            ...isSelect.slice(0, id),
-            !isSelect[id],
-            ...isSelect.slice(id + 1),
-          ]);
-        }}
-      >
-        <div>
-          {category.map((item, i) => (
-            <div key={i}>
-              <div>{item[i]}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  const categoryList02 = category2.map((item, index) => (
+    <div
+      key={index}
+      className="float-left active:bg-[#C3F4FF] w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
+    >
+      {item}
+    </div>
+  ));
 
-  // const categoryList02 = (idx) => {
-  //   category2.map((item, index) => (
-  //     <div
-  //       key={index}
-  //       className="float-left w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
-  //     >
-  //       {item}
-  //     </div>
-  //   ));
-  // };
-
-  // const categoryList03 = category3.map((item, index) => (
-  //   <div
-  //     key={index}
-  //     className="float-left w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
-  //   >
-  //     {item}
-  //   </div>
-  // ));
+  const categoryList03 = category3.map((item, index) => (
+    <div
+      key={index}
+      className="float-left w-[88px] h-[38px] flex justify-center items-center bg-[#fffff] shadow-[0px_4px_4px_rgba(0,0,0,0.3)] rounded-[20px] text-[0.8rem]"
+    >
+      {item}
+    </div>
+  ));
 
   return (
     <>
       <div>
-        {/* <div className="float-right">{categoryList02}</div>
-        <div>{categoryList03}</div> */}
-        <div className="flex flex-row">
-          <div>{getButton(0)}</div>
-          <div>{getButton(1)}</div>
-          <div>{getButton(2)}</div>
-        </div>
+        <div> {categoryList}</div>
+        <div className="float-right">{categoryList02}</div>
+        <div>{categoryList03}</div>
       </div>
     </>
   );
