@@ -15,6 +15,7 @@ import maleColor from "../Assets/Gender/MaleColor.svg";
 import femaleColor from "../Assets/Gender/FemaleColor.svg";
 import Headers01 from "../Components/Headers/Headers01";
 import InfoCategory from "../Components/InfoCatagory/InfoCategory";
+import FrontHeader from "../Components/Header/FrontHeader";
 
 const SignUp = () => {
   const navigator = useNavigate();
@@ -142,9 +143,10 @@ const SignUp = () => {
   return (
     <>
       <InfoBox className=" flex-col items-center">
-        <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
+        <div className="relative h-[770px] rounded-[5px] mx-[auto] my-[0px]">
+          <FrontHeader msg="회원가입" />
           <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
-            <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
+            <h1 className="text-[20px] font-bold">프로필을 설정해주세요!</h1>
             <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
               <div className="w-[120px] h-[120px] mb-[2px]">{showImage}</div>
               <div className="w-[100%] rounded-[10px]">
@@ -211,7 +213,7 @@ const SignUp = () => {
                               type="radio"
                               name="gender"
                               id="male"
-                              value="true"
+                              value="male"
                               onChange={onChangeValue}
                               className=" w-[61px]"
                             />
@@ -227,7 +229,7 @@ const SignUp = () => {
                               type="radio"
                               name="gender"
                               id="male"
-                              value="false"
+                              value="female"
                               onChange={onChangeValue}
                               className=" w-[61px]"
                             />
@@ -246,7 +248,7 @@ const SignUp = () => {
                             onClick={(e) => {
                               e.preventDefault();
                               removeCookie("token", { path: "/" });
-                              navigator(-2);
+                              navigator(-1);
                             }}
                             className="w-[160px] float-left"
                           >
@@ -276,7 +278,7 @@ export default SignUp;
 
 const InfoBox = styled.div`
   width: 100%;
-  height: 812px;
+  height: 770px;
   @media screen and (min-width: 320px) and (max-width: 375px) {
   } ;
 `;
