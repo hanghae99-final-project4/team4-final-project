@@ -15,7 +15,6 @@ import HelpModal from "../Components/Modal/HelpModal";
 const cookies = new Cookies();
 
 const token = cookies.get("token");
-// console.log(token);
 const ConversPage = () => {
   const initialState = {
     nickname: "",
@@ -58,7 +57,7 @@ const ConversPage = () => {
     async function getNickname() {
       const { data } = await trainApi.getConvers();
       console.log(data);
-      setMessage(data.body);
+      setMessage(data.user);
     }
     getNickname();
   }, []);

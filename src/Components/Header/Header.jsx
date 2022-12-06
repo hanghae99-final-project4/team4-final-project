@@ -9,8 +9,8 @@ const Header = () => {
     <div>
       {" "}
       <MainHeader>
-        <HeaderIcon onClick={() => navigate("/converspage")} />
-        환승시민
+        <HeaderIcon />
+        나의정보
       </MainHeader>
     </div>
   );
