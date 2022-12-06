@@ -60,11 +60,11 @@ const Login = () => {
         }
         if (doneInfo === false && donePhone === false) {
           console.log(res);
-          navigator("/authcode");
+          navigate("/authcode");
           alert("추가정보를 입력해주세요!");
         } else if (doneInfo === true && donePhone === true) {
           alert(`${msg}`);
-          navigator("/subwaypage");
+          navigate("/subwaypage");
         }
       })
       .catch((err) => {

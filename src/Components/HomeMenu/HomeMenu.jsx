@@ -1,13 +1,14 @@
 import React from "react";
-import mypage from "../../Assets/FooterHome/FooterUser.svg";
-import home from "../../Assets/FooterHome/FooterHome.svg";
+import spot from "../../Assets/NewFooterHome/Chatting.svg";
+import home from "../../Assets/NewFooterHome/Home.svg";
+import mypage from "../../Assets/NewFooterHome/Profile.svg";
 import { useNavigate } from "react-router-dom";
 
 const HomeMenu = () => {
   const navigator = useNavigate();
   return (
-    <footer className="w-full absolute bottom-[0px] h-[50px] bg-[#FFFFF] flex flex-auto justify-center items-center">
-      <div className="w-[375px] h-[50px] bg-[#ffffff]">
+    <footer className="w-full absolute bottom-[0px] h-[50px] bg-[#FFFFFF] shadow-[5px_0px_4px_rgba(0,0,0,0.25)] flex flex-auto justify-center items-center">
+      <div className="w-[375px] h-[50px] bg-[#FFFFFF]">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -16,6 +17,15 @@ const HomeMenu = () => {
           className="w-[125px] h-[50px] float-left flex justify-center items-center cursor-pointer hover:shadow-inner"
         >
           <img src={home} alt="home" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigator("/converspage");
+          }}
+          className="w-[125px] h-[50px] float-left flex justify-center items-center cursor-pointer hover:shadow-inner"
+        >
+          <img src={spot} alt="home" />
         </button>
         <button
           className="w-[125px] h-[50px] float-right flex justify-center items-center cursor-pointer hover:shadow-inner"

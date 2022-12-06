@@ -9,6 +9,9 @@ import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
 import { trainApi } from "../Redux/Modules/Instance";
 import FrontHeader from "../Components/Header/FrontHeader";
+import { ReactComponent as HowIcon } from "../Assets/Convers/How.svg";
+import { useState } from "react";
+import HelpModal from "../Components/Modal/HelpModal";
 const cookies = new Cookies();
 
 const token = cookies.get("token");
@@ -21,6 +24,7 @@ const ConversPage = () => {
     dropstation: "",
     from: false,
   };
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
@@ -76,9 +80,17 @@ const ConversPage = () => {
           </InfoDiv>
           <StationDiv>
             <SquareInfo>
-              <span style={{ fontSize: "14px", fontWeight: "1000" }}>
-                칸 정보
-              </span>
+              <HowDiv>
+                <span style={{ fontSize: "14px", fontWeight: "1000" }}>
+                  칸 정보
+                </span>
+                <HowIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setModal(!modal)}
+                />
+                {modal && <HelpModal modal={modal} setModal={setModal} />}
+              </HowDiv>
+
               <StationInfo
                 placeholder="칸 정보 입력"
                 value={message?.train}
@@ -240,4 +252,9 @@ const SpanDiv = styled.div`
   @media only screen and (min-width: 375px) {
     margin-left: 33px;
   }
+`;
+const HowDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3%;
 `;
