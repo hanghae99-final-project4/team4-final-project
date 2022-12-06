@@ -1,4 +1,5 @@
 import React from "react";
+import GuideIcon from "../../Element/GuideIcon";
 
 const CustomerUserGuide = () => {
   return (

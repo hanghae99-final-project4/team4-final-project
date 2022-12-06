@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
+import { useNavigate } from "react-router-dom";
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
@@ -16,6 +17,7 @@ const MyPage = () => {
   const [form, setForm, OnChangeHandler] = useInput([]);
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const navigate = useNavigate();
 
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [gender, setGender] = useState(null);
@@ -254,11 +256,32 @@ const MyPage = () => {
         <BottomStyle type={"save"} onClick={imgSubmitHandler}>
           저장
         </BottomStyle>
-        <BottomStyle type={"cancle"}>취소</BottomStyle>
+        <BottomStyle
+          type={"cancle"}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          취소
+        </BottomStyle>
       </div>
       <Customer>
-        <button className="button1">고객유의사항</button>
-        <button className="button2">고객이용가이드</button>
+        <button
+          className="button1"
+          onClick={() => {
+            navigate("/GuideIcon");
+          }}
+        >
+          고객유의사항
+        </button>
+        <button
+          className="button2"
+          onClick={() => {
+            navigate("/CustomerUserGuide");
+          }}
+        >
+          고객이용가이드
+        </button>
       </Customer>
       <div></div>
       {isModal ? (
