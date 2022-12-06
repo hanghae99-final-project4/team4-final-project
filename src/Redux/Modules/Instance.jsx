@@ -33,8 +33,6 @@ export const trainApi2 = {
   postProficForm: (payload) => instanceF.post("/profile", payload),
   postProfile: (payload) => instanceF.post("/profile", payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
-
-
 };
 
 export const trainApi = {
@@ -43,7 +41,12 @@ export const trainApi = {
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
   getConvers: () => instance.get("/profile"),
-
+  postAuthName: (payload) => instance.post("/user/check", payload),
+  postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
+  postAuthCode: (payload) => instance.post("/auth2/compare", payload),
+  postSubSign: (payload) => instance.post("/user/signup", payload),
+  postUserId: (payload) => instance.post("/user/checkid", payload),
+  postSignIn: (payload) => instance.post("/user/login", payload),
 };
 // const token = cookies.get("token", token);
 // /인터셉터로 갱신된 토큰 교환

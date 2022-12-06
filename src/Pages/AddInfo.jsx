@@ -5,18 +5,19 @@ import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInput";
 import BlankImg from "../Assets/Empty_img.jpg";
 import { useNavigate } from "react-router-dom";
-import infoReq from "../Assets/InfoReq.svg";
-import cancle from "../Assets/SmallCancel.svg";
-import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
+// import { ReactComponent as Male } from "../Assets/Gender/Male.svg";
 import male from "../Assets/Gender/Male.svg";
 import female from "../Assets/Gender/Female.svg";
+// import { ReactComponent as MaleColor } from "../Assets/Gender/MaleColor.svg";
 import maleColor from "../Assets/Gender/MaleColor.svg";
 import femaleColor from "../Assets/Gender/FemaleColor.svg";
-import Headers01 from "../Components/Headers/Headers01";
-import InfoCategory from "../Components/InfoCatagory/InfoCategory";
+import FrontHeader from "../Components/Header/FrontHeader";
+import longnext from "../Components/Footer/LongNextBtn.svg";
+import setprofile from "../Assets/SignUp/SettingInit.svg";
 
 const SignUp = () => {
+  const [imgClick, setImgClick] = useState(false);
   const navigator = useNavigate();
   const cookies = new Cookies();
   const token = cookies.get("token");
@@ -33,7 +34,6 @@ const SignUp = () => {
   });
   const [isGender, setIsGender] = useState(false);
   const inputRef = useRef([]);
-  const yhURL = process.env.REACT_APP_YH_HOST;
 
   console.log(token);
   console.log(files);
@@ -41,7 +41,7 @@ const SignUp = () => {
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
-    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
+    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
     console.log(url);
     setFileImg({
@@ -54,14 +54,17 @@ const SignUp = () => {
   const authOk = async (e) => {
     e.preventDefault();
     await trainApi
-      .postAuthCode({
+      .postAuthName({
         nickname: form.nickname,
       })
       .then((res) => {
         console.log(res);
+        const msg = res.data.msg;
+        alert(msg);
       })
       .catch((err) => {
-        console.log(err);
+        const msg = err.response.data.error;
+        alert(msg);
       });
   };
 
@@ -88,7 +91,6 @@ const SignUp = () => {
       .then((res) => {
         //new토큰이 들어온 자리
         console.log(res);
-
         const msg = res.data.msg;
         alert(msg);
         navigator("/subwaypage");
@@ -111,6 +113,11 @@ const SignUp = () => {
       });
     // }
   };
+  //이미지 변환
+  const imgChange = () => {
+    setImgClick(!imgClick);
+  };
+
   //---------------------------------------
   const onClickFilesInput = (e) => {
     e.preventDefault();
@@ -123,16 +130,16 @@ const SignUp = () => {
         <img
           src={BlankImg}
           alt={fileImg.type}
-          className="w-[120px] h-[120px]"
+          className="w-[120px] h-[120px] rounded-[20px]"
           onClick={onClickFilesInput}
         />
       );
-    } else if (fileImg) {
+    } else if (fileImg !== undefined) {
       return (
         <img
           src={fileImg.thumbnail}
           alt={fileImg.type}
-          className="w-[120px] h-[120px]"
+          className="w-[120px] h-[120px] rounded-[0px]"
           onClick={onClickFilesInput}
         />
       );
@@ -141,12 +148,15 @@ const SignUp = () => {
 
   return (
     <>
-      <InfoBox className=" flex-col items-center">
-        <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
-          <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
-            <h1 className="text-[20px] font-bold">기본정보를 입력해주세요!</h1>
-            <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
-              <div className="w-[120px] h-[120px] mb-[2px]">{showImage}</div>
+      <InfoBox className="w-[375px] flex flex-col justify-center items-center ">
+        <div className=" w-[375px] relative h-[770px] rounded-[5px] mx-[auto] my-[0px] shadow-[0px_4px_4px_rgba(0,0,0,0.3)]">
+          <FrontHeader msg="회원가입" />
+          <div className="w-[375px]  rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
+            <h1 className="text-[20px] relative font-bold">
+              <img src={setprofile} alt="setprofile" />
+            </h1>
+            <div className="w-[100%] mx-[auto] mt-[4px] mb-[0px] flex flex-col items-center">
+              <div className="w-[120px] h-[120px] mb-[2px] ">{showImage}</div>
               <div className="w-[100%] rounded-[10px]">
                 <form className="flex flex-col gap-[20px] ">
                   <div className="flex flex-col">
@@ -172,7 +182,7 @@ const SignUp = () => {
                   <div className="flex flex-col gap-[4px]">
                     <div className="flex flex-col">
                       <label className="text-[1rem] font-bold">닉네임</label>
-                      <div className="w-[230px]">
+                      <div className="w-[236px]">
                         <input
                           name="nickname"
                           type="text"
@@ -183,7 +193,7 @@ const SignUp = () => {
                           onChange={onChangeValue}
                           className="w-[155px] h-[30px] text-[1rem] rounded-[4px] border-b-[1px] focus:border-indigo-500"
                         />
-                        <div className=" w-[74px] h-[30px] float-right flex justify-center items-center bg-[#C3F4FF] rounded-[20px] text-[0.8rem]">
+                        <div className=" w-[74px] h-[30px] float-right flex justify-center items-center ml-[4px] bg-[#C3F4FF] rounded-[20px] text-[0.8rem] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
                           <button onClick={(e) => authOk(e)}>중복확인</button>
                         </div>
                       </div>
@@ -205,29 +215,40 @@ const SignUp = () => {
                       </div>
                       <div className="flex justify-center">
                         <div className="float-left mr-[61px]">
-                          <label htmlFor="male">
-                            <img src={isGender ? male : maleColor} alt="male" />
+                          <label
+                            htmlFor="male"
+                            className="h-[61px]
+                          "
+                          >
+                            <img
+                              // src={!imgClick ? <Male /> : <MaleColor />}
+                              src={!imgClick ? male : maleColor}
+                              alt="male"
+                              onClick={imgChange}
+                            />
+
                             <input
                               type="radio"
                               name="gender"
                               id="male"
-                              value="true"
+                              value={true}
                               onChange={onChangeValue}
                               className=" w-[61px]"
                             />
                           </label>
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="female">
+                          <label htmlFor="female" className="h-[61px]">
                             <img
-                              src={isGender ? female : femaleColor}
+                              src={!imgClick ? femaleColor : female}
                               alt="female"
+                              onClick={imgChange}
                             />
                             <input
                               type="radio"
                               name="gender"
-                              id="male"
-                              value="false"
+                              id="female"
+                              value={false}
                               onChange={onChangeValue}
                               className=" w-[61px]"
                             />
@@ -236,35 +257,37 @@ const SignUp = () => {
                       </div>
                       <div>
                         <h2 className="text-[1rem] font-bold">카테고리</h2>
-                        <div className="w-[313px] text-black font-bold">
-                          <InfoCategory />
+                        <div className="w-[313px] text-gray-300 text-[1.2rem] font-bold">
+                          {/* <InfoCategory /> */}서비스 준비중입니다.
                         </div>
                       </div>
-                      <div className="absolute bottom-0">
-                        <div className="w-[335px]">
-                          <button
+                      {/* <div className="absolute bottom-[0px]"> */}
+                      {/* <div className="w-[375px] "> */}
+                      {/* <button
                             onClick={(e) => {
                               e.preventDefault();
                               removeCookie("token", { path: "/" });
-                              navigator(-2);
+                              navigator(-1);
                             }}
                             className="w-[160px] float-left"
                           >
                             <img src={cancle} alt="cancle" />
-                          </button>
-                          <button
-                            onClick={(e) => onSubmit(e)}
-                            className="w-[160px] float-right"
-                          >
+                          </button> */}
+                      {/* <button className="w-[160px] float-right">
                             <img src={next} alt="next" />
-                          </button>
-                        </div>
-                      </div>
+                          </button> */}
+                      {/* </div> */}
+                      {/* </div> */}
                     </div>
                   </div>
                 </form>
               </div>
             </div>
+          </div>
+          <div>
+            <button className="absolute bottom-0" onClick={(e) => onSubmit(e)}>
+              <img src={longnext} alt="" />
+            </button>
           </div>
         </div>
       </InfoBox>
@@ -276,7 +299,7 @@ export default SignUp;
 
 const InfoBox = styled.div`
   width: 100%;
-  height: 812px;
+  height: 770px;
   @media screen and (min-width: 320px) and (max-width: 375px) {
   } ;
 `;

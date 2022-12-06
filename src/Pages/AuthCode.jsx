@@ -1,6 +1,12 @@
 import axios from "axios";
 import styled from "styled-components";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInput";
 import BlankImg from "../Assets/Empty_img.jpg";
@@ -10,24 +16,28 @@ import next from "../Assets/NextBtn.svg";
 import { trainApi, trainApi2 } from "../Redux/Modules/Instance";
 import FooterNext from "../Components/Footer/FooterNext";
 import FrontHeader from "../Components/Header/FrontHeader";
+import signcheck from "../Assets/SignUp/SignCheck.svg";
+import phoneauth from "../Assets/SignUp/PhoneAuth.svg";
+import norminfo from "../Assets/SubSign/NormInfo.svg";
 
 const AuthCode = () => {
   const [, , removeCookie] = useCookies(["token"]);
+  const [minutes, setMinutes] = useState(3);
+  const [seconds, setSeconds] = useState(0);
 
+  // const token = getCookie("token");/
   const cookies = new Cookies();
   const token = cookies.get("token");
-  // const token = getCookie("token");/
   console.log(token);
 
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
   console.log(files);
 
-  // const thURL = process.env.REACT_APP_TH_S_HOST;
-  const yhURL = process.env.REACT_APP_YH_HOST;
-
+  const inputRef = useRef([]);
   let [fileImg, setFileImg] = useState([]);
   console.log(fileImg);
+
   const [check, setCheck] = useState(false);
   const [form, setForm, onChangeValue, reset] = useInput({
     representProfile: "",
@@ -36,14 +46,11 @@ const AuthCode = () => {
     nickname: "",
     gender: check,
   });
-  const [disable, setDisable] = useState(false);
-
-  const inputRef = useRef([]);
 
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
-    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
+    //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
     console.log(url);
     setFileImg({
@@ -73,8 +80,13 @@ const AuthCode = () => {
       alert(data.msg);
     } catch (err) {
       console.log(err);
+      const status = err.response.status;
       const errMsg = err.response.data.error;
-      alert(errMsg);
+      if (status === 400 && "이미 가입된 번호입니다") {
+        alert(errMsg);
+      } else {
+        alert(errMsg);
+      }
     }
   };
   //인증확인
@@ -91,118 +103,69 @@ const AuthCode = () => {
       const msg = data.msg;
       if (msg === "인증되었습니다") {
         navigator("/addinfo");
+        alert(msg);
       }
-      alert(msg);
     } catch (err) {
       console.log(err);
+      const status = err.response.status;
       const errMsg = err.response.data.error;
-      alert(errMsg);
+      if (status === 400 && "이미 가입된 번호입니다") {
+        alert(errMsg);
+      } else {
+        alert(errMsg);
+      }
     }
   };
 
   //업로드 버튼(1) 클릭시
   console.log("0_token", token);
-  const onSubmit = async (e) => {
-    e.preventDefault();
 
-    console.log("1_token", token);
-    const fd = new FormData();
-    console.log(fd);
-    fd.append("representProfile", fileImg.files);
-    fd.append("phoneNumber", form.phoneNumber);
-    fd.append("gender", true);
-    fd.append("nickname", form.nickname);
+  // 3분 타이머
 
-    for (let pair of fd.entries()) {
-      console.log(pair);
-    }
-    console.log("2_token", token);
-    await trainApi2
-      .postForm(fd)
-      //res 값으로 request에서 에러 처리를
-      .then((res) => {
-        //new토큰이 들어온 자리
-        console.log(res);
-
-        const msg = res.data.msg;
-        alert(msg);
-        // navigator("/subwaypage");
-      })
-      .catch((err) => {
-        console.log(err);
-
-        const msg = err.response.data.msg;
-        const er = err.response.data.error;
-        msg ? alert(msg) : er ? alert(er) : <></>;
-        return;
-      });
-    // }
-  };
   //---------------------------------------
-  const onClickFilesInput = (e) => {
-    e.preventDefault();
-    inputRef.current?.click();
-  };
-
-  const showImage = useMemo(() => {
-    if (fileImg) {
-      return <img src="../Assets/Empty_img.jpg" alt="emptyProfile" />;
-    } else if (!fileImg) {
-      return (
-        <img
-          src={fileImg.thumbnail}
-          alt={fileImg.type}
-          className="w-[120px] h-[120px] bg-[#D9D9D9] rounded-[5px]"
-          onClick={onClickFilesInput}
-        />
-      );
-    }
-  }, [fileImg]);
 
   return (
     <>
-      <InfoBox className=" flex-col items-center">
-        <div className="relative h-[770px] rounded-[5px] mx-[auto] my-[0px]">
+      <InfoBox className="w-[375px] flex flex-col items-center">
+        <div className="relative w-[375px] h-[770px] rounded-[5px] mx-[auto] my-[0px] shadow-[0px_4px_4px_rgba(0,0,0,0.3)]">
           <FrontHeader msg="회원가입" />
-          <div className="w-[375px] after:rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
-            <h1 className="text-[1.4rem] font-bold">
-              기본 정보를 입력해주세요!
+          <div className="w-[375px] rounded-[5px] mx-[auto] my-[0px]">
+            <h1 className="text-[1.4rem] pt-[60px] ml-[20px] font-bold items-center">
+              <img src={norminfo} alt="normal_info" />
             </h1>
-            <div className="w-[100%] mx-[auto] mt-[30px] mb-[0px] flex flex-col items-center">
-              <div className="w-[100%] rounded-[10px]">
+            <div className="w-[100%] mx-[auto] mt-[40%] mb-[0px] flex flex-col items-center">
+              <div className="w-[100%] rounded-[10px]  ">
                 <form className="flex flex-col">
                   <div className="flex flex-col justify-center items-center gap-[10px]">
-                    <div className=" flex flex-col gap-[10px] mt-[30px]">
-                      <div className="w-[330px] mx-[auto] my-[0px] flex flex-col justify-center ">
+                    <div className=" flex flex-col gap-[16px]">
+                      <div className="w-[330px] mx-[auto] my-[0px] flex flex-col justify-center gap-[12px]">
                         <h2 className="text-[0.8rem] font-[600]">
-                          휴대폰 인증
+                          <img src={phoneauth} alt="phoneauth" />
                         </h2>
-                        <div className="w-[330px] flex flex-row items-center gap-[8px] text-[0.8rem] border-b-[1px] ">
+                        <div className="w-[330px] pb-[6px] flex flex-row items-center gap-[8px] text-[0.8rem] border-b-[1px] border-[text-[rgba(0,0,0,0.5)]]">
                           <input
                             type="radio"
                             className="float-left w-[18px] h-[18px]"
                           />
 
-                          <label htmlFor="allCheck">
-                            <p className="text-[1rem]">
-                              본인 확인을 위한 약관 모두 동의
-                            </p>
+                          <label htmlFor="allCheck" className="p-[2px]">
+                            <img src={signcheck} alt="signcheck" />
                           </label>
                         </div>
                       </div>
                       <div>
-                        <div className="flex gap-[10px]">
+                        <div className="w-[330px] flex gap-[10px] ">
                           <input
                             name="phoneNumber"
                             type="text"
                             value={form.phoneNumber}
                             placeholder="휴대폰 11자리"
                             onChange={onChangeValue}
-                            className="float-left w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
+                            className="float-left w-[240px] pb-[2px] text-[1rem] border-b-[1px] focus:border-indigo-500"
                           />
                           <button
                             onClick={(e) => onNumberRequest(e)}
-                            className="flex justify-center"
+                            className="rounded-[22px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
                           >
                             <img
                               src={infoReq}
@@ -212,33 +175,38 @@ const AuthCode = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="flex gap-[10px]">
+                      {/* 받은 인증번호 입력 */}
+                      <div className="flex gap-[10px] border-b-[1px] ">
                         <input
                           type="text"
                           name="authCode"
                           value={form.authCode}
-                          placeholder="인증번호 입력"
+                          placeholder="인증 번호 입력"
                           onChange={onChangeValue}
-                          className="w-[220px] text-[1rem] border-b-[1px] focus:border-indigo-500"
+                          className="w-[330px] pb-[2px] text-[1rem] focus:border-indigo-500"
                         />
+                      </div>
+                      {/* 타이머 3분*/}
+                      <div>
+                        {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} */}
                       </div>
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-[10px]">
-                    <div className="absolute bottom-0">
-                      <div className="w-[335px] flex flex-col gap-[5px]">
+                    <div className="mx-[auto] my-[0px]">
+                      <div className="w-[335px] mt-[30px] flex flex-col items-center gap-[5px]">
                         <OkBtn
                           onClick={(e) => onAuthNumber(e)}
-                          className="w-[74px] h-[30px] py-[5px] px-[10px] bg-[#C3F4FF] rounded-[15px] text-[0.8rem] font-bold"
+                          className="w-[74px] h-[30px] bg-[#C3F4FF] rounded-[15px] text-[0.8rem] font-bold"
                         >
                           확인
                         </OkBtn>
                         <CancelBtn
                           onClick={(e) => {
                             e.preventDefault();
-                            removeCookie("token", { path: "/" });
-                            navigator(-2);
+
+                            navigator(-1);
                           }}
                         >
                           취소

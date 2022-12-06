@@ -13,6 +13,7 @@ import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
+import FrontHeader from "../Header/FrontHeader";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
@@ -42,12 +43,6 @@ const Chatting = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const thURL = process.env.REACT_APP_TH_S_HOST;
-  console.log(isModal);
-  console.log(name);
-  console.log(room);
-  console.log(message);
-  console.log(chatArr);
-  console.log(file);
 
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
@@ -228,46 +223,6 @@ const Chatting = () => {
       console.log(message);
     });
   }
-  const sendHandler = () => {
-    //   const formData = new FormData();
-    //   formData.append("image", postPicture[0]);
-    //   for (const key of formData.entries()) {
-    //     console.log(key);
-    //   }
-    //   socket.emit("imgaeUP", {
-    //     image: postPicture[0]?.preview,
-    //   });
-    //   socket.on("imgaeUP", (message) => {
-    //     console.log(message);
-    //   });
-  };
-  //     socket.emit("randomchat", {
-  //       msg: message.msg,
-  //       roomkey: room,
-  //     });
-  // socket.on("broadcast", (message) => {
-  //   console.log(message.msg);
-  // });
-  // };
-  // };
-
-  //   socket.emit("imagaeUP", {
-  //     image: formData,
-  //   });
-
-  //   socket.on("broadcast", (message) => {
-  //     console.log(message.msg);
-  //   });
-  // };
-  //   socket.emit("randomchat", {
-  //     msg: message.msg,
-  //     roomkey: room,
-  //   });
-
-  //   socket.on("broadcast", (message) => {
-  //     console.log(message.msg);
-  //   });
-  // };
 
   return (
     <div
@@ -277,10 +232,10 @@ const Chatting = () => {
         alignItems: "center",
       }}
     >
-      <Header />
       {success ? (
         <>
           <div>
+            <FrontHeader msg={counterUser?.nickname} />
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
                 {isModal && (

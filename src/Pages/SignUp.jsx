@@ -1,12 +1,11 @@
 import axios from "axios";
 import styled from "styled-components";
 import { useEffect } from "react";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInputOrigin";
 import BlankImg from "../Assets/Empty_img.jpg";
-import jwtDecode from "jwt-decode";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
 import cancle from "../Assets/CancleBtn.svg";
 import next from "../Assets/NextBtn.svg";
@@ -53,6 +52,8 @@ const SignUp = () => {
   const inputRef = useRef([]);
   //파일 미리볼 url을 저장해줄 state
   //파일 저장
+
+  //구글,카카오 로그인 할 경우 파라미터 값 가져와서 토큰 쿠키에 장착하기.
   useEffect(() => {
     if (code !== null) {
       removeCookie("token");
@@ -119,12 +120,7 @@ const SignUp = () => {
   //업로드 버튼(1) 클릭시
   const onSubmit = async (e) => {
     e.preventDefault();
-    // if (
-    //   form.phoneNumber === "" ||
-    //   form.authCode === "" ||
-    // ) {
-    //   return alert("모든 항목을 입력해주세요");
-    // } else {
+
     const fd = new FormData();
     console.log(fd);
     fd.append("representProfile", fileImg.files);
@@ -344,6 +340,7 @@ export default SignUp;
 const InfoBox = styled.div`
   width: 100%;
   height: 812px;
+
   @media screen and (min-width: 320px) and (max-width: 375px) {
     font-size: 1.3rem;
   } ;
