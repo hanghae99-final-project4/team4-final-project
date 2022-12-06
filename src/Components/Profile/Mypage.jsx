@@ -8,6 +8,8 @@ import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
 import { useNavigate } from "react-router-dom";
+import HomeMenu from "../HomeMenu/HomeMenu";
+import FrontHeader from "../Header/FrontHeader";
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
@@ -21,7 +23,7 @@ const MyPage = () => {
 
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [gender, setGender] = useState(null);
-
+  console.log(representProfile);
   useEffect(() => {
     async function getProfile() {
       const { data } = await axios.get(`${thURL}/profile`, {
@@ -29,6 +31,7 @@ const MyPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(data);
 
       setForm(data.body);
     }
@@ -49,18 +52,16 @@ const MyPage = () => {
     formData.append("gender", gender);
 
     if (
-      !representProfile[0]?.file ||
-      !form.phoneNumber ||
-      !form.nickname ||
-      !form.statusmessage ||
-      gender === null
+      representProfile[0]?.file === undefined ||
+      !form?.phoneNumber ||
+      !form?.nickname ||
+      !form?.statusmessage
     ) {
       window.alert("비어있는 내용을 채워주세요");
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair);
-
+    } else {
+      for (var pair of formData.entries()) {
+        console.log(pair);
+      }
       await trainApi2
         .postProfile(formData)
         .then((res) => {
@@ -100,13 +101,13 @@ const MyPage = () => {
           onClick={() => removeProfile(item.url)}
           style={{
             position: "relative",
-            top: "20px",
+            top: "18px",
             zIndex: "999",
-            right: "-90px",
+            right: "0px",
             cursor: "pointer",
           }}
         />
-        <img
+        <ThumbImg
           onClick={() =>
             setRepresentProfile([
               {
@@ -116,12 +117,6 @@ const MyPage = () => {
             ])
           }
           key={index}
-          style={{
-            cursor: "pointer",
-            transform: "scale(1)",
-            width: "200px",
-            height: "200px",
-          }}
           src={item.url}
           alt="image"
         />
@@ -161,148 +156,162 @@ const MyPage = () => {
 
   //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
-    <Wrap>
-      <Header>
-        <div style={{ fontSize: "18px" }}>◀︎</div>
-        <div style={{ fontSize: "18px" }}>나의정보 </div>
-        <div style={{ fontSize: "12px" }}>로그아웃</div>
-      </Header>
+    <>
+      <Wrap>
+        <FrontHeader msg="나의정보" />
 
-      <TitleBox>
-        <div>
-          <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>
+        <TitleBox>
+          <div>
+            <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>
+          </div>
+        </TitleBox>
+
+        <ProfileBox>
+          <ImgWrap>
+            {representProfile?.length > 0 ? (
+              <ImgBox
+                style={{ transform: "scale(1)", borderRadius: "10px" }}
+                id="img-preview"
+                src={preview}
+              />
+            ) : (
+              <ImgBox
+                style={{ transform: "scale(1)", borderRadius: "10px" }}
+                id="img-preview"
+                src={form?.representProfile}
+              />
+            )}
+
+            <UploadImage
+              maxSize={314572800}
+              type="file"
+              name="profile"
+              ref={inputRef}
+              value={form?.profile}
+              accept="image/*"
+              multiple
+              onChange={(e) => formSubmit(e)}
+            />
+            <ImgButton onClick={() => setIsModal(true)}>사진 첨부</ImgButton>
+          </ImgWrap>
+          <InfoWrap>
+            <ul>
+              <li>
+                <span>휴대폰</span>
+                <InputInfo
+                  name="phoneNumber"
+                  value={form?.phoneNumber}
+                  onChange={OnChangeHandler}
+                ></InputInfo>
+              </li>
+              <li>
+                <span>닉네임</span>
+                <InputInfo
+                  onChange={OnChangeHandler}
+                  name="nickname"
+                  value={form?.nickname}
+                ></InputInfo>
+              </li>
+              <li style={{ display: "flex", alignItems: "flex-start" }}>
+                {/* <span>성별</span> */}
+                {/* <div style={{ width: "80%" }}>
+                  <CheckGender
+                    type="checkbox"
+                    name="gender"
+                    value="1"
+                    onChange={(e) => checkOnlyOne(e.target)}
+                  />
+                  <span>여성</span>
+                  <CheckGender
+                    type="checkbox"
+                    name="gender"
+                    value="2"
+                    onChange={(e) => checkOnlyOne(e.target)}
+                  />
+                  <span>남성</span>
+                </div> */}
+              </li>
+              <li
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                  margin: 0,
+                  borderRadius: "10px",
+                }}
+              >
+                <AreaTitle>상태 메세지</AreaTitle>
+                <textarea
+                  style={{ width: "100%", height: "40px" }}
+                  onChange={OnChangeHandler}
+                  name="statusmessage"
+                  value={form?.statusmessage}
+                ></textarea>
+              </li>
+            </ul>
+          </InfoWrap>
+        </ProfileBox>
+
+        <div style={{ margin: "1rem", marginTop: "33px" }}>
+          <BottomStyle type={"save"} onClick={() => imgSubmitHandler()}>
+            저장
+          </BottomStyle>
+          <BottomStyle
+            type={"cancle"}
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            취소
+          </BottomStyle>
         </div>
-      </TitleBox>
-
-      <ProfileBox>
-        <ImgWrap>
-          <ImgBox
-            style={{ transform: "scale(1)", borderRadius: "10px" }}
-            id="img-preview"
-            src={preview}
-          />
-          <UploadImage
-            maxSize={314572800}
-            type="file"
-            name="profile"
-            ref={inputRef}
-            value={form?.profile}
-            accept="image/*"
-            multiple
-            onChange={(e) => formSubmit(e)}
-          />
-          <ImgButton onClick={() => setIsModal(true)}>사진 첨부</ImgButton>
-        </ImgWrap>
-        <InfoWrap>
-          <ul>
-            <li>
-              <span>휴대폰</span>
-              <InputInfo
-                name="phoneNumber"
-                value={form?.phoneNumber}
-                onChange={OnChangeHandler}
-              ></InputInfo>
-            </li>
-            <li>
-              <span>닉네임</span>
-              <InputInfo
-                onChange={OnChangeHandler}
-                name="nickname"
-                value={form?.nickname}
-              ></InputInfo>
-            </li>
-            <li style={{ display: "flex", alignItems: "flex-start" }}>
-              <span>성별</span>
-              <div style={{ width: "80%" }}>
-                <CheckGender
-                  type="checkbox"
-                  name="gender"
-                  value="1"
-                  onChange={(e) => checkOnlyOne(e.target)}
-                />
-                <span>여성</span>
-                <CheckGender
-                  type="checkbox"
-                  name="gender"
-                  value="2"
-                  onChange={(e) => checkOnlyOne(e.target)}
-                />
-                <span>남성</span>
-              </div>
-            </li>
-            <li
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
-                margin: 0,
-                borderRadius: "10px",
-              }}
-            >
-              <AreaTitle>상태 메세지</AreaTitle>
-              <textarea
-                style={{ width: "100%", height: "40px" }}
-                onChange={OnChangeHandler}
-                name="statusmessage"
-                value={form?.statusmessage}
-              ></textarea>
-            </li>
-          </ul>
-        </InfoWrap>
-      </ProfileBox>
-
-      <div style={{ margin: "1rem", marginTop: "33px" }}>
-        <BottomStyle type={"save"} onClick={imgSubmitHandler}>
-          저장
-        </BottomStyle>
-        <BottomStyle
-          type={"cancle"}
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          취소
-        </BottomStyle>
-      </div>
-      <Customer>
-        <button
-          className="button-notice"
-          onClick={() => {
-            navigate("/GuideIcon");
-          }}
-        >
-          고객유의사항
-        </button>
-        <button
-          className="button-guide"
-          onClick={() => {
-            navigate("/CustomerUserGuide");
-          }}
-        >
-          고객이용가이드
-        </button>
-      </Customer>
-      <div></div>
-      {isModal ? (
-        <ModalCtn>
-          <ModalWrap>
-            <ModalProfileDiv>{thumb}</ModalProfileDiv>
-            <ProfileSetBtn onClick={() => PictureUpload()}>
-              프로필 사진 바꾸기
-            </ProfileSetBtn>
-            <ProfileCloseBtn
-              onClick={() => {
-                fileImagePreview(representProfile[0]?.file);
-                setIsModal(!isModal);
-              }}
-            >
-              저장 후 나가기
-            </ProfileCloseBtn>
-          </ModalWrap>
-        </ModalCtn>
-      ) : null}
-    </Wrap>
+        <Customer>
+          <button
+            className="button-notice"
+            onClick={() => {
+              window.alert("서비스 준비중입니다.");
+              navigate("/mypage");
+            }}
+          >
+            고객유의사항
+          </button>
+          <button
+            className="button-guide"
+            onClick={() => {
+              window.alert("서비스 준비중입니다.");
+              navigate("/CustomerUserGuide");
+            }}
+          >
+            고객이용가이드
+          </button>
+        </Customer>
+        <div></div>
+        {isModal ? (
+          <ModalCtn>
+            <ModalWrap>
+              <ModalProfileDiv>{thumb}</ModalProfileDiv>
+              <ProfileSetBtn onClick={() => PictureUpload()}>
+                프로필 사진 바꾸기
+              </ProfileSetBtn>
+              <ProfileCloseBtn
+                onClick={() => {
+                  if (representProfile[0]?.file === undefined) {
+                    setIsModal(!isModal);
+                  } else {
+                    fileImagePreview(representProfile[0]?.file);
+                    setIsModal(!isModal);
+                  }
+                }}
+              >
+                저장 후 나가기
+              </ProfileCloseBtn>
+            </ModalWrap>
+          </ModalCtn>
+        ) : null}
+      </Wrap>
+      <HomeMenu />
+    </>
   );
 };
 export default MyPage;
@@ -417,6 +426,8 @@ const BottomStyle = styled.button`
 `;
 
 const ModalCtn = styled.div`
+  position: absolute;
+  margin: 0 auto;
   width: 100%;
   height: 100%;
   border: none;
@@ -434,8 +445,8 @@ const ModalCtn = styled.div`
 const ModalWrap = styled.div`
   position: relative;
   border-radius: 5px;
-  left: 300px;
-  top: 200px;
+  left: 30%;
+  top: 20%;
   width: 800px;
   height: 500px;
   background-color: white;
@@ -443,10 +454,22 @@ const ModalWrap = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  @media screen and (min-width: 350px) and (max-width: 600px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: relative;
+    width: 85%;
+    height: 40%;
+    left: 5%;
+    top: 20%;
+  }
 `;
 
 // 이미지 5장 움직 일 수 있는 곳입니다.
 const ModalProfileDiv = styled.div`
+  margin: 0 auto;
   width: 800px;
   height: 300px;
   display: flex;
@@ -455,6 +478,26 @@ const ModalProfileDiv = styled.div`
   align-items: center;
   position: relative;
   right: -80px;
+  @media screen and (min-width: 320px) and (max-width: 650px) {
+    margin: 0 auto;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    right: -10%;
+    gap: 20px;
+  }
+`;
+//각각의 이미지
+const ThumbImg = styled.img`
+  cursor: pointer;
+  transform: scale(1);
+  width: 200px;
+  height: 200px;
+  @media screen and (min-width: 320px) and (max-width: 365px) {
+    width: 30%;
+
+    transform: scale(1);
+  }
 `;
 
 // 저장 하기 버튼입니다.
@@ -468,6 +511,14 @@ const ProfileCloseBtn = styled.button`
   right: 500px;
   font-size: 14px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  @media screen and (min-width: 330px) and (max-width: 650px) {
+    right: 20%;
+    top: 40%;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  }
 `;
 const ProfileSetBtn = styled.button`
   width: 150px;
@@ -479,6 +530,11 @@ const ProfileSetBtn = styled.button`
   border-radius: 30px;
   font-size: 14px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  @media screen and (min-width: 350px) and (max-width: 650px) {
+    right: 20%;
+    top: 40%;
+    width: 100%;
+  }
 `;
 
 const UploadImage = styled.input`
@@ -487,8 +543,9 @@ const UploadImage = styled.input`
 `;
 
 const Customer = styled.div`
-  @media only screen and (max-width: 375px) {
-    width: 300px;
+  @media only screen and (min-width: 375px) and (max-width: 650px) {
+    margin-left: 2%;
+    width: 350px;
     height: 30px;
   }
   justify-content: space-between;

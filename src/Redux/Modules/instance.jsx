@@ -29,7 +29,7 @@ const instanceF = axios.create({
 
 export const trainApi2 = {
   //signup
-  postForm: (payload) => instanceF.post("/user", payload),
+  postForm: (fd) => instanceF.post("/user", fd),
   postProficForm: (payload) => instanceF.post("/profile", payload),
   postProfile: (payload) => instanceF.post("/profile", payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
@@ -42,8 +42,7 @@ export const trainApi = {
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
   getConvers: () => instance.get("/profile"),
   postAuthName: (payload) => instance.post("/user/check", payload),
-  postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
-  postAuthCode: (payload) => instance.post("/auth2/compare", payload),
+
   postSubSign: (payload) => instance.post("/user/signup", payload),
   postUserId: (payload) => instance.post("/user/checkid", payload),
   postSignIn: (payload) => instance.post("/user/login", payload),

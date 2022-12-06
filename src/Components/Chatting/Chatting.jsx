@@ -14,6 +14,7 @@ import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
 import FrontHeader from "../Header/FrontHeader";
+import ChattingHome from "../HomeMenu/ChattingHome";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
@@ -223,6 +224,9 @@ const Chatting = () => {
       console.log(message);
     });
   }
+  const download = () => {
+    window.location.assign();
+  };
 
   return (
     <div
@@ -308,10 +312,17 @@ const Chatting = () => {
                             {item.msg}
                           </ChatDiv>
                         ) : item.url?.split(".")[5] == "mp4" ? (
-                          <ChatVideo src={item?.url} />
+                          <>
+                            <ChatVideo a href={item?.url} src={item?.url} />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
                         ) : (
                           // <div>mp4</div>
-                          <ChatImg imgurl={item?.url} />
+                          <>
+                            <ChatImg imgurl={item?.url} />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
+
                           // <div>img</div>
                         )}
                       </UserChatDiv>
@@ -346,7 +357,7 @@ const Chatting = () => {
             </AllChatDiv>
           </div>
 
-          <HomeMenu />
+          <ChattingHome />
         </>
       ) : (
         <>
@@ -369,7 +380,7 @@ const Chatting = () => {
             <input value={message.msg} onChange={onChangeHandler} name="msg" />
             <button onClick={() => sendHandler()}>제출</button> */}
           </LoadingDiv>
-          <HomeMenu />
+          <ChattingHome />
         </>
       )}
     </div>
@@ -536,10 +547,18 @@ const ChatImg = styled.div`
 `;
 
 const ChatVideo = styled.video`
+  background-size: cover;
+  background-repeat: repeat;
+  background-image: ${({ imgurl }) => `url(${imgurl})`};
+  background-position: center;
   width: 300px;
   height: 300px;
   border-radius: 10%;
   border: none;
+  @media only screen and (min-width: 375px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const LoadingDiv = styled.div`
@@ -565,4 +584,13 @@ const UserProfileName = styled.div`
 //전체 채팅 화면
 const AllChatDiv = styled.div`
   position: relative;
+`;
+
+const Download = styled.a`
+  width: 88px;
+  height: 38px;
+  background-color: #c3f4ff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  font-family: "Noto Sans KR", sans-serif;
 `;

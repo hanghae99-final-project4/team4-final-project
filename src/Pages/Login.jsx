@@ -58,6 +58,7 @@ const Login = () => {
         if (token) {
           setCookie("token", token, { path: "/" });
         }
+
         if (doneInfo === false && donePhone === false) {
           console.log(res);
           navigate("/authcode");
@@ -65,6 +66,8 @@ const Login = () => {
         } else if (doneInfo === true && donePhone === true) {
           alert(`${msg}`);
           navigate("/subwaypage");
+        } else {
+          navigate("/authcode");
         }
       })
       .catch((err) => {
