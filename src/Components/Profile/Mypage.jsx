@@ -267,7 +267,7 @@ const MyPage = () => {
       </div>
       <Customer>
         <button
-          className="button1"
+          className="button-notice"
           onClick={() => {
             navigate("/GuideIcon");
           }}
@@ -275,7 +275,7 @@ const MyPage = () => {
           고객유의사항
         </button>
         <button
-          className="button2"
+          className="button-guide"
           onClick={() => {
             navigate("/CustomerUserGuide");
           }}
@@ -496,7 +496,7 @@ const Customer = styled.div`
   width: 100%;
   display: flex;
 
-  .button1 {
+  .button-notice {
     @media only screen and (max-width: 375px) {
       width: 110px;
       height: 30px;
@@ -511,7 +511,7 @@ const Customer = styled.div`
     font-size: 14px;
     line-height: 17px;
   }
-  .button2 {
+  .button-guide {
     @media only screen and (max-width: 375px) {
       width: 110px;
       height: 30px;
