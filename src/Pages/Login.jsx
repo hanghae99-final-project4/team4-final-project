@@ -1,58 +1,169 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import useInput from "../MyTools/Hooks/UseInput";
+import { trainApi } from "../Redux/Modules/Instance";
 import Kakaologo from "../Assets/Kakaologo.svg";
 import Naverlogo from "../Assets/Naverlogo.svg";
 import Googlelogo from "../Assets/Googlelogo.svg";
 import logo from "../Assets/Logo.svg";
+import signmsg from "../Assets/SignIn/SignMsg.svg";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_CALLBACK_URL}&response_type=code`;
-  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/auth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
-  // const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${GOOGLE_CLIENT_ID}&scope=openid%20profile%20email&redirect_uri=${GOOGLE_REDIRECT_URI}`;
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=email%20openid&response_type=code&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
-  // const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
+  const [cookie, setCookie, removeCookie] = useCookies();
+  const navigate = useNavigate();
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
+  const KAKAO = `${process.env.REACT_APP_KAKAO_URL}`;
+  const GOOGLE = `${process.env.REACT_APP_GOOGLE_URL}`;
 
+  const [Info, setInfo, onChangeValue, reset] = useInput({
+    snsId: "",
+    password: "",
+  });
+
+  //가지고 있던 토큰 없애기
+  useEffect(() => {
+    removeCookie("token");
+  }, []);
   const kakoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+    window.location.assign(KAKAO);
   };
 
   const googleLogin = () => {
-    window.location.href = GOOGLE_AUTH_URL;
+    window.location.assign(GOOGLE);
   };
 
   const naverLogin = () => {
     window.location.href = NAVER_AUTH_URL;
   };
 
+  //로그인 버튼
+  const onSignIn = async (e) => {
+    e.preventDefault();
+
+    await trainApi
+      .postSignIn({
+        snsId: Info.snsId,
+        password: Info.password,
+      })
+      .then((res) => {
+        console.log(res);
+
+        const token = res.data.jwtToken;
+        const msg = res.data.message;
+        const doneInfo = res.data.doneAdditionalInfo;
+        const donePhone = res.data.donePhoneNumber;
+        // console.log(token);
+        if (token) {
+          setCookie("token", token, { path: "/" });
+        }
+        if (doneInfo === false && donePhone === false) {
+          console.log(res);
+          navigator("/authcode");
+          alert("추가정보를 입력해주세요!");
+        } else if (doneInfo === true && donePhone === true) {
+          alert(`${msg}`);
+          navigator("/subwaypage");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        const errMsg = err.response.data.message;
+        alert(errMsg);
+      });
+
+    reset();
+  };
+
+  const signUp = (e) => {
+    navigate("/subsign");
+  };
+
   return (
-    <Login1 className="p-[0px] flex flex-col justify-center items-center font-sans">
-      <LoginBox className="relative flex-col items-center rounded-[10px]">
-        <h1 className="h-[45px] flex justify-center items-center bg-[#D9D9D9] text-center text-[1.2rem] font-bold">
-          환승시민
-        </h1>
-        <br />
-        <article className="py-[90px] justify-center items-center">
-          <div className="w-[263px] h-[58px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
-            <h2 className="w-[full] mx-[auto] my-[0px] font-bold text-[1.3rem] text-center">
-              지하철에서 <br />
-              새로운 인연을 만나보아요.
+    <Login1 className="w-[375px] p-[0px] flex flex-col justify-center items-center font-sans">
+      <LoginBox className="w-[375px] relative pt-[60px] flex-col items-center rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.3)]">
+        <article className="justify-center items-center">
+          <div className="w-[276px] h-[90px] mt-[30px] leading-[33px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
+            <h2 className="w-[full] mx-[auto] my-[0px] font-[600] text-[1.4rem] text-center">
+              {/* 지하철에서 <br />
+              새로운 인연을 만나보아요. */}
+              <p>지하철에서</p>
+              <p>새로운 인연을 만나보아요.</p>
             </h2>
+            <p className="block w-[275px] mt-[10px] text-center text-[0.8rem]">
+              <img src={signmsg} alt="machingInfo" />
+            </p>
           </div>
-          <div className="w-[340px] mt-[56px] mx-[auto] my-[0px] flex flex-col justify-center">
+          <div className="w-[340px] mt-[30px] mx-[auto] flex flex-col justify-center gap-[4px]">
             {<img src={logo} alt="logo" className="mx-[auto] my-[0px]" />}
             <div>
+              <form className="w-[100%] mx-[auto] mb-[0px] flex flex-col items-center">
+                <div className="w-[340px] h-[156px] mx-[auto] my-[0px] flex flex-col gap-[4px]">
+                  <div className="flex flex-col items-center gap-[14px]">
+                    <input
+                      type="text"
+                      name="snsId"
+                      value={Info.snsId}
+                      onChange={onChangeValue}
+                      placeholder="아이디 입력"
+                      className="w-[328px] p-[4px] text-[1rem] border-b-[1px] border-[rgba(0,0,0,0.5)]"
+                    />
+
+                    <input
+                      type="password"
+                      name="password"
+                      value={Info.password}
+                      onChange={onChangeValue}
+                      placeholder="비밀번호 입력"
+                      className="w-[328px] p-[4px] text-[1rem] border-b-[1px] border-[rgba(0,0,0,0.5)]"
+                    />
+
+                    <div className="w-[340px] flex flex-col items-center gap-[5px]">
+                      <OkBtn onClick={(e) => onSignIn(e)}>로그인</OkBtn>
+                    </div>
+                    <div className="w-[340px] mt-[6px] flex justify-between">
+                      <button
+                        onClick={(e) => signUp(e)}
+                        className="w-[168px] border-r-[1px] border-[rgba(0,0,0,0.5)] text-[rgba(0,0,0,0.5)]"
+                      >
+                        회원가입
+                      </button>
+                      <button
+                        className="w-[168px] text-[rgba(0,0,0,0.5)]"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          alert("서비스준비중입니다.");
+                        }}
+                      >
+                        아이디 찾기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div className="absolute bottom-[40px]">
               <div className="gap-[10px] flex flex-col justify-center items-center">
                 {/* 카카오로그인 */}
-                <button onClick={kakoLogin}>
+                <button
+                  className="rounded-[12px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                  onClick={kakoLogin}
+                >
                   <img src={Kakaologo} alt="kakao" />
                 </button>
                 {/* 구글로그인 */}
-                <button onClick={googleLogin}>
+                <button
+                  className="rounded-[12px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                  onClick={googleLogin}
+                >
                   <img src={Googlelogo} alt="snsGoogle" />
                 </button>
                 {/* 네이버로그인 */}
-                <button onClick={naverLogin}>
+                <button
+                  className="rounded-[12px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
+                  onClick={naverLogin}
+                >
                   <img src={Naverlogo} alt="snsNaver" />
                 </button>
               </div>
@@ -67,21 +178,37 @@ const Login = () => {
 export default Login;
 
 const Login1 = styled.div`
-  width: 100%;
+  /* width: 100%; */
 
   margin: 0 auto;
   padding: 0;
   outline: 0;
   border: 0;
   @media screen and (min-width: 320px) and (max-width: 375px) {
-    font-size: 1.3rem;
+    font-size: 1rem;
   } ;
 `;
 
 const LoginBox = styled.div`
   width: 100%;
-  height: 812px;
+  height: 770px;
   @media screen and (min-width: 320px) and (max-width: 375px) {
-    font-size: 1.3rem;
+    font-size: 1rem;
   } ;
+`;
+
+const OkBtn = styled.button`
+  width: 100%;
+  height: 48px;
+
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  line-height: 27px;
+  color: #5b5b5b;
+
+  background-color: #c3f4ff;
+
+  font-size: 1rem;
+  font-weight: 700;
 `;

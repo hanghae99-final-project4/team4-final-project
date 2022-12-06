@@ -6,7 +6,7 @@ import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
-import { trainApi2 } from "../../Redux/Modules/instance";
+import { trainApi2 } from "../../Redux/Modules/Instance";
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();

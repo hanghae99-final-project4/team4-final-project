@@ -7,10 +7,10 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
-
+import { trainApi } from "../Redux/Modules/Instance";
+import FrontHeader from "../Components/Header/FrontHeader";
 const cookies = new Cookies();
 
-const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const token = cookies.get("token");
 const ConversPage = () => {
   const initialState = {
@@ -51,15 +51,7 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await axios.get(
-        `${thURL}/profile`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const { data } = await trainApi.getConvers();
       console.log(data);
       setMessage(data.user);
     }
@@ -69,7 +61,7 @@ const ConversPage = () => {
 
   return (
     <>
-      <Header />
+      <FrontHeader msg="환승시민" />
       <CoversCtn>
         <ProfileBox>
           <InfoDiv style={{ fontSize: "30px" }}>
@@ -148,6 +140,7 @@ const CoversCtn = styled.div`
   justify-content: flex-start;
 
   @media only screen and (min-width: 375px) {
+    overflow-y: hidden;
     width: 375px;
     height: 812px;
 
@@ -159,13 +152,14 @@ const CoversCtn = styled.div`
 `;
 const ProfileBox = styled.div`
   width: 100%;
-  height: 415px;
+  height: 399px;
   border: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   @media only screen and (min-width: 375px) {
     margin-left: 15px;
+    height: 399px;
   }
 `;
 

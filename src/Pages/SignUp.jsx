@@ -1,11 +1,10 @@
 import axios from "axios";
 import styled from "styled-components";
 import { useEffect } from "react";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
 import useInput from "../MyTools/Hooks/UseInputOrigin";
 import BlankImg from "../Assets/Empty_img.jpg";
-import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import infoReq from "../Assets/InfoReq.svg";
 import cancle from "../Assets/CancleBtn.svg";
@@ -17,14 +16,19 @@ import next from "../Assets/NextBtn.svg";
 //추가정보기입란
 const SignUp = () => {
   //취소버튼시 로그아웃하면서 로그인창으로
-  const [, , removeCookie] = useCookies(["token"]);
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
+  //쿼리 token 가져오기
+  let getParameter = (key) => {
+    return new URLSearchParams(window.location.search).get(key);
+  };
+  const code = getParameter("sexybaby");
+  console.log(code);
   //cookie에서 토큰꺼내기
   const cookies = new Cookies();
   const token = cookies.get("token");
+
   // console.log(token);
-  const headers = {
-    authorization: `${token}`,
-  };
+
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
   console.log(files);
@@ -48,6 +52,14 @@ const SignUp = () => {
   const inputRef = useRef([]);
   //파일 미리볼 url을 저장해줄 state
   //파일 저장
+
+  //구글,카카오 로그인 할 경우 파라미터 값 가져와서 토큰 쿠키에 장착하기.
+  useEffect(() => {
+    if (code !== null) {
+      removeCookie("token");
+      setCookie("token", code, { path: "/" });
+    }
+  }, []);
 
   //파일 target
   const onImgChange = (e) => {
@@ -108,12 +120,7 @@ const SignUp = () => {
   //업로드 버튼(1) 클릭시
   const onSubmit = async (e) => {
     e.preventDefault();
-    // if (
-    //   form.phoneNumber === "" ||
-    //   form.authCode === "" ||
-    // ) {
-    //   return alert("모든 항목을 입력해주세요");
-    // } else {
+
     const fd = new FormData();
     console.log(fd);
     fd.append("representProfile", fileImg.files);
@@ -124,32 +131,23 @@ const SignUp = () => {
     for (let pair of fd.entries()) {
       console.log(pair);
     }
-    await axios
-      .post(`${thURL}/user`, fd, {
+    try {
+      const { data } = await axios.post(`${thURL}/user`, fd, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then((res) => {
-        // console.log(res);
-
-        const msg = res.data.msg;
-        alert(msg);
-        navigator("/subwaypage");
-      })
-      .catch((err) => {
-        // console.log(err);
-
-        // const status = err.response.status;
-        // console.log(status);
-        // const msg = err.response.data.error;
-        const msg = err.response.data.msg;
-        const er = err.response.data.error;
-        msg ? alert(msg) : er ? alert(er) : <></>;
-        return;
       });
-    // }
+      console.log(data);
+
+      if (data.newtoken !== undefined) {
+        removeCookie("token");
+        setCookie("token", data.newtoken, { path: "/" });
+      }
+      navigator("/subwaypage");
+    } catch (error) {
+      console.log(error);
+    }
   };
   //---------------------------------------
   const onClickFilesInput = (e) => {
@@ -311,7 +309,7 @@ const SignUp = () => {
                             onClick={(e) => {
                               e.preventDefault();
                               removeCookie("token", { path: "/" });
-                              navigator(-2);
+                              navigator("/");
                             }}
                             className="w-[160px] float-left"
                           >
@@ -342,6 +340,7 @@ export default SignUp;
 const InfoBox = styled.div`
   width: 100%;
   height: 812px;
+
   @media screen and (min-width: 320px) and (max-width: 375px) {
     font-size: 1.3rem;
   } ;

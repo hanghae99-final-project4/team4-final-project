@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import axios from "axios";
 import _ from "lodash";
@@ -13,8 +12,10 @@ import Header from "../Header/Header";
 import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
-const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
+import { trainApi2 } from "../../Redux/Modules/Instance";
+import FrontHeader from "../Header/FrontHeader";
 
+const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
   const profile = JSON.parse(localStorage.getItem("profile")).value;
@@ -32,6 +33,8 @@ const Chatting = () => {
   const [chatArr, setChatArr] = useState([]);
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
+  const [counter, setCounter] = useState([]);
+  const [counterUser, setCounterUser] = useState([]);
   const navigate = useNavigate();
 
   const boxRef = useRef(null);
@@ -40,13 +43,7 @@ const Chatting = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const thURL = process.env.REACT_APP_TH_S_HOST;
-  console.log(isModal);
-  console.log(name);
-  console.log(room);
-  console.log(message);
-  console.log(chatArr);
-  console.log(file);
-  console.log(file.name);
+
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -104,6 +101,16 @@ const Chatting = () => {
   //상대방 프로필
   const CounterUserHandler = () => {
     setIsModal(true);
+    console.log(counter);
+    socket.emit("counteruser", {
+      fair: counter.fair,
+      ownself: counter.ownself,
+    });
+    socket.on(`${name}`, (message) => {
+      console.log(message);
+      setCounterUser(message);
+    });
+    console.log(counterUser);
   };
 
   ///매칭 순서대로 randomjoin => maching => name
@@ -126,6 +133,7 @@ const Chatting = () => {
 
     socket.on(`${name}`, (message) => {
       console.log(message, `${name}`);
+      setCounter(message);
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
@@ -205,12 +213,7 @@ const Chatting = () => {
     }
     console.log(file);
     try {
-      const { data } = await axios.post(`${thURL}/uploadFile`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await trainApi2.chattingForm(formData);
       console.log("잘받음", data);
       setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
     } catch (error) {
@@ -220,46 +223,6 @@ const Chatting = () => {
       console.log(message);
     });
   }
-  const sendHandler = () => {
-    //   const formData = new FormData();
-    //   formData.append("image", postPicture[0]);
-    //   for (const key of formData.entries()) {
-    //     console.log(key);
-    //   }
-    //   socket.emit("imgaeUP", {
-    //     image: postPicture[0]?.preview,
-    //   });
-    //   socket.on("imgaeUP", (message) => {
-    //     console.log(message);
-    //   });
-  };
-  //     socket.emit("randomchat", {
-  //       msg: message.msg,
-  //       roomkey: room,
-  //     });
-  // socket.on("broadcast", (message) => {
-  //   console.log(message.msg);
-  // });
-  // };
-  // };
-
-  //   socket.emit("imagaeUP", {
-  //     image: formData,
-  //   });
-
-  //   socket.on("broadcast", (message) => {
-  //     console.log(message.msg);
-  //   });
-  // };
-  //   socket.emit("randomchat", {
-  //     msg: message.msg,
-  //     roomkey: room,
-  //   });
-
-  //   socket.on("broadcast", (message) => {
-  //     console.log(message.msg);
-  //   });
-  // };
 
   return (
     <div
@@ -269,14 +232,20 @@ const Chatting = () => {
         alignItems: "center",
       }}
     >
-      <Header />
       {success ? (
         <>
           <div>
+            <FrontHeader msg={counterUser?.nickname} />
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
                 {isModal && (
                   <CounterProfileModal
+                    gender={counterUser?.gender}
+                    statusmessage={counterUser?.statusmessage}
+                    nickname={counterUser?.nickname}
+                    representProfile={counterUser?.representProfile}
+                    setCounterUser={setCounterUser}
+                    couterUser={counterUser}
                     isModal={isModal}
                     setIsModal={setIsModal}
                   />
@@ -357,6 +326,7 @@ const Chatting = () => {
                   ref={inputRef}
                   type="file"
                   name="picture"
+                  maxSize={300000000}
                   value={file.picture}
                   accept="image/*,video/*"
                   multiple

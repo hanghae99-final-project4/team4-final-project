@@ -2,8 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "../Pages/SignUp";
 import Login from "../Pages/Login";
-import GoogleLogin from "../Pages/GoogleLogin";
-import KakaoLogin from "../Pages/KakaoLogin";
 import NaverLogin from "../Pages/NaverLogin";
 import ChatPage from "../Pages/ChatPage";
 import MainPage from "../Pages/MainPage";
@@ -15,19 +13,23 @@ import ChattingPage from "../Pages/ChattingPage";
 import SubwayPage from "../Pages/SubwayPage";
 import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
 import CustomerNotice from "../Components/Profile/CustomerNotice";
-import ColorPage from "../Pages/ColorPage";
+
 import AgreePage from "../Components/Profile/AgreePage";
+import AuthCode from "../Pages/AuthCode";
+import AddInfo from "../Pages/AddInfo";
+import SubSign from "../Pages/SubSign";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/subsign" element={<SubSign />} />
+        <Route path="/authcode" element={<AuthCode />} />
+        <Route path="/addinfo" element={<AddInfo />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="profilepic" element={<ProfilePic />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
-        <Route path="/auth/kakao/callback" element={<KakaoLogin />} />
-        <Route path="/auth/google/callback" element={<GoogleLogin />} />
         <Route path="/auth/naver/callback" element={<NaverLogin />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/main" element={<MainPage />} />
@@ -37,7 +39,7 @@ const Router = () => {
         <Route path="/subwaypage" element={<SubwayPage />} />
         <Route path="/customerUserGuide" element={<CustomerUserGuide />} />
         <Route path="/customerNotice" element={<CustomerNotice />} />
-        <Route path="/colorpage" element={<ColorPage />} />
+
         <Route path="/agreepage" element={<AgreePage />} />
       </Routes>
     </BrowserRouter>

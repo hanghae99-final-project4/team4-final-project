@@ -2,24 +2,30 @@ import React from "react";
 import styled from "styled-components";
 import ExitIcon from "../../Element/ExitIcon";
 
-const CounterProfileModal = ({ isModal, setIsModal }) => {
+const CounterProfileModal = ({
+  isModal,
+  setIsModal,
+  counterUser,
+  setCounterUser,
+  gender,
+  statusmessage,
+  nickname,
+  representProfile,
+}) => {
+  console.log(counterUser);
   return (
     <ModalCtn>
       <ModalWrap>
-        <CounterProfileImg
-          src={
-            "http://res.cloudinary.com/dtkt6x68f/image/upload/v1669558881/li5hayvyslqgaza45wmu.png"
-          }
-        />
+        <CounterProfileImg src={representProfile} />
         <ExitIcon isModal={isModal} setIsModal={setIsModal} />
         <StationInfoDiv>
           <TagDiv>
             <NickNameTag>닉네임</NickNameTag>
-            <Nickname>안태퐝</Nickname>
+            <Nickname>{nickname}</Nickname>
           </TagDiv>
           <TagDiv>
             <NickNameTag>성별</NickNameTag>
-            <Nickname>남자</Nickname>
+            <Nickname>{gender === true ? "여성" : "남성"}</Nickname>
           </TagDiv>
           <TagDiv>
             <NickNameTag>관심사</NickNameTag>
@@ -31,7 +37,7 @@ const CounterProfileModal = ({ isModal, setIsModal }) => {
           </TagDiv>
           <StatusTagDiv>
             <StatusTag>상태메시지</StatusTag>
-            <StatusMessage>나는야 과묵한 남자</StatusMessage>
+            <StatusMessage>{statusmessage}</StatusMessage>
           </StatusTagDiv>
         </StationInfoDiv>
       </ModalWrap>
