@@ -4,30 +4,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
-import ProfileModal from "../Modal/ProfileModal";
 import { CloseCircleFilled } from "@ant-design/icons";
-import { Cookies, useCookies } from "react-cookie";
-import HomeMenu from "../HomeMenu/HomeMenu";
-import { useNavigate } from "react-router-dom";
-import { trainApi, trainApi2 } from "../../Redux/Modules/instance";
-
+import { Cookies } from "react-cookie";
+import { trainApi2 } from "../../Redux/Modules/instance";
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
   const [files, setFiles] = useState([]);
-  const [check, setCheck] = useState(false);
-  const [url, setUrl] = useState("");
   const [representProfile, setRepresentProfile] = useState([]);
-  const [form, setForm, OnChangeHandler, reset] = useInput([]);
-  const [, , removeCookie] = useCookies(["token"]);
-  // const [, , removeCookie] = useCookies(["kakaoToken"]);
+  const [preview, setPreview] = useState();
+  const [form, setForm, OnChangeHandler] = useInput([]);
   const cookies = new Cookies();
   const token = cookies.get("token");
-  const navigator = useNavigate();
-
-  console.log(token);
 
   const thURL = process.env.REACT_APP_TH_S_HOST;
+  const [gender, setGender] = useState(null);
 
   useEffect(() => {
     async function getProfile() {
@@ -36,41 +27,52 @@ const MyPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data);
+
       setForm(data.body);
     }
     getProfile();
-  }, [form?.representProfile]);
-  console.log(representProfile);
+  }, [representProfile]);
 
+  // 저장
   async function imgSubmitHandler() {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
       formData.append("profileImage", files[i].file);
     }
-    formData.append("representProfile", representProfile[0].file);
+
+    formData.append("representProfile", representProfile[0]?.file);
     formData.append("phoneNumber", form.phoneNumber);
     formData.append("nickname", form.nickname);
     formData.append("statusmessage", form.statusmessage);
+    formData.append("gender", gender);
+
+    if (
+      !representProfile[0]?.file ||
+      !form.phoneNumber ||
+      !form.nickname ||
+      !form.statusmessage ||
+      gender === null
+    ) {
+      window.alert("비어있는 내용을 채워주세요");
+    }
 
     for (var pair of formData.entries()) {
       console.log(pair);
-    }
 
-    await trainApi2
-      .postProfile(formData)
-      .then((res) => {
-        console.log(res);
-        alert(res.data.msg);
-      })
-      .catch((err) => {
-        console.log(err);
-        const errMsg = err.response.data.error;
-        alert(errMsg);
-      });
+      await trainApi2
+        .postProfile(formData)
+        .then((res) => {
+          console.log(res);
+          alert(res.data.msg);
+        })
+        .catch((err) => {
+          console.log(err);
+          const errMsg = err.response.data.error;
+          alert(errMsg);
+        });
+    }
   }
 
-  //photo 집어넣으면 생성 되게끔 최대 5개 제한
   const formSubmit = (e) => {
     let temp = [];
     const photoList = e.target.files;
@@ -82,13 +84,10 @@ const MyPage = () => {
       });
     }
 
-    //포스팅한 포스트의 개수 제한!
     if (temp.length > 5) {
       temp = temp.slice(0, 5);
     }
     setFiles(temp.concat(files));
-
-    console.log(e.target);
   };
 
   //preview 이미지 함수
@@ -122,438 +121,348 @@ const MyPage = () => {
             height: "200px",
           }}
           src={item.url}
+          alt="image"
         />
       </div>
     );
   });
+
   const removeProfile = (deleteUrl) => {
     setFiles(files.filter((item) => item.url !== deleteUrl));
   };
-  console.log(url);
-  console.log(form);
+
+  const fileImagePreview = (fileBlob) => {
+    console.log(fileBlob);
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setPreview(reader.result);
+        resolve();
+      };
+    });
+  };
+
+  const PictureUpload = () => {
+    inputRef.current.click();
+  };
+
+  const checkOnlyOne = (checkThis) => {
+    const checkboxes = document.getElementsByName("gender");
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] !== checkThis) {
+        checkboxes[i].checked = false;
+      } else checkboxes[i].value === "1" ? setGender(true) : setGender(false);
+    }
+  };
 
   //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
-    <>
-      <MyinfoDiv>
-        <div className="logoutbox">
-          <span style={{ fontSize: "20" }}>나의 정보</span>
-          <LogoutBtn
-            onClick={(e) => {
-              e.preventDefault();
-              removeCookie("token", { path: "/" });
-              navigator("/");
-              // removeCookie("kakaoToken", { path: "/" });
-            }}
-          >
-            로그아웃
-          </LogoutBtn>
-        </div>
-      </MyinfoDiv>
-      <Wrap>
-        <div className="profilebutton">
-          <div className="profilename">프로필</div>
-        </div>
-        <AttachPicture>
-          <ProfileImgDiv>
-            <div className="img-preview">
-              <ImgPreview
-                style={{ transform: "scale(1)", borderRadius: "10px" }}
-                id="img-preview"
-                src={form?.representProfile}
-              />
-            </div>
+    <Wrap>
+      <Header>
+        <div style={{ fontSize: "18px" }}>◀︎</div>
+        <div style={{ fontSize: "18px" }}>나의정보 </div>
+        <div style={{ fontSize: "12px" }}>로그아웃</div>
+      </Header>
 
-            <UploadImage
-              maxSize={314572800}
-              type="file"
-              name="profile"
-              ref={inputRef}
-              value={form?.profile}
-              accept="image/*"
-              multiple
-              onChange={(e) => formSubmit(e)}
-            ></UploadImage>
-            <RechangeImgBtn onClick={() => setIsModal(!isModal)}>
-              사진 첨부
-            </RechangeImgBtn>
-          </ProfileImgDiv>
+      <TitleBox>
+        <div>
+          <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>
+        </div>
+      </TitleBox>
 
-          <Information>
-            <PhoneNumDiv>
-              <UserInputInfo>휴대폰</UserInputInfo>
-              <UserInput
+      <ProfileBox>
+        <ImgWrap>
+          <ImgBox
+            style={{ transform: "scale(1)", borderRadius: "10px" }}
+            id="img-preview"
+            src={preview}
+          />
+          <UploadImage
+            maxSize={314572800}
+            type="file"
+            name="profile"
+            ref={inputRef}
+            value={form?.profile}
+            accept="image/*"
+            multiple
+            onChange={(e) => formSubmit(e)}
+          />
+          <ImgButton onClick={() => setIsModal(true)}>사진 첨부</ImgButton>
+        </ImgWrap>
+        <InfoWrap>
+          <ul>
+            <li>
+              <span>휴대폰</span>
+              <InputInfo
                 name="phoneNumber"
                 value={form?.phoneNumber}
-                // 폰넘버를 겟에서 받아온 그걸 적어라
                 onChange={OnChangeHandler}
-              ></UserInput>
-            </PhoneNumDiv>
-            <NicknameDiv>
-              <UserInputInfo>닉네임</UserInputInfo>
-              <UserInput
+              ></InputInfo>
+            </li>
+            <li>
+              <span>닉네임</span>
+              <InputInfo
                 onChange={OnChangeHandler}
                 name="nickname"
                 value={form?.nickname}
-              />
-            </NicknameDiv>
-            <GenderDiv>
-              {form?.gender === true ? (
-                //여자면 여자 그림 남자면 남자 그림 svg 코드 가져오기
-                <>
-                  성별
-                  <input
-                    type="checkbox"
-                    name="gender"
-                    checked={check}
-                    value={form.gender}
-                  />
-                  여자
-                  <input
-                    type="checkbox"
-                    name="gender"
-                    checked={check}
-                    value={form.gender}
-                  />
-                  남자
-                </>
-              ) : (
-                <>
-                  성별
-                  <input
-                    type="checkbox"
-                    name="gender"
-                    checked={check}
-                    value={form?.gender}
-                  />
-                  여자
-                  <input
-                    type="checkbox"
-                    name="gender"
-                    checked={check}
-                    value={form?.gender}
-                  />
-                  남자
-                </>
-              )}
-            </GenderDiv>
-
-            <CommentDiv>
-              <CommentTextArea
-                placeholder="상태메시지"
+              ></InputInfo>
+            </li>
+            <li style={{ display: "flex", alignItems: "flex-start" }}>
+              <span>성별</span>
+              <div style={{ width: "80%" }}>
+                <CheckGender
+                  type="checkbox"
+                  name="gender"
+                  value="1"
+                  onChange={(e) => checkOnlyOne(e.target)}
+                />
+                <span>여성</span>
+                <CheckGender
+                  type="checkbox"
+                  name="gender"
+                  value="2"
+                  onChange={(e) => checkOnlyOne(e.target)}
+                />
+                <span>남성</span>
+              </div>
+            </li>
+            <li
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                margin: 0,
+                borderRadius: "10px",
+              }}
+            >
+              <AreaTitle>상태 메세지</AreaTitle>
+              <textarea
+                style={{ width: "100%", height: "40px" }}
                 onChange={OnChangeHandler}
                 name="statusmessage"
                 value={form?.statusmessage}
-              ></CommentTextArea>
-            </CommentDiv>
-          </Information>
-        </AttachPicture>
-        <Information>
-          {/* <SaveBtn onClick={() => imgSubmitHandler()}>저장 버튼</SaveBtn>
-      </div>
-      <div></div>
-      <div className="client">
-        <button>고객유의사항</button>
-        <button>고객이용가이드</button> */}
-          <SaveBtn onClick={() => imgSubmitHandler()}>저장</SaveBtn>
-        </Information>
-        <CancelBtn>취소</CancelBtn>
-        <Customer>
-          <button className="button1">고객유의사항</button>
+              ></textarea>
+            </li>
+          </ul>
+        </InfoWrap>
+      </ProfileBox>
 
-          <button className="button2">고객이용가이드</button>
-        </Customer>
-        {isModal && (
-          <ProfileModal
-            isModal={isModal}
-            setIsModal={setIsModal}
-            url={url}
-            setUrl={setUrl}
-            inputRef={inputRef}
-            files={files}
-            thumb={thumb}
-          />
-        )}
-        <HomeMenu />
-      </Wrap>
-    </>
+      <div style={{ margin: "1rem", marginTop: "33px" }}>
+        <BottomStyle type={"save"} onClick={imgSubmitHandler}>
+          저장
+        </BottomStyle>
+        <BottomStyle type={"cancle"}>취소</BottomStyle>
+      </div>
+      <Customer>
+        <button className="button1">고객유의사항</button>
+        <button className="button2">고객이용가이드</button>
+      </Customer>
+      <div></div>
+      {isModal ? (
+        <ModalCtn>
+          <ModalWrap>
+            <ModalProfileDiv>{thumb}</ModalProfileDiv>
+            <ProfileSetBtn onClick={() => PictureUpload()}>
+              프로필 사진 바꾸기
+            </ProfileSetBtn>
+            <ProfileCloseBtn
+              onClick={() => {
+                fileImagePreview(representProfile[0]?.file);
+                setIsModal(!isModal);
+              }}
+            >
+              저장 후 나가기
+            </ProfileCloseBtn>
+          </ModalWrap>
+        </ModalCtn>
+      ) : null}
+    </Wrap>
   );
 };
+export default MyPage;
+
 const Wrap = styled.div`
-  @media only screen and (max-width: 375px) {
-    width: 375px;
-    height: 812px;
-  }
-  justify-content: center;
+  margin: 0 auto;
+  max-width: 412px;
+  min-width: 375px;
+  width: 100%;
+  height: 100%;
+`;
+
+const Header = styled.div`
+  height: 44px;
+  background-color: #c3f4ff;
+  display: flex;
   align-items: center;
-  background-color: #e6e6e6;
-  position: absolute;
+  justify-content: space-between;
+  padding: 0 10px 0 10px;
+`;
 
-  // 프로필 테두리
-  .profilebutton {
-    @media only screen and (max-width: 375px) {
-      width: 114px;
-      height: 44px;
-    }
-    align-items: center;
-    justify-content: center;
-    display: flex;
+const TitleBox = styled.div`
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 
-    // 👆 프로필 글씨체 중앙으로 바꾸는 코드
-    box-sizing: border-box;
+  div {
     width: 114px;
     height: 44px;
-    left: 133px;
-    top: 126px;
     border: 2px solid #71c9dd;
     border-radius: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
 
-    // 프로필 이름
-    .profilename {
-      width: 56px;
-      height: 24px;
-      left: 162px;
-      top: 136px;
+const ProfileBox = styled.div`
+  height: 200px;
+  margin: 0 1rem 0 1rem;
+  padding: 2rem;
 
-      font-family: "Inter";
-      font-style: normal;
-      font-weight: 700;
-      font-size: 20px;
-      line-height: 24px;
-      color: #5b5b5b;
+  box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+`;
+
+const ImgWrap = styled.div`
+  display: flex;
+  width: 60%;
+  height: 140px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
+const ImgBox = styled.img`
+  border-radius: 20px;
+  width: 100px;
+  height: 100px;
+`;
+
+const ImgButton = styled.button`
+  width: 100px;
+  height: 20px;
+  background-color: FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+`;
+
+const InfoWrap = styled.div`
+  width: 100%;
+  li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6%;
+    span {
+      width: 50px;
+      margin-right: 5%;
+      font-size: 16px;
     }
   }
+`;
+
+const InputInfo = styled.input`
+  width: 70%;
+  height: 30px;
+  box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
+  border-radius: 10px;
+`;
+
+const CheckGender = styled.input`
+  font-size: 12px;
+  margin-right: 5px;
+`;
+
+const AreaTitle = styled.div`
   width: 100%;
-  height: 100vh;
-  text-align: center;
-  .logoutbox {
-    border: none;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-  }
-  .client > button {
-    margin-top: 100px;
-  }
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #e6e6e6;
+  font-size: 14px;
 `;
 
-// 흰색 박스입니다.
-const Information = styled.div`
-  width: 343px;
-  height: 194px;
-  border: none;
-  position: relative;
+const BottomStyle = styled.button`
+  width: 100%;
+  height: 48px;
+  box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
+  background: ${(props) => (props.type === "save" ? "#C3F4FF" : "#fff")};
+  border-radius: 10px;
+  margin-bottom: 16px;
 `;
-const AttachPicture = styled.div`
-  @media only screen and (max-width: 375px) {
-    width: 343px;
-    height: 194px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    //박스그림자
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
-  }
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  width: 700px;
-  height: 350px;
-  padding: 60px;
-  border-radius: 30px;
+const ModalCtn = styled.div`
+  width: 100%;
+  height: 100%;
   border: none;
-  background-color: #ffffff;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: ${(isModal) => (isModal ? "block" : "none")};
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
   z-index: 999;
-  margin: 40px;
+`;
+const ModalWrap = styled.div`
+  position: relative;
+  border-radius: 5px;
+  left: 300px;
+  top: 200px;
+  width: 800px;
+  height: 500px;
+  background-color: white;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
-// 맨위 나의정보 옆에 로그아웃 버튼입니다.
-const LogoutBtn = styled.button`
-  /* background: #71c9dd; */
-  border: none;
-  border-radius: 10px;
-  color: black;
-  width: 90px;
-  /* height: 40px; */
-  /* display: flex; */
-  justify-content: end;
-  // 이곳은 텍스트만 움직임
-  // 건드리면 텍스만 바뀜
-  /* text-align: right; */
-
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 15px;
-`;
-
-// 사진 첨부 프리뷰입니다.
-const ImgPreview = styled.img`
-  @media only screen and (max-width: 375px) {
-    width: 100px;
-    height: 100px;
-    border-radius: 20px;
-  }
-
-  border-style: solid;
-  border: none;
-  width: 200px;
-  height: 200px;
-  margin-right: 50px;
+// 이미지 5장 움직 일 수 있는 곳입니다.
+const ModalProfileDiv = styled.div`
+  width: 800px;
+  height: 300px;
+  display: flex;
+  gap: 20px;
+  flex-direction: row;
+  align-items: center;
   position: relative;
+  right: -80px;
+`;
+
+// 저장 하기 버튼입니다.
+const ProfileCloseBtn = styled.button`
+  position: relative;
+  bottom: -150px;
+  width: 150px;
+  height: 50px;
+  border: 2px solid #71c9dd;
+  border-radius: 30px;
+  right: 500px;
+  font-size: 14px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+const ProfileSetBtn = styled.button`
+  width: 150px;
+  height: 50px;
+  position: relative;
+  bottom: -150px;
+  left: -100px;
+  border: 2px solid #71c9dd;
+  border-radius: 30px;
+  font-size: 14px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const UploadImage = styled.input`
+  display: none;
   height: 30px;
 `;
 
-const ViewImage = styled.button`
-  /* height: 30px;
-  position: absolute;
-  //포지션 쓸때 잘 봐야함
-  left: 50%; */
-  right: 35%;
-  margin-top: 350px;
-`;
-// 나의정보, 로그아웃 최상단 버튼입니다.
-const MyinfoDiv = styled.div`
-  background-color: #c3f4ff;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 21.78px;
-  width: 100vw;
-`;
-
-// 여기서부터 휴대폰, 닉네임, 성별, 상태메세지
-const PhoneNumDiv = styled.div`
-  @media only screen and (max-width: 375px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
-
-  display: flex;
-`;
-const NicknameDiv = styled.div`
-  @media only screen and (max-width: 375px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
-
-  display: flex;
-  flex-direction: row;
-  margin-top: 12px;
-  .input {
-    border: 1px solid black;
-    outline: 1px solid blue;
-  }
-`;
-// 성별
-
-//각각 갭 따로따로 넣어라
-const GenderDiv = styled.div`
-  @media only screen and (max-width: 375px) {
-    width: 140px;
-    height: 22px;
-  }
-  display: flex;
-  justify-content: left;
-  gap: 20px;
-  margin-top: 20px;
-`;
-const CommentDiv = styled.div`
-  @media only screen and (max-width: 375px) {
-    width: 196px;
-    height: 60px;
-  }
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  /* width: 95%; */
-`;
-const CommentTextArea = styled.textarea`
-  @media only screen and (max-width: 375px) {
-    width: 196px;
-    height: 60px;
-  }
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  font-size: 20px;
-  width: 350px;
-  height: 111px;
-`;
-
-// 저장 버튼
-const SaveBtn = styled.button`
-  @media only screen and (max-width: 375px) {
-    width: 320px;
-    height: 48px;
-  }
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  background-color: #71c9dd;
-  border-radius: 10px;
-  border: none;
-  width: 700px;
-  height: 40px;
-`;
-
-// 취소 버튼
-const CancelBtn = styled.button`
-  @media only screen and (max-width: 375px) {
-    width: 320px;
-    height: 48px;
-  }
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin-top: 20px;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  border: none;
-  width: 700px;
-  height: 40px;
-`;
-const ProfileImgDiv = styled.div`
-  input {
-    display: none;
-  }
-`;
-
-// 사진 첨부 버튼입니다.
-// 사진 첨부 버튼을 줄여야 휴대폰, 닉네임 사이 갭이 줄여짐
-const RechangeImgBtn = styled.button`
-  @media only screen and (max-width: 375px) {
-    width: 100px;
-    height: 20px;
-  }
-  width: 200px;
-  height: 40px;
-  margin-top: 20px;
-  margin-right: 10px;
-  background-color: #757575;
-  color: white;
-  border: none;
-  border-radius: 30px;
-`;
-
-//고객유의사항, 고객이용가이드입니다.
 const Customer = styled.div`
   @media only screen and (max-width: 375px) {
     width: 300px;
@@ -561,7 +470,7 @@ const Customer = styled.div`
   }
   justify-content: space-between;
   margin-top: 30px;
-  width: 700px;
+  width: 100%;
   display: flex;
 
   .button1 {
@@ -589,25 +498,7 @@ const Customer = styled.div`
     height: 30px;
     border: 2px solid #71c9dd;
     border-radius: 20px;
-
     font-size: 14px;
     line-height: 17px;
   }
 `;
-
-export default MyPage;
-
-const UserInputInfo = styled.span`
-  white-space: nowrap;
-  font-weight: 400;
-  font-size: 21.79px;
-  line-height: 22px;
-`;
-const UserInput = styled.input`
-  width: 140px;
-  height: 30px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-`;
-
-//사진첨부마진 너무 먹고있다-
-// 부모 먼저 보고 타고타고 내려와야한다
