@@ -260,7 +260,7 @@ const MyPage = () => {
           <BottomStyle
             type={"cancle"}
             onClick={() => {
-              navigate("/");
+              navigate("/subwaypage");
             }}
           >
             취소
