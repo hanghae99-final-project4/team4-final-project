@@ -53,12 +53,12 @@ instance.interceptors.request.use(
   async (config) => {
     const token = cookies.get("token");
     // 요청 성공 직전 수행할 일
-    console.log("일반데이터 인터셉터정보 65줄", config); //여기부터 요청시작
-    console.log("현재장착된 토큰", config.headers);
-    console.log(config.headers.Authorization); //
+    // console.log("일반데이터 인터셉터정보 65줄", config); //여기부터 요청시작
+    // console.log("현재장착된 토큰", config.headers);
+    // console.log(config.headers.Authorization); //
 
     config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 62줄", token);
+    // console.log("토큰 여기까지 찍혀 62줄", token);
 
     return config;
   },
@@ -75,12 +75,12 @@ instance.interceptors.response.use(
   (config) => {
     console.log("res 인터셉터정보 87줄");
     // const token = cookies.get("token");
-    console.log(token); //현재 장착되어있는 토큰
-    console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
-    console.log("body-data값", config.data); //백에서 보내준 body값: newToken
-    console.log(config.config.headers); //현재토큰 Author~on: Bearer
-    console.log(config.status);
-    config.config.headers["Authorization"] = `Bearer ${token}`;
+    // console.log(token); //현재 장착되어있는 토큰
+    // console.log("status(200)대 정보", config); //200,201 값, 리프레쉬토큰 만료되면 200대 안 들어옴
+    // console.log("body-data값", config.data); //백에서 보내준 body값: newToken
+    // console.log(config.config.headers); //현재토큰 Author~on: Bearer
+    // console.log(config.status);
+    // config.config.headers["Authorization"] = `Bearer ${token}`;
 
     return config;
   },
