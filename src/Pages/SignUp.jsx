@@ -22,7 +22,7 @@ const SignUp = () => {
     return new URLSearchParams(window.location.search).get(key);
   };
   const code = getParameter("sexybaby");
-  console.log(code);
+  // console.log(code);
   //cookie에서 토큰꺼내기
   const cookies = new Cookies();
   const token = cookies.get("token");
@@ -31,7 +31,7 @@ const SignUp = () => {
 
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
-  console.log(files);
+  // console.log(files);
   //서버 체인져
   const thURL = process.env.REACT_APP_TH_S_HOST;
   // const thURL = process.env.REACT_APP_YJ_HOST;
@@ -72,7 +72,7 @@ const SignUp = () => {
     //fileList모양
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
-    console.log(url);
+    // console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
@@ -107,7 +107,7 @@ const SignUp = () => {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
-      console.log(data);
+      // console.log(data);
       const msg = data.msg;
       alert(msg);
     } catch (err) {
@@ -122,14 +122,14 @@ const SignUp = () => {
     e.preventDefault();
 
     const fd = new FormData();
-    console.log(fd);
+    // console.log(fd);
     fd.append("representProfile", fileImg.files);
     fd.append("phoneNumber", form.phoneNumber);
     fd.append("gender", true);
     fd.append("nickname", form.nickname);
     // fd.append("authCode", form.authCode);
     for (let pair of fd.entries()) {
-      console.log(pair);
+      // console.log(pair);
     }
     try {
       const { data } = await axios.post(`${thURL}/user`, fd, {
@@ -138,7 +138,7 @@ const SignUp = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data);
+      // console.log(data);
 
       if (data.newtoken !== undefined) {
         removeCookie("token");

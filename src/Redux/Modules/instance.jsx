@@ -90,23 +90,23 @@ http status가 401 경우 응답 에러 직전 호출.
 .catch() 으로 이어짐.
 */
     //폼데이터 response 400대 혹은 그 외 에러
-    console.log("일반데이터 res 에러 처리 110줄");
-    console.log(error); //400에러 지나감
-    console.log(error.response.status); //status(400)에러
+    // console.log("일반데이터 res 에러 처리 110줄");
+    // console.log(error); //400에러 지나감
+    // console.log(error.response.status); //status(400)에러
 
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     const statusValue = error.response.status;
 
     if (statusValue === 401 && ok !== 6) {
-      console.log("status 401찍혀 119줄");
+      // console.log("status 401찍혀 119줄");
       alert("비정상적인 활동이 감지되어 로그인 화면으로 이동합니다.");
       removeCookie("token", { path: "/" });
       window.location.replace("/");
     } else if (statusValue === 401 && ok === 6) {
       //토큰 만료됐을 때
-      console.log("401에러-만료되서 새 토큰 발행하는겨");
-      console.log("새토큰으로 교체!", newToken);
+      // console.log("401에러-만료되서 새 토큰 발행하는겨");
+      // console.log("새토큰으로 교체!", newToken);
 
       setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
       return axios({
@@ -126,12 +126,12 @@ instanceF.interceptors.request.use(
   async (config) => {
     const token = cookies.get("token");
     // 요청 성공 직전 수행할 일
-    console.log("폼데이터 인터셉터정보 131줄", config); //여기부터 요청시작
-    console.log("현재장착된 토큰", config.headers);
-    console.log(config.headers.Authorization); //
+    // console.log("폼데이터 인터셉터정보 131줄", config); //여기부터 요청시작
+    // console.log("현재장착된 토큰", config.headers);
+    // console.log(config.headers.Authorization); //
 
     config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 144줄", token);
+    // console.log("토큰 여기까지 찍혀 144줄", token);
 
     return config;
   },
@@ -149,12 +149,12 @@ instanceF.interceptors.response.use(
   (config) => {
     const token = cookies.get("token");
     // 요청 성공 직전 수행할 일
-    console.log("일반데이터 인터셉터정보 163줄", config); //여기부터 요청시작
-    console.log(config.headers);
-    console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
+    // console.log("일반데이터 인터셉터정보 163줄", config); //여기부터 요청시작
+    // console.log(config.headers);
+    // console.log(config.headers.Authorization); //이건 Bearer만 찍히는 게 맞아.?
 
     config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("토큰 여기까지 찍혀 159줄", token);
+    // console.log("토큰 여기까지 찍혀 159줄", token);
 
     return config;
   },
@@ -164,23 +164,23 @@ http status가 401 경우 응답 에러 직전 호출.
 .catch() 으로 이어짐.
 */
     //폼데이터 response 400대 혹은 그 외 에러
-    console.log("폼데이터 res 에러 처리 169줄");
-    console.log(error); //400에러 지나감
-    console.log(error.response.status); //status(400)대에러
+    // console.log("폼데이터 res 에러 처리 169줄");
+    // console.log(error); //400에러 지나감
+    // console.log(error.response.status); //status(400)대에러
     // console.log(error.response.data); //백에서보낸errorbody값
-    console.log("새토큰들어왔다", error.response.data.newJwtToken);
+    // console.log("새토큰들어왔다", error.response.data.newJwtToken);
     const newToken = error.response.data.newJwtToken;
     const ok = error.response.data.ok;
     const statusValue = error.response.status;
 
     if (statusValue === 401 && ok !== 6) {
-      console.log("status 401찍혀 210줄");
+      // console.log("status 401찍혀 210줄");
       alert("비정상적인 활동이 감지되어 로그인 화면으로 이동합니다.");
       removeCookie("token", { path: "/" });
       // window.location.replace("/"); //이부분은 필요시 사용. useNavigate()대체함수
     } else if (statusValue === 401 && ok === 6) {
       //만료됐을 때
-      console.log("새토큰장착", newToken);
+      // console.log("새토큰장착", newToken);
       setCookie("token", newToken, { path: "/" }); //1.새토큰세팅하고
       return axios({
         ...error.config,

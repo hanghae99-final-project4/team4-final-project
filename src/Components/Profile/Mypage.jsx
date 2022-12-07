@@ -6,7 +6,7 @@ import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
-import { trainApi2 } from "../../Redux/Modules/Instance";
+import { trainApi, trainApi2 } from "../../Redux/Modules/Instance";
 import { useNavigate } from "react-router-dom";
 import HomeMenu from "../HomeMenu/HomeMenu";
 import FrontHeader from "../Header/FrontHeader";
@@ -26,11 +26,7 @@ const MyPage = () => {
   console.log(representProfile);
   useEffect(() => {
     async function getProfile() {
-      const { data } = await axios.get(`${thURL}/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await trainApi.getConvers();
       console.log(data);
 
       setForm(data.body);

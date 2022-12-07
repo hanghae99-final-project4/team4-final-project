@@ -28,15 +28,15 @@ const AuthCode = () => {
   // const token = getCookie("token");/
   const cookies = new Cookies();
   const token = cookies.get("token");
-  console.log(token);
+  // console.log(token);
 
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
-  console.log(files);
+  // console.log(files);
 
   const inputRef = useRef([]);
   let [fileImg, setFileImg] = useState([]);
-  console.log(fileImg);
+  // console.log(fileImg);
 
   const [check, setCheck] = useState(false);
   const [form, setForm, onChangeValue, reset] = useInput({
@@ -66,7 +66,7 @@ const AuthCode = () => {
     const fileList = e.target.files[0];
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
-    console.log(url);
+    // console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
@@ -118,7 +118,7 @@ const AuthCode = () => {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
-      console.log(data);
+      // console.log(data);
       const msg = data.msg;
       if (msg === "인증되었습니다") {
         navigator("/addinfo");
@@ -137,7 +137,7 @@ const AuthCode = () => {
   };
 
   //업로드 버튼(1) 클릭시
-  console.log("0_token", token);
+  // console.log("0_token", token);
 
   // 3분 타이머
 

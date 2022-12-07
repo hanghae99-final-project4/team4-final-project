@@ -102,16 +102,16 @@ const Chatting = () => {
   //상대방 프로필
   const CounterUserHandler = () => {
     setIsModal(true);
-    console.log(counter);
+    // console.log(counter);
     socket.emit("counteruser", {
       fair: counter.fair,
       ownself: counter.ownself,
     });
     socket.on(`${name}`, (message) => {
-      console.log(message);
+      // console.log(message);
       setCounterUser(message);
     });
-    console.log(counterUser);
+    // console.log(counterUser);
   };
 
   ///매칭 순서대로 randomjoin => maching => name
@@ -121,7 +121,7 @@ const Chatting = () => {
       socket.emit("leaveRoom", roomkey);
       localStorage.removeItem("roomkey");
     }
-    console.log(roomkey);
+    // console.log(roomkey);
     socket.emit("randomjoin", {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
@@ -133,7 +133,7 @@ const Chatting = () => {
     });
 
     socket.on(`${name}`, (message) => {
-      console.log(message, `${name}`);
+      // console.log(message, `${name}`);
       setCounter(message);
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
