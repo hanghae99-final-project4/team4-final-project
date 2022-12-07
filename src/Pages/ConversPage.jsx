@@ -149,13 +149,16 @@ const ConversPage = () => {
 export default ConversPage;
 
 const MaxDiv = styled.div`
+  margin: 0 auto;
   overflow-y: hidden;
+  width: 375px;
+  height: 812px;
 `;
 const CoversCtn = styled.div`
   overflow: hidden;
   scroll-behavior: unset;
   width: 375px;
-  height: 812px;
+  height: 767px;
   margin: auto;
   background-color: white;
   display: flex;
@@ -166,7 +169,7 @@ const CoversCtn = styled.div`
   @media only screen and (min-width: 375px) {
     overflow-y: hidden;
     width: 375px;
-    height: 812px;
+    height: 767px;
 
     display: flex;
     flex-direction: column;
