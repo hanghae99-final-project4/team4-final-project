@@ -356,7 +356,6 @@ const Chatting = () => {
               </FooterDiv>
             </AllChatDiv>
           </div>
-
           <ChattingHome />
         </>
       ) : (
@@ -564,12 +563,19 @@ const ChatVideo = styled.video`
 const LoadingDiv = styled.div`
   margin: auto;
   overflow-y: hidden;
-  width: 100%;
-  height: 100%;
+  width: 375px;
+  height: 812px;
   display: flex;
   align-items: center;
   justify-content: center;
   @media only screen and (min-width: 320px) and (max-width: 650px) {
+    margin: auto;
+    overflow-y: hidden;
+    width: 375px;
+    height: 812px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 const UserProfileName = styled.div`

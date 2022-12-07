@@ -11,5 +11,5 @@ const LoadingIcon = () => {
 
 export default LoadingIcon;
 const LoadingDiv = styled.div`
-  margin-top: 168px;
+  margin-top: -30%;
 `;

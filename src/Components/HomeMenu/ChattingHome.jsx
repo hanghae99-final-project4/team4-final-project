@@ -3,11 +3,12 @@ import spot from "../../Assets/NewFooterHome/Chatting.svg";
 import home from "../../Assets/NewFooterHome/Home.svg";
 import mypage from "../../Assets/NewFooterHome/Profile.svg";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const ChattingHome = () => {
   const navigator = useNavigate();
   return (
-    <footer className="w-full relative bottom-[0px] h-[50px] bg-[#FFFFFF] shadow-[5px_0px_4px_rgba(0,0,0,0.25)] flex flex-auto justify-center items-center">
+    <footer className="w-full relative bottom-[-80px] h-[50px] bg-[#FFFFFF] shadow-[5px_0px_4px_rgba(0,0,0,0.25)] flex flex-auto justify-center items-center">
       <div className="w-[375px] h-[50px] bg-[#FFFFFF]">
         <button
           onClick={(e) => {
@@ -54,3 +55,9 @@ const ChattingHome = () => {
 };
 
 export default ChattingHome;
+const Footer = styled.div`
+  @media screen and (min-width: 320px) and (max-width: 650px;) {
+    position: relative;
+    margin-top: 20px;
+  }
+`;
