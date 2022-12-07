@@ -237,8 +237,8 @@ const Chatting = () => {
       }}
     >
       {success ? (
-        <>
-          <div>
+        <FooterBox>
+          <div style={{ height: "812px" }}>
             <FrontHeader msg={counterUser?.nickname} />
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
@@ -356,9 +356,9 @@ const Chatting = () => {
                 </ChatSendBtn>
               </FooterDiv>
             </AllChatDiv>
-            <ChattingHome />
           </div>
-        </>
+          <ChattingHome />
+        </FooterBox>
       ) : (
         <>
           <LoadingDiv>
@@ -600,4 +600,9 @@ const Download = styled.a`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   font-family: "Noto Sans KR", sans-serif;
+`;
+
+const FooterBox = styled.div`
+  height: 812px;
+  position: relative;
 `;
