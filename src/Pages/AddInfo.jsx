@@ -69,7 +69,6 @@ const SignUp = () => {
   };
 
   //업로드 버튼(1) 클릭시
-  console.log("0_token", token);
   const onSubmit = async (e) => {
     e.preventDefault();
 
