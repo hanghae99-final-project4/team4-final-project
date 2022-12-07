@@ -9,15 +9,17 @@
 <ellipse cx="163" cy="46" rx="20" ry="25" fill="#FDAA02" fill-opacity="0.7"/>
 <path d="M198.166 25.6506C201.925 18.5661 212.075 18.5661 215.834 25.6506L228.653 49.8134C232.187 56.4737 227.359 64.5 219.819 64.5H194.181C186.641 64.5 181.813 56.4737 185.347 49.8134L198.166 25.6506Z" fill="#6BF200" fill-opacity="0.7"/>
 <rect x="89" width="22" height="91" rx="11" fill="#FB5002" fill-opacity="0.7"/>
-<circle cx="24.5" cy="61.5" r="1.5" fill="black"/>
-<circle cx="28.5" cy="61.5" r="1.5" fill="black"/>
-<circle cx="85.5" cy="36.5" r="1.5" fill="black"/>
-<circle cx="89.5" cy="36.5" r="1.5" fill="black"/>
-<circle cx="197.5" cy="54.5" r="1.5" fill="black"/>
-<circle cx="201.5" cy="54.5" r="1.5" fill="black"/>
-<ellipse cx="132" cy="63" rx="1" ry="2" fill="black"/>
-<ellipse cx="138" cy="63" rx="1" ry="2" fill="black"/>
+<circle cx="8.5" cy="41.5" r="1.5" fill="black"/>
+<circle cx="12.5" cy="41.5" r="1.5" fill="black"/>
+<circle cx="78.5" cy="33.5" r="1.5" fill="black"/>
+<circle cx="82.5" cy="33.5" r="1.5" fill="black"/>
+<circle cx="212.5" cy="39.5" r="1.5" fill="black"/>
+<circle cx="216.5" cy="39.5" r="1.5" fill="black"/>
+<ellipse cx="128" cy="43" rx="1" ry="2" fill="black"/>
+<ellipse cx="134" cy="43" rx="1" ry="2" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M96 9C96 10.1046 96.8954 11 98 11C99.1046 11 100 10.1046 100 9H99C99 9.55228 98.5523 10 98 10C97.4477 10 97 9.55228 97 9H96Z" fill="black"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M164 40C164 38.8954 163.105 38 162 38C160.895 38 160 38.8954 160 40L161 40C161 39.4477 161.448 39 162 39C162.552 39 163 39.4477 163 40L164 40Z" fill="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M101 9C101 10.1046 101.895 11 103 11C104.105 11 105 10.1046 105 9H104C104 9.55228 103.552 10 103 10C102.448 10 102 9.55228 102 9H101Z" fill="black"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M159 40C159 38.8954 158.105 38 157 38C155.895 38 155 38.8954 155 40L156 40C156 39.4477 156.448 39 157 39C157.552 39 158 39.4477 158 40L159 40Z" fill="black"/>
 <defs>
 <linearGradient id="paint0_linear_0_1" x1="81.5" y1="102" x2="159.166" y2="126.556" gradientUnits="userSpaceOnUse">
