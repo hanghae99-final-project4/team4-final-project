@@ -53,9 +53,9 @@ const MyPage = () => {
 
     if (
       representProfile[0]?.file === undefined ||
-      !form?.phoneNumber ||
-      !form?.nickname ||
-      !form?.statusmessage
+      form?.phoneNumber === undefined ||
+      form?.nickname === undefined ||
+      form?.statusmessage === undefined
     ) {
       window.alert("비어있는 내용을 채워주세요");
     } else {

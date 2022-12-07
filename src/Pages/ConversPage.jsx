@@ -29,7 +29,7 @@ const ConversPage = () => {
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   console.log(message);
-  const name = JSON.parse(localStorage.getItem("nickname")).value;
+  const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
   console.log(name);
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
