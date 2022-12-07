@@ -29,7 +29,7 @@ const NaverLogin = () => {
       if (doneInfo === true) {
         navigator("/subwaypage");
       } else {
-        navigator("/signup");
+        navigator("/authcode");
       }
       alert(`${msg}`);
     });
