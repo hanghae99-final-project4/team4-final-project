@@ -18,7 +18,6 @@ const NaverLogin = () => {
   axios
     .get(`${thURL}/auth/naver/callback?code=${code}&state=${state}`)
     .then((res) => {
-      console.log(res);
 
       const token = res.data.jwtToken;
       const msg = res.data.message;
