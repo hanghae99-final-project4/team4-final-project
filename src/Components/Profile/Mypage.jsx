@@ -237,12 +237,12 @@ const MyPage = () => {
                 }}
               >
                 <AreaTitle>상태 메세지</AreaTitle>
-                <textarea
+                <input
                   style={{ width: "100%", height: "40px" }}
                   onChange={OnChangeHandler}
                   name="statusmessage"
                   value={form?.statusmessage}
-                ></textarea>
+                ></input>
               </li>
             </ul>
           </InfoWrap>
