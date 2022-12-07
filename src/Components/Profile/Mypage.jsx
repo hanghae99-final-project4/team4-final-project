@@ -265,8 +265,7 @@ const MyPage = () => {
           <button
             className="button-notice"
             onClick={() => {
-              window.alert("서비스 준비중입니다.");
-              navigate("/mypage");
+              navigate("/customerNotice");
             }}
           >
             고객유의사항
@@ -274,8 +273,7 @@ const MyPage = () => {
           <button
             className="button-guide"
             onClick={() => {
-              window.alert("서비스 준비중입니다.");
-              navigate("/CustomerUserGuide");
+              navigate("/customerUserGuide");
             }}
           >
             고객이용가이드

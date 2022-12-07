@@ -16,7 +16,12 @@ const CustomerNotice = () => {
 };
 export default CustomerNotice;
 
-const Wrap = styled.div``;
+const Wrap = styled.div`
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const TitleBox = styled.div`
   height: 100px;
@@ -25,7 +30,7 @@ const TitleBox = styled.div`
   align-items: flex-end;
 
   div {
-    width: 114px;
+    width: 200px;
     height: 44px;
     border: 2px solid #71c9dd;
     border-radius: 30px;

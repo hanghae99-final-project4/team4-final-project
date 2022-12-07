@@ -28,9 +28,7 @@ const ConversPage = () => {
   const navigate = useNavigate();
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
-  console.log(message);
   const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
-  console.log(name);
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -93,7 +91,9 @@ const ConversPage = () => {
               </HowDiv>
 
               <StationInfo
-                placeholder="칸 정보 입력"
+                minLength={4}
+                maxLength={4}
+                placeholder="칸 정보 입력 4자리만"
                 value={message?.train}
                 name="train"
                 onChange={onChangeHandler}
