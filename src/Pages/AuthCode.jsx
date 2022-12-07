@@ -21,7 +21,7 @@ import phoneauth from "../Assets/SignUp/PhoneAuth.svg";
 import norminfo from "../Assets/SubSign/NormInfo.svg";
 
 const AuthCode = () => {
-  const [, , removeCookie] = useCookies(["token"]);
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
 
@@ -46,6 +46,20 @@ const AuthCode = () => {
     nickname: "",
     gender: check,
   });
+
+  //파라미터 key값 가져오기
+  let getParameter = (key) => {
+    return new URLSearchParams(window.location.search).get(key);
+  };
+  const code = getParameter("sexybaby");
+
+  //구글,카카오 로그인 할 경우 파라미터 값 가져와서 토큰 쿠키에 장착하기.
+  useEffect(() => {
+    if (code !== null) {
+      removeCookie("token");
+      setCookie("token", code, { path: "/" });
+    }
+  }, []);
 
   //파일 target
   const onImgChange = (e) => {
@@ -78,6 +92,11 @@ const AuthCode = () => {
       });
       console.log(data);
       alert(data.msg);
+      //새로운 토큰 안올때가 undefined 오면 값을 token 저장
+      if (data.newtoken !== undefined) {
+        removeCookie("token");
+        setCookie("token", data.newtoken, { path: "/" });
+      }
     } catch (err) {
       console.log(err);
       const status = err.response.status;
