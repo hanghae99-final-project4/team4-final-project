@@ -19,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Noto Sans KR', sans-serif;
         font-style:normal;
         background-color: #ffffff;
-        margin-bottom: 100px;
+        
     }
     ol, ul{
         list-style: none;
