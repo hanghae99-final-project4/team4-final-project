@@ -5,6 +5,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useNavigate } from "react-router-dom";
 import HomeMenu from "../HomeMenu/HomeMenu";
+import SubwayHome from "../HomeMenu/SubwayHome";
 const Subway = () => {
   const navigate = useNavigate();
   const initialState = {
@@ -33,36 +34,40 @@ const Subway = () => {
   };
   console.log(subway);
   return (
-    <SubwayDiv>
-      <div onClick={Locate}>
-        <SubwayIcon />
-      </div>
-      <TransformWrapper initialScale={1} minScale={1} maxScale={10}>
-        <TransformComponent>
-          <div onClick={charterOnClick}>
-            <img
-              src="https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png"
-              style={{ border: "1px solid black" }}
-              ref={subwayRef}
-              onClick={(e) => subwayCoordinate(e)}
-            />
-          </div>
-        </TransformComponent>
-      </TransformWrapper>
+    <>
+      <SubwayDiv>
+        <div onClick={Locate}>
+          <SubwayIcon />
+        </div>
+        <TransformWrapper initialScale={1} minScale={1} maxScale={10}>
+          <TransformComponent>
+            <div onClick={charterOnClick}>
+              <img
+                src="https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png"
+                style={{ border: "1px solid black" }}
+                ref={subwayRef}
+                onClick={(e) => subwayCoordinate(e)}
+              />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
 
-      <SeoulStationDiv
-        onClick={() => setSubway({ station: "서울" })}
-      ></SeoulStationDiv>
-      <SeoulCityHall
-        onClick={() => setSubway({ station: "시청" })}
-      ></SeoulCityHall>
-      <HomeMenu />
-    </SubwayDiv>
+        <SeoulStationDiv
+          onClick={() => setSubway({ station: "서울" })}
+        ></SeoulStationDiv>
+        <SeoulCityHall
+          onClick={() => setSubway({ station: "시청" })}
+        ></SeoulCityHall>
+      </SubwayDiv>
+
+      <SubwayHome />
+    </>
   );
 };
 
 export default Subway;
 const SubwayDiv = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
 
@@ -110,4 +115,8 @@ const SeoulCityHall = styled.div`
   top: 354px;
   left: 515px;
   z-index: 999;
+`;
+const HomeDiv = styled.div`
+  position: absolute;
+  bottom: 0px;
 `;

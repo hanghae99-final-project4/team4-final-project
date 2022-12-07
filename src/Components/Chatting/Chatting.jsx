@@ -338,7 +338,7 @@ const Chatting = () => {
                   type="file"
                   name="picture"
                   maxSize={300000000}
-                  value={file.picture}
+                  value={file?.picture}
                   accept="image/*,video/*"
                   multiple
                   onChange={(e) => setFile(e.target.files[0])}

@@ -47,8 +47,13 @@ const ConversPage = () => {
     setItemWithExpireTime("profile", message.representProfile, 3000000000);
     setItemWithExpireTime("nickname", message.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
-    reset("");
-    navigate("/chattingpage");
+    if (message?.train.length !== 4) {
+      window.alert("칸 정보는 숫자로만 4자리만 입력해주세요!!");
+    } else {
+      reset("");
+
+      navigate("/chattingpage");
+    }
   };
   const CanselHandler = () => {
     navigate("/subwaypage");
@@ -93,6 +98,7 @@ const ConversPage = () => {
               <StationInfo
                 minLength={4}
                 maxLength={4}
+                pattern={/^[0-9]/g}
                 placeholder="칸 정보 입력 4자리만"
                 value={message?.train}
                 name="train"
