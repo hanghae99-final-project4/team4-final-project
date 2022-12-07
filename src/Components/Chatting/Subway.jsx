@@ -73,8 +73,8 @@ const SubwayDiv = styled.div`
 `;
 const SubwayMapFrame = styled.div`
   overflow: hidden;
-  width: 1000px;
-  height: 1000px;
+  width: 375px;
+  height: 812px;
   border: 1px solid black;
   overflow-y: scroll;
   background-image: url("https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png");

@@ -66,7 +66,7 @@ const ConversPage = () => {
   console.log(message);
 
   return (
-    <>
+    <MaxDiv>
       <FrontHeader msg="환승시민" />
       <CoversCtn>
         <ProfileBox>
@@ -137,15 +137,20 @@ const ConversPage = () => {
         </ProfileBox>
         <HomeMenu />
       </CoversCtn>
-    </>
+    </MaxDiv>
   );
 };
 
 export default ConversPage;
+
+const MaxDiv = styled.div`
+  overflow-y: hidden;
+`;
 const CoversCtn = styled.div`
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  scroll-behavior: unset;
+  width: 375px;
+  height: 812px;
   margin: auto;
   background-color: white;
   display: flex;
@@ -171,7 +176,7 @@ const ProfileBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 375px) and (max-width: 650px) {
     margin-left: 15px;
     height: 399px;
   }
@@ -222,7 +227,7 @@ const ButtonDiv = styled.div`
   flex-direction: row;
   margin-top: 15px;
   gap: 10px;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 375px) and (max-width: 650) {
     margin-left: 10px;
   }
 `;
