@@ -108,7 +108,7 @@ const SubSign = () => {
                         placeholder="아이디 입력"
                         className="w-[253px]  text-[1rem] border-b-[1px] border-[#71C9DD]"
                       />
-                      <div className="w-[74px] h-[30px] float-right bg-[#C3F4FF] ml-[4px] p-[4px] rounded-[20px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] text-[0.9rem] text-center">
+                      <div className="w-[74px] h-[30px] flex justify-center float-right bg-[#C3F4FF] ml-[4px] p-[4px] rounded-[20px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] text-[0.9rem] text-center">
                         <button onClick={(e) => IdOk(e)}>중복확인</button>
                       </div>
                     </div>
@@ -135,7 +135,7 @@ const SubSign = () => {
                       value={Info.password}
                       onChange={onChangeValue}
                       placeholder="비밀번호 입력"
-                      className="w-[253px] mt-[10px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                      className="w-[253px] mt-[10px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
                     />
                   </div>
                   {Info.snsId.length === 0 ? (
@@ -170,7 +170,7 @@ const SubSign = () => {
                   value={Info.confirmpassword}
                   onChange={onChangeValue}
                   placeholder="비밀번호 입력"
-                  className="w-[253px] mt-[10px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                  className="w-[253px] mt-[10px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
                 />
                 {Info.password !== Info.confirmpassword ? (
                   <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
@@ -208,6 +208,7 @@ const ErrorMessage = styled.div`
   width: 291px;
   color: #808080;
 
+  margin-top: 4px;
   font-family: "MonoplexKR-Regular";
   font-size: 0.8rem;
 `;
