@@ -540,7 +540,7 @@ const ChatImg = styled.div`
   height: 300px;
   border-radius: 10%;
   border: none;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
     width: 200px;
     height: 200px;
   }
@@ -555,7 +555,7 @@ const ChatVideo = styled.video`
   height: 300px;
   border-radius: 10%;
   border: none;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
     width: 200px;
     height: 200px;
   }
@@ -569,7 +569,7 @@ const LoadingDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
   }
 `;
 const UserProfileName = styled.div`
