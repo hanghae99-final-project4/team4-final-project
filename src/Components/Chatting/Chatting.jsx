@@ -400,7 +400,7 @@ const PostPictureDiv = styled.div`
 //전체 채팅방
 const ChatMainDiv = styled.div`
   overflow-y: hidden;
-  height: 608px;
+  height: 620px;
   width: 375px;
   padding: 0 16px;
 `;
@@ -416,9 +416,9 @@ const FooterDiv = styled.form`
   position: relative;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
-  bottom: 0px;
+  bottom: -30px;
   background-color: #ffffff;
-  height: 68px;
+  height: 67px;
   width: 375px;
 `;
 const Forminput = styled.input`
