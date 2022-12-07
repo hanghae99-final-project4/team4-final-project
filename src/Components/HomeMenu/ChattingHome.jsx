@@ -8,7 +8,7 @@ import styled from "styled-components";
 const ChattingHome = () => {
   const navigator = useNavigate();
   return (
-    <footer className="w-full relative bottom-[-80px] h-[50px] bg-[#FFFFFF] shadow-[5px_0px_4px_rgba(0,0,0,0.25)] flex flex-auto justify-center items-center">
+    <footer className="w-full absolute bottom-[0px] h-[50px] bg-[#FFFFFF] shadow-[5px_0px_4px_rgba(0,0,0,0.25)] flex flex-auto justify-center items-center">
       <div className="w-[375px] h-[50px] bg-[#FFFFFF]">
         <button
           onClick={(e) => {
