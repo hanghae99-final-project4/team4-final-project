@@ -356,8 +356,8 @@ const Chatting = () => {
                 </ChatSendBtn>
               </FooterDiv>
             </AllChatDiv>
+            <ChattingHome />
           </div>
-          <ChattingHome />
         </>
       ) : (
         <>
@@ -379,8 +379,8 @@ const Chatting = () => {
             {/* <button onClick={() => postSend()}>post 보내기</button>
             <input value={message.msg} onChange={onChangeHandler} name="msg" />
             <button onClick={() => sendHandler()}>제출</button> */}
+            <ChattingHome />
           </LoadingDiv>
-          <ChattingHome />
         </>
       )}
     </div>
