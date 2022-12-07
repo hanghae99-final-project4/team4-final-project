@@ -27,7 +27,6 @@ const MyPage = () => {
   useEffect(() => {
     async function getProfile() {
       const { data } = await trainApi.getConvers();
-      console.log(data);
 
       setForm(data.body);
     }
