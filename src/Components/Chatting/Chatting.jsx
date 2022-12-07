@@ -345,6 +345,7 @@ const Chatting = () => {
                 />
                 <ImageFormIcon inputRef={inputRef} />
                 <ChatInput
+                  placeholder="이미지 첨부는 이미지 첨부 후 전송 버튼 누르시오"
                   type="text"
                   value={message.msg}
                   name="msg"
