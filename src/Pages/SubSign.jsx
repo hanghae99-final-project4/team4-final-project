@@ -81,13 +81,11 @@ const SubSign = () => {
         }
         return;
       });
-
-    reset();
   };
 
   return (
     <InfoBox className=" w-[375px] flex flex-col items-center">
-      <div className="relative w-[375px] h-[770px] rounded-[5px] mx-[auto] my-[0px] shadow-[0px_4px_4px_rgba(0,0,0,0.3)]">
+      <div className="relative w-[375px] h-[812px] rounded-[5px] mx-[auto] my-[0px] ">
         <FrontHeader msg="회원가입" />
         <div className="w-[375px] rounded-[5px] mt-[60px] px-[20px] mx-[auto] my-[0px]">
           <h1>
@@ -110,16 +108,14 @@ const SubSign = () => {
                         placeholder="아이디 입력"
                         className="w-[253px]  text-[1rem] border-b-[1px] border-[#71C9DD]"
                       />
-                      <div className="w-[74px] h-[30px] float-right bg-[#C3F4FF] ml-[4px] p-[4px] flex justify-center items-center rounded-[20px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] text-[0.9rem] text-center">
+                      <div className="w-[74px] h-[30px] flex justify-center float-right bg-[#C3F4FF] ml-[4px] p-[4px] rounded-[20px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] text-[0.9rem] text-center">
                         <button onClick={(e) => IdOk(e)}>중복확인</button>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {Info.snsId.length === 0 ? (
-                  <div></div>
-                ) : Info.snsId.length <= 5 || Info.snsId.length >= 15 ? (
+                {Info.snsId.length <= 5 || Info.snsId.length >= 15 ? (
                   <ErrorMessage>
                     아이디는 6자~15자 이내로 영문 혹은 숫자를 조합해주세요.
                   </ErrorMessage>
@@ -139,11 +135,14 @@ const SubSign = () => {
                       value={Info.password}
                       onChange={onChangeValue}
                       placeholder="비밀번호 입력"
-                      className="w-[253px] mt-[10px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                      className="w-[253px] mt-[10px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
                     />
                   </div>
-                  {Info.password.length === 0 ? (
-                    <div></div>
+                  {Info.snsId.length === 0 ? (
+                    <ErrorMessage>
+                      비밀번호는 대,소문자 또는 숫자를 포함한 10자~20자 이하로
+                      적어주세요
+                    </ErrorMessage>
                   ) : Info.password.replace(" ", "").includes(Info.snsId) ? (
                     <ErrorMessage>
                       패스워드에 닉네임이 포함되어있습니다.
@@ -171,11 +170,9 @@ const SubSign = () => {
                   value={Info.confirmpassword}
                   onChange={onChangeValue}
                   placeholder="비밀번호 입력"
-                  className="w-[253px] mt-[10px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                  className="w-[253px] mt-[10px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
                 />
-                {Info.password.length === 0 ? (
-                  <div></div>
-                ) : Info.password !== Info.confirmpassword ? (
+                {Info.password !== Info.confirmpassword ? (
                   <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
                 ) : (
                   <div></div>
@@ -211,15 +208,14 @@ const ErrorMessage = styled.div`
   width: 291px;
   color: #808080;
 
+  margin-top: 4px;
   font-family: "MonoplexKR-Regular";
   font-size: 0.8rem;
 `;
 
 const InfoBox = styled.div`
-  width: 100%;
-  height: 770px;
   @media only screen and (min-width: 375px) {
-    font-size: 1.3rem;
+    width: 100%;
   } ;
 `;
 

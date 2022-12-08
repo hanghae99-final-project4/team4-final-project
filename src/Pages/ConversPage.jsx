@@ -28,7 +28,7 @@ const ConversPage = () => {
   const navigate = useNavigate();
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
-  console.log(message);
+  const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -47,8 +47,13 @@ const ConversPage = () => {
     setItemWithExpireTime("profile", message.representProfile, 3000000000);
     setItemWithExpireTime("nickname", message.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
-    reset("");
-    navigate("/chattingpage");
+    if (message?.train.length !== 4) {
+      window.alert("칸 정보는 숫자로만 4자리만 입력해주세요!!");
+    } else {
+      reset("");
+
+      navigate("/chattingpage");
+    }
   };
   const CanselHandler = () => {
     navigate("/subwaypage");
@@ -56,15 +61,14 @@ const ConversPage = () => {
   useEffect(() => {
     async function getNickname() {
       const { data } = await trainApi.getConvers();
-      console.log(data);
-      setMessage(data.user);
+      // console.log(data.body);
+      setMessage(data.body);
     }
     getNickname();
   }, []);
-  console.log(message);
 
   return (
-    <>
+    <MaxDiv>
       <FrontHeader msg="환승시민" />
       <CoversCtn>
         <ProfileBox>
@@ -92,7 +96,10 @@ const ConversPage = () => {
               </HowDiv>
 
               <StationInfo
-                placeholder="칸 정보 입력"
+                minLength={4}
+                maxLength={4}
+                pattern={/^[0-9]/g}
+                placeholder="칸 정보 입력 4자리만"
                 value={message?.train}
                 name="train"
                 onChange={onChangeHandler}
@@ -135,15 +142,23 @@ const ConversPage = () => {
         </ProfileBox>
         <HomeMenu />
       </CoversCtn>
-    </>
+    </MaxDiv>
   );
 };
 
 export default ConversPage;
+
+const MaxDiv = styled.div`
+  margin: 0 auto;
+  overflow-y: hidden;
+  width: 375px;
+  height: 812px;
+`;
 const CoversCtn = styled.div`
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  scroll-behavior: unset;
+  width: 375px;
+  height: 767px;
   margin: auto;
   background-color: white;
   display: flex;
@@ -154,7 +169,7 @@ const CoversCtn = styled.div`
   @media only screen and (min-width: 375px) {
     overflow-y: hidden;
     width: 375px;
-    height: 812px;
+    height: 767px;
 
     display: flex;
     flex-direction: column;
@@ -169,7 +184,7 @@ const ProfileBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 375px) and (max-width: 650px) {
     margin-left: 15px;
     height: 399px;
   }
@@ -220,7 +235,7 @@ const ButtonDiv = styled.div`
   flex-direction: row;
   margin-top: 15px;
   gap: 10px;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 375px) and (max-width: 650) {
     margin-left: 10px;
   }
 `;

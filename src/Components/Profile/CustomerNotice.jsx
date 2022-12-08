@@ -17,10 +17,10 @@ const CustomerNotice = () => {
 export default CustomerNotice;
 
 const Wrap = styled.div`
-  @media only screen and (max-width: 375px) {
-    width: 110px;
-    height: 30px;
-  }
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const TitleBox = styled.div`
@@ -30,7 +30,7 @@ const TitleBox = styled.div`
   align-items: flex-end;
 
   div {
-    width: 114px;
+    width: 200px;
     height: 44px;
     border: 2px solid #71c9dd;
     border-radius: 30px;

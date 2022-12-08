@@ -18,8 +18,6 @@ const NaverLogin = () => {
   axios
     .get(`${thURL}/auth/naver/callback?code=${code}&state=${state}`)
     .then((res) => {
-      console.log(res);
-
       const token = res.data.jwtToken;
       const msg = res.data.message;
       const doneInfo = res.data.doneAdditionalInfo;
@@ -29,7 +27,7 @@ const NaverLogin = () => {
       if (doneInfo === true) {
         navigator("/subwaypage");
       } else {
-        navigator("/signup");
+        navigator("/authcode");
       }
       alert(`${msg}`);
     });
@@ -40,5 +38,5 @@ const NaverLogin = () => {
     </div>
   );
 };
-
+//네이버로그인
 export default NaverLogin;

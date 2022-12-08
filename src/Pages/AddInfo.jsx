@@ -35,15 +35,15 @@ const SignUp = () => {
   const [isGender, setIsGender] = useState(false);
   const inputRef = useRef([]);
 
-  console.log(token);
-  console.log(files);
-  console.log(fileImg);
+  // console.log(token);
+  // console.log(files);
+  // console.log(fileImg);
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
-    console.log(url);
+    // console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
@@ -58,7 +58,7 @@ const SignUp = () => {
         nickname: form.nickname,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const msg = res.data.msg;
         alert(msg);
       })
@@ -69,28 +69,27 @@ const SignUp = () => {
   };
 
   //업로드 버튼(1) 클릭시
-  console.log("0_token", token);
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("1_token", token);
+    // console.log("1_token", token);
     const fd = new FormData();
-    console.log(fd);
+    // console.log(fd);
     fd.append("representProfile", fileImg.files);
     fd.append("gender", form.gender);
     fd.append("nickname", form.nickname);
 
     for (let pair of fd.entries()) {
-      console.log(pair);
+      // console.log(pair);
     }
-    console.log("2_token", token);
+    // console.log("2_token", token);
     await trainApi2
       .postForm(fd)
 
       //res 값으로 request에서 에러 처리를
       .then((res) => {
         //new토큰이 들어온 자리
-        console.log(res);
+        // console.log(res);
         const msg = res.data.msg;
         alert(msg);
         navigator("/subwaypage");

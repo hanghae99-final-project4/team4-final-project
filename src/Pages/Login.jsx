@@ -48,7 +48,7 @@ const Login = () => {
         password: Info.password,
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         const token = res.data.jwtToken;
         const msg = res.data.message;
@@ -58,13 +58,16 @@ const Login = () => {
         if (token) {
           setCookie("token", token, { path: "/" });
         }
+
         if (doneInfo === false && donePhone === false) {
-          console.log(res);
+          // console.log(res);
           navigate("/authcode");
           alert("추가정보를 입력해주세요!");
         } else if (doneInfo === true && donePhone === true) {
           alert(`${msg}`);
           navigate("/subwaypage");
+        } else {
+          navigate("/authcode");
         }
       })
       .catch((err) => {

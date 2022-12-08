@@ -21,22 +21,22 @@ import phoneauth from "../Assets/SignUp/PhoneAuth.svg";
 import norminfo from "../Assets/SubSign/NormInfo.svg";
 
 const AuthCode = () => {
-  const [, , removeCookie] = useCookies(["token"]);
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
 
   // const token = getCookie("token");/
   const cookies = new Cookies();
   const token = cookies.get("token");
-  console.log(token);
+  // console.log(token);
 
   const navigator = useNavigate();
   const [files, setFiles] = useState([]);
-  console.log(files);
+  // console.log(files);
 
   const inputRef = useRef([]);
   let [fileImg, setFileImg] = useState([]);
-  console.log(fileImg);
+  // console.log(fileImg);
 
   const [check, setCheck] = useState(false);
   const [form, setForm, onChangeValue, reset] = useInput({
@@ -47,12 +47,26 @@ const AuthCode = () => {
     gender: check,
   });
 
+  //파라미터 key값 가져오기
+  let getParameter = (key) => {
+    return new URLSearchParams(window.location.search).get(key);
+  };
+  const code = getParameter("sexybaby");
+
+  //구글,카카오 로그인 할 경우 파라미터 값 가져와서 토큰 쿠키에 장착하기.
+  useEffect(() => {
+    if (code !== null) {
+      removeCookie("token");
+      setCookie("token", code, { path: "/" });
+    }
+  }, []);
+
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
-    console.log(url);
+    // console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
@@ -78,6 +92,11 @@ const AuthCode = () => {
       });
       console.log(data);
       alert(data.msg);
+      //새로운 토큰 안올때가 undefined 오면 값을 token 저장
+      if (data.newtoken !== undefined) {
+        removeCookie("token");
+        setCookie("token", data.newtoken, { path: "/" });
+      }
     } catch (err) {
       console.log(err);
       const status = err.response.status;
@@ -99,7 +118,7 @@ const AuthCode = () => {
         phoneNumber: form.phoneNumber,
         authCode: form.authCode,
       });
-      console.log(data);
+      // console.log(data);
       const msg = data.msg;
       if (msg === "인증되었습니다") {
         navigator("/addinfo");
@@ -118,7 +137,7 @@ const AuthCode = () => {
   };
 
   //업로드 버튼(1) 클릭시
-  console.log("0_token", token);
+  // console.log("0_token", token);
 
   // 3분 타이머
 

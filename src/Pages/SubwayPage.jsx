@@ -2,6 +2,7 @@ import React from "react";
 import Subway from "../Components/Chatting/Subway";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
+import styled from "styled-components";
 
 const SubwayPage = () => {
   const [cookie, setCookie, removeCookie] = useCookies(["token"]);
@@ -20,10 +21,13 @@ const SubwayPage = () => {
   }, []);
 
   return (
-    <div>
+    <SubWayDiv>
       <Subway />;
-    </div>
+    </SubWayDiv>
   );
 };
 
 export default SubwayPage;
+const SubWayDiv = styled.div`
+  overflow: hidden;
+`;

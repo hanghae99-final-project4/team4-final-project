@@ -14,6 +14,7 @@ import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
 import FrontHeader from "../Header/FrontHeader";
+import ChattingHome from "../HomeMenu/ChattingHome";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
@@ -101,16 +102,16 @@ const Chatting = () => {
   //상대방 프로필
   const CounterUserHandler = () => {
     setIsModal(true);
-    console.log(counter);
+    // console.log(counter);
     socket.emit("counteruser", {
       fair: counter.fair,
       ownself: counter.ownself,
     });
     socket.on(`${name}`, (message) => {
-      console.log(message);
+      // console.log(message);
       setCounterUser(message);
     });
-    console.log(counterUser);
+    // console.log(counterUser);
   };
 
   ///매칭 순서대로 randomjoin => maching => name
@@ -120,7 +121,7 @@ const Chatting = () => {
       socket.emit("leaveRoom", roomkey);
       localStorage.removeItem("roomkey");
     }
-    console.log(roomkey);
+    // console.log(roomkey);
     socket.emit("randomjoin", {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
@@ -132,7 +133,7 @@ const Chatting = () => {
     });
 
     socket.on(`${name}`, (message) => {
-      console.log(message, `${name}`);
+      // console.log(message, `${name}`);
       setCounter(message);
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
@@ -223,6 +224,9 @@ const Chatting = () => {
       console.log(message);
     });
   }
+  const download = () => {
+    window.location.assign();
+  };
 
   return (
     <div
@@ -233,8 +237,8 @@ const Chatting = () => {
       }}
     >
       {success ? (
-        <>
-          <div>
+        <FooterBox>
+          <div style={{ height: "812px" }}>
             <FrontHeader msg={counterUser?.nickname} />
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
@@ -308,10 +312,17 @@ const Chatting = () => {
                             {item.msg}
                           </ChatDiv>
                         ) : item.url?.split(".")[5] == "mp4" ? (
-                          <ChatVideo src={item?.url} />
+                          <>
+                            <ChatVideo a href={item?.url} src={item?.url} />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
                         ) : (
                           // <div>mp4</div>
-                          <ChatImg imgurl={item?.url} />
+                          <>
+                            <ChatImg imgurl={item?.url} />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
+
                           // <div>img</div>
                         )}
                       </UserChatDiv>
@@ -327,13 +338,14 @@ const Chatting = () => {
                   type="file"
                   name="picture"
                   maxSize={300000000}
-                  value={file.picture}
+                  value={file?.picture}
                   accept="image/*,video/*"
                   multiple
                   onChange={(e) => setFile(e.target.files[0])}
                 />
                 <ImageFormIcon inputRef={inputRef} />
                 <ChatInput
+                  placeholder="이미지 첨부는 이미지 첨부 후 전송 버튼 누르시오"
                   type="text"
                   value={message.msg}
                   name="msg"
@@ -345,9 +357,8 @@ const Chatting = () => {
               </FooterDiv>
             </AllChatDiv>
           </div>
-
-          <HomeMenu />
-        </>
+          <ChattingHome />
+        </FooterBox>
       ) : (
         <>
           <LoadingDiv>
@@ -368,8 +379,8 @@ const Chatting = () => {
             {/* <button onClick={() => postSend()}>post 보내기</button>
             <input value={message.msg} onChange={onChangeHandler} name="msg" />
             <button onClick={() => sendHandler()}>제출</button> */}
+            <ChattingHome />
           </LoadingDiv>
-          <HomeMenu />
         </>
       )}
     </div>
@@ -389,7 +400,7 @@ const PostPictureDiv = styled.div`
 //전체 채팅방
 const ChatMainDiv = styled.div`
   overflow-y: hidden;
-  height: 608px;
+  height: 620px;
   width: 375px;
   padding: 0 16px;
 `;
@@ -405,9 +416,9 @@ const FooterDiv = styled.form`
   position: relative;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
-  bottom: 0px;
+  bottom: -30px;
   background-color: #ffffff;
-  height: 68px;
+  height: 67px;
   width: 375px;
 `;
 const Forminput = styled.input`
@@ -529,28 +540,43 @@ const ChatImg = styled.div`
   height: 300px;
   border-radius: 10%;
   border: none;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
     width: 200px;
     height: 200px;
   }
 `;
 
 const ChatVideo = styled.video`
+  background-size: cover;
+  background-repeat: repeat;
+  background-image: ${({ imgurl }) => `url(${imgurl})`};
+  background-position: center;
   width: 300px;
   height: 300px;
   border-radius: 10%;
   border: none;
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const LoadingDiv = styled.div`
   margin: auto;
   overflow-y: hidden;
-  width: 100%;
-  height: 100%;
+  width: 375px;
+  height: 812px;
   display: flex;
   align-items: center;
   justify-content: center;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
+    margin: auto;
+    overflow-y: hidden;
+    width: 375px;
+    height: 812px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 const UserProfileName = styled.div`
@@ -564,5 +590,19 @@ const UserProfileName = styled.div`
 `;
 //전체 채팅 화면
 const AllChatDiv = styled.div`
+  position: relative;
+`;
+
+const Download = styled.a`
+  width: 88px;
+  height: 38px;
+  background-color: #c3f4ff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  font-family: "Noto Sans KR", sans-serif;
+`;
+
+const FooterBox = styled.div`
+  height: 812px;
   position: relative;
 `;
