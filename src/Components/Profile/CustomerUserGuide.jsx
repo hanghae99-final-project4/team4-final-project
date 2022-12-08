@@ -5,12 +5,12 @@ import styled from "styled-components";
 const CustomerUserGuide = () => {
   return (
     <Wrap>
-      <GuideIcon />
       <TitleBox>
         <div>
-          <p style={{ fontSize: "24px", fontWeight: "700" }}>고객 유의 사항</p>
+          <p>고객 유의사항</p>
         </div>
       </TitleBox>
+      <GuideIcon />
     </Wrap>
   );
 };

@@ -5,18 +5,23 @@ import styled from "styled-components";
 const CustomerNotice = () => {
   return (
     <Wrap>
-      <GuideIcon />
       <TitleBox>
         <div>
-          <p style={{ fontSize: "24px", fontWeight: "700" }}>고객 유의 사항</p>
+          <p>고객 이용가이드</p>
         </div>
       </TitleBox>
+      <GuideIcon />
     </Wrap>
   );
 };
 export default CustomerNotice;
 
-const Wrap = styled.div``;
+const Wrap = styled.div`
+  @media only screen and (max-width: 375px) {
+    width: 110px;
+    height: 30px;
+  }
+`;
 
 const TitleBox = styled.div`
   height: 100px;

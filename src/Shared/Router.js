@@ -36,8 +36,8 @@ const Router = () => {
         <Route path="/converspage" element={<ConversPage />} />
         <Route path="/chattingpage" element={<ChattingPage />} />
         <Route path="/subwaypage" element={<SubwayPage />} />
-        <Route path="/customerUserGuide" element={<CustomerUserGuide />} />
-        <Route path="/customerNotice" element={<CustomerNotice />} />
+        <Route path="/customeruserguide" element={<CustomerUserGuide />} />
+        <Route path="/customernotice" element={<CustomerNotice />} />
 
         <Route path="/agreepage" element={<AgreePage />} />
       </Routes>
