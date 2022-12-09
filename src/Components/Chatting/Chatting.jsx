@@ -208,7 +208,7 @@ const Chatting = () => {
       reset(initialState);
     }
   };
-  console.log(chatArr?.url, chatArr?.nickname);
+
   //이미지 비디오 보내는 로직
   async function postSend() {
     const formData = new FormData();
@@ -233,6 +233,7 @@ const Chatting = () => {
   const download = () => {
     window.location.assign();
   };
+  console.log(chatArr?.url, chatArr?.nickname, chatArr);
 
   return (
     <div
