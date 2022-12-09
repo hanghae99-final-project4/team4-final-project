@@ -100,7 +100,8 @@ const Chatting = () => {
   }
 
   //상대방 프로필
-  const CounterUserHandler = () => {
+  const CounterUserHandler = (e) => {
+    e.preventDefault();
     setIsModal(true);
     // console.log(counter);
     socket.emit("counteruser", {
@@ -165,6 +166,7 @@ const Chatting = () => {
             nickname: message.name,
             msg: message.msg,
             profile: message.profile,
+            url: message.url,
           },
         ]);
       });
@@ -220,6 +222,10 @@ const Chatting = () => {
     } catch (error) {
       console.log(error);
     }
+    socket.emit("persnalchat", {
+      url: data.img,
+      nickname: data.name,
+    });
   }
   socket.on("imgaeUP", (message) => {
     console.log(message);
@@ -285,7 +291,7 @@ const Chatting = () => {
                         item.profile !== undefined ? (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={CounterUserHandler}
+                              onClick={(e) => CounterUserHandler(e)}
                               src={item.profile}
                             />
                             <UserProfileName>{item.nickname}</UserProfileName>
@@ -293,7 +299,7 @@ const Chatting = () => {
                         ) : (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={CounterUserHandler}
+                              onClick={(e) => CounterUserHandler(e)}
                               src={
                                 "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg"
                               }
