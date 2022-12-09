@@ -188,6 +188,10 @@ const Chatting = () => {
     e.preventDefault();
     if (file?.name !== undefined) {
       postSend();
+      socket.emit("persnalchat", {
+        url: chatArr?.url,
+        nickname: chatArr?.nickname,
+      });
       setFile([]);
     }
     if (message.msg !== "") {
@@ -222,10 +226,6 @@ const Chatting = () => {
     } catch (error) {
       console.log(error);
     }
-    socket.emit("persnalchat", {
-      url: chatArr?.url,
-      nickname: chatArr?.nickname,
-    });
   }
 
   socket.on("imgaeUP", (message) => {
