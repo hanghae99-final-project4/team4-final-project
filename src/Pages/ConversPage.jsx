@@ -273,3 +273,4 @@ const HowDiv = styled.div`
   align-items: center;
   gap: 3%;
 `;
+//
