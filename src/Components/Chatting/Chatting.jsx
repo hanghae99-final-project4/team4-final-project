@@ -14,9 +14,8 @@ import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
 import FrontHeader from "../Header/FrontHeader";
-import ExitIcon from "../../Element/ExitIcon";
 import ChattingHome from "../HomeMenu/ChattingHome";
-import { ReactComponent as ExitIconItem } from "../../Assets/Chatting/Exit.svg";
+
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
@@ -59,7 +58,6 @@ const Chatting = () => {
     // setItem
     window.localStorage.setItem(keyName, objString);
   }
-
   const scrollEvent = _.debounce(() => {
     console.log("scroll");
     const scrollTop = boxRef.current.scrollTop; //요소의 상단에서 맨 위에 표시 되는 콘텐츠까지의 거리를 측정한 것입니다.
@@ -141,8 +139,12 @@ const Chatting = () => {
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
-      setRoom(message.roomkey);
-      setItemWithExpireTime("roomkey", message.roomkey, 5000000000);
+      console.log(message.roomkey);
+      if (message.roomkey !== null) {
+        setRoom(message.roomkey);
+      }
+
+      setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
       //roomkey 들어오면 success 값 true
       if (
         message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
@@ -151,7 +153,7 @@ const Chatting = () => {
         setSuccess(true);
         console.log("실행됨", success);
       } else {
-        window.alert(message.fail);
+        alert(message.fail);
       }
       console.log("success", success);
 
@@ -159,8 +161,6 @@ const Chatting = () => {
       socket.on("broadcast", (message) => {
         console.log(message);
         console.log(chatArr);
-
-        getItemWithExpireTime("roomkey");
         getItemWithExpireTime("train");
         getItemWithExpireTime("nickname");
         getItemWithExpireTime("dropstation");
@@ -259,46 +259,16 @@ const Chatting = () => {
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
                 {isModal && (
-                  <ModalCtn>
-                    <ModalWrap>
-                      <CounterProfileImg src={counterUser?.representProfile} />
-                      <ExitIcon
-                        onClick={() => setIsModal(!isModal)}
-                        style={{
-                          cursor: "pointer",
-                          position: "absolute",
-                          right: "10px",
-                          top: "5px",
-                        }}
-                      />
-                      <StationInfoDiv>
-                        <TagDiv>
-                          <NickNameTag>닉네임</NickNameTag>
-                          <Nickname>{counterUser?.nickname}</Nickname>
-                        </TagDiv>
-                        <TagDiv>
-                          <NickNameTag>성별</NickNameTag>
-                          <Nickname>
-                            {counterUser?.gender === true ? "여성" : "남성"}
-                          </Nickname>
-                        </TagDiv>
-                        <TagDiv>
-                          <NickNameTag>관심사</NickNameTag>
-                          <Nickname>#틱톡#연애</Nickname>
-                        </TagDiv>
-                        <TagDiv>
-                          <NickNameTag>취미</NickNameTag>
-                          <Nickname>#운동#테니스</Nickname>
-                        </TagDiv>
-                        <StatusTagDiv>
-                          <StatusTag>상태메시지</StatusTag>
-                          <StatusMessage>
-                            {counterUser?.statusmessage}
-                          </StatusMessage>
-                        </StatusTagDiv>
-                      </StationInfoDiv>
-                    </ModalWrap>
-                  </ModalCtn>
+                  <CounterProfileModal
+                    gender={counterUser?.gender}
+                    statusmessage={counterUser?.statusmessage}
+                    nickname={counterUser?.nickname}
+                    representProfile={counterUser?.representProfile}
+                    setCounterUser={setCounterUser}
+                    couterUser={counterUser}
+                    isModal={isModal}
+                    setIsModal={setIsModal}
+                  />
                 )}
 
                 <ChatBox>
