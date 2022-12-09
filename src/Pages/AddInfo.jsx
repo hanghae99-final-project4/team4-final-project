@@ -35,15 +35,11 @@ const SignUp = () => {
   const [isGender, setIsGender] = useState(false);
   const inputRef = useRef([]);
 
-  // console.log(token);
-  // console.log(files);
-  // console.log(fileImg);
   //파일 target
   const onImgChange = (e) => {
     const fileList = e.target.files[0];
     //File {name: 'profile01.png', lastModified: 1668816585952, lastModifiedDate: Sat Nov 19 2022 09:09:45 GMT+0900 (한국 표준시), webkitRelativePath: '', size: 692520, …}
     const url = URL.createObjectURL(fileList);
-    // console.log(url);
     setFileImg({
       files: fileList,
       thumbnail: url,
@@ -58,7 +54,6 @@ const SignUp = () => {
         nickname: form.nickname,
       })
       .then((res) => {
-        // console.log(res);
         const msg = res.data.msg;
         alert(msg);
       })
@@ -72,31 +67,24 @@ const SignUp = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    // console.log("1_token", token);
     const fd = new FormData();
-    // console.log(fd);
     fd.append("representProfile", fileImg.files);
     fd.append("gender", form.gender);
     fd.append("nickname", form.nickname);
 
     for (let pair of fd.entries()) {
-      // console.log(pair);
     }
-    // console.log("2_token", token);
     await trainApi2
       .postForm(fd)
 
       //res 값으로 request에서 에러 처리를
       .then((res) => {
         //new토큰이 들어온 자리
-        // console.log(res);
         const msg = res.data.msg;
         alert(msg);
         navigator("/subwaypage");
       })
       .catch((err) => {
-        console.log(err);
-
         const msg = err.response.data.msg;
         const er = err.response.data.error;
 
@@ -138,7 +126,7 @@ const SignUp = () => {
         <img
           src={fileImg.thumbnail}
           alt={fileImg.type}
-          className="w-[120px] h-[120px] rounded-[0px]"
+          className="w-[120px] h-[120px] rounded-[20px]"
           onClick={onClickFilesInput}
         />
       );
@@ -147,14 +135,14 @@ const SignUp = () => {
 
   return (
     <>
-      <InfoBox className="w-[375px] flex flex-col justify-center items-center ">
-        <div className=" w-[375px] relative h-[770px] rounded-[5px] mx-[auto] my-[0px] shadow-[0px_4px_4px_rgba(0,0,0,0.3)]">
+      <InfoBox className="flex flex-col justify-center items-center ">
+        <div className="relative h-[812px] rounded-[5px] mx-[auto] my-[0px]">
           <FrontHeader msg="회원가입" />
-          <div className="w-[375px]  rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
+          <div className="w-[375px] rounded-[5px] pt-[30px] px-[20px]  mx-[auto] my-[0px]">
             <h1 className="text-[20px] relative font-bold">
               <img src={setprofile} alt="setprofile" />
             </h1>
-            <div className="w-[100%] mx-[auto] mt-[4px] mb-[0px] flex flex-col items-center">
+            <div className="w-[100%] mx-[auto] mt-[10px] mb-[0px] flex flex-col items-center">
               <div className="w-[120px] h-[120px] mb-[2px] ">{showImage}</div>
               <div className="w-[100%] rounded-[10px]">
                 <form className="flex flex-col gap-[20px] ">
@@ -255,10 +243,11 @@ const SignUp = () => {
                         </div>
                       </div>
                       <div>
-                        <h2 className="text-[1rem] font-bold">카테고리</h2>
-                        <div className="w-[313px] text-gray-300 text-[1.2rem] font-bold">
-                          {/* <InfoCategory /> */}서비스 준비중입니다.
-                        </div>
+                        {/* <h2 className="text-[1rem] font-bold">카테고리</h2> */}
+                        {/* <div className="w-[313px] text-gray-300 text-[1.2rem] font-bold"> */}
+                        {/* <InfoCategory /> */}
+                        {/* 서비스 준비중입니다. */}
+                        {/* </div> */}
                       </div>
                       {/* <div className="absolute bottom-[0px]"> */}
                       {/* <div className="w-[375px] "> */}
@@ -297,8 +286,8 @@ const SignUp = () => {
 export default SignUp;
 
 const InfoBox = styled.div`
-  width: 100%;
-  height: 770px;
   @media screen and (min-width: 320px) and (max-width: 375px) {
+    width: 100%;
+    height: 812px;
   } ;
 `;
