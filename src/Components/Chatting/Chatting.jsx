@@ -222,12 +222,10 @@ const Chatting = () => {
       const { data } = await trainApi2.chattingForm(formData);
       console.log("잘받음", data);
       socket.emit("persnalchat", {
-        url: data.img,
-        nickname: data.name,
+        url: data?.img,
+        nickname: data?.name,
         roomkey: room,
       });
-
-      setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
     } catch (error) {
       console.log(error);
     }
