@@ -220,10 +220,10 @@ const Chatting = () => {
     } catch (error) {
       console.log(error);
     }
-    socket.on("imgaeUP", (message) => {
-      console.log(message);
-    });
   }
+  socket.on("imgaeUP", (message) => {
+    console.log(message);
+  });
   const download = () => {
     window.location.assign();
   };
