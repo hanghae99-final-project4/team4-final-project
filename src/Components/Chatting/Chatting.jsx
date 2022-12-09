@@ -14,6 +14,7 @@ import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
 import FrontHeader from "../Header/FrontHeader";
+import ExitIcon from "../../Element/ExitIcon";
 import ChattingHome from "../HomeMenu/ChattingHome";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
