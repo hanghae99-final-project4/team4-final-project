@@ -65,7 +65,7 @@ const ConversPage = () => {
       setMessage(data.body);
     }
     getNickname();
-  }, [message]);
+  }, []);
 
   return (
     <MaxDiv>
