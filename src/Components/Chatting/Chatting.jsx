@@ -139,7 +139,7 @@ const Chatting = () => {
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
       console.log(message.roomkey);
-      if (message.roomkey !== null) {
+      if (message.roomkey !== undefined) {
         setRoom(message.roomkey);
       }
 
@@ -147,7 +147,7 @@ const Chatting = () => {
       //roomkey 들어오면 success 값 true
       if (
         message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
-        message.roomkey !== null
+        message.roomkey !== undefined
       ) {
         setSuccess(true);
         console.log("실행됨", success);
