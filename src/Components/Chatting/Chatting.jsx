@@ -261,7 +261,7 @@ const Chatting = () => {
       {success ? (
         <FooterBox>
           <div style={{ height: "812px" }}>
-            <FrontHeader msg={counterUser?.nickname} />
+            <FrontHeader msg={counter?.fair} />
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
                 {isModal && (
