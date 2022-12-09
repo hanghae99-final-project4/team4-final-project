@@ -3,7 +3,7 @@ import axios from "axios";
 import { Cookies, useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
 
-const token = document.cookie.replace("token=", "");
+const token = cookies.getItem("token");
 const cookies = new Cookies();
 const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
