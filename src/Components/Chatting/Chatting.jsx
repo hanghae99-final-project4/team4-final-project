@@ -102,18 +102,15 @@ const Chatting = () => {
   //상대방 프로필
   const CounterUserHandler = () => {
     setIsModal(true);
-    console.log(counter "카운터 돌아요");
     socket.emit("counteruser", {
       fair: counter.fair,
       ownself: counter.ownself,
-
     });
     socket.on(`${name}`, (message) => {
-      console.log(message , "counteruser 메시지 잘 받아요");
+      console.log(message, "counteruser 메시지 잘 받아요");
       setCounterUser(message);
-      
     });
-    console.log(counterUser , "난 카운터 유저 ");
+    console.log(counterUser, "난 카운터 유저 ");
   };
 
   ///매칭 순서대로 randomjoin => maching => name
