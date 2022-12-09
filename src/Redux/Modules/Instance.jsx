@@ -1,11 +1,9 @@
 ////src/Redux/Modules/Instance.js
 import axios from "axios";
-import { Cookies, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
+import { getCookie } from "./Cookie";
 
-const token = cookie.get("token");
-const [cookie, setCookie] = useCookies();
-const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
@@ -15,7 +13,7 @@ const yhURL = process.env.REACT_APP_TH_S_HOST;
 const instance = axios.create({
   baseURL: `${yhURL}`,
   headers: {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${getCookie("token")}`,
   },
 });
 //폼데이터 Instance
@@ -23,7 +21,7 @@ const instanceF = axios.create({
   baseURL: `${yhURL}`,
   headers: {
     "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${getCookie("token")}`,
   },
 });
 
