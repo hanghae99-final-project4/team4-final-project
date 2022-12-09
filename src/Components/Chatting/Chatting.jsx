@@ -44,7 +44,7 @@ const Chatting = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const thURL = process.env.REACT_APP_TH_S_HOST;
-
+  console.log(room);
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
