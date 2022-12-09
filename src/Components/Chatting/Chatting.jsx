@@ -198,8 +198,6 @@ const Chatting = () => {
         msg: message.msg,
         nickname: message.nickname,
         profile: message.url,
-        url: chatArr?.url,
-        nickname: chatArr?.nickname,
       });
       console.log("chatting", {
         roomkey: room,
@@ -209,8 +207,8 @@ const Chatting = () => {
       });
       reset(initialState);
     }
-    console.log(chatArr?.url, chatArr?.nickname);
   };
+  console.log(chatArr?.url, chatArr?.nickname);
   //이미지 비디오 보내는 로직
   async function postSend() {
     const formData = new FormData();
