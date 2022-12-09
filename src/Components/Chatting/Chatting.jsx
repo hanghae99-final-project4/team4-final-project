@@ -132,48 +132,53 @@ const Chatting = () => {
     });
 
     socket.on(`${name}`, (message) => {
-      console.log(message, `입장 시 불러오는 socket.on`);
-      setCounter(message);
-
-      //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
-      socket.emit("end", "");
-      socket.emit("joinFair", { roomkey: message.roomkey });
-      console.log(message.roomkey);
       if (message.roomkey !== undefined) {
-        setRoom(message.roomkey);
-      }
+        console.log(message, `입장 시 불러오는 socket.on`);
+        setCounter(message);
 
-      setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
-      //roomkey 들어오면 success 값 true
-      if (
-        message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
-        message.roomkey !== undefined
-      ) {
-        setSuccess(true);
-        console.log("실행됨", success);
+        //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
+        socket.emit("end", "");
+        socket.emit("joinFair", { roomkey: message.roomkey });
+        console.log(message.roomkey);
+        if (message.roomkey !== undefined) {
+          setRoom(message.roomkey);
+        }
+
+        setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
+        //roomkey 들어오면 success 값 true
+        if (
+          message.fail !==
+            "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
+          message.roomkey !== undefined
+        ) {
+          setSuccess(true);
+          console.log("실행됨", success);
+        } else {
+          alert(message.fail);
+        }
+        console.log("success", success);
+
+        //메시지 들어온대로 렌더 해주기
+        socket.on("broadcast", (message) => {
+          console.log(message);
+          console.log(chatArr);
+          getItemWithExpireTime("train");
+          getItemWithExpireTime("nickname");
+          getItemWithExpireTime("dropstation");
+          setChatArr((chatArr) => [
+            ...chatArr,
+            {
+              roomkey: message.roomkey,
+              nickname: message.name,
+              msg: message.msg,
+              profile: message.profile,
+              url: message.url,
+            },
+          ]);
+        });
       } else {
-        alert(message.fail);
+        setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
       }
-      console.log("success", success);
-
-      //메시지 들어온대로 렌더 해주기
-      socket.on("broadcast", (message) => {
-        console.log(message);
-        console.log(chatArr);
-        getItemWithExpireTime("train");
-        getItemWithExpireTime("nickname");
-        getItemWithExpireTime("dropstation");
-        setChatArr((chatArr) => [
-          ...chatArr,
-          {
-            roomkey: message.roomkey,
-            nickname: message.name,
-            msg: message.msg,
-            profile: message.profile,
-            url: message.url,
-          },
-        ]);
-      });
     });
   }, []);
 
