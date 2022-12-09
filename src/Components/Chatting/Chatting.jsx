@@ -316,18 +316,12 @@ const Chatting = () => {
                             <ChatVideo
                               className={name === item.nickname && "owner"}
                               src={item?.url}
-                            />
-                            <Download href={item?.url}>다운로드</Download>
+                            ></ChatVideo>
                           </>
                         ) : (
                           // <div>mp4</div>
-                          <>
-                            <ChatImg
-                              className={name === item.nickname && "owner"}
-                              imgurl={item?.url}
-                            />
-                            <Download href={item?.url}>다운로드</Download>
-                          </>
+
+                          <ChatImg imgurl={item?.url}></ChatImg>
 
                           // <div>img</div>
                         )}
@@ -471,8 +465,8 @@ const UserProfileDiv = styled.div`
 const ChatDiv = styled.div`
   margin-top: 20px;
   padding: 10px 30px;
-  width: 201px;
-  min-height: 50px;
+  width: 0;
+  min-height: 0;
   position: relative;
   border-radius: 2em;
   font-size: 13px;
@@ -547,8 +541,14 @@ const ChatImg = styled.div`
   border-radius: 10%;
   border: none;
   @media only screen and (min-width: 320px) and (max-width: 650px) {
+    background-size: cover;
+    background-repeat: repeat;
+    background-image: ${({ imgurl }) => `url(${imgurl})`};
+    background-position: center;
     width: 200px;
     height: 200px;
+    border-radius: 10%;
+    border: none;
   }
 `;
 
@@ -562,8 +562,14 @@ const ChatVideo = styled.video`
   border-radius: 10%;
   border: none;
   @media only screen and (min-width: 320px) and (max-width: 650px) {
+    background-size: cover;
+    background-repeat: repeat;
+    background-image: ${({ imgurl }) => `url(${imgurl})`};
+    background-position: center;
     width: 200px;
     height: 200px;
+    border-radius: 10%;
+    border: none;
   }
 `;
 
@@ -586,6 +592,8 @@ const LoadingDiv = styled.div`
   }
 `;
 const UserProfileName = styled.div`
+  display: flex;
+  flex-direction: row;
   width: 120px;
   height: 19px;
   border: none;
