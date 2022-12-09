@@ -3,8 +3,8 @@ import axios from "axios";
 import { Cookies, useCookies } from "react-cookie";
 import { removeCookie, setCookie } from "../../MyTools/Hooks/MyCookie";
 
-const token = cookies.getItem("token");
-const cookies = new Cookies();
+const token = cookie.get("token");
+const [cookie, setCookie] = useCookies();
 const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
