@@ -312,25 +312,24 @@ const Chatting = () => {
                             {item.msg}
                           </ChatDiv>
                         ) : item.url?.split(".")[5] == "mp4" ? (
-                          // <>
-                          //   <ChatVideo
-                          //     className={name === item.nickname && "owner"}
-                          //     src={item?.url}
-                          //   />
-                          //   <Download href={item?.url}>다운로드</Download>
-                          // </>
-                          <div>mp4</div>
+                          <>
+                            <ChatVideo
+                              className={name === item.nickname && "owner"}
+                              src={item?.url}
+                            />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
                         ) : (
-                          //
-                          // <>
-                          //   <ChatImg
-                          //     className={name === item.nickname && "owner"}
-                          //     imgurl={item?.url}
-                          //   />
-                          //   <Download href={item?.url}>다운로드</Download>
-                          // </>
+                          // <div>mp4</div>
+                          <>
+                            <ChatImg
+                              className={name === item.nickname && "owner"}
+                              imgurl={item?.url}
+                            />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
 
-                          <div>img</div>
+                          // <div>img</div>
                         )}
                       </UserChatDiv>
                     </div>
