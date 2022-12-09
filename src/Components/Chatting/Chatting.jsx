@@ -188,12 +188,12 @@ const Chatting = () => {
     e.preventDefault();
     if (file?.name !== undefined) {
       postSend();
-      socket.emit("persnalchat", {
-        url: chatArr?.url,
-        nickname: chatArr?.nickname,
-      });
       setFile([]);
     }
+    socket.emit("persnalchat", {
+      url: chatArr?.url,
+      nickname: chatArr?.nickname,
+    });
     if (message.msg !== "") {
       socket.emit("persnalchat", {
         roomkey: room,
