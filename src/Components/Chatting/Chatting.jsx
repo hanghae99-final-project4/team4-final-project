@@ -108,6 +108,8 @@ const Chatting = () => {
     });
     socket.on(`${name}`, (message) => {
       console.log(message, "counteruser 메시지 잘 받아요");
+      setItemWithExpireTime("roomkey", room, 3000000000);
+
       setCounterUser(message);
     });
     console.log(counterUser, "난 카운터 유저 ");
@@ -177,7 +179,7 @@ const Chatting = () => {
           ]);
         });
       } else {
-        setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
+        setItemWithExpireTime("roomkey", room, 3000000000);
       }
     });
   }, []);
