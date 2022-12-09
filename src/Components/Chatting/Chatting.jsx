@@ -16,7 +16,7 @@ import { trainApi2 } from "../../Redux/Modules/Instance";
 import FrontHeader from "../Header/FrontHeader";
 import ExitIcon from "../../Element/ExitIcon";
 import ChattingHome from "../HomeMenu/ChattingHome";
-
+import { ReactComponent as ExitIconItem } from "../../Assets/Chatting/Exit.svg";
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
@@ -59,6 +59,7 @@ const Chatting = () => {
     // setItem
     window.localStorage.setItem(keyName, objString);
   }
+
   const scrollEvent = _.debounce(() => {
     console.log("scroll");
     const scrollTop = boxRef.current.scrollTop; //요소의 상단에서 맨 위에 표시 되는 콘텐츠까지의 거리를 측정한 것입니다.
@@ -141,7 +142,7 @@ const Chatting = () => {
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
       setRoom(message.roomkey);
-      setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
+      setItemWithExpireTime("roomkey", message.roomkey, 5000000000);
       //roomkey 들어오면 success 값 true
       if (
         message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
@@ -150,7 +151,7 @@ const Chatting = () => {
         setSuccess(true);
         console.log("실행됨", success);
       } else {
-        alert(message.fail);
+        window.alert(message.fail);
       }
       console.log("success", success);
 
@@ -158,12 +159,15 @@ const Chatting = () => {
       socket.on("broadcast", (message) => {
         console.log(message);
         console.log(chatArr);
+
+        getItemWithExpireTime("roomkey");
         getItemWithExpireTime("train");
         getItemWithExpireTime("nickname");
         getItemWithExpireTime("dropstation");
         setChatArr((chatArr) => [
           ...chatArr,
           {
+            roomkey: message.roomkey,
             nickname: message.name,
             msg: message.msg,
             profile: message.profile,
@@ -258,7 +262,15 @@ const Chatting = () => {
                   <ModalCtn>
                     <ModalWrap>
                       <CounterProfileImg src={counterUser?.representProfile} />
-                      <ExitIcon isModal={isModal} setIsModal={setIsModal} />
+                      <ExitIcon
+                        onClick={() => setIsModal(!isModal)}
+                        style={{
+                          cursor: "pointer",
+                          position: "absolute",
+                          right: "10px",
+                          top: "5px",
+                        }}
+                      />
                       <StationInfoDiv>
                         <TagDiv>
                           <NickNameTag>닉네임</NickNameTag>
