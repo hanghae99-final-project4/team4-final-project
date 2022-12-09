@@ -111,6 +111,7 @@ const Chatting = () => {
     socket.on(`${name}`, (message) => {
       // console.log(message);
       setCounterUser(message);
+      console.log(message);
     });
     // console.log(counterUser);
   };
@@ -134,8 +135,9 @@ const Chatting = () => {
     });
 
     socket.on(`${name}`, (message) => {
-      // console.log(message, `${name}`);
+      console.log(message, `입장 시 불러오는 socket.on`);
       setCounter(message);
+
       //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
       socket.emit("end", "");
       socket.emit("joinFair", { roomkey: message.roomkey });
