@@ -61,8 +61,13 @@ const ConversPage = () => {
   useEffect(() => {
     async function getNickname() {
       const { data } = await trainApi.getConvers();
-      // console.log(data.body);
-      setMessage(data.body);
+      if (
+        data?.errorMessage === "비정상적인 활동이 감지되어 로그아웃됩니다(2)."
+      ) {
+        return getNickname();
+      } else {
+        setMessage(data.body);
+      }
     }
     getNickname();
   }, []);
