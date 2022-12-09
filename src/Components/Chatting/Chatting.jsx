@@ -313,13 +313,19 @@ const Chatting = () => {
                           </ChatDiv>
                         ) : item.url?.split(".")[5] == "mp4" ? (
                           <>
-                            <ChatVideo a href={item?.url} src={item?.url} />
+                            <ChatVideo
+                              className={name === item.nickname && "owner"}
+                              src={item?.url}
+                            />
                             <Download href={item?.url}>다운로드</Download>
                           </>
                         ) : (
                           // <div>mp4</div>
                           <>
-                            <ChatImg imgurl={item?.url} />
+                            <ChatImg
+                              className={name === item.nickname && "owner"}
+                              imgurl={item?.url}
+                            />
                             <Download href={item?.url}>다운로드</Download>
                           </>
 
