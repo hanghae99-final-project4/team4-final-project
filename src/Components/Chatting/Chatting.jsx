@@ -221,7 +221,7 @@ const Chatting = () => {
     try {
       const { data } = await trainApi2.chattingForm(formData);
       console.log("잘받음", data);
-      socket.emit("persnalchat", { url: data?.img, nickname: data?.name });
+      socket.emit("persnalchat", { url: data, roomkey: room });
 
       setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
     } catch (error) {
