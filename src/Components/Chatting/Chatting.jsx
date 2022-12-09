@@ -223,10 +223,11 @@ const Chatting = () => {
       console.log(error);
     }
     socket.emit("persnalchat", {
-      url: data.img,
-      nickname: data.name,
+      url: chatArr?.url,
+      nickname: chatArr?.nickname,
     });
   }
+
   socket.on("imgaeUP", (message) => {
     console.log(message);
   });
