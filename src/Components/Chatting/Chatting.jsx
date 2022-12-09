@@ -190,10 +190,15 @@ const Chatting = () => {
       postSend();
       setFile([]);
     }
-    socket.emit("persnalchat", {
-      url: chatArr?.url,
-      nickname: chatArr?.nickname,
-    });
+    console.log("여기까지 실행");
+    socket.emit(
+      "persnalchat",
+      {
+        url: chatArr?.url,
+        nickname: chatArr?.nickname,
+      },
+      console.log(chatArr?.url, chatArr?.nickname)
+    );
     if (message.msg !== "") {
       socket.emit("persnalchat", {
         roomkey: room,
