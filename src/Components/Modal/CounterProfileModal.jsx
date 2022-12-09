@@ -5,14 +5,12 @@ import ExitIcon from "../../Element/ExitIcon";
 const CounterProfileModal = ({
   isModal,
   setIsModal,
-  counterUser,
-  setCounterUser,
+
   gender,
   statusmessage,
   nickname,
   representProfile,
 }) => {
-  console.log(counterUser);
   return (
     <ModalCtn>
       <ModalWrap>
