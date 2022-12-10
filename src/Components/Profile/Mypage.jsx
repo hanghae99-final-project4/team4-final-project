@@ -9,7 +9,8 @@ import { Cookies } from "react-cookie";
 import { trainApi, trainApi2 } from "../../Redux/Modules/Instance";
 import { useNavigate } from "react-router-dom";
 import HomeMenu from "../HomeMenu/HomeMenu";
-import FrontHeader from "../Header/FrontHeader";
+import MypageHeader from "./MypageHeader";
+
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
@@ -153,8 +154,7 @@ const MyPage = () => {
   return (
     <>
       <Wrap>
-        <FrontHeader msg="나의정보" />
-
+        <MypageHeader msg={"나의정보"} />
         <TitleBox>
           <div>
             <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>
