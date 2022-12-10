@@ -77,9 +77,9 @@ http status가 401 경우 응답 에러 직전 호출.
 .catch() 으로 이어짐.
 */
 
-    const newToken = error.response.data.newJwtToken;
-    const ok = error.response.data.ok;
-    const statusValue = error.response.status;
+    const newToken = error?.response?.data?.newJwtToken;
+    const ok = error?.response?.data?.ok;
+    const statusValue = error?.response?.status;
 
     if (statusValue === 401 && ok !== 6) {
       alert("비정상적인 활동이 감지되어 로그인 화면으로 이동합니다.");

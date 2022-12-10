@@ -16,6 +16,7 @@ const Login = () => {
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
   const KAKAO = `${process.env.REACT_APP_KAKAO_URL}`;
   const GOOGLE = `${process.env.REACT_APP_GOOGLE_URL}`;
+  const NAVER = `${process.env.REACT_APP_NAVER_URL}`;
 
   const [Info, setInfo, onChangeValue, reset] = useInput({
     snsId: "",
@@ -35,7 +36,7 @@ const Login = () => {
   };
 
   const naverLogin = () => {
-    window.location.href = NAVER_AUTH_URL;
+    window.location.assign(NAVER);
   };
 
   //로그인 버튼
