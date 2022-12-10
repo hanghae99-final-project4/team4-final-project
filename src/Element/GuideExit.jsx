@@ -1,17 +1,17 @@
 import React from "react";
 import { ReactComponent as ExitIconItem } from "../Assets/Chatting/Exit.svg";
 import { useNavigate } from "react-router-dom";
-const GuideExit = () => {
+const GuideExit = ({ isModal, setIsModal }) => {
   const navigate = useNavigate();
 
   return (
     <ExitIconItem
-      onClick={() => navigate("/mypage")}
+      onClick={() => setIsModal(!isModal)}
       style={{
         cursor: "pointer",
-        position: "relative",
-        left: "150px",
-        top: "-550px",
+        position: "absolute",
+        right: "30px",
+        top: "40px",
       }}
     />
   );
