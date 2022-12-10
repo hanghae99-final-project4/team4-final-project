@@ -1,12 +1,10 @@
 import React from "react";
-import { ReactComponent as GuideIconItem } from "../Assets/GuideIcon.svg";
 import { ReactComponent as GuideIconItemtwo } from "../Assets/GuideIcontwo.svg";
-
+import GuideExit from "./GuideExit";
 const GuideIcon = () => {
   return (
     <div>
-      <GuideIconItem />
-      <GuideIconItemtwo />
+      <GuideIconItemtwo></GuideIconItemtwo>
     </div>
   );
 };
