@@ -10,32 +10,14 @@ const NaverLogin = () => {
   const cookies = new Cookies();
   const [tokens, setTokens] = useCookies(["token"]);
 
-  // useEffect(() => {
-  // 인가코드 확인하기
   const code = new URL(window.location.href).searchParams.get("code");
   const state = new URL(window.location.href).searchParams.get("state");
-  // console.log("인가코드", code);
-  // const yhURL = process.env.REACT_APP_YH_HOST;
-  const thURL = process.env.REACT_APP_TH_S_HOST;
-  // const thURL = process.env.REACT_APP_TH_HOST;
-  // console.log(1);
-  //1. url에 뜬 인가코드 추출한 것 토큰 get요청 할 때 url 쿼리로 보내기.
-  // 2. 토큰(카카오토큰이든 자체 jwt토큰이든 )get으로 받기
-  axios
-    .get(
-      `${thURL}/auth/naver/callback?code=${code}&state=${state}`
-      //       {
-      //   headers: {
-      //     Authorization: `${token}`,
-      //   },
-      // }
-    )
-    .then((res) => {
-      // console.log(res);
-      // console.log(res.data);
-      // console.log(res.data.jwtToken);
-      // console.log(res.data.message);
 
+  const thURL = process.env.REACT_APP_TH_S_HOST;
+
+  axios
+    .get(`${thURL}/auth/naver/callback?code=${code}&state=${state}`)
+    .then((res) => {
       const token = res.data.jwtToken;
       const msg = res.data.message;
       const doneInfo = res.data.doneAdditionalInfo;
@@ -45,20 +27,19 @@ const NaverLogin = () => {
       if (doneInfo === true) {
         navigator("/subwaypage");
       } else {
-        navigator("/signup");
+        navigator("/authcode");
       }
       alert(`${msg}`);
     });
-  //   .catch((err) => {
-  //     console.log(1);
-  //     console.log(err);
-  //   });
-  // // }, []);
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <img src={FirstLogo} alt="firstlogo" className="block m-[auto]" />
     </div>
   );
 };
-
+//네이버로그인
+//
+//
+//
 export default NaverLogin;

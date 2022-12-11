@@ -1,14 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeaderIcon from "../../Element/HeaderIcon";
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <div>
       {" "}
       <MainHeader>
         <HeaderIcon />
-        환승시민
+        나의정보
       </MainHeader>
     </div>
   );

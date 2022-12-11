@@ -8,10 +8,13 @@ import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
 import { trainApi } from "../Redux/Modules/Instance";
+import FrontHeader from "../Components/Header/FrontHeader";
+import { ReactComponent as HowIcon } from "../Assets/Convers/How.svg";
+import { useState } from "react";
+import HelpModal from "../Components/Modal/HelpModal";
 const cookies = new Cookies();
 
 const token = cookies.get("token");
-// console.log(token);
 const ConversPage = () => {
   const initialState = {
     nickname: "",
@@ -21,10 +24,11 @@ const ConversPage = () => {
     dropstation: "",
     from: false,
   };
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
-  console.log(message);
+  const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -43,8 +47,13 @@ const ConversPage = () => {
     setItemWithExpireTime("profile", message.representProfile, 3000000000);
     setItemWithExpireTime("nickname", message.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
-    reset("");
-    navigate("/chattingpage");
+    if (message?.train.length !== 4) {
+      window.alert("칸 정보는 숫자로만 4자리만 입력해주세요!!");
+    } else {
+      reset("");
+
+      navigate("/chattingpage");
+    }
   };
   const CanselHandler = () => {
     navigate("/subwaypage");
@@ -52,16 +61,20 @@ const ConversPage = () => {
   useEffect(() => {
     async function getNickname() {
       const { data } = await trainApi.getConvers();
-      console.log(data);
-      setMessage(data.body);
+      if (
+        data?.errorMessage === "비정상적인 활동이 감지되어 로그아웃됩니다(2)."
+      ) {
+        return getNickname();
+      } else {
+        setMessage(data.body);
+      }
     }
     getNickname();
   }, []);
-  console.log(message);
 
   return (
-    <>
-      <Header />
+    <MaxDiv>
+      <FrontHeader msg="환승시민" />
       <CoversCtn>
         <ProfileBox>
           <InfoDiv style={{ fontSize: "30px" }}>
@@ -76,11 +89,22 @@ const ConversPage = () => {
           </InfoDiv>
           <StationDiv>
             <SquareInfo>
-              <span style={{ fontSize: "14px", fontWeight: "1000" }}>
-                칸 정보
-              </span>
+              <HowDiv>
+                <span style={{ fontSize: "14px", fontWeight: "1000" }}>
+                  칸 정보
+                </span>
+                <HowIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setModal(!modal)}
+                />
+                {modal && <HelpModal modal={modal} setModal={setModal} />}
+              </HowDiv>
+
               <StationInfo
-                placeholder="칸 정보 입력"
+                minLength={4}
+                maxLength={4}
+                pattern={/^[0-9]/g}
+                placeholder="칸 정보 입력 4자리만"
                 value={message?.train}
                 name="train"
                 onChange={onChangeHandler}
@@ -123,15 +147,23 @@ const ConversPage = () => {
         </ProfileBox>
         <HomeMenu />
       </CoversCtn>
-    </>
+    </MaxDiv>
   );
 };
 
 export default ConversPage;
+
+const MaxDiv = styled.div`
+  margin: 0 auto;
+  overflow-y: hidden;
+  width: 375px;
+  height: 812px;
+`;
 const CoversCtn = styled.div`
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  scroll-behavior: unset;
+  width: 375px;
+  height: 767px;
   margin: auto;
   background-color: white;
   display: flex;
@@ -140,8 +172,9 @@ const CoversCtn = styled.div`
   justify-content: flex-start;
 
   @media only screen and (min-width: 375px) {
+    overflow-y: hidden;
     width: 375px;
-    height: 812px;
+    height: 767px;
 
     display: flex;
     flex-direction: column;
@@ -151,13 +184,14 @@ const CoversCtn = styled.div`
 `;
 const ProfileBox = styled.div`
   width: 100%;
-  height: 415px;
+  height: 399px;
   border: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 375px) and (max-width: 650px) {
     margin-left: 15px;
+    height: 399px;
   }
 `;
 
@@ -206,7 +240,7 @@ const ButtonDiv = styled.div`
   flex-direction: row;
   margin-top: 15px;
   gap: 10px;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 375px) and (max-width: 650) {
     margin-left: 10px;
   }
 `;
@@ -239,3 +273,9 @@ const SpanDiv = styled.div`
     margin-left: 33px;
   }
 `;
+const HowDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3%;
+`;
+//

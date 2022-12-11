@@ -13,6 +13,8 @@ import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
 import { trainApi2 } from "../../Redux/Modules/Instance";
+import FrontHeader from "../Header/FrontHeader";
+import ChattingHome from "../HomeMenu/ChattingHome";
 
 const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const Chatting = () => {
@@ -42,13 +44,7 @@ const Chatting = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const thURL = process.env.REACT_APP_TH_S_HOST;
-  console.log(isModal);
-  console.log(name);
   console.log(room);
-  console.log(message);
-  console.log(chatArr);
-  console.log(file);
-
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -106,16 +102,17 @@ const Chatting = () => {
   //상대방 프로필
   const CounterUserHandler = () => {
     setIsModal(true);
-    console.log(counter);
     socket.emit("counteruser", {
       fair: counter.fair,
       ownself: counter.ownself,
     });
     socket.on(`${name}`, (message) => {
-      console.log(message);
+      console.log(message, "counteruser 메시지 잘 받아요");
+      setItemWithExpireTime("roomkey", room, 3000000000);
+
       setCounterUser(message);
     });
-    console.log(counterUser);
+    console.log(counterUser, "난 카운터 유저 ");
   };
 
   ///매칭 순서대로 randomjoin => maching => name
@@ -125,7 +122,7 @@ const Chatting = () => {
       socket.emit("leaveRoom", roomkey);
       localStorage.removeItem("roomkey");
     }
-    console.log(roomkey);
+    // console.log(roomkey);
     socket.emit("randomjoin", {
       train: JSON.parse(localStorage.getItem("train")).value,
       nickname: JSON.parse(localStorage.getItem("nickname")).value,
@@ -137,41 +134,53 @@ const Chatting = () => {
     });
 
     socket.on(`${name}`, (message) => {
-      console.log(message, `${name}`);
-      setCounter(message);
-      //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
-      socket.emit("end", "");
-      socket.emit("joinFair", { roomkey: message.roomkey });
-      setRoom(message.roomkey);
-      setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
-      //roomkey 들어오면 success 값 true
-      if (
-        message.fail !== "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
-        message.roomkey !== null
-      ) {
-        setSuccess(true);
-        console.log("실행됨", success);
-      } else {
-        alert(message.fail);
-      }
-      console.log("success", success);
+      if (message.roomkey !== undefined) {
+        console.log(message, `입장 시 불러오는 socket.on`);
+        setCounter(message);
 
-      //메시지 들어온대로 렌더 해주기
-      socket.on("broadcast", (message) => {
-        console.log(message);
-        console.log(chatArr);
-        getItemWithExpireTime("train");
-        getItemWithExpireTime("nickname");
-        getItemWithExpireTime("dropstation");
-        setChatArr((chatArr) => [
-          ...chatArr,
-          {
-            nickname: message.name,
-            msg: message.msg,
-            profile: message.profile,
-          },
-        ]);
-      });
+        //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
+        socket.emit("end", "");
+        socket.emit("joinFair", { roomkey: message.roomkey });
+        console.log(message.roomkey);
+        if (message.roomkey !== undefined) {
+          setRoom(message.roomkey);
+        }
+
+        setItemWithExpireTime("roomkey", message.roomkey, 3000000000);
+        //roomkey 들어오면 success 값 true
+        if (
+          message.fail !==
+            "매칭 가능한 상대방이 없습니다. 다시 시도해주세요." &&
+          message.roomkey !== undefined
+        ) {
+          setSuccess(true);
+          console.log("실행됨", success);
+        } else {
+          alert(message.fail);
+        }
+        console.log("success", success);
+
+        //메시지 들어온대로 렌더 해주기
+        socket.on("broadcast", (message) => {
+          console.log(message);
+          console.log(chatArr);
+          getItemWithExpireTime("train");
+          getItemWithExpireTime("nickname");
+          getItemWithExpireTime("dropstation");
+          setChatArr((chatArr) => [
+            ...chatArr,
+            {
+              roomkey: message.roomkey,
+              nickname: message.name,
+              msg: message.msg,
+              profile: message.profile,
+              url: message.url,
+            },
+          ]);
+        });
+      } else {
+        setItemWithExpireTime("roomkey", room, 3000000000);
+      }
     });
   }, []);
 
@@ -192,6 +201,8 @@ const Chatting = () => {
       postSend();
       setFile([]);
     }
+    console.log("여기까지 실행");
+
     if (message.msg !== "") {
       socket.emit("persnalchat", {
         roomkey: room,
@@ -208,6 +219,7 @@ const Chatting = () => {
       reset(initialState);
     }
   };
+
   //이미지 비디오 보내는 로직
   async function postSend() {
     const formData = new FormData();
@@ -220,54 +232,23 @@ const Chatting = () => {
     try {
       const { data } = await trainApi2.chattingForm(formData);
       console.log("잘받음", data);
-      setChatArr([...chatArr, { nickname: data.name, url: data.img }]);
+      socket.emit("persnalchat", {
+        url: data?.img,
+        nickname: data?.name,
+        roomkey: room,
+      });
     } catch (error) {
       console.log(error);
     }
-    socket.on("imgaeUP", (message) => {
-      console.log(message);
-    });
   }
-  const sendHandler = () => {
-    //   const formData = new FormData();
-    //   formData.append("image", postPicture[0]);
-    //   for (const key of formData.entries()) {
-    //     console.log(key);
-    //   }
-    //   socket.emit("imgaeUP", {
-    //     image: postPicture[0]?.preview,
-    //   });
-    //   socket.on("imgaeUP", (message) => {
-    //     console.log(message);
-    //   });
+
+  socket.on("imgaeUP", (message) => {
+    console.log(message);
+  });
+  const download = () => {
+    window.location.assign();
   };
-  //     socket.emit("randomchat", {
-  //       msg: message.msg,
-  //       roomkey: room,
-  //     });
-  // socket.on("broadcast", (message) => {
-  //   console.log(message.msg);
-  // });
-  // };
-  // };
-
-  //   socket.emit("imagaeUP", {
-  //     image: formData,
-  //   });
-
-  //   socket.on("broadcast", (message) => {
-  //     console.log(message.msg);
-  //   });
-  // };
-  //   socket.emit("randomchat", {
-  //     msg: message.msg,
-  //     roomkey: room,
-  //   });
-
-  //   socket.on("broadcast", (message) => {
-  //     console.log(message.msg);
-  //   });
-  // };
+  // console.log(chatArr?.url, chatArr?.nickname, chatArr);
 
   return (
     <div
@@ -277,10 +258,10 @@ const Chatting = () => {
         alignItems: "center",
       }}
     >
-      <Header />
       {success ? (
-        <>
-          <div>
+        <FooterBox>
+          <div style={{ height: "812px" }}>
+            <FrontHeader msg={counter?.fair} />
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
                 {isModal && (
@@ -326,7 +307,7 @@ const Chatting = () => {
                         item.profile !== undefined ? (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={CounterUserHandler}
+                              onClick={(e) => CounterUserHandler(e)}
                               src={item.profile}
                             />
                             <UserProfileName>{item.nickname}</UserProfileName>
@@ -334,7 +315,7 @@ const Chatting = () => {
                         ) : (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={CounterUserHandler}
+                              onClick={(e) => CounterUserHandler(e)}
                               src={
                                 "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg"
                               }
@@ -353,10 +334,23 @@ const Chatting = () => {
                             {item.msg}
                           </ChatDiv>
                         ) : item.url?.split(".")[5] == "mp4" ? (
-                          <ChatVideo src={item?.url} />
+                          <>
+                            <ChatVideo
+                              className={name === item.nickname && "owner"}
+                              src={item?.url}
+                            />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
                         ) : (
                           // <div>mp4</div>
-                          <ChatImg imgurl={item?.url} />
+                          <>
+                            <ChatImg
+                              className={name === item.nickname && "owner"}
+                              imgurl={item?.url}
+                            />
+                            <Download href={item?.url}>다운로드</Download>
+                          </>
+
                           // <div>img</div>
                         )}
                       </UserChatDiv>
@@ -372,13 +366,14 @@ const Chatting = () => {
                   type="file"
                   name="picture"
                   maxSize={300000000}
-                  value={file.picture}
+                  value={file?.picture}
                   accept="image/*,video/*"
                   multiple
                   onChange={(e) => setFile(e.target.files[0])}
                 />
                 <ImageFormIcon inputRef={inputRef} />
                 <ChatInput
+                  placeholder="이미지 첨부는 이미지 첨부 후 전송 버튼 누르시오"
                   type="text"
                   value={message.msg}
                   name="msg"
@@ -390,9 +385,8 @@ const Chatting = () => {
               </FooterDiv>
             </AllChatDiv>
           </div>
-
-          <HomeMenu />
-        </>
+          <ChattingHome />
+        </FooterBox>
       ) : (
         <>
           <LoadingDiv>
@@ -413,8 +407,8 @@ const Chatting = () => {
             {/* <button onClick={() => postSend()}>post 보내기</button>
             <input value={message.msg} onChange={onChangeHandler} name="msg" />
             <button onClick={() => sendHandler()}>제출</button> */}
+            <ChattingHome />
           </LoadingDiv>
-          <HomeMenu />
         </>
       )}
     </div>
@@ -434,7 +428,7 @@ const PostPictureDiv = styled.div`
 //전체 채팅방
 const ChatMainDiv = styled.div`
   overflow-y: hidden;
-  height: 608px;
+  height: 620px;
   width: 375px;
   padding: 0 16px;
 `;
@@ -450,9 +444,9 @@ const FooterDiv = styled.form`
   position: relative;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
-  bottom: 0px;
+  bottom: -30px;
   background-color: #ffffff;
-  height: 68px;
+  height: 67px;
   width: 375px;
 `;
 const Forminput = styled.input`
@@ -574,28 +568,43 @@ const ChatImg = styled.div`
   height: 300px;
   border-radius: 10%;
   border: none;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
     width: 200px;
     height: 200px;
   }
 `;
 
 const ChatVideo = styled.video`
+  background-size: cover;
+  background-repeat: repeat;
+  background-image: ${({ imgurl }) => `url(${imgurl})`};
+  background-position: center;
   width: 300px;
   height: 300px;
   border-radius: 10%;
   border: none;
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const LoadingDiv = styled.div`
   margin: auto;
   overflow-y: hidden;
-  width: 100%;
-  height: 100%;
+  width: 375px;
+  height: 812px;
   display: flex;
   align-items: center;
   justify-content: center;
-  @media only screen and (min-width: 375px) {
+  @media only screen and (min-width: 320px) and (max-width: 650px) {
+    margin: auto;
+    overflow-y: hidden;
+    width: 375px;
+    height: 812px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 const UserProfileName = styled.div`
@@ -611,3 +620,129 @@ const UserProfileName = styled.div`
 const AllChatDiv = styled.div`
   position: relative;
 `;
+
+const Download = styled.a`
+  width: 88px;
+  height: 38px;
+  background-color: #c3f4ff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  font-family: "Noto Sans KR", sans-serif;
+`;
+
+const FooterBox = styled.div`
+  height: 812px;
+  position: relative;
+`;
+const ModalCtn = styled.div`
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: ${(isModal) => (isModal ? "block" : "none")};
+  position: absolute;
+
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0;
+
+  z-index: 1000;
+`;
+//상대 프로필 전체 div
+const ModalWrap = styled.div`
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 15%;
+
+  width: 342px;
+  height: 429px;
+  background-color: #dcf9ff;
+  box-shadow: 10px 15px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+`;
+const StationInfoDiv = styled.div`
+  height: 300px;
+  display: flex;
+
+  flex-direction: column;
+  justify-content: flex;
+`;
+//닉네임 + 값
+const TagDiv = styled.div`
+  margin-top: 11px;
+  margin-left: 23px;
+  width: 227px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+//style + 값
+const StatusTagDiv = styled.div`
+  margin-top: 40px;
+  margin-left: 23px;
+  width: 267px;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+//닉네임 값
+const Nickname = styled.div`
+  padding-left: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #ffffff;
+  color: #797979;
+  border-radius: 10px;
+  width: 140px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+`;
+//닉네임 태그
+const NickNameTag = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+  width: 50px;
+  height: 19px;
+`;
+//상대방 프로필 이미지
+const CounterProfileImg = styled.img`
+  width: 110px;
+  height: 110px;
+  border-radius: 20px;
+  margin-left: 117px;
+  margin-top: 18px;
+`;
+//상태메시지 태그
+const StatusTag = styled.div`
+  width: 100px;
+  height: 20px;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 114px;
+`;
+
+const StatusMessage = styled.div`
+  margin-top: -36px;
+  padding-left: 8px;
+  padding-top: 15px;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: #ffffff;
+  color: #797979;
+  border-radius: 10px;
+  width: 180px;
+  height: 100px;
+  display: flex;
+  margin-left: 17px;
+`;
+//
