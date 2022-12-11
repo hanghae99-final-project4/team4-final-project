@@ -70,10 +70,10 @@ const AuthCode = () => {
       const { data } = await trainApi.postAuthPhone({
         phoneNumber: form.phoneNumber,
       });
-      console.log(data);
+      // console.log(data);
       alert(data.msg);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       const status = err.response.status;
       const errMsg = err.response.data.error;
       const errMsg_501 = err.response.data.message;
