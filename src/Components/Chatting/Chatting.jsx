@@ -16,7 +16,11 @@ import { trainApi2 } from "../../Redux/Modules/Instance";
 import FrontHeader from "../Header/FrontHeader";
 import ChattingHome from "../HomeMenu/ChattingHome";
 
-const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
+// const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
+const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
+  path: "/socket.io",
+  transports: ["websocket"],
+});
 const Chatting = () => {
   const name = JSON.parse(localStorage.getItem("nickname")).value;
   const profile = JSON.parse(localStorage.getItem("profile")).value;
@@ -134,6 +138,7 @@ const Chatting = () => {
     });
 
     socket.on(`${name}`, (message) => {
+      //roomkey 를 가지고 있는 상태이면
       if (message.roomkey !== undefined) {
         console.log(message, `입장 시 불러오는 socket.on`);
         setCounter(message);
