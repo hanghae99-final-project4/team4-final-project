@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
         list-style: none;
     }
     button {
-        border: 0;
+        /* border: 0; */
         background: transparent;
         cursor: pointer;
     }
