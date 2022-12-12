@@ -9,6 +9,7 @@ import logo from "../Assets/Logo.svg";
 import signmsg from "../Assets/SignIn/SignMsg.svg";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import signintext from "../Assets/SignIn/signinText.svg";
 
 const Login = () => {
   const [cookie, setCookie, removeCookie] = useCookies();
@@ -39,7 +40,8 @@ const Login = () => {
     window.location.assign(NAVER);
   };
 
-  //로그인 버튼
+  //로그인버튼
+
   const onSignIn = async (e) => {
     e.preventDefault();
 
@@ -49,7 +51,7 @@ const Login = () => {
         password: Info.password,
       })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
 
         const token = res.data.jwtToken;
         const msg = res.data.message;
@@ -59,16 +61,14 @@ const Login = () => {
         if (token) {
           setCookie("token", token, { path: "/" });
         }
-
+        //추가정보입력란, 핸드폰 인증 안 할 시
         if (doneInfo === false && donePhone === false) {
-          // console.log(res);
+          console.log(res);
+          alert("환승시민정보를 기입해주세요!");
           navigate("/authcode");
-          alert("추가정보를 입력해주세요!");
         } else if (doneInfo === true && donePhone === true) {
           alert(`${msg}`);
           navigate("/subwaypage");
-        } else {
-          navigate("/authcode");
         }
       })
       .catch((err) => {
@@ -76,26 +76,24 @@ const Login = () => {
         const errMsg = err.response.data.message;
         alert(errMsg);
       });
-
-    reset();
   };
 
   const signUp = (e) => {
+    e.preventDefault(e);
     navigate("/subsign");
   };
 
   return (
-    <Login1 className="w-[375px] p-[0px] flex flex-col justify-center items-center font-sans">
-      <LoginBox className="w-[375px] relative pt-[60px] flex-col items-center rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.3)]">
+    <Login1 className="h-[812px] flex flex-col justify-center items-center">
+      <LoginBox className="relative pt-[60px] flex-col items-center rounded-[10px]">
         <article className="justify-center items-center">
-          <div className="w-[276px] h-[90px] mt-[30px] leading-[33px] flex flex-col justify-center items-center mx-[auto] my-[0px]">
-            <h2 className="w-[full] mx-[auto] my-[0px] font-[600] text-[1.4rem] text-center">
+          <div className="w-[276px] h-[90px] mt-[30px] flex flex-col gap-[16px] justify-center items-center mx-[auto] my-[0px]">
+            <h1 className="w-[full] mx-[auto] my-[0px] font-[600] text-[1.4rem] text-center">
               {/* 지하철에서 <br />
-              새로운 인연을 만나보아요. */}
-              <p>지하철에서</p>
-              <p>새로운 인연을 만나보아요.</p>
-            </h2>
-            <p className="block w-[275px] mt-[10px] text-center text-[0.8rem]">
+            새로운 인연을 만나보아요. */}
+              <img src={signintext} alt="pretext" />
+            </h1>
+            <p className="block w-[275px] text-center text-[0.8rem]">
               <img src={signmsg} alt="machingInfo" />
             </p>
           </div>
@@ -147,8 +145,8 @@ const Login = () => {
                 </div>
               </form>
             </div>
-            <div className="absolute bottom-[40px]">
-              <div className="gap-[10px] flex flex-col justify-center items-center">
+            <div className="absolute bottom-[40px] flex justify-center items-center">
+              <div className="gap-[10px] mx-[auto] my-[0px] flex flex-col justify-center items-center">
                 {/* 카카오로그인 */}
                 <button
                   className="rounded-[12px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
@@ -195,7 +193,7 @@ const Login1 = styled.div`
 
 const LoginBox = styled.div`
   width: 100%;
-  height: 770px;
+  height: 812px;
   @media screen and (min-width: 320px) and (max-width: 375px) {
     font-size: 1rem;
   } ;
