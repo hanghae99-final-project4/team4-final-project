@@ -51,11 +51,11 @@ BE: nodejs,Javascript,JWT,PASSPORT,mySQL,swagger,socketio
 |마이 프로필 조회   | GET  | /profile | - | { msg: "유저 프로필이 조회되었습니다", body: userProfileInfo } | `인증 토큰 필수` |
 |마이 프로필 삭제(회원 탈퇴 시)| DELETE | /profile| - | - | `인증 토큰 필수` |
 ---
-### 아키텍처
+## 아키텍처
 
 ![qwe jpg drawio](https://user-images.githubusercontent.com/113084907/207002835-50b4fa8f-d4f5-4435-99a3-b802ec551c78.png)
 
-### 주요기능 구성
+## 주요기능 구성
 
 1. 소셜로그인(passport)
 
@@ -83,8 +83,8 @@ BE: nodejs,Javascript,JWT,PASSPORT,mySQL,swagger,socketio
 
    - namespace와 room, join, leave 기능을 이용해서 우리의 매칭, 채팅 기능을 이용하기에 최적화했습니다.
 
-
-### 라이브러리
+<br />
+## 라이브러리
 
 - 사용 편집기 : 	<img src="https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=flat&logo=VisualStudioCode&logoColor=white" />
 
