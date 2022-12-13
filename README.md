@@ -36,9 +36,9 @@ BE: nodejs,Javascript,JWT,PASSPORT,mySQL,swagger,socketio
 프론트엔드 팀 `FE`
 |팀내 포지션| 한 줄 소개 | 이름 | 깃허브 | 블로그 |
 |--------|----------|-------|------|-------|
-|부리더|   |김재우 |https://github.com/wyswhsl21|||
-|팀원 |   |남해리|https://github.com/NSunR|||
-|팀원 |   |이상현|https://github.com/shlee1027|||
+|부리더| 레드어몽이 |김재우 |https://github.com/wyswhsl21|||
+|팀원 | 건치감자 |남해리|https://github.com/NSunR|||
+|팀원 | 레드어몽이 |이상현|https://github.com/shlee1027|||
 
 ## API 명세서  
 아래는 API 명세서 입니다.
@@ -55,6 +55,33 @@ BE: nodejs,Javascript,JWT,PASSPORT,mySQL,swagger,socketio
 
 ![qwe jpg drawio](https://user-images.githubusercontent.com/113084907/207002835-50b4fa8f-d4f5-4435-99a3-b802ec551c78.png)
 
+### 주요기능 구성
+
+1. 소셜로그인(passport)
+
+   - 카카오, 구글, 네이버가 구비되어있고, 
+     다양한 선택지의 간편로그인으로 서비스를 이용할 수 있습니다.
+
+     
+
+2. 일반 로그인, 회원가입, 추가정보(환승시민 인증정보)
+
+   - 빠른 로그인으로 서비스를 접할 수 있고, 환승시민만의 추가인증정보로 서비스를 이용하는 이용자에게 매칭되는 상대에 대한 실제 인증 정보에 대해 신뢰도를 높여줍니다.
+
+3. 마이페이지
+
+   - FormData전송 get, post로 이미지(최대 5개)를 등록하고 대표이미지(represent image)를 정해서 다른 유저에게 자신의 인상을 주고 상태메세지를 통해 자신을 소개할 수 있습니다.
+
+     
+
+4. 1:1 채팅기능  ([Socket.io](http://Socket.io))
+
+   - 본인이 탑승하는 열차에 한정된 채팅범위를 뒀습니다.
+   - 채팅 중 대기 화면 움직이는 로고로 이용자의 기다림을 달랩니다.
+   - 채팅창 내에서 이미지,동영상 전송 가능합니다.
+   - 방에서 이탈하면 어떠한 정보도 저장하지않고 그대로 종료할 수 있습니다.
+
+   - namespace와 room, join, leave 기능을 이용해서 우리의 매칭, 채팅 기능을 이용하기에 최적화했습니다.
 
 
 ### 라이브러리
