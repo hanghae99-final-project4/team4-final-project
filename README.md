@@ -131,6 +131,7 @@ AXIOS에 내장된 인터셉터 함수로 request, response 별로 토큰을 우
 <details>
 <summary> 고객 반응 1- 회원가입 및 추가정보 부분 </summary>
 <div markdown="1">
+  
 |관련사항| 내용  |
 |--------|----------|
 |담당자| FE- 남해리 |
@@ -155,9 +156,10 @@ AXIOS에 내장된 인터셉터 함수로 request, response 별로 토큰을 우
 |해결 및 개선 2  |버튼의 크기를 키우고 필수 요건임을 알리기 위한 안내문을 추가했습니다. ex) 크기 키우고 안내 추가. ⇒ 사진첨부, 사진첨부 필수.  |
 |개선  2 |![image](https://user-images.githubusercontent.com/76435572/207478717-72f72df1-0ca0-4d1a-851f-36919eb4c7bd.png) |
 
+
+***
 </div>
 </details>
-***
 
 ## 폴더 구조
 ```text
