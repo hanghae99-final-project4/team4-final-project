@@ -139,24 +139,33 @@ AXIOS에 내장된 인터셉터 함수로 request, response 별로 토큰을 우
 <br />
 
 <details>
-<summary>1.채팅이 원활하지 않았던 이유?</summary>
+<summary>2.채팅이 원활하지 않았던 이유?</summary>
 <div markdown="1">
   
 
 |관련사항| 내용  |
 |--------|----------|
+|담당자| FE-김재우 |
 |문제|  roomkey가 사라진 후 채팅을 보내게 되면 서버에서 msg 를 두번씩 보내는 현상 발생. |
 |도입이유 | roomkey를 서버에 보내야만 이 사람이 room 에 들어있는 유저라는걸 서버에서 인식을 하는데, 어느 순간부터 roomkey가 사라져, 서버에서 이용하는 유저가 채팅방에 들어있는 사람인지 인식하기가 힘들어짐.|
 |선택지 1안|1안.메시지를 받을때마다 서버에서 roomkey를 보내줘서 roomkey를 다시 저장하는 방법 => 서버에서 계속 roomkey를 보내주면 다른 이용자가 roomkey가 갑자기 바뀌어 다른 room에 있는 유저들과도 채팅이 가능하게 됨.|
-|선택지 2안|2안.해당 문제점을 개선한 방법이기도 하다.roomkey를 가지고 있을때와 없을때 조건을 걸어서 다시 roomkey를 저장하지 않게끔 코드를 수정함. |
-
+|선택지 2안|2안.해당 문제점을 개선한 방법이기도 하다.roomkey를 가지고 있을때와 없을때 조건을 걸어서 다시 roomkey를 저장하지 않게끔 코드를 수정함.|
 |조율 |  1안은 문제점은 개선되겠지만 개선 되면서 또 다른 문제점이 또 발생하게 될 수 있기 때문에, 2안으로 결정하게 됨.  |
-|의견결정 | (첫번째 첨부사진)선택지 2로 결정했습니다. 첫번째로, 토큰이 해제 안 되고 계속 장착되어 로그인을 유지하기 위해 매번 request, response의  config, error처리에 토큰 항상  붙여 내보냅니다| |
-|과정1 | ![트러블슈팅 과정1](https://user-images.githubusercontent.com/108774881/207602360-b4e2f96d-6204-4674-82a7-f968c646bde5.png)
-  |
-|과정2 |   (두번째 첨부사진)두번째로, response값을 내보낼 때, 토큰을 적용하는 코드 외에 값을 별 과정없이 통째로 내보내는 코드(return config, return error.config, 토큰장착)로 유지해서 response값이 처리되는 과정이 느리지 않게 하기로 결정했습니다. |
-|과정3 |   ![image](https://user-images.githubusercontent.com/76435572/207472009-0b153457-3f0b-4d22-a3bc-fd79bed6764b.png) |
-  
+|의견결정 |roomkey를 가지고 있을때와 없을때 조건을 걸어서 다시 roomkey를 저장하지 않게끔 코드를 수정해줌.
+그리고 상대방 프로필 봤을경우에도 roomkey 가 사라지는걸 방지하기 위해서 다시 roomkey를 localstorage 에 저장하게끔 코드를 수정해서 
+roomkey 가 사라지는 현상을 해결함.|
+|해결과정 설명|
+-해결방안- 
+먼저 roomkey 가 사라지는 sequence 를 찾아서 어떤 특정 행동을
+했을 시 roomkey 가 사라지는지 확인.
+<br>
+roomkey 가 사라지는 logic 은 상대방 프로필을 확인했을경우 roomkey 가 사라짐.
+<br>
+해당 상대방 프로필을 확인할 시 socket.on name이라는 값으로 서버에서 데이터를 받게 되는데 .. 해당 로직이 맨처음 진입시에도 
+socket.on name 을 쓰고 있어 roomkey가 사라지는 현상이 발생됨을 찾음.|
+|과정1 | ![개선사항](https://user-images.githubusercontent.com/108774881/207612227-539b68a4-108d-4da0-a381-e1fcfedf168b.png)|
+|과정2 | ![개선사항2](https://user-images.githubusercontent.com/108774881/207616896-bc04713d-189c-4113-924d-153d1c47af40.png) |
+
 </div>
 </details>
 <br />
