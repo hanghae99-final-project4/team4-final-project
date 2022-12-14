@@ -50,7 +50,7 @@
 |마이 프로필 업데이트| POST | /profile | { representProfile: 이미지파일, profileImage: [이미지파일], nickname: "jiji", statusmessage: "멋쟁이 4조" } | { status: 200, msg: "유저 프로필 정보가 수정되었습니다"}| `인증 토큰 필수` |
 |마이 프로필 조회   | GET  | /profile | - | { msg: "유저 프로필이 조회되었습니다", body: userProfileInfo } | `인증 토큰 필수` |
 |마이 프로필 삭제(회원 탈퇴 시)| DELETE | /profile| - | - | `인증 토큰 필수` |
----
+
 ***
 
 ## 아키텍처
@@ -58,6 +58,7 @@
 ![qwe jpg drawio](https://user-images.githubusercontent.com/113084907/207002835-50b4fa8f-d4f5-4435-99a3-b802ec551c78.png)
 
 <br />
+
 ***
 
 ## Front-End 라이브러리
@@ -70,6 +71,7 @@
 
 
 <br />
+
 ***
 
 ## 주요기능 구성
@@ -101,6 +103,7 @@
    - namespace와 room, join, leave 기능을 이용해서 우리의 매칭, 채팅 기능을 이용하기에 최적화했습니다.
 
 <br />
+
 ***
 
 ## 트러블슈팅(Trouble Shooting)
@@ -119,6 +122,8 @@
 |과정3 |   ![image](https://user-images.githubusercontent.com/76435572/207472009-0b153457-3f0b-4d22-a3bc-fd79bed6764b.png) |
 
 <br />
+
+***
 
 ## 고객 반응 및 개선사항
 ### 고객 반응 1- 회원가입 및 추가정보 부분
@@ -145,6 +150,7 @@
 |요구사항 2 |버튼이 작아 불편함을 느끼셨습니다. |
 |해결 및 개선 2  |버튼의 크기를 키우고 필수 요건임을 알리기 위한 안내문을 추가했습니다. ex) 크기 키우고 안내 추가. ⇒ 사진첨부, 사진첨부 필수.  |
 |개선  2 |![image](https://user-images.githubusercontent.com/76435572/207478717-72f72df1-0ca0-4d1a-851f-36919eb4c7bd.png) |
+
 
 ***
 
