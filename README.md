@@ -101,3 +101,17 @@
 
 ## 트러블슈팅(Trouble Shooting)
 
+|관련사항| 내용  |
+|--------|----------|
+|작성자|  남해리 |
+|도입이유 | 새 AccessToken을 받아 교체하거나 토큰을 받아 로그인 상태를 유지하기 위해 도입했습니다. |
+|선택지 |  1. instance에서만 bearer + 토큰달고 request는 사용 안 해 보기로 했습니다.
+
+          2. instance와 request와 response값에 토큰을 붙여 config값과 내보내고 return하는 값은 일반 config, error값만 통째로 내보내기로 했습니다.|
+|조율 |  코드를 줄이면 응답처리 소요시간이 줄어 좋지만 토큰도 유지되어야 한다고 생각했습니다.  |
+| 의견결정 | (첫번째 첨부사진)선택지 2로 결정했습니다. 첫번째로, 토큰이 해제 안 되고 계속 장착되어 로그인을 유지하기 위해 매번 request, response의  config, error처리에 토큰 항상  붙여 내보냅니다|
+| 과정1 |![image](https://user-images.githubusercontent.com/76435572/207471825-d556e40d-e4bb-4cc8-95ab-aaacbfe75d54.png)
+| 과정2 |  (두번째 첨부사진)두번째로, response값을 내보낼 때, 토큰을 적용하는 코드 외에 값을 별 과정없이 통째로 내보내는 코드(return config, return error.config, 토큰장착)로 유지해서 response값이 처리되는 과정이 느리지 않게 하기로 결정했습니다. |
+| 과정 3 | ![image](https://user-images.githubusercontent.com/76435572/207472009-0b153457-3f0b-4d22-a3bc-fd79bed6764b.png) |
+
+
