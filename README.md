@@ -105,7 +105,7 @@
 |--------|----------|
 |작성자|  남해리 |
 |도입이유 | 새 AccessToken을 받아 교체하거나 토큰을 받아 로그인 상태를 유지하기 위해 도입했습니다. |
-|선택지 |  1. instance에서만 bearer + 토큰달고 request는 사용 안 해 보기로 했습니다.
+|선택지 |  1. instance에서만 bearer + 토큰달고 request는 사용 안 해 보기로 했습니다. |
 
           2. instance와 request와 response값에 토큰을 붙여 config값과 내보내고 return하는 값은 일반 config, error값만 통째로 내보내기로 했습니다.|
 |조율 |  코드를 줄이면 응답처리 소요시간이 줄어 좋지만 토큰도 유지되어야 한다고 생각했습니다.  |
