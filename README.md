@@ -31,9 +31,9 @@
 프론트엔드 팀 `FE`
 |팀내 포지션| 한 줄 소개 | 이름 | 깃허브 | 블로그 |
 |--------|----------|-------|------|-------|
-|부리더| 산타 |김재우 |https://github.com/wyswhsl21|||
+|부리더| 크리스마스 케이크 |김재우 |https://github.com/wyswhsl21|||
 |팀원 | 건치감자 |남해리|https://github.com/NSunR|||
-|팀원 | 루돌프 |이상현|https://github.com/shlee1027|||
+|팀원 | 크리스마스 루돌프 |이상현|https://github.com/shlee1027|||
 
 ***
 
