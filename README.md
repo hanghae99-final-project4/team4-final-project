@@ -143,7 +143,16 @@
 |개선  2 |![image](https://user-images.githubusercontent.com/76435572/207478717-72f72df1-0ca0-4d1a-851f-36919eb4c7bd.png) |
 
 
+## 폴더 구조
 
+axios/lib
+  ├── adapters
+  │     └── http.js
+  ├── cancel
+  │     └── CancelToken.js
+  └── core
+        ├── InterceptorManager.js
+        └── Axios.js
 
 
 
