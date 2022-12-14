@@ -144,7 +144,7 @@
 
 
 ## 폴더 구조
-
+```text
 axios/lib
   ├── adapters
   │     └── http.js
@@ -154,7 +154,7 @@ axios/lib
         ├── InterceptorManager.js
         └── Axios.js
 
-
+```
 
 
 
