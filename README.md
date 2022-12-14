@@ -148,18 +148,17 @@
 ```text
 team4-final-project
   ├── public
-  │     └── favicon
+  │     └── favicon(홈페이지 파비콘)
   │     └── index.html
   │     └── logo192.png
   │     └── logo512.png
   ├── src
-  │     └── Assets
-  │     └── Components
-  │     └── Element
-  │     └── MyTools
-  │     └── Pages
-  │     └── Redux
-  │     └── Shared
+  │     └── Assets(페이지별 폴더로 나눠서 해당 이미지 파일 보관)
+  │     └── Components(페이지별 상세페이지로 쓰인 컴포넌트 보관)
+  │     └── Element(상세페이지 안의 필요한 컴포넌트들 보관)
+  │     └── MyTools(페이지별로 쓰인 hooks보관)
+  │     └── Pages(페이지별 코드)
+  │     └── Shared(인스턴스 및 라우팅설정 보관)
   │     └── App.js
   │     └── App.test.js
   │     └── index.css
@@ -168,11 +167,11 @@ team4-final-project
   │     └── setupTests.js
   │     
   └── .gitignore
-  └── package.json
-  └── postcss.config.js
-  └── prettierrc.js
-  └── README.md
-  └── tailwind.config.js
+  └── package.json (install해서 쓰는 패키지 및 라이브러리, 프레임워크 내역)
+  └── postcss.config.js (테일윈드css를 원활히 쓰기 위한 설정 파일)
+  └── prettierrc.js (띄어쓰기, 따옴표 설정으로 충돌 막기위한 설정 파일)
+  └── README.md (프로젝트 설명 마크다운 파일)
+  └── tailwind.config.js (테일윈드css를 원활히 쓰기 위한 묘듈 설정을 사용하는 파일)
   └── yarn.lock
        
 ```
