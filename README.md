@@ -104,8 +104,12 @@
 ***
 
 ## 트러블슈팅(Trouble Shooting)
-### 1. 장착된 토큰이 계속 해제되거나 만료되어 로그인 유지와 새 토큰교체가 원활히 이루어지지 않았습니다.
-### => AXIOS에 내장된 인터셉터 함수로 request, response 별로 토큰을 우편처럼 붙여 적용.
+<detail>
+  <summary> 1. 장착된 토큰이 계속 해제되거나 만료되어 로그인 유지와 새 토큰교체가 원활히 이루어지지 않았습니다. </summary>
+  <div markdown="1">
+  
+
+AXIOS에 내장된 인터셉터 함수로 request, response 별로 토큰을 우편처럼 붙여 적용.
 |관련사항| 내용  |
 |--------|----------|
 |담당자| FE- 남해리 |
@@ -117,7 +121,8 @@
 |과정1 |  ![image](https://user-images.githubusercontent.com/76435572/207471825-d556e40d-e4bb-4cc8-95ab-aaacbfe75d54.png) |
 |과정2 |   (두번째 첨부사진)두번째로, response값을 내보낼 때, 토큰을 적용하는 코드 외에 값을 별 과정없이 통째로 내보내는 코드(return config, return error.config, 토큰장착)로 유지해서 response값이 처리되는 과정이 느리지 않게 하기로 결정했습니다. |
 |과정3 |   ![image](https://user-images.githubusercontent.com/76435572/207472009-0b153457-3f0b-4d22-a3bc-fd79bed6764b.png) |
-
+  </div>
+</detail>
 <br />
 
 ***
