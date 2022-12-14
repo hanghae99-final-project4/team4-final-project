@@ -158,7 +158,7 @@ team4-final-project
   │     └── Element(상세페이지 안의 필요한 컴포넌트들 보관)
   │     └── MyTools(페이지별로 쓰인 hooks보관)
   │     └── Pages(페이지별 코드)
-  │     └── Shared(인스턴스 및 라우팅설정 보관)
+  │     └── Shared(인스턴스, 인터셉터 및 페이지 라우팅설정 보관)
   │     └── App.js
   │     └── App.test.js
   │     └── index.css
