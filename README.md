@@ -146,15 +146,35 @@
 
 ## 폴더 구조
 ```text
-axios/lib
-  ├── adapters
-  │     └── http.js
-  ├── cancel
-  │     └── CancelToken.js
-  └── core
-        ├── InterceptorManager.js
-        └── Axios.js
-
+team4-final-project
+  ├── public
+  │     └── favicon
+  │     └── index.html
+  │     └── logo192.png
+  │     └── logo512.png
+  ├── src
+  │     └── Assets
+  │     └── Components
+  │     └── Element
+  │     └── MyTools
+  │     └── Pages
+  │     └── Redux
+  │     └── Shared
+  │     └── App.js
+  │     └── App.test.js
+  │     └── index.css
+  │     └── logo.svg
+  │     └── reportWebVital.js
+  │     └── setupTests.js
+  │     
+  └── .gitignore
+  └── package.json
+  └── postcss.config.js
+  └── prettierrc.js
+  └── README.md
+  └── tailwind.config.js
+  └── yarn.lock
+       
 ```
 
 
