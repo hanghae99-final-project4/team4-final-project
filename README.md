@@ -29,7 +29,7 @@
 |팀원| 오윤지|https://github.com/doodlerrr|
 
 프론트엔드 팀 `FE`
-|팀내 포지션| 한 줄 소개 | 이름 | 깃허브 |
+|팀내 포지션|  이름 | 깃허브 |
 |--------|----------|-------|
 |부리더| 김재우 |https://github.com/wyswhsl21|||
 |팀원 | 남해리|https://github.com/NSunR|||
