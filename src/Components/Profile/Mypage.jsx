@@ -53,7 +53,7 @@ const MyPage = () => {
       form?.nickname === undefined ||
       form?.statusmessage === undefined
     ) {
-      window.alert("비어있는 내용을 채워주세요");
+      // window.alert("비어있는 내용을 채워주세요");
     } else {
       for (var pair of formData.entries()) {
         console.log(pair);
