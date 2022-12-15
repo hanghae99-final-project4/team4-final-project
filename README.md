@@ -231,7 +231,6 @@ team4-final-project
   │     └── App.test.js
   │     └── index.css
   │     └── logo.svg
-  │     └── reportWebVital.js
   │     └── setupTests.js
   │     
   └── .gitignore
