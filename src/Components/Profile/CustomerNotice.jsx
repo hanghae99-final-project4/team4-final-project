@@ -1,17 +1,30 @@
 import React from "react";
-import GuideIcon from "../../Element/GuideIcon";
 import styled from "styled-components";
+import GuideAlert from "../../Element/GuideAlert";
+import GuideExit from "../../Element/GuideExit";
+import HeaderIcon from "../../Element/HeaderIcon";
+import FrontHeader from "../Header/FrontHeader";
+import HomeMenu from "../HomeMenu/HomeMenu";
 
 const CustomerNotice = () => {
   return (
-    <Wrap>
-      <TitleBox>
-        <div>
-          <p>고객 이용가이드</p>
-        </div>
-      </TitleBox>
-      <GuideIcon />
-    </Wrap>
+    <>
+      <Wrap>
+        <FrontHeadDiv>
+          <FrontHeader msg={"나의정보"} />
+          <HeaderIcon />
+        </FrontHeadDiv>
+        <TitleBox>
+          <div>
+            <p style={{ fontSize: "24px", fontWeight: "700" }}>
+              고객 유의 사항
+            </p>
+          </div>
+        </TitleBox>
+        <GuideAlert />
+        <HomeMenu />
+      </Wrap>
+    </>
   );
 };
 export default CustomerNotice;
@@ -39,4 +52,7 @@ const TitleBox = styled.div`
     align-items: center;
     justify-content: center;
   }
+`;
+const FrontHeadDiv = styled.div`
+  width: 375px;
 `;

@@ -6,12 +6,15 @@ import { useNavigate } from "react-router-dom";
 const HeaderIcon = () => {
   const navigate = useNavigate();
   return (
-    <div>
-      <HeaderPointer
-        onClick={() => navigate("/converspage")}
-        style={{ cursor: "pointer", position: "relative", left: "-140px" }}
-      />
-    </div>
+    <HeaderPointer
+      onClick={() => navigate("/mypage")}
+      style={{
+        cursor: "pointer",
+        position: "relative",
+        left: "5px",
+        top: "-35px",
+      }}
+    />
   );
 };
 
