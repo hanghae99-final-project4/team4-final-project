@@ -48,7 +48,7 @@ const Subway = () => {
           <TransformComponent>
             <div onClick={charterOnClick}>
               <img
-                src="https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png"
+                src="https://ssl.pstatic.net/sstatic/keypage/outside/subway/img/220718/smap_sg_all.png"
                 style={{
                   border: "none",
                   width: "375px",

@@ -162,6 +162,7 @@ const Chatting = () => {
           console.log("실행됨", success);
         } else {
           alert(message.fail);
+          navigate("/converspage");
         }
         console.log("success", success);
 
@@ -435,7 +436,7 @@ const ChatMainDiv = styled.div`
   overflow-y: hidden;
   height: 620px;
   width: 375px;
-  padding: 0 16px;
+  padding: 0 0px;
 `;
 const SitdownHeader = styled.div`
   background-color: #f5f5f5;
