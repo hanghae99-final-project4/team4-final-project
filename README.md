@@ -203,7 +203,7 @@ AXIOS에 내장된 인터셉터 함수로 request, response 별로 토큰을 우
 |담당자| FE- 김재우 |
 |요구사항 1 |![채팅방 개선사항(2) 이미지](https://user-images.githubusercontent.com/108774881/207624509-fadb671f-6026-4229-88ed-6f7ef5e3b472.png)|
 |해결 및 개선 방법 | file이 담겨있을때만 해당 로직이 돌아가게끔 조건문을 줘서 이미지 전송 할땐 저 로직이 돌게끔 하고 메시지 전송할땐 다른 로직이 돌게 수정함. |
-|개선 전 사진 |<img width="490" alt="1670579834569" src="https://user-images.githubusercontent.com/108774881/207741551-6333f225-1840-49b0-a11e-7f9bfa04fc1e.png">|
+|개선 전 사진 |![1670567729874](https://user-images.githubusercontent.com/108774881/207741630-733b649f-94e6-4b1f-9bf8-7b4b14734ba6.png)|
 |개선 후 사진 |![이미지 잘받음](https://user-images.githubusercontent.com/108774881/207627734-e290cf9f-c06c-4eba-a0d7-a4fe07ca61f2.png)|
   
   <br/>
