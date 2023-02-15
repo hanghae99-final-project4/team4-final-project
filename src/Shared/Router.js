@@ -26,7 +26,7 @@ const Router = () => {
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
        <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/subsign" element={<SubSign />} />
         <Route path="/authcode" element={<AuthCode />} />
         <Route path="/addinfo" element={<AddInfo />} />
