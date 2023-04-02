@@ -22,7 +22,7 @@ const SubwayPage = () => {
 
   return (
     <SubWayDiv>
-      <Subway />;
+      <Subway />
     </SubWayDiv>
   );
 };

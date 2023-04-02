@@ -39,27 +39,28 @@ const Subway = () => {
         <div onClick={Locate}>
           <SubwayIcon />
         </div>
-        <TransformWrapper initialScale={1} minScale={1} maxScale={10}>
+        <TransformWrapper
+          style={{ width: "375px", height: "812px" }}
+          initialScale={2}
+          minScale={1}
+          maxScale={10}
+        >
           <TransformComponent>
             <div onClick={charterOnClick}>
               <img
-                src="https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png"
-                style={{ border: "1px solid black" }}
+                src="https://ssl.pstatic.net/sstatic/keypage/outside/subway/img/220718/smap_sg_all.png"
+                style={{
+                  border: "none",
+                  width: "375px",
+                  height: "712px",
+                }}
                 ref={subwayRef}
                 onClick={(e) => subwayCoordinate(e)}
               />
             </div>
           </TransformComponent>
         </TransformWrapper>
-
-        <SeoulStationDiv
-          onClick={() => setSubway({ station: "서울" })}
-        ></SeoulStationDiv>
-        <SeoulCityHall
-          onClick={() => setSubway({ station: "시청" })}
-        ></SeoulCityHall>
       </SubwayDiv>
-
       <SubwayHome />
     </>
   );
@@ -67,20 +68,20 @@ const Subway = () => {
 
 export default Subway;
 const SubwayDiv = styled.div`
+  margin: 0 auto;
   position: relative;
   display: flex;
   flex-direction: column;
 
   align-items: center;
-  width: 100%;
-
-  height: 100vh;
+  width: 375px;
+  height: 812px;
 `;
 const SubwayMapFrame = styled.div`
   overflow: hidden;
   width: 375px;
   height: 812px;
-  border: 1px solid black;
+  border: none;
   overflow-y: scroll;
   background-image: url("https://gingernews.co.kr/wp-content/uploads/2022/05/img_subway.png");
   margin: auto;
@@ -108,7 +109,7 @@ const SeoulStationDiv = styled.div`
 `;
 const SeoulCityHall = styled.div`
   position: absolute;
-  border: 1px solid black;
+  border: none;
   cursor: pointer;
   width: 10px;
   height: 10px;
