@@ -17,6 +17,7 @@ const SubSign = () => {
     snsId: "",
     password: "",
     confirmpassword: "",
+    nickname: "",
   });
 
   //아이디 유효성
@@ -152,9 +153,28 @@ const SubSign = () => {
                 )}
               </div>
               <div>
-                <label>
-                  <img src={pw} alt="password" />
-                </label>
+                <div className="mt-[-15px]">
+                  <label className="w-[50px] h-[19px] text-black text-sm font-sans semibold font-bold">
+                    닉네임<span className="text-cyan-300">*</span>
+                  </label>
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    name="nickname"
+                    value={Info.nickname}
+                    onChange={onChangeValue}
+                    placeholder="닉네임 입력"
+                    className="w-[253px] mt-[-15px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                  />
+                </div>
+                <div className="mt-[10px]">
+                  <label className="">
+                    <img src={pw} alt="password" />
+                  </label>
+                </div>
+
                 <div>
                   <div>
                     <input
@@ -164,7 +184,7 @@ const SubSign = () => {
                       value={Info.password}
                       onChange={onChangeValue}
                       placeholder="비밀번호 입력"
-                      className="w-[253px] mt-[10px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                      className="w-[253px] mt-[15px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
                     />
                   </div>
                   {Info.password.length === 0 ? (
@@ -197,7 +217,7 @@ const SubSign = () => {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="mt-[15px]">
                 <div>
                   <label className="text-[1rem]">
                     <img src={pwConfirm} alt="pwConfirm" />
