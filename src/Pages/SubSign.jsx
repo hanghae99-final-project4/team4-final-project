@@ -181,7 +181,9 @@ const SubSign = () => {
                     <ErrorMessage>
                       패스워드에 닉네임이 포함되어있습니다.
                     </ErrorMessage>
+
                   ) : Info.password.length < 8 || Info.password.length > 20 ? (
+
                     <ErrorMessage>
                       비밀번호는 영문+숫자+특수문자를 포함한 8자~20자로
                       적어주세요!
