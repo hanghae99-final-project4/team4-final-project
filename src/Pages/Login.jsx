@@ -43,39 +43,36 @@ const Login = () => {
   //로그인버튼
 
   const onSignIn = async (e) => {
-    e.preventDefault();
-
-    await trainApi
-      .postSignIn({
+    try {
+      console.log(Info.snsId, Info.password);
+      e.preventDefault();
+      const { data } = await trainApi.postSignIn({
         snsId: Info.snsId,
         password: Info.password,
-      })
-      .then((res) => {
-        console.log(res);
-
-        const token = res.data.jwtToken;
-        const msg = res.data.message;
-        const doneInfo = res.data.doneAdditionalInfo;
-        const donePhone = res.data.donePhoneNumber;
-        // console.log(token);
-        if (token) {
-          setCookie("token", token, { path: "/" });
-        }
-        //추가정보입력란, 핸드폰 인증 안 할 시
-        if (doneInfo === false && donePhone === false) {
-          console.log(res);
-          alert("환승시민정보를 기입해주세요!");
-          navigate("/authcode");
-        } else if (doneInfo === true && donePhone === true) {
-          alert(`${msg}`);
-          navigate("/subwaypage");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        const errMsg = err.response.data.message;
-        alert(errMsg);
       });
+      console.log(data);
+      const token = data.jwtToken;
+      // const msg = data.message;
+      // const doneInfo = data.doneAdditionalInfo;
+      // const donePhone = data.donePhoneNumber;
+      // // console.log(token);
+      if (token) {
+        setCookie("token", token, { path: "/" });
+      }
+      // //추가정보입력란, 핸드폰 인증 안 할 시
+      // if (doneInfo === false && donePhone === false) {
+      //   console.log(data);
+      //   alert("환승시민정보를 기입해주세요!");
+      //   navigate("/authcode");
+      // } else if (doneInfo === true && donePhone === true) {
+      //   alert(`${msg}`);
+      navigate("/subwaypage");
+      // }
+    } catch (err) {
+      console.log(err);
+      const errMsg = err.response.data.message;
+      alert(errMsg);
+    }
   };
 
   const signUp = (e) => {
@@ -86,7 +83,7 @@ const Login = () => {
   return (
     <Login1 className="h-[812px] flex flex-col justify-center items-center">
       <LoginBox className="relative pt-[60px] flex-col items-center rounded-[10px]">
-        <article className="justify-center items-center">
+        <article className="items-center justify-center">
           <div className="w-[276px] h-[90px] mt-[30px] flex flex-col gap-[16px] justify-center items-center mx-[auto] my-[0px]">
             <h1 className="w-[full] mx-[auto] my-[0px] font-[600] text-[1.4rem] text-center">
               {/* 지하철에서 <br />

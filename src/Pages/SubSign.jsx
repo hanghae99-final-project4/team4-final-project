@@ -72,45 +72,41 @@ const SubSign = () => {
   };
   //확인버튼
   const onSignup = async (e) => {
-    e.preventDefault();
-
-    // }
-    await trainApi
-      .postSubSign({
+    try {
+      e.preventDefault();
+      const { data } = await trainApi.postSubSign({
         snsId: Info.snsId,
         password: Info.password,
         confirmpassword: Info.confirmpassword,
-      })
-      .then((res) => {
-        // console.log(res);
-        const msg = res.data.msg;
-        if (msg === "성공") {
-          alert("회원가입이 되셨습니다.");
-          navigator("/");
-        }
-      })
-      .catch((err) => {
-        // console.log(err);
-        const status = err.response.status;
-        const errMsg = err.response.data;
-        const error = err.response.data.error;
-        if (
-          status === 422 &&
-          errMsg === '"password" is not allowed to be empty'
-        ) {
-          alert("패스워드는 필수 입력 정보입니다.");
-        } else if (
-          status === 422 &&
-          errMsg === '"confirmpassword" must be [ref:password]'
-        ) {
-          alert("비밀번호가 일치하지 않습니다.");
-        } else if (status === 422) {
-          alert(errMsg);
-        } else if (status === 400) {
-          alert(error);
-        }
-        return;
       });
+      console.log(data);
+      const msg = data.msg;
+      if (msg === "성공") {
+        alert("회원가입이 되셨습니다.");
+        navigator("/");
+      }
+    } catch (err) {
+      // console.log(err);
+      const status = err.response.status;
+      const errMsg = err.response.data;
+      const error = err.response.data.error;
+      if (
+        status === 422 &&
+        errMsg === '"password" is not allowed to be empty'
+      ) {
+        alert("패스워드는 필수 입력 정보입니다.");
+      } else if (
+        status === 422 &&
+        errMsg === '"confirmpassword" must be [ref:password]'
+      ) {
+        alert("비밀번호가 일치하지 않습니다.");
+      } else if (status === 422) {
+        alert(errMsg);
+      } else if (status === 400) {
+        alert(error);
+      }
+      return;
+    }
   };
 
   return (
