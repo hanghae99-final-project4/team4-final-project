@@ -51,7 +51,7 @@ const Login = () => {
         password: Info.password,
       });
       console.log(data);
-      const token = data.jwtToken;
+      const token = data.acctoken;
       // const msg = data.message;
       // const doneInfo = data.doneAdditionalInfo;
       // const donePhone = data.donePhoneNumber;
