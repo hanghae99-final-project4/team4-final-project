@@ -14,7 +14,7 @@ const SubSign = () => {
   const navigator = useNavigate();
   const [, , removeCookie] = useCookies(["token"]);
   const [Info, setInfo, onChangeValue, reset] = useInput({
-    snsId: "",
+    account: "",
     password: "",
     confirmpassword: "",
     nickname: "",
@@ -39,23 +39,23 @@ const SubSign = () => {
     //아이디유효성
     const pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
-    if (Info.snsId.trim() === "" || Info.snsId.trim() === "\n") {
+    if (Info.account.trim() === "" || Info.account.trim() === "\n") {
       alert("빈칸을 채워주세요!");
       return;
-    } else if (pattern_kor.test(Info.snsId) === true) {
+    } else if (pattern_kor.test(Info.account) === true) {
       alert("6자~15자로 영문 혹은 영문+숫자로 조합해주세요!");
       return;
-    } else if (Info.snsId.length < 6 || Info.snsId.length > 16) {
+    } else if (Info.account.length < 6 || Info.account.length > 16) {
       alert("6자~15자로 영문 혹은 영문+숫자로 조합해주세요!");
       return;
-    } else if (pattern_empty.test(Info.snsId) === true) {
+    } else if (pattern_empty.test(Info.account) === true) {
       alert("공백을 채워주세요!");
       return;
     }
 
     await trainApi
       .postUserId({
-        snsId: Info.snsId,
+        account: Info.account,
       })
       .then((res) => {
         // console.log(res);
@@ -76,9 +76,9 @@ const SubSign = () => {
     try {
       e.preventDefault();
       const { data } = await trainApi.postSubSign({
-        snsId: Info.snsId,
+        account: Info.account,
         password: Info.password,
-        confirmpassword: Info.confirmpassword,
+        password2: Info.confirmpassword,
       });
       console.log(data);
       const msg = data.msg;
@@ -129,8 +129,8 @@ const SubSign = () => {
                     <div className="mt-[10px] flex justify-center">
                       <input
                         type="text"
-                        name="snsId"
-                        value={Info.snsId}
+                        name="account"
+                        value={Info.account}
                         maxLength="15"
                         onChange={onChangeValue}
                         placeholder="아이디 입력"
@@ -143,7 +143,7 @@ const SubSign = () => {
                   </div>
                 </div>
 
-                {Info.snsId.length < 6 || Info.snsId.length > 15 ? (
+                {Info.account.length < 6 || Info.account.length > 15 ? (
                   <ErrorMessage>
                     아이디는 6자~15자 이내로 영문 또는 영문과 숫자를
                     조합해주세요.

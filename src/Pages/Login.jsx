@@ -20,7 +20,7 @@ const Login = () => {
   const NAVER = `${process.env.REACT_APP_NAVER_URL}`;
 
   const [Info, setInfo, onChangeValue, reset] = useInput({
-    snsId: "",
+    account: "",
     password: "",
   });
 
@@ -44,28 +44,23 @@ const Login = () => {
 
   const onSignIn = async (e) => {
     try {
-      console.log(Info.snsId, Info.password);
+      console.log(Info.account, Info.password);
       e.preventDefault();
       const { data } = await trainApi.postSignIn({
-        snsId: Info.snsId,
+        account: Info.account,
         password: Info.password,
       });
       console.log(data);
-      const token = data.acctoken;
-      // const msg = data.message;
-      // const doneInfo = data.doneAdditionalInfo;
-      // const donePhone = data.donePhoneNumber;
-      // // console.log(token);
+      const token = data.data.token;
+      const userId = data?.data.result?.id;
+      console.log(userId);
+      console.log(token);
+
       if (token) {
+        localStorage.setItem("userId", userId);
         setCookie("token", token, { path: "/" });
       }
-      // //추가정보입력란, 핸드폰 인증 안 할 시
-      // if (doneInfo === false && donePhone === false) {
-      //   console.log(data);
-      //   alert("환승시민정보를 기입해주세요!");
-      //   navigate("/authcode");
-      // } else if (doneInfo === true && donePhone === true) {
-      //   alert(`${msg}`);
+
       navigate("/subwaypage");
       // }
     } catch (err) {
@@ -102,8 +97,8 @@ const Login = () => {
                   <div className="flex flex-col items-center gap-[14px]">
                     <input
                       type="text"
-                      name="snsId"
-                      value={Info.snsId}
+                      name="account"
+                      value={Info.account}
                       onChange={onChangeValue}
                       placeholder="아이디 입력"
                       className="w-[328px] p-[4px] text-[1rem] border-b-[1px] border-[rgba(0,0,0,0.5)]"

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignUp from "../Pages/SignUp";
 import NaverLogin from "../Pages/NaverLogin";
 import ChatPage from "../Pages/ChatPage";
 import MainPage from "../Pages/MainPage";
@@ -12,8 +11,6 @@ import { Suspense, lazy } from "react";
 import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
 import CustomerNotice from "../Components/Profile/CustomerNotice";
 import AgreePage from "../Components/Profile/AgreePage";
-import AuthCode from "../Pages/AuthCode";
-import AddInfo from "../Pages/AddInfo";
 import SubSign from "../Pages/SubSign";
 
 const LoginPage = lazy(() => import("../Pages/Login"));
@@ -27,13 +24,10 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/subsign" element={<SubSign />} />
-          <Route path="/authcode" element={<AuthCode />} />
-          <Route path="/addinfo" element={<AddInfo />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/auth/naver/callback" element={<NaverLogin />} />
-          <Route path="/signup" element={<SignUp />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/chatpage" element={<ChatPage />} />
           <Route path="/converspage" element={<ConversPage />} />
