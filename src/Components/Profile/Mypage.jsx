@@ -15,7 +15,7 @@ const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
   const [files, setFiles] = useState([]);
-  const [representProfile, setRepresentProfile] = useState([]);
+  const [primaryImage, setPrimaryImage] = useState([]);
   const [preview, setPreview] = useState();
   const [form, setForm, OnChangeHandler] = useInput([]);
   const cookies = new Cookies();
@@ -24,52 +24,54 @@ const MyPage = () => {
 
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [gender, setGender] = useState(null);
-  console.log(representProfile);
+  console.log(primaryImage);
   useEffect(() => {
     async function getProfile() {
       const { data } = await trainApi.getConvers();
 
-      setForm(data.body);
+      setForm(data.userInfo);
     }
     getProfile();
-  }, [representProfile]);
-
+  }, [primaryImage]);
+  const profile = form?.images?.filter((item) => item.is_primary === true)?.[0]
+    .image_url;
+  console.log(profile);
   // 저장
   async function imgSubmitHandler() {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      formData.append("profileImage", files[i].file);
+      formData.append("otherImages", files[i].file);
     }
 
-    formData.append("representProfile", representProfile[0]?.file);
-    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("primaryImage", primaryImage[0]?.file);
+    // formData.append("phoneNumber", form.phoneNumber);
     formData.append("nickname", form.nickname);
-    formData.append("statusmessage", form.statusmessage);
+    formData.append("introduction", form.statusmessage);
     formData.append("gender", gender);
 
-    if (
-      representProfile[0]?.file === undefined ||
-      form?.phoneNumber === undefined ||
-      form?.nickname === undefined ||
-      form?.statusmessage === undefined
-    ) {
-      // window.alert("비어있는 내용을 채워주세요");
-    } else {
-      for (var pair of formData.entries()) {
-        console.log(pair);
-      }
-      await trainApi2
-        .postProfile(formData)
-        .then((res) => {
-          console.log(res);
-          alert(res.data.msg);
-        })
-        .catch((err) => {
-          console.log(err);
-          const errMsg = err.response.data.error;
-          alert(errMsg);
-        });
+    // if (
+    //   primaryImage[0]?.file === undefined ||
+    //   // form?.phoneNumber === undefined ||
+    //   form?.nickname === undefined ||
+    //   form?.statusmessage === undefined
+    // ) {
+    //   // window.alert("비어있는 내용을 채워주세요");
+    // } else {
+    for (var pair of formData.entries()) {
+      console.log(pair);
     }
+    await trainApi2
+      .postProfile(formData)
+      .then((res) => {
+        console.log(res);
+        alert(res.data.msg);
+      })
+      .catch((err) => {
+        console.log(err);
+        const errMsg = err.response.data.error;
+        alert(errMsg);
+      });
+    // }
   }
 
   const formSubmit = (e) => {
@@ -105,7 +107,7 @@ const MyPage = () => {
         />
         <ThumbImg
           onClick={() =>
-            setRepresentProfile([
+            setPrimaryImage([
               {
                 file: item.file,
                 url: item.url,
@@ -163,7 +165,7 @@ const MyPage = () => {
 
         <ProfileBox>
           <ImgWrap>
-            {representProfile?.length > 0 ? (
+            {primaryImage?.length > 0 ? (
               <ImgBox
                 style={{ transform: "scale(1)", borderRadius: "10px" }}
                 id="img-preview"
@@ -173,7 +175,10 @@ const MyPage = () => {
               <ImgBox
                 style={{ transform: "scale(1)", borderRadius: "10px" }}
                 id="img-preview"
-                src={form?.representProfile}
+                src={
+                  form?.images?.filter((item) => item.is_primary === true)?.[0]
+                    .image_url
+                }
               />
             )}
 
@@ -289,10 +294,10 @@ const MyPage = () => {
               </ProfileSetBtn>
               <ProfileCloseBtn
                 onClick={() => {
-                  if (representProfile[0]?.file === undefined) {
+                  if (primaryImage[0]?.file === undefined) {
                     setIsModal(!isModal);
                   } else {
-                    fileImagePreview(representProfile[0]?.file);
+                    fileImagePreview(primaryImage[0]?.file);
                     setIsModal(!isModal);
                   }
                 }}

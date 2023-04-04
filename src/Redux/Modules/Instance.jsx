@@ -17,7 +17,7 @@ const code = new URL(window.location.href).searchParams.get("code");
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
 const yhURL = process.env.REACT_APP_TH_S_HOST;
-
+const Id = localStorage.getItem("userId");
 //일반데이터 Instance
 export const instance = axios.create({
   baseURL: `${yhURL}`,
@@ -36,19 +36,16 @@ export const instanceF = axios.create({
 
 export const trainApi2 = {
   //signup
-  postForm: (fd) => instanceF.post("/user", fd),
-  postProficForm: (payload) => instanceF.post("/profile", payload),
-  postProfile: (payload) => instanceF.post("/profile", payload),
+  postProficForm: (payload) => instanceF.post("/user", payload),
+  postProfile: (payload) => instanceF.post(`/user/upload/${Id}`, payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
 };
 
 export const trainApi = {
-  // getLogin: () => instance.get(`/auth/kakao/callback?code=${code}`),
   postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
-  getConvers: () => instance.get("/profile"),
-  postAuthName: (payload) => instance.post("/user/check", payload),
+  getConvers: () => instance.get(`/user/${Id}`),
 
   postSubSign: (payload) => instance.post("/user/signup", payload),
   postUserId: (payload) => instance.post("/user/checkid", payload),
