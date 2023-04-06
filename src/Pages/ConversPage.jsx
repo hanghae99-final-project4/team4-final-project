@@ -7,11 +7,12 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
-import { trainApi } from "../Redux/Modules/Instance";
+
 import FrontHeader from "../Components/Header/FrontHeader";
 import { ReactComponent as HowIcon } from "../Assets/Convers/How.svg";
 import { useState } from "react";
 import HelpModal from "../Components/Modal/HelpModal";
+import { trainApi } from "../apis/Instance";
 const cookies = new Cookies();
 
 const token = cookies.get("token");

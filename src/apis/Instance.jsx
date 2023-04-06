@@ -1,13 +1,9 @@
 ////src/Redux/Modules/Instance.js
 import axios from "axios";
 import { Cookies, useCookies } from "react-cookie";
-import {
-  getCookie,
-  removeCookie,
-  setCookie,
-} from "../../MyTools/Hooks/MyCookie";
+import { getCookie, removeCookie, setCookie } from "../MyTools/Hooks/MyCookie";
 import mem from "mem";
-import { memoizedRefreshToken, memoizedRefreshTokenF } from "./refreshToken";
+import { memoizedRefreshToken } from "./../Recoil/Modules/refreshToken";
 
 const token = getCookie("token");
 console.log(token);
@@ -39,12 +35,20 @@ export const trainApi2 = {
   postProficForm: (payload) => instanceF.post("/user", payload),
   postProfile: (payload) => instanceF.post(`/user/upload/${Id}`, payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
+  deleteProfile: (deleteUrl) =>
+    instance.delete(`user/images/${Id}`, { data: [{ url: deleteUrl }] }),
+  patchProfile: (otherimage, primaryimage) =>
+    instance.patch(`user/images/${Id}`, [
+      { url: primaryimage },
+      { url: otherimage },
+    ]),
 };
 
 export const trainApi = {
   postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
+
   getConvers: () => instance.get(`/user/${Id}`),
 
   postSubSign: (payload) => instance.post("/user/signup", payload),
@@ -74,8 +78,8 @@ instance.interceptors.response.use(
     if (error.response.status === 401 && !config?.sent) {
       config.sent = true;
       const result = await memoizedRefreshToken();
-      console.log(result);
-      if (result?.acctoken) {
+      console.log(result?.acctoken);
+      if (result) {
         config.headers = {
           ...config.headers,
           Authorization: `Bearer ${result?.acctoken}`,

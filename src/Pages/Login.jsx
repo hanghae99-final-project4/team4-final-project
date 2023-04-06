@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import useInput from "../MyTools/Hooks/UseInput";
-import { trainApi } from "../Redux/Modules/Instance";
+import { trainApi } from "../apis/Instance";
 import Kakaologo from "../Assets/Kakaologo.svg";
 import Naverlogo from "../Assets/Naverlogo.svg";
 import Googlelogo from "../Assets/Googlelogo.svg";
@@ -26,6 +26,7 @@ const Login = () => {
 
   //가지고 있던 토큰 없애기
   useEffect(() => {
+    localStorage.clear();
     removeCookie("token");
   }, []);
   const kakoLogin = () => {
@@ -52,7 +53,7 @@ const Login = () => {
       });
       console.log(data);
       const token = data.data.token;
-      const userId = data?.data.result?.id;
+      const userId = data?.data.rest?.user_id;
       console.log(userId);
       console.log(token);
 

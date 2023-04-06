@@ -10,10 +10,12 @@ import { CookiesProvider } from "react-cookie";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <GlobalStyle />
-    <CookiesProvider>
-      <App />
-    </CookiesProvider>
+    
+      <GlobalStyle />
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
+   
   </>
 );
 

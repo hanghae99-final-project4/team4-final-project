@@ -6,10 +6,12 @@ import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
-import { trainApi, trainApi2 } from "../../Redux/Modules/Instance";
+import { trainApi, trainApi2 } from "../../apis/Instance";
 import { useNavigate } from "react-router-dom";
 import HomeMenu from "../HomeMenu/HomeMenu";
 import MypageHeader from "./MypageHeader";
+import { useRecoilState } from "recoil";
+import { useInfoState } from "../../Recoil/userList";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -21,21 +23,28 @@ const MyPage = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
   const navigate = useNavigate();
-
+  const [changeprofile, setChangeprofile] = useState([]);
+  const [originprofile, setOriginprofile] = useState([]);
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [gender, setGender] = useState(null);
-  console.log(primaryImage);
+  const [image, setImage] = useRecoilState(useInfoState);
   useEffect(() => {
     async function getProfile() {
       const { data } = await trainApi.getConvers();
-
+      console.log(data);
+      setImage(data.userInfo.images);
       setForm(data.userInfo);
+      setChangeprofile(data.userInfo.images);
     }
+
     getProfile();
-  }, [primaryImage]);
-  const profile = form?.images?.filter((item) => item.is_primary === true)?.[0]
-    .image_url;
+  }, []);
+  console.log(image);
+
+  const profile = form?.images?.filter((item) => item?.is_primary === true)?.[0]
+    ?.image_url;
   console.log(profile);
+
   // 저장
   async function imgSubmitHandler() {
     const formData = new FormData();
@@ -47,16 +56,7 @@ const MyPage = () => {
     // formData.append("phoneNumber", form.phoneNumber);
     formData.append("nickname", form.nickname);
     formData.append("introduction", form.statusmessage);
-    formData.append("gender", gender);
 
-    // if (
-    //   primaryImage[0]?.file === undefined ||
-    //   // form?.phoneNumber === undefined ||
-    //   form?.nickname === undefined ||
-    //   form?.statusmessage === undefined
-    // ) {
-    //   // window.alert("비어있는 내용을 채워주세요");
-    // } else {
     for (var pair of formData.entries()) {
       console.log(pair);
     }
@@ -73,30 +73,115 @@ const MyPage = () => {
       });
     // }
   }
+  //사진 업로드
+  const uploadFile = async () => {
+    const formData = new FormData();
+    for (let i = 0; i < image.length; i++) {
+      formData.append("otherImages", image[i].file);
+    }
+    formData.append("primaryImage", primaryImage[0]?.file);
+    console.log(Array.from(formData.entries()));
+    const form = formData.getAll("otherImages");
+    formData.delete("otherImages");
+    console.log(form);
+    console.log(primaryImage[0]?.file);
+    form
+      .filter((item) => item.name !== primaryImage[0].file.name)
+      .forEach((item) => formData.append("otherImages", item));
+    console.log(Array.from(formData.entries()));
 
+    try {
+      const { data } = await trainApi2.postProfile(formData);
+      console.log(data);
+      setIsModal(!isModal);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //대표 프로필 수정
+  const patchProfile = async () => {
+    console.log(primaryImage[0].url);
+    //기존 대표 이미지
+    const originProfile = changeprofile?.filter(
+      (item) => item?.is_primary === true
+    );
+    // console.log(originProfile);
+    //프로필 사진들
+    const newProfile = [...changeprofile];
+    //새로운 대표 이미지
+    const changenewProfile = changeprofile?.filter(
+      (item) => item.image_url === primaryImage[0].url
+    );
+    setChangeprofile(...changeprofile, changenewProfile);
+
+    // console.log("새로운 이미지", changenewProfile);
+    // console.log("url", changenewProfile[0].image_url);
+    // console.log("들어감", changeprofile);
+    //기존의 있던 대표 이미지
+    const changeProfile = changeprofile.filter(
+      (item) => item.image_url === originProfile
+    );
+
+    // setChangeprofile(
+    const newArr = newProfile
+      .map((item) =>
+        item.image_url === changenewProfile[0].image_url
+          ? { ...item, is_primary: true }
+          : item
+      )
+      .filter((item) => item.image_url === changenewProfile[0].image_url);
+
+    // );
+    // setOriginprofile(
+    const origin = newProfile
+      .map((item) =>
+        item.image_url === originProfile[0].image_url
+          ? { ...item, is_primary: false }
+          : item
+      )
+      .filter((item) => item.image_url === originProfile[0].image_url);
+    // );
+    console.log(originProfile[0].image_url);
+
+    //console.log(changenewProfile);
+    // console.log(image);
+
+    console.log("새로운 프로필", newArr);
+    console.log("기존이미지", origin);
+    try {
+      const { data } = await trainApi2.patchProfile(newArr, origin);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(changeprofile);
+
+  console.log("클릭한 이미지", primaryImage);
+  //사진 업로드 시 파일 만들기
   const formSubmit = (e) => {
-    let temp = [];
+    let temp = [...image];
     const photoList = e.target.files;
     for (let i = 0; i < photoList.length; i++) {
       temp.push({
         id: photoList[i]?.name,
         file: photoList?.[i],
-        url: URL?.createObjectURL(photoList[i]),
+        image_url: URL?.createObjectURL(photoList[i]),
       });
     }
 
     if (temp.length > 5) {
       temp = temp.slice(0, 5);
     }
-    setFiles(temp.concat(files));
+    setImage(temp.concat(files));
   };
 
   //preview 이미지 함수
-  const thumb = files.map((item, index) => {
+  const thumb = image.map((item, index) => {
     return (
       <div>
         <CloseCircleFilled
-          onClick={() => removeProfile(item.url)}
+          onClick={() => removeProfile(item.image_url)}
           style={{
             position: "relative",
             top: "18px",
@@ -110,20 +195,27 @@ const MyPage = () => {
             setPrimaryImage([
               {
                 file: item.file,
-                url: item.url,
+                url: item.image_url,
               },
             ])
           }
           key={index}
-          src={item.url}
+          src={item.image_url}
           alt="image"
         />
       </div>
     );
   });
-
-  const removeProfile = (deleteUrl) => {
-    setFiles(files.filter((item) => item.url !== deleteUrl));
+  //이미지 삭제하는 함수
+  const removeProfile = async (deleteUrl) => {
+    console.log(deleteUrl);
+    try {
+      const { data } = await trainApi2.deleteProfile(deleteUrl);
+      console.log(data);
+      setImage(image.filter((item) => item.image_url !== deleteUrl));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fileImagePreview = (fileBlob) => {
@@ -169,15 +261,15 @@ const MyPage = () => {
               <ImgBox
                 style={{ transform: "scale(1)", borderRadius: "10px" }}
                 id="img-preview"
-                src={preview}
+                src={primaryImage[0].url}
               />
             ) : (
               <ImgBox
                 style={{ transform: "scale(1)", borderRadius: "10px" }}
                 id="img-preview"
                 src={
-                  form?.images?.filter((item) => item.is_primary === true)?.[0]
-                    .image_url
+                  form?.images?.filter((item) => item?.is_primary === true)?.[0]
+                    ?.image_url
                 }
               />
             )}
@@ -192,7 +284,9 @@ const MyPage = () => {
               multiple
               onChange={(e) => formSubmit(e)}
             />
-            <ImgButton onClick={() => setIsModal(true)}>사진 첨부</ImgButton>
+            <ImgButton onClick={() => setIsModal(!isModal)}>
+              사진 업로드
+            </ImgButton>
           </ImgWrap>
           <InfoWrap>
             <ul>
@@ -212,25 +306,7 @@ const MyPage = () => {
                   value={form?.nickname}
                 ></InputInfo>
               </li>
-              <li style={{ display: "flex", alignItems: "flex-start" }}>
-                {/* <span>성별</span> */}
-                {/* <div style={{ width: "80%" }}>
-                  <CheckGender
-                    type="checkbox"
-                    name="gender"
-                    value="1"
-                    onChange={(e) => checkOnlyOne(e.target)}
-                  />
-                  <span>여성</span>
-                  <CheckGender
-                    type="checkbox"
-                    name="gender"
-                    value="2"
-                    onChange={(e) => checkOnlyOne(e.target)}
-                  />
-                  <span>남성</span>
-                </div> */}
-              </li>
+              <li style={{ display: "flex", alignItems: "flex-start" }}></li>
               <li
                 style={{
                   display: "flex",
@@ -290,8 +366,10 @@ const MyPage = () => {
             <ModalWrap>
               <ModalProfileDiv>{thumb}</ModalProfileDiv>
               <ProfileSetBtn onClick={() => PictureUpload()}>
-                프로필 사진 바꾸기
+                사진 업로드
               </ProfileSetBtn>
+              <button onClick={() => uploadFile()}>저장</button>
+              <button onClick={() => patchProfile()}>대표프로필 수정</button>
               <ProfileCloseBtn
                 onClick={() => {
                   if (primaryImage[0]?.file === undefined) {
@@ -302,7 +380,7 @@ const MyPage = () => {
                   }
                 }}
               >
-                저장 후 나가기
+                나가기
               </ProfileCloseBtn>
             </ModalWrap>
           </ModalCtn>
