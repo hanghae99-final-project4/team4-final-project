@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import useInput from "../MyTools/Hooks/UseInput";
 import FrontHeader from "../Components/Header/FrontHeader";
-import { trainApi } from "../Redux/Modules/Instance";
 import { useCookies } from "react-cookie";
 import userid from "../Assets/SubSign/UserId.svg";
 import pw from "../Assets/SubSign/Password.svg";
 import pwConfirm from "../Assets/SubSign/PasswordConfirm.svg";
 import norminfo from "../Assets/SubSign/NormInfo.svg";
 import { useNavigate } from "react-router-dom";
+import { trainApi } from "../apis/Instance";
 
 const SubSign = () => {
   const navigator = useNavigate();

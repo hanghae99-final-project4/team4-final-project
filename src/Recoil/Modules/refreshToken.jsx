@@ -1,6 +1,6 @@
 import mem from "mem";
 
-import { instance } from "./Instance";
+import { instance } from "../../apis/Instance";
 import {
   getCookie,
   removeCookie,
