@@ -45,48 +45,34 @@ const MyPage = () => {
     ?.image_url;
   console.log(profile);
 
-  // 저장
+  // 프로필 정보들 저장 핸들러
   async function imgSubmitHandler() {
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("otherImages", files[i].file);
-    }
-
-    formData.append("primaryImage", primaryImage[0]?.file);
-    // formData.append("phoneNumber", form.phoneNumber);
-    formData.append("nickname", form.nickname);
-    formData.append("introduction", form.statusmessage);
-
-    for (var pair of formData.entries()) {
-      console.log(pair);
-    }
-    await trainApi2
-      .postProfile(formData)
-      .then((res) => {
-        console.log(res);
-        alert(res.data.msg);
-      })
-      .catch((err) => {
-        console.log(err);
-        const errMsg = err.response.data.error;
-        alert(errMsg);
-      });
-    // }
+    try {
+      const { data } = await trainApi2.editProfile(
+        form.nickname,
+        form.statusmessage
+      );
+      console.log(data);
+    } catch (error) {}
   }
+  console.log(form);
   //사진 업로드
+
   const uploadFile = async () => {
     const formData = new FormData();
     for (let i = 0; i < image.length; i++) {
-      formData.append("otherImages", image[i].file);
+      if (image[i].file !== undefined)
+        formData.append("otherImages", image[i].file);
     }
-    formData.append("primaryImage", primaryImage[0]?.file);
+    if (primaryImage[0]?.file !== undefined)
+      formData.append("primaryImage", primaryImage[0]?.file);
+
     console.log(Array.from(formData.entries()));
     const form = formData.getAll("otherImages");
     formData.delete("otherImages");
     console.log(form);
-    console.log(primaryImage[0]?.file);
     form
-      .filter((item) => item.name !== primaryImage[0].file.name)
+      .filter((item) => item.name !== primaryImage[0]?.file.name)
       .forEach((item) => formData.append("otherImages", item));
     console.log(Array.from(formData.entries()));
 
@@ -303,7 +289,7 @@ const MyPage = () => {
                 <InputInfo
                   onChange={OnChangeHandler}
                   name="nickname"
-                  value={form?.nickname}
+                  value={form?.result?.nickname}
                 ></InputInfo>
               </li>
               <li style={{ display: "flex", alignItems: "flex-start" }}></li>
@@ -322,7 +308,7 @@ const MyPage = () => {
                   style={{ width: "100%", height: "40px" }}
                   onChange={OnChangeHandler}
                   name="statusmessage"
-                  value={form?.statusmessage}
+                  value={form?.result?.introduction}
                 ></input>
               </li>
             </ul>
