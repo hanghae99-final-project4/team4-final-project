@@ -38,10 +38,7 @@ export const trainApi2 = {
   deleteProfile: (deleteUrl) =>
     instance.delete(`user/images/${Id}`, { data: [{ url: deleteUrl }] }),
   patchProfile: (otherimage, primaryimage) =>
-    instance.patch(`user/images/${Id}`, [
-      { url: primaryimage },
-      { url: otherimage },
-    ]),
+    instance.patch(`user/images/${Id}`, [primaryimage, otherimage]),
 };
 
 export const trainApi = {

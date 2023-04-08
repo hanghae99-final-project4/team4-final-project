@@ -149,7 +149,7 @@ const MyPage = () => {
     console.log("새로운 프로필", newArr);
     console.log("기존이미지", origin);
     try {
-      const { data } = await trainApi2.patchProfile(newArr, origin);
+      const { data } = await trainApi2.patchProfile(newArr[0], origin[0]);
       console.log(data);
     } catch (error) {
       console.log(error);
