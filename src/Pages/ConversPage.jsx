@@ -44,10 +44,12 @@ const ConversPage = () => {
     // setItem
     window.localStorage.setItem(keyName, objString);
   }
+
   const conversHandler = () => {
+    const primary = message.images.filter((item) => item.is_primary === true);
     setItemWithExpireTime("train", message.train, 3000000000);
-    setItemWithExpireTime("profile", message.representProfile, 3000000000);
-    setItemWithExpireTime("nickname", message.nickname, 30000000000);
+    setItemWithExpireTime("profile", primary[0]?.image_url, 3000000000);
+    setItemWithExpireTime("nickname", message.result.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
     if (message?.train.length !== 4) {
       window.alert("칸 정보는 숫자로만 4자리만 입력해주세요!!");
@@ -62,9 +64,9 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await trainApi.getConvers(Id);
-
-      setMessage(data.body);
+      const { data } = await trainApi.getConvers();
+      console.log(data);
+      setMessage(data.userInfo);
     }
     getNickname();
   }, []);

@@ -32,7 +32,6 @@ const Login = () => {
   //가지고 있던 토큰 없애기
   useEffect(() => {
     localStorage.clear();
-    removeCookie("token");
   }, []);
 
   const kakoLogin = () => {
@@ -60,8 +59,6 @@ const Login = () => {
       console.log(data);
       const token = data.data.token;
       const userId = data?.data.rest?.user_id;
-      console.log(userId);
-      console.log(token);
 
       if (token) {
         localStorage.setItem("userId", userId);
