@@ -8,7 +8,7 @@ import {
 } from "../../MyTools/Hooks/MyCookie";
 
 const refreshTokenFn = async () => {
-  const token = getCookie("token");
+  const token = localStorage.getItem("token");
 
   try {
     const { data } = await instance.post("/newtoken", { token: token });
