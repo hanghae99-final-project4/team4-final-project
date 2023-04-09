@@ -77,9 +77,12 @@ const MyPage = () => {
     const form = formData.getAll("otherImages");
     formData.delete("otherImages");
     console.log(form);
+    console.log(primaryImage[0]?.file);
+
     form
-      .filter((item) => item.name !== primaryImage[0]?.file.name)
+      .filter((item) => item.name !== primaryImage[0]?.file?.name)
       .forEach((item) => formData.append("otherImages", item));
+
     console.log(Array.from(formData.entries()));
 
     try {
@@ -87,6 +90,7 @@ const MyPage = () => {
       const { data } = await trainApi2.postProfile(Id, formData);
       console.log(data);
       setIsModal(!isModal);
+      getProfile();
     } catch (error) {
       console.log(error);
     }
