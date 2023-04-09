@@ -10,12 +10,17 @@ import signmsg from "../Assets/SignIn/SignMsg.svg";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import signintext from "../Assets/SignIn/signinText.svg";
+//카카오 소셜 로그인
 
 const Login = () => {
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
-  const KAKAO = `${process.env.REACT_APP_KAKAO_URL}`;
+  //카카오 소셜 로그인
+  const kakao_restapikey = `${process.env.REACT_APP_KAKAO_KEY}`;
+  const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URI}`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_restapikey}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
   const GOOGLE = `${process.env.REACT_APP_GOOGLE_URL}`;
   const NAVER = `${process.env.REACT_APP_NAVER_URL}`;
 
@@ -29,8 +34,9 @@ const Login = () => {
     localStorage.clear();
     removeCookie("token");
   }, []);
+
   const kakoLogin = () => {
-    window.location.assign(KAKAO);
+    window.location.assign(KAKAO_AUTH_URL);
   };
 
   const googleLogin = () => {
@@ -59,7 +65,7 @@ const Login = () => {
 
       if (token) {
         localStorage.setItem("userId", userId);
-        setCookie("token", token, { path: "/" });
+        localStorage.setItem("token", token);
       }
 
       navigate("/subwaypage");

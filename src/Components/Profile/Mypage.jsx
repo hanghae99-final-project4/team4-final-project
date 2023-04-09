@@ -28,12 +28,13 @@ const MyPage = () => {
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useRecoilState(useInfoState);
+  const Id = localStorage.getItem("userId");
   useEffect(() => {
     getProfile();
   }, []);
   //프로필 조회 함수
   async function getProfile() {
-    const { data } = await trainApi.getConvers();
+    const { data } = await trainApi.getConvers(Id);
     console.log(data);
     setImage(data.userInfo.images);
     setForm(data.userInfo);
@@ -238,6 +239,7 @@ const MyPage = () => {
     <>
       <Wrap>
         <MypageHeader msg={"나의정보"} />
+
         <TitleBox>
           <div>
             <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>

@@ -30,6 +30,7 @@ const ConversPage = () => {
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
+  const Id = localStorage.getItem("userId");
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -61,7 +62,7 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await trainApi.getConvers();
+      const { data } = await trainApi.getConvers(Id);
 
       setMessage(data.body);
     }
