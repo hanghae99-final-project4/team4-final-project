@@ -241,6 +241,7 @@ const Chatting = () => {
       const { data } = await trainApi2.chattingForm(name, formData);
       console.log("잘받음", data);
       socket.emit("persnalchat", {
+        profile: message.url,
         url: data?.url,
         nickname: data?.id,
         roomkey: room,
