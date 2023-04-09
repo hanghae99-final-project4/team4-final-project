@@ -10,7 +10,7 @@ import { memoizedRefreshToken } from "./../Recoil/Modules/refreshToken";
 //인스턴스 - api 전역관리
 const yhURL = process.env.REACT_APP_TH_S_HOST;
 const token = localStorage.getItem("token");
-const Id = localStorage.getItem("userId");
+
 //일반데이터 Instance
 export const instance = axios.create({
   baseURL: `${yhURL}`,
@@ -33,17 +33,16 @@ export const api = axios.create({
     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
   },
 });
-
 export const trainApi2 = {
   //signup
   postProficForm: (payload) => instanceF.post("/user", payload),
-  postProfile: (payload) => instanceF.post(`/user/upload/${Id}`, payload),
+  postProfile: (Id, payload) => instanceF.post(`/user/upload/${Id}`, payload),
   chattingForm: (formData) => instanceF.post("/uploadFile", formData),
-  deleteProfile: (deleteUrl) =>
+  deleteProfile: (Id, deleteUrl) =>
     instance.delete(`user/images/${Id}`, { data: [{ url: deleteUrl }] }),
-  patchProfile: (otherimage, primaryimage) =>
+  patchProfile: (Id, otherimage, primaryimage) =>
     instance.patch(`user/images/${Id}`, [primaryimage, otherimage]),
-  editProfile: (nickname, introduction) =>
+  editProfile: (Id, nickname, introduction) =>
     instance.post(`user/edit/${Id}`, { nickname, introduction }),
 };
 
@@ -54,7 +53,7 @@ export const trainApi = {
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
 
-  getConvers: () => instance.get(`/user/${Id}`),
+  getConvers: (userId) => instance.get(`/user/${userId}`),
 
   postSubSign: (payload) => instance.post("/user/signup", payload),
   postUserId: (payload) => instance.post("/user/checkid", payload),

@@ -34,7 +34,8 @@ const MyPage = () => {
   }, []);
   //프로필 조회 함수
   async function getProfile() {
-    const { data } = await trainApi.getConvers();
+    const userId = localStorage.getItem("userId");
+    const { data } = await trainApi.getConvers(userId);
     console.log(data);
     setImage(data.userInfo.images);
     setForm(data.userInfo);
@@ -49,7 +50,9 @@ const MyPage = () => {
   // 프로필 정보들 저장 핸들러
   async function imgSubmitHandler() {
     try {
+      const Id = localStorage.getItem("userId");
       const { data } = await trainApi2.editProfile(
+        Id,
         form.nickname,
         form.statusmessage
       );
@@ -80,7 +83,8 @@ const MyPage = () => {
     console.log(Array.from(formData.entries()));
 
     try {
-      const { data } = await trainApi2.postProfile(formData);
+      const Id = localStorage.getItem("userId");
+      const { data } = await trainApi2.postProfile(Id, formData);
       console.log(data);
       setIsModal(!isModal);
     } catch (error) {
@@ -138,8 +142,11 @@ const MyPage = () => {
     console.log("새로운 프로필", newArr);
     console.log("기존이미지", origin);
     try {
-      const { data } = await trainApi2.patchProfile(newArr[0], origin[0]);
+      const Id = localStorage.getItem("userId");
+      const { data } = await trainApi2.patchProfile(Id, newArr[0], origin[0]);
       console.log(data);
+      setIsModal(!isModal);
+      getProfile();
     } catch (error) {
       console.log(error);
     }
@@ -197,9 +204,10 @@ const MyPage = () => {
   });
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
+    const Id = localStorage.getItem("userId");
     console.log(deleteUrl);
     try {
-      const { data } = await trainApi2.deleteProfile(deleteUrl);
+      const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
       console.log(data);
       setImage(image.filter((item) => item.image_url !== deleteUrl));
     } catch (error) {
