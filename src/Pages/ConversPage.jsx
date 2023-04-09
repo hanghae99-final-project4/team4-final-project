@@ -64,7 +64,8 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await trainApi.getConvers();
+      const userId = localStorage.getItem("userId");
+      const { data } = await trainApi.getConvers(userId);
       console.log(data);
       setMessage(data.userInfo);
     }
