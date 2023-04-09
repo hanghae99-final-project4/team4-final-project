@@ -5,15 +5,14 @@ import { getCookie, removeCookie, setCookie } from "../MyTools/Hooks/MyCookie";
 import mem from "mem";
 import { memoizedRefreshToken } from "./../Recoil/Modules/refreshToken";
 
-const token = getCookie("token");
-console.log(token);
-const cookies = new Cookies();
-const code = new URL(window.location.href).searchParams.get("code");
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
 const yhURL = process.env.REACT_APP_TH_S_HOST;
 const Id = localStorage.getItem("userId");
+const token = localStorage.getItem("token");
+console.log(token);
+console.log(Id);
 //일반데이터 Instance
 export const instance = axios.create({
   baseURL: `${yhURL}`,
@@ -27,6 +26,13 @@ export const instanceF = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
     Authorization: `Bearer ${token}`,
+  },
+});
+
+export const api = axios.create({
+  baseURL: "https://kauth.kakao.com",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
   },
 });
 
@@ -44,11 +50,13 @@ export const trainApi2 = {
 };
 
 export const trainApi = {
+  kakaoLogin: (code) =>
+    axios.post(`${yhURL}/social/oauth/callback`, { authorizationCode: code }),
   postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
 
-  getConvers: () => instance.get(`/user/${Id}`),
+  getConvers: (Id) => instance.get(`/user/${Id}`),
 
   postSubSign: (payload) => instance.post("/user/signup", payload),
   postUserId: (payload) => instance.post("/user/checkid", payload),
@@ -57,7 +65,7 @@ export const trainApi = {
 // 인터셉터
 instance.interceptors.request.use(
   async (config) => {
-    const token = getCookie("token");
+    const token = localStorage.getItem("token");
     console.log(token);
     if (token) {
       config.headers = {

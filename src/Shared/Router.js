@@ -12,6 +12,7 @@ import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
 import CustomerNotice from "../Components/Profile/CustomerNotice";
 import AgreePage from "../Components/Profile/AgreePage";
 import SubSign from "../Pages/SubSign";
+import KakaoLogin from "../Pages/KakaoLogin";
 
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
@@ -23,6 +24,8 @@ const Router = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/social/oauth/callback" element={<KakaoLogin />} />
+
           <Route path="/subsign" element={<SubSign />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
