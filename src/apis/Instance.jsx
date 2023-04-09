@@ -4,13 +4,14 @@ import { Cookies, useCookies } from "react-cookie";
 import { getCookie, removeCookie, setCookie } from "../MyTools/Hooks/MyCookie";
 import mem from "mem";
 import { memoizedRefreshToken } from "./../Recoil/Modules/refreshToken";
+import { useNavigate } from "react-router-dom";
 
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
 const yhURL = process.env.REACT_APP_TH_S_HOST;
 const token = localStorage.getItem("token");
-
+const navigate = useNavigate();
 //일반데이터 Instance
 export const instance = axios.create({
   baseURL: `${yhURL}`,
@@ -88,6 +89,8 @@ instance.interceptors.response.use(
           ...config.headers,
           Authorization: `Bearer ${result?.acctoken}`,
         };
+      } else {
+        navigate("/");
       }
       return instance(config);
     }
