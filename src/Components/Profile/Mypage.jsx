@@ -26,19 +26,19 @@ const MyPage = () => {
   const [changeprofile, setChangeprofile] = useState([]);
   const [originprofile, setOriginprofile] = useState([]);
   const thURL = process.env.REACT_APP_TH_S_HOST;
-  const [gender, setGender] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useRecoilState(useInfoState);
   useEffect(() => {
-    async function getProfile() {
-      const { data } = await trainApi.getConvers();
-      console.log(data);
-      setImage(data.userInfo.images);
-      setForm(data.userInfo);
-      setChangeprofile(data.userInfo.images);
-    }
-
     getProfile();
   }, []);
+  //프로필 조회 함수
+  async function getProfile() {
+    const { data } = await trainApi.getConvers();
+    console.log(data);
+    setImage(data.userInfo.images);
+    setForm(data.userInfo);
+    setChangeprofile(data.userInfo.images);
+  }
   console.log(image);
 
   const profile = form?.images?.filter((item) => item?.is_primary === true)?.[0]
@@ -52,6 +52,8 @@ const MyPage = () => {
         form.nickname,
         form.statusmessage
       );
+      setIsEdit(!isEdit);
+      getProfile();
       console.log(data);
     } catch (error) {}
   }
@@ -221,14 +223,15 @@ const MyPage = () => {
     inputRef.current.click();
   };
 
-  const checkOnlyOne = (checkThis) => {
-    const checkboxes = document.getElementsByName("gender");
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i] !== checkThis) {
-        checkboxes[i].checked = false;
-      } else checkboxes[i].value === "1" ? setGender(true) : setGender(false);
-    }
-  };
+  //성별 나중에 쓸 수도 있는 코드.
+  // const checkOnlyOne = (checkThis) => {
+  //   const checkboxes = document.getElementsByName("gender");
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     if (checkboxes[i] !== checkThis) {
+  //       checkboxes[i].checked = false;
+  //     } else checkboxes[i].value === "1" ? setGender(true) : setGender(false);
+  //   }
+  // };
 
   //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
@@ -274,60 +277,103 @@ const MyPage = () => {
               사진 업로드
             </ImgButton>
           </ImgWrap>
-          <InfoWrap>
-            <ul>
-              <li>
-                <span>휴대폰</span>
-                <InputInfo
-                  name="phoneNumber"
-                  value={form?.phoneNumber}
-                  onChange={OnChangeHandler}
-                ></InputInfo>
-              </li>
-              <li>
-                <span>닉네임</span>
-                <InputInfo
-                  onChange={OnChangeHandler}
-                  name="nickname"
-                  value={form?.result?.nickname}
-                ></InputInfo>
-              </li>
-              <li style={{ display: "flex", alignItems: "flex-start" }}></li>
-              <li
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
-                  margin: 0,
-                  borderRadius: "10px",
-                }}
-              >
-                <AreaTitle>상태 메세지</AreaTitle>
-                <input
-                  style={{ width: "100%", height: "40px" }}
-                  onChange={OnChangeHandler}
-                  name="statusmessage"
-                  value={form?.result?.introduction}
-                ></input>
-              </li>
-            </ul>
-          </InfoWrap>
+          {isEdit ? (
+            <InfoWrap>
+              <ul>
+                <li>
+                  <span>닉네임</span>
+                  <InputInfo
+                    onChange={OnChangeHandler}
+                    name="nickname"
+                    value={form?.nickname}
+                  ></InputInfo>
+                </li>
+                <li style={{ display: "flex", alignItems: "flex-start" }}></li>
+                <li
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                    margin: 0,
+                    borderRadius: "10px",
+                  }}
+                >
+                  <AreaTitle>상태 메세지</AreaTitle>
+                  <input
+                    style={{ width: "100%", height: "40px" }}
+                    onChange={OnChangeHandler}
+                    name="statusmessage"
+                    value={form?.statusmessage}
+                  ></input>
+                </li>
+              </ul>
+            </InfoWrap>
+          ) : (
+            <InfoWrap>
+              <ul>
+                <li>
+                  <span>닉네임</span>
+                  <InputInfo
+                    onChange={OnChangeHandler}
+                    name="nickname"
+                    value={form?.result?.nickname}
+                  ></InputInfo>
+                </li>
+                <li style={{ display: "flex", alignItems: "flex-start" }}></li>
+                <li
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                    margin: 0,
+                    borderRadius: "10px",
+                  }}
+                >
+                  <AreaTitle>상태 메세지</AreaTitle>
+                  <input
+                    style={{ width: "100%", height: "40px" }}
+                    onChange={OnChangeHandler}
+                    name="statusmessage"
+                    value={form?.result?.introduction}
+                  ></input>
+                </li>
+              </ul>
+            </InfoWrap>
+          )}
         </ProfileBox>
+        {/* 수정 모드 / 저장 모드 바꾸기 */}
+        {isEdit ? (
+          <div style={{ margin: "1rem", marginTop: "33px" }}>
+            <BottomStyle type={"save"} onClick={() => imgSubmitHandler()}>
+              저장
+            </BottomStyle>{" "}
+            <BottomStyle
+              type={"cancle"}
+              onClick={() => {
+                navigate("/subwaypage");
+              }}
+            >
+              취소
+            </BottomStyle>
+          </div>
+        ) : (
+          <div style={{ margin: "1rem", marginTop: "33px" }}>
+            <BottomStyle type={"save"} onClick={() => setIsEdit(!isEdit)}>
+              수정
+            </BottomStyle>{" "}
+            <BottomStyle
+              type={"cancle"}
+              onClick={() => {
+                navigate("/subwaypage");
+              }}
+            >
+              취소
+            </BottomStyle>
+          </div>
+        )}
 
-        <div style={{ margin: "1rem", marginTop: "33px" }}>
-          <BottomStyle type={"save"} onClick={() => imgSubmitHandler()}>
-            저장
-          </BottomStyle>
-          <BottomStyle
-            type={"cancle"}
-            onClick={() => {
-              navigate("/subwaypage");
-            }}
-          >
-            취소
-          </BottomStyle>
-        </div>
         <Customer>
           <button
             className="button-notice"
