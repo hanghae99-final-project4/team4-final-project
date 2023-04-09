@@ -9,10 +9,8 @@ import { memoizedRefreshToken } from "./../Recoil/Modules/refreshToken";
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
 const yhURL = process.env.REACT_APP_TH_S_HOST;
-const Id = localStorage.getItem("userId");
 const token = localStorage.getItem("token");
-console.log(token);
-console.log(Id);
+const Id = localStorage.getItem("userId");
 //일반데이터 Instance
 export const instance = axios.create({
   baseURL: `${yhURL}`,
@@ -56,7 +54,7 @@ export const trainApi = {
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
 
-  getConvers: (Id) => instance.get(`/user/${Id}`),
+  getConvers: () => instance.get(`/user/${Id}`),
 
   postSubSign: (payload) => instance.post("/user/signup", payload),
   postUserId: (payload) => instance.post("/user/checkid", payload),
