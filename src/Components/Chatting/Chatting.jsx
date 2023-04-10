@@ -12,9 +12,10 @@ import Header from "../Header/Header";
 import ImageFormIcon from "../../Element/ImageFormIcon";
 import CounterProfileModal from "../Modal/CounterProfileModal";
 import { Cookies } from "react-cookie";
-import { trainApi2 } from "../../Redux/Modules/Instance";
+
 import FrontHeader from "../Header/FrontHeader";
 import ChattingHome from "../HomeMenu/ChattingHome";
+import { trainApi2 } from "../../apis/Instance";
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -229,18 +230,20 @@ const Chatting = () => {
   //이미지 비디오 보내는 로직
   async function postSend() {
     const formData = new FormData();
-    formData.append("image", file);
-    formData.append("name", name);
+    formData.append("chatImage", file);
+
     for (const key of formData.entries()) {
       console.log(key);
     }
     console.log(file);
     try {
-      const { data } = await trainApi2.chattingForm(formData);
+      const name = JSON.parse(localStorage.getItem("nickname")).value;
+      const { data } = await trainApi2.chattingForm(name, formData);
       console.log("잘받음", data);
       socket.emit("persnalchat", {
-        url: data?.img,
-        nickname: data?.name,
+        profile: message.url,
+        url: data?.url,
+        nickname: data?.id,
         roomkey: room,
       });
     } catch (error) {

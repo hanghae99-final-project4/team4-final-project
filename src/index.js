@@ -4,17 +4,18 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./Redux/Config/configstore";
 import GlobalStyle from "./Pages/GlobalStyle";
 import { CookiesProvider } from "react-cookie";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <GlobalStyle />
-    <CookiesProvider store={store}>
-      <App />
-    </CookiesProvider>
+    
+      <GlobalStyle />
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
+   
   </>
 );
 
