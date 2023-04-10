@@ -50,7 +50,19 @@ export const trainApi2 = {
 
 export const trainApi = {
   kakaoLogin: (code) =>
-    axios.post(`${yhURL}/social/oauth/callback`, { authorizationCode: code }),
+    axios.post(`${yhURL}/social/oauth/callback`, {
+      authorizationCode: code,
+    }),
+  naverLogin: (code, state) =>
+    axios.post(`${yhURL}/social/nauth/callback`, {
+      authorizationCode: code,
+
+      state: state,
+    }),
+  googleLogin: (code) =>
+    axios.post(`${yhURL}/social/gauth/callback`, {
+      authorizationCode: code,
+    }),
   postName: (payload) => instance.post("/", payload),
   postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
   postAuthCode: (payload) => instance.post("/auth2/compare", payload),
