@@ -13,6 +13,7 @@ import CustomerNotice from "../Components/Profile/CustomerNotice";
 import AgreePage from "../Components/Profile/AgreePage";
 import SubSign from "../Pages/SubSign";
 import KakaoLogin from "../Pages/KakaoLogin";
+import GoogleLogin from "../Pages/GoogleLogin";
 
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
@@ -25,12 +26,13 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/social/oauth/callback" element={<KakaoLogin />} />
-
+          <Route path="/social/nauth/callback" element={<NaverLogin />} />
+          <Route path="/social/gauth/callback" element={<GoogleLogin />} />
           <Route path="/subsign" element={<SubSign />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
-          <Route path="/auth/naver/callback" element={<NaverLogin />} />
+
           <Route path="/main" element={<MainPage />} />
           <Route path="/chatpage" element={<ChatPage />} />
           <Route path="/converspage" element={<ConversPage />} />

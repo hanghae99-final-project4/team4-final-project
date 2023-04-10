@@ -15,14 +15,16 @@ import signintext from "../Assets/SignIn/signinText.svg";
 const Login = () => {
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
+
   //카카오 소셜 로그인
   const kakao_restapikey = `${process.env.REACT_APP_KAKAO_KEY}`;
   const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URI}`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_restapikey}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  //네이버 소셜 로그인
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
 
-  const GOOGLE = `${process.env.REACT_APP_GOOGLE_URL}`;
-  const NAVER = `${process.env.REACT_APP_NAVER_URL}`;
+  //구글 소셜 로그인
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
 
   const [Info, setInfo, onChangeValue, reset] = useInput({
     account: "",
@@ -39,11 +41,11 @@ const Login = () => {
   };
 
   const googleLogin = () => {
-    window.location.assign(GOOGLE);
+    window.location.assign(GOOGLE_AUTH_URL);
   };
 
   const naverLogin = () => {
-    window.location.assign(NAVER);
+    window.location.assign(NAVER_AUTH_URL);
   };
 
   //로그인버튼

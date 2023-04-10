@@ -4,34 +4,33 @@ import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Cookies, useCookies } from "react-cookie";
 import FirstLogo from "../Assets/FirstLogo.svg";
+import { trainApi } from "../apis/Instance";
 
 const NaverLogin = () => {
-  const navigator = useNavigate();
-  const cookies = new Cookies();
-  const [tokens, setTokens] = useCookies(["token"]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    naverLogin();
+  }, []);
 
   const code = new URL(window.location.href).searchParams.get("code");
   const state = new URL(window.location.href).searchParams.get("state");
-
-  const thURL = process.env.REACT_APP_TH_S_HOST;
-
-  axios
-    .get(`${thURL}/auth/naver/callback?code=${code}&state=${state}`)
-    .then((res) => {
-      console.log(res);
-      const token = res.data.jwtToken;
-      const msg = res.data.message;
-      const doneInfo = res.data.doneAdditionalInfo;
-      if (token) {
-        setTokens("token", token, { path: "/" });
+  console.log(code, state);
+  const naverLogin = async () => {
+    try {
+      const { data } = await trainApi.naverLogin(code, state);
+      console.log(data);
+      const token = data.token;
+      const userId = data.result[0].id;
+      if (data.token) {
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("token", token);
       }
-      if (doneInfo === true) {
-        navigator("/subwaypage");
-      } else {
-        navigator("/authcode");
-      }
-      alert(`${msg}`);
-    });
+      navigate("/subwaypage");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
