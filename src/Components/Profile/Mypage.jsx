@@ -6,95 +6,182 @@ import useInput from "../../MyTools/Hooks/UseInput";
 import { useRef } from "react";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { Cookies } from "react-cookie";
-import { trainApi, trainApi2 } from "../../Redux/Modules/Instance";
+import { trainApi, trainApi2 } from "../../apis/Instance";
 import { useNavigate } from "react-router-dom";
 import HomeMenu from "../HomeMenu/HomeMenu";
 import MypageHeader from "./MypageHeader";
+import { useRecoilState } from "recoil";
+import { useInfoState } from "../../Recoil/userList";
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
   const [files, setFiles] = useState([]);
-  const [representProfile, setRepresentProfile] = useState([]);
+  const [primaryImage, setPrimaryImage] = useState([]);
   const [preview, setPreview] = useState();
   const [form, setForm, OnChangeHandler] = useInput([]);
   const cookies = new Cookies();
   const token = cookies.get("token");
   const navigate = useNavigate();
-
+  const [changeprofile, setChangeprofile] = useState([]);
+  const [originprofile, setOriginprofile] = useState([]);
   const thURL = process.env.REACT_APP_TH_S_HOST;
-  const [gender, setGender] = useState(null);
-  console.log(representProfile);
+  const [isEdit, setIsEdit] = useState(false);
+  const [image, setImage] = useRecoilState(useInfoState);
+
   useEffect(() => {
-    async function getProfile() {
-      const { data } = await trainApi.getConvers();
-
-      setForm(data.body);
-    }
     getProfile();
-  }, [representProfile]);
-
-  // 저장
-  async function imgSubmitHandler() {
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("profileImage", files[i].file);
-    }
-
-    formData.append("representProfile", representProfile[0]?.file);
-    formData.append("phoneNumber", form.phoneNumber);
-    formData.append("nickname", form.nickname);
-    formData.append("statusmessage", form.statusmessage);
-    formData.append("gender", gender);
-
-    if (
-      representProfile[0]?.file === undefined ||
-      form?.phoneNumber === undefined ||
-      form?.nickname === undefined ||
-      form?.statusmessage === undefined
-    ) {
-      // window.alert("비어있는 내용을 채워주세요");
-    } else {
-      for (var pair of formData.entries()) {
-        console.log(pair);
-      }
-      await trainApi2
-        .postProfile(formData)
-        .then((res) => {
-          console.log(res);
-          alert(res.data.msg);
-        })
-        .catch((err) => {
-          console.log(err);
-          const errMsg = err.response.data.error;
-          alert(errMsg);
-        });
-    }
+  }, []);
+  //프로필 조회 함수
+  async function getProfile() {
+    const userId = localStorage.getItem("userId");
+    const { data } = await trainApi.getConvers(userId);
+    console.log(data);
+    setImage(data.userInfo.images);
+    setForm(data.userInfo);
+    setChangeprofile(data.userInfo.images);
   }
+  console.log(image);
 
+  const profile = form?.images?.filter((item) => item?.is_primary === true)?.[0]
+    ?.image_url;
+  console.log(profile);
+
+  // 프로필 정보들 저장 핸들러
+  async function imgSubmitHandler() {
+    try {
+      const Id = localStorage.getItem("userId");
+      const { data } = await trainApi2.editProfile(
+        Id,
+        form.nickname,
+        form.statusmessage
+      );
+      setIsEdit(!isEdit);
+      getProfile();
+      console.log(data);
+    } catch (error) {}
+  }
+  console.log(form);
+  //사진 업로드
+
+  const uploadFile = async () => {
+    const formData = new FormData();
+    for (let i = 0; i < image.length; i++) {
+      if (image[i].file !== undefined)
+        formData.append("otherImages", image[i].file);
+    }
+    if (primaryImage[0]?.file !== undefined)
+      formData.append("primaryImage", primaryImage[0]?.file);
+
+    console.log(Array.from(formData.entries()));
+    const form = formData.getAll("otherImages");
+    formData.delete("otherImages");
+    console.log(form);
+    console.log(primaryImage[0]?.file);
+
+    form
+      .filter((item) => item.name !== primaryImage[0]?.file?.name)
+      .forEach((item) => formData.append("otherImages", item));
+
+    console.log(Array.from(formData.entries()));
+
+    try {
+      const Id = localStorage.getItem("userId");
+      const { data } = await trainApi2.postProfile(Id, formData);
+      console.log(data);
+      setIsModal(!isModal);
+      getProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //대표 프로필 수정
+  const patchProfile = async () => {
+    console.log(primaryImage[0].url);
+    //기존 대표 이미지
+    const originProfile = changeprofile?.filter(
+      (item) => item?.is_primary === true
+    );
+    // console.log(originProfile);
+    //프로필 사진들
+    const newProfile = [...changeprofile];
+    //새로운 대표 이미지
+    const changenewProfile = changeprofile?.filter(
+      (item) => item.image_url === primaryImage[0].url
+    );
+    setChangeprofile(...changeprofile, changenewProfile);
+
+    // console.log("새로운 이미지", changenewProfile);
+    // console.log("url", changenewProfile[0].image_url);
+    // console.log("들어감", changeprofile);
+    //기존의 있던 대표 이미지
+    const changeProfile = changeprofile.filter(
+      (item) => item.image_url === originProfile
+    );
+
+    // setChangeprofile(
+    const newArr = newProfile
+      .map((item) =>
+        item.image_url === changenewProfile[0].image_url
+          ? { ...item, is_primary: true }
+          : item
+      )
+      .filter((item) => item.image_url === changenewProfile[0].image_url);
+
+    // );
+    // setOriginprofile(
+    const origin = newProfile
+      .map((item) =>
+        item.image_url === originProfile[0].image_url
+          ? { ...item, is_primary: false }
+          : item
+      )
+      .filter((item) => item.image_url === originProfile[0].image_url);
+    // );
+    console.log(originProfile[0].image_url);
+
+    //console.log(changenewProfile);
+    // console.log(image);
+
+    console.log("새로운 프로필", newArr);
+    console.log("기존이미지", origin);
+    try {
+      const Id = localStorage.getItem("userId");
+      const { data } = await trainApi2.patchProfile(Id, newArr[0], origin[0]);
+      console.log(data);
+      setIsModal(!isModal);
+      getProfile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(changeprofile);
+
+  console.log("클릭한 이미지", primaryImage);
+  //사진 업로드 시 파일 만들기
   const formSubmit = (e) => {
-    let temp = [];
+    let temp = [...image];
     const photoList = e.target.files;
     for (let i = 0; i < photoList.length; i++) {
       temp.push({
         id: photoList[i]?.name,
         file: photoList?.[i],
-        url: URL?.createObjectURL(photoList[i]),
+        image_url: URL?.createObjectURL(photoList[i]),
       });
     }
 
     if (temp.length > 5) {
       temp = temp.slice(0, 5);
     }
-    setFiles(temp.concat(files));
+    setImage(temp.concat(files));
   };
 
   //preview 이미지 함수
-  const thumb = files.map((item, index) => {
+  const thumb = image.map((item, index) => {
     return (
       <div>
         <CloseCircleFilled
-          onClick={() => removeProfile(item.url)}
+          onClick={() => removeProfile(item.image_url)}
           style={{
             position: "relative",
             top: "18px",
@@ -105,23 +192,31 @@ const MyPage = () => {
         />
         <ThumbImg
           onClick={() =>
-            setRepresentProfile([
+            setPrimaryImage([
               {
                 file: item.file,
-                url: item.url,
+                url: item.image_url,
               },
             ])
           }
           key={index}
-          src={item.url}
+          src={item.image_url}
           alt="image"
         />
       </div>
     );
   });
-
-  const removeProfile = (deleteUrl) => {
-    setFiles(files.filter((item) => item.url !== deleteUrl));
+  //이미지 삭제하는 함수
+  const removeProfile = async (deleteUrl) => {
+    const Id = localStorage.getItem("userId");
+    console.log(deleteUrl);
+    try {
+      const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
+      console.log(data);
+      setImage(image.filter((item) => item.image_url !== deleteUrl));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fileImagePreview = (fileBlob) => {
@@ -141,20 +236,22 @@ const MyPage = () => {
     inputRef.current.click();
   };
 
-  const checkOnlyOne = (checkThis) => {
-    const checkboxes = document.getElementsByName("gender");
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i] !== checkThis) {
-        checkboxes[i].checked = false;
-      } else checkboxes[i].value === "1" ? setGender(true) : setGender(false);
-    }
-  };
+  //성별 나중에 쓸 수도 있는 코드.
+  // const checkOnlyOne = (checkThis) => {
+  //   const checkboxes = document.getElementsByName("gender");
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     if (checkboxes[i] !== checkThis) {
+  //       checkboxes[i].checked = false;
+  //     } else checkboxes[i].value === "1" ? setGender(true) : setGender(false);
+  //   }
+  // };
 
   //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
     <>
       <Wrap>
         <MypageHeader msg={"나의정보"} />
+
         <TitleBox>
           <div>
             <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>
@@ -163,17 +260,20 @@ const MyPage = () => {
 
         <ProfileBox>
           <ImgWrap>
-            {representProfile?.length > 0 ? (
+            {primaryImage?.length > 0 ? (
               <ImgBox
                 style={{ transform: "scale(1)", borderRadius: "10px" }}
                 id="img-preview"
-                src={preview}
+                src={primaryImage[0].url}
               />
             ) : (
               <ImgBox
                 style={{ transform: "scale(1)", borderRadius: "10px" }}
                 id="img-preview"
-                src={form?.representProfile}
+                src={
+                  form?.images?.filter((item) => item?.is_primary === true)?.[0]
+                    ?.image_url
+                }
               />
             )}
 
@@ -187,80 +287,107 @@ const MyPage = () => {
               multiple
               onChange={(e) => formSubmit(e)}
             />
-            <ImgButton onClick={() => setIsModal(true)}>사진 첨부</ImgButton>
+            <ImgButton onClick={() => setIsModal(!isModal)}>
+              사진 업로드
+            </ImgButton>
           </ImgWrap>
-          <InfoWrap>
-            <ul>
-              <li>
-                <span>휴대폰</span>
-                <InputInfo
-                  name="phoneNumber"
-                  value={form?.phoneNumber}
-                  onChange={OnChangeHandler}
-                ></InputInfo>
-              </li>
-              <li>
-                <span>닉네임</span>
-                <InputInfo
-                  onChange={OnChangeHandler}
-                  name="nickname"
-                  value={form?.nickname}
-                ></InputInfo>
-              </li>
-              <li style={{ display: "flex", alignItems: "flex-start" }}>
-                {/* <span>성별</span> */}
-                {/* <div style={{ width: "80%" }}>
-                  <CheckGender
-                    type="checkbox"
-                    name="gender"
-                    value="1"
-                    onChange={(e) => checkOnlyOne(e.target)}
-                  />
-                  <span>여성</span>
-                  <CheckGender
-                    type="checkbox"
-                    name="gender"
-                    value="2"
-                    onChange={(e) => checkOnlyOne(e.target)}
-                  />
-                  <span>남성</span>
-                </div> */}
-              </li>
-              <li
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
-                  margin: 0,
-                  borderRadius: "10px",
-                }}
-              >
-                <AreaTitle>상태 메세지</AreaTitle>
-                <input
-                  style={{ width: "100%", height: "40px" }}
-                  onChange={OnChangeHandler}
-                  name="statusmessage"
-                  value={form?.statusmessage}
-                ></input>
-              </li>
-            </ul>
-          </InfoWrap>
+          {isEdit ? (
+            <InfoWrap>
+              <ul>
+                <li>
+                  <span>닉네임</span>
+                  <InputInfo
+                    onChange={OnChangeHandler}
+                    name="nickname"
+                    value={form?.nickname}
+                  ></InputInfo>
+                </li>
+                <li style={{ display: "flex", alignItems: "flex-start" }}></li>
+                <li
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                    margin: 0,
+                    borderRadius: "10px",
+                  }}
+                >
+                  <AreaTitle>상태 메세지</AreaTitle>
+                  <input
+                    style={{ width: "100%", height: "40px" }}
+                    onChange={OnChangeHandler}
+                    name="statusmessage"
+                    value={form?.statusmessage}
+                  ></input>
+                </li>
+              </ul>
+            </InfoWrap>
+          ) : (
+            <InfoWrap>
+              <ul>
+                <li>
+                  <span>닉네임</span>
+                  <InputInfo
+                    onChange={OnChangeHandler}
+                    name="nickname"
+                    value={form?.result?.nickname}
+                  ></InputInfo>
+                </li>
+                <li style={{ display: "flex", alignItems: "flex-start" }}></li>
+                <li
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                    margin: 0,
+                    borderRadius: "10px",
+                  }}
+                >
+                  <AreaTitle>상태 메세지</AreaTitle>
+                  <input
+                    style={{ width: "100%", height: "40px" }}
+                    onChange={OnChangeHandler}
+                    name="statusmessage"
+                    value={form?.result?.introduction}
+                  ></input>
+                </li>
+              </ul>
+            </InfoWrap>
+          )}
         </ProfileBox>
+        {/* 수정 모드 / 저장 모드 바꾸기 */}
+        {isEdit ? (
+          <div style={{ margin: "1rem", marginTop: "33px" }}>
+            <BottomStyle type={"save"} onClick={() => imgSubmitHandler()}>
+              저장
+            </BottomStyle>{" "}
+            <BottomStyle
+              type={"cancle"}
+              onClick={() => {
+                navigate("/subwaypage");
+              }}
+            >
+              취소
+            </BottomStyle>
+          </div>
+        ) : (
+          <div style={{ margin: "1rem", marginTop: "33px" }}>
+            <BottomStyle type={"save"} onClick={() => setIsEdit(!isEdit)}>
+              수정
+            </BottomStyle>{" "}
+            <BottomStyle
+              type={"cancle"}
+              onClick={() => {
+                navigate("/subwaypage");
+              }}
+            >
+              취소
+            </BottomStyle>
+          </div>
+        )}
 
-        <div style={{ margin: "1rem", marginTop: "33px" }}>
-          <BottomStyle type={"save"} onClick={() => imgSubmitHandler()}>
-            저장
-          </BottomStyle>
-          <BottomStyle
-            type={"cancle"}
-            onClick={() => {
-              navigate("/subwaypage");
-            }}
-          >
-            취소
-          </BottomStyle>
-        </div>
         <Customer>
           <button
             className="button-notice"
@@ -285,19 +412,21 @@ const MyPage = () => {
             <ModalWrap>
               <ModalProfileDiv>{thumb}</ModalProfileDiv>
               <ProfileSetBtn onClick={() => PictureUpload()}>
-                프로필 사진 바꾸기
+                사진 업로드
               </ProfileSetBtn>
+              <button onClick={() => uploadFile()}>저장</button>
+              <button onClick={() => patchProfile()}>대표프로필 수정</button>
               <ProfileCloseBtn
                 onClick={() => {
-                  if (representProfile[0]?.file === undefined) {
+                  if (primaryImage[0]?.file === undefined) {
                     setIsModal(!isModal);
                   } else {
-                    fileImagePreview(representProfile[0]?.file);
+                    fileImagePreview(primaryImage[0]?.file);
                     setIsModal(!isModal);
                   }
                 }}
               >
-                저장 후 나가기
+                나가기
               </ProfileCloseBtn>
             </ModalWrap>
           </ModalCtn>

@@ -7,11 +7,12 @@ import axios from "axios";
 import { Cookies } from "react-cookie";
 import HomeMenu from "../Components/HomeMenu/HomeMenu";
 import Header from "../Components/Header/Header";
-import { trainApi } from "../Redux/Modules/Instance";
+
 import FrontHeader from "../Components/Header/FrontHeader";
 import { ReactComponent as HowIcon } from "../Assets/Convers/How.svg";
 import { useState } from "react";
 import HelpModal from "../Components/Modal/HelpModal";
+import { trainApi } from "../apis/Instance";
 const cookies = new Cookies();
 
 const token = cookies.get("token");
@@ -29,6 +30,7 @@ const ConversPage = () => {
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
+  const Id = localStorage.getItem("userId");
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -42,10 +44,12 @@ const ConversPage = () => {
     // setItem
     window.localStorage.setItem(keyName, objString);
   }
+
   const conversHandler = () => {
+    const primary = message.images.filter((item) => item.is_primary === true);
     setItemWithExpireTime("train", message.train, 3000000000);
-    setItemWithExpireTime("profile", message.representProfile, 3000000000);
-    setItemWithExpireTime("nickname", message.nickname, 30000000000);
+    setItemWithExpireTime("profile", primary[0]?.image_url, 3000000000);
+    setItemWithExpireTime("nickname", message.result.nickname, 30000000000);
     setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
     if (message?.train.length !== 4) {
       window.alert("칸 정보는 숫자로만 4자리만 입력해주세요!!");
@@ -60,14 +64,10 @@ const ConversPage = () => {
   };
   useEffect(() => {
     async function getNickname() {
-      const { data } = await trainApi.getConvers();
-      if (
-        data?.errorMessage === "비정상적인 활동이 감지되어 로그아웃됩니다(2)."
-      ) {
-        return getNickname();
-      } else {
-        setMessage(data.body);
-      }
+      const userId = localStorage.getItem("userId");
+      const { data } = await trainApi.getConvers(userId);
+      console.log(data);
+      setMessage(data.userInfo);
     }
     getNickname();
   }, []);

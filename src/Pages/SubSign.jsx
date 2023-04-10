@@ -2,21 +2,22 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import useInput from "../MyTools/Hooks/UseInput";
 import FrontHeader from "../Components/Header/FrontHeader";
-import { trainApi } from "../Redux/Modules/Instance";
 import { useCookies } from "react-cookie";
 import userid from "../Assets/SubSign/UserId.svg";
 import pw from "../Assets/SubSign/Password.svg";
 import pwConfirm from "../Assets/SubSign/PasswordConfirm.svg";
 import norminfo from "../Assets/SubSign/NormInfo.svg";
 import { useNavigate } from "react-router-dom";
+import { trainApi } from "../apis/Instance";
 
 const SubSign = () => {
   const navigator = useNavigate();
   const [, , removeCookie] = useCookies(["token"]);
   const [Info, setInfo, onChangeValue, reset] = useInput({
-    snsId: "",
+    account: "",
     password: "",
     confirmpassword: "",
+    nickname: "",
   });
 
   //아이디 유효성
@@ -38,23 +39,23 @@ const SubSign = () => {
     //아이디유효성
     const pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
-    if (Info.snsId.trim() === "" || Info.snsId.trim() === "\n") {
+    if (Info.account.trim() === "" || Info.account.trim() === "\n") {
       alert("빈칸을 채워주세요!");
       return;
-    } else if (pattern_kor.test(Info.snsId) === true) {
+    } else if (pattern_kor.test(Info.account) === true) {
       alert("6자~15자로 영문 혹은 영문+숫자로 조합해주세요!");
       return;
-    } else if (Info.snsId.length < 6 || Info.snsId.length > 16) {
+    } else if (Info.account.length < 6 || Info.account.length > 16) {
       alert("6자~15자로 영문 혹은 영문+숫자로 조합해주세요!");
       return;
-    } else if (pattern_empty.test(Info.snsId) === true) {
+    } else if (pattern_empty.test(Info.account) === true) {
       alert("공백을 채워주세요!");
       return;
     }
 
     await trainApi
       .postUserId({
-        snsId: Info.snsId,
+        account: Info.account,
       })
       .then((res) => {
         // console.log(res);
@@ -72,45 +73,41 @@ const SubSign = () => {
   };
   //확인버튼
   const onSignup = async (e) => {
-    e.preventDefault();
-
-    // }
-    await trainApi
-      .postSubSign({
-        snsId: Info.snsId,
+    try {
+      e.preventDefault();
+      const { data } = await trainApi.postSubSign({
+        account: Info.account,
         password: Info.password,
-        confirmpassword: Info.confirmpassword,
-      })
-      .then((res) => {
-        // console.log(res);
-        const msg = res.data.msg;
-        if (msg === "성공") {
-          alert("회원가입이 되셨습니다.");
-          navigator("/");
-        }
-      })
-      .catch((err) => {
-        // console.log(err);
-        const status = err.response.status;
-        const errMsg = err.response.data;
-        const error = err.response.data.error;
-        if (
-          status === 422 &&
-          errMsg === '"password" is not allowed to be empty'
-        ) {
-          alert("패스워드는 필수 입력 정보입니다.");
-        } else if (
-          status === 422 &&
-          errMsg === '"confirmpassword" must be [ref:password]'
-        ) {
-          alert("비밀번호가 일치하지 않습니다.");
-        } else if (status === 422) {
-          alert(errMsg);
-        } else if (status === 400) {
-          alert(error);
-        }
-        return;
+        password2: Info.confirmpassword,
       });
+      console.log(data);
+      const msg = data.msg;
+      if (msg === "성공") {
+        alert("회원가입이 되셨습니다.");
+        navigator("/");
+      }
+    } catch (err) {
+      // console.log(err);
+      const status = err.response.status;
+      const errMsg = err.response.data;
+      const error = err.response.data.error;
+      if (
+        status === 422 &&
+        errMsg === '"password" is not allowed to be empty'
+      ) {
+        alert("패스워드는 필수 입력 정보입니다.");
+      } else if (
+        status === 422 &&
+        errMsg === '"confirmpassword" must be [ref:password]'
+      ) {
+        alert("비밀번호가 일치하지 않습니다.");
+      } else if (status === 422) {
+        alert(errMsg);
+      } else if (status === 400) {
+        alert(error);
+      }
+      return;
+    }
   };
 
   return (
@@ -132,8 +129,8 @@ const SubSign = () => {
                     <div className="mt-[10px] flex justify-center">
                       <input
                         type="text"
-                        name="snsId"
-                        value={Info.snsId}
+                        name="account"
+                        value={Info.account}
                         maxLength="15"
                         onChange={onChangeValue}
                         placeholder="아이디 입력"
@@ -146,7 +143,7 @@ const SubSign = () => {
                   </div>
                 </div>
 
-                {Info.snsId.length < 6 || Info.snsId.length > 15 ? (
+                {Info.account.length < 6 || Info.account.length > 15 ? (
                   <ErrorMessage>
                     아이디는 6자~15자 이내로 영문 또는 영문과 숫자를
                     조합해주세요.
@@ -156,9 +153,28 @@ const SubSign = () => {
                 )}
               </div>
               <div>
-                <label>
-                  <img src={pw} alt="password" />
-                </label>
+                <div className="mt-[-15px]">
+                  <label className="w-[50px] h-[19px] text-black text-sm font-sans semibold font-bold">
+                    닉네임<span className="text-cyan-300">*</span>
+                  </label>
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    name="nickname"
+                    value={Info.nickname}
+                    onChange={onChangeValue}
+                    placeholder="닉네임 입력"
+                    className="w-[253px] mt-[-15px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                  />
+                </div>
+                <div className="mt-[10px]">
+                  <label className="">
+                    <img src={pw} alt="password" />
+                  </label>
+                </div>
+
                 <div>
                   <div>
                     <input
@@ -168,7 +184,7 @@ const SubSign = () => {
                       value={Info.password}
                       onChange={onChangeValue}
                       placeholder="비밀번호 입력"
-                      className="w-[253px] mt-[10px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
+                      className="w-[253px] mt-[15px] pb-[2px] text-[1rem] border-b-[1px]  border-[#71C9DD]"
                     />
                   </div>
                   {Info.password.length === 0 ? (
@@ -203,7 +219,7 @@ const SubSign = () => {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="mt-[15px]">
                 <div>
                   <label className="text-[1rem]">
                     <img src={pwConfirm} alt="pwConfirm" />

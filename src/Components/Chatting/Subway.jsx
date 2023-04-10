@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import SubwayIcon from "../../Element/SubwayIcon";
 import styled from "styled-components";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import useInput from "../../MyTools/Hooks/UseInput";
 import { useNavigate } from "react-router-dom";
 import HomeMenu from "../HomeMenu/HomeMenu";
@@ -39,7 +38,8 @@ const Subway = () => {
         <div onClick={Locate}>
           <SubwayIcon />
         </div>
-        <TransformWrapper
+        <div>
+          {/* <TransformWrapper
           style={{ width: "375px", height: "812px" }}
           initialScale={2}
           minScale={1}
@@ -56,10 +56,10 @@ const Subway = () => {
                 }}
                 ref={subwayRef}
                 onClick={(e) => subwayCoordinate(e)}
-              />
-            </div>
-          </TransformComponent>
-        </TransformWrapper>
+              /> */}
+        </div>
+        {/* </TransformComponent> */}
+        {/* </TransformWrapper> */}
       </SubwayDiv>
       <SubwayHome />
     </>
