@@ -10,6 +10,8 @@ import signmsg from "../Assets/SignIn/SignMsg.svg";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import signintext from "../Assets/SignIn/signinText.svg";
+import axios from "axios";
+
 //카카오 소셜 로그인
 
 const Login = () => {
@@ -19,12 +21,16 @@ const Login = () => {
   //카카오 소셜 로그인
   const kakao_restapikey = `${process.env.REACT_APP_KAKAO_KEY}`;
   const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URI}`;
+  const google_restapikey = `${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
+  const GOOGLE_REDIRECT_URI = `${process.env.REACT_APP_GOOGLE_REDIRECT_URI}`;
+  const naver_restapikey = `${process.env.REACT_APP_NAVER_CLIENT_ID}`;
+  const NAVER_REDIRECT_URI = `${process.env.REACT_APP_NAVER_CLIENT_ID}`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_restapikey}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   //네이버 소셜 로그인
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&state=randomState&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
+  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naver_restapikey}&state=randomState&redirect_uri=${NAVER_REDIRECT_URI}`;
 
   //구글 소셜 로그인
-  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_restapikey}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
 
   const [Info, setInfo, onChangeValue, reset] = useInput({
     account: "",
@@ -36,6 +42,27 @@ const Login = () => {
     localStorage.clear();
   }, []);
 
+  // async function ymLogin() {
+  //   try {
+  //     for (let i = 100; i <= 150; i++) {
+  //       const { data } = axios.post(
+  //         `https://sniperfactory.com/sfac/http_assignment_${i}`,
+
+  //         {},
+  //         {
+  //           headers: {
+  //             "Access-Control-Allow-Origin": "*",
+  //             "User-Agent": "SniperFactoryBrowser",
+  //             Authorization: "Bearer ey",
+  //           },
+  //         }
+  //       );
+  //       console.log(data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   const kakoLogin = () => {
     window.location.assign(KAKAO_AUTH_URL);
   };
@@ -168,6 +195,7 @@ const Login = () => {
                 </button>
               </div>
             </div>
+            {/* <button onClick={() => ymLogin()}>클릭해봐</button> */}
           </div>
         </article>
       </LoginBox>
