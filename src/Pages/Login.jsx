@@ -24,7 +24,7 @@ const Login = () => {
   const google_restapikey = `${process.env.REACT_APP_GOOGLE_CLIENT_ID}`;
   const GOOGLE_REDIRECT_URI = `${process.env.REACT_APP_GOOGLE_REDIRECT_URI}`;
   const naver_restapikey = `${process.env.REACT_APP_NAVER_CLIENT_ID}`;
-  const NAVER_REDIRECT_URI = `${process.env.REACT_APP_NAVER_CLIENT_ID}`;
+  const NAVER_REDIRECT_URI = `${process.env.REACT_APP_NAVER_REDIRECT_URI}`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_restapikey}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   //네이버 소셜 로그인
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naver_restapikey}&state=randomState&redirect_uri=${NAVER_REDIRECT_URI}`;
@@ -51,7 +51,6 @@ const Login = () => {
   //         {},
   //         {
   //           headers: {
-  //             "Access-Control-Allow-Origin": "*",
   //             "User-Agent": "SniperFactoryBrowser",
   //             Authorization: "Bearer ey",
   //           },
