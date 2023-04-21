@@ -14,6 +14,7 @@ import AgreePage from "../Components/Profile/AgreePage";
 import SubSign from "../Pages/SubSign";
 import KakaoLogin from "../Pages/KakaoLogin";
 import GoogleLogin from "../Pages/GoogleLogin";
+import EmailPage from "../Pages/EmailPage";
 
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
@@ -28,6 +29,7 @@ const Router = () => {
           <Route path="/social/oauth/callback" element={<KakaoLogin />} />
           <Route path="/social/nauth/callback" element={<NaverLogin />} />
           <Route path="/social/gauth/callback" element={<GoogleLogin />} />
+          <Route path="/email" element={<EmailPage />} />
           <Route path="/subsign" element={<SubSign />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />

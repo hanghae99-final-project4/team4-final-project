@@ -7,12 +7,9 @@ const HeaderIcon = () => {
   const navigate = useNavigate();
   return (
     <HeaderPointer
-      onClick={() => navigate("/mypage")}
+      onClick={() => navigate(-1)}
       style={{
         cursor: "pointer",
-        position: "relative",
-        left: "5px",
-        top: "-35px",
       }}
     />
   );
