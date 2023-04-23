@@ -15,6 +15,8 @@ import SubSign from "../Pages/SubSign";
 import KakaoLogin from "../Pages/KakaoLogin";
 import GoogleLogin from "../Pages/GoogleLogin";
 import EmailPage from "../Pages/EmailPage";
+import ResetPage from "../Pages/ResetPage";
+import AuthPage from "../Pages/AuthPage";
 
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
@@ -30,6 +32,8 @@ const Router = () => {
           <Route path="/social/nauth/callback" element={<NaverLogin />} />
           <Route path="/social/gauth/callback" element={<GoogleLogin />} />
           <Route path="/email" element={<EmailPage />} />
+          <Route path="/reset" element={<ResetPage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/subsign" element={<SubSign />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />

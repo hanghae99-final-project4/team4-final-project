@@ -20,7 +20,7 @@ const EmailLogin = () => {
       </PasswordMiss>
       <NoaccountBox>
         <Noaccount>계정이 없으신가요?</Noaccount>
-        <div>이메일로 회원가입</div>
+        <EmailSign>이메일로 회원가입</EmailSign>
       </NoaccountBox>
     </Wrap>
   );
@@ -61,6 +61,7 @@ const LoginButton = styled.button`
   background-color: rgba(250, 58, 69, 0.3);
 `;
 const PasswordMiss = styled.div`
+  cursor: pointer;
   margin: 0 auto;
   margin-top: 30px;
   color: #696969;
@@ -76,6 +77,8 @@ const PasswordMiss = styled.div`
 const NoaccountBox = styled.div`
   margin-top: 240px;
   gap: 16.5px;
+  display: flex;
+  flex-direction: column;
 `;
 const Noaccount = styled.span`
   color: #a0a0a0;

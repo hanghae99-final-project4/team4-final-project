@@ -11,8 +11,7 @@ const Header = ({ msg }) => {
         <PointerBox>
           <HeaderIcon />
         </PointerBox>
-
-        {msg}
+        <MessageBox>{msg}</MessageBox>
       </MainHeader>
     </div>
   );
@@ -30,13 +29,14 @@ const MainHeader = styled.div`
   line-height: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
   font-size: 18px;
   font-weight: 400;
   line-height: 21.78px;
   width: 375px;
 `;
 const PointerBox = styled.div`
-  position: relative;
-  right: 63px;
+  margin-left: 16px;
+`;
+const MessageBox = styled.div`
+  margin-left: 63px;
 `;

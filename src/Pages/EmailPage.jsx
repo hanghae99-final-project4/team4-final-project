@@ -14,7 +14,7 @@ const EmailPage = () => {
 
 export default EmailPage;
 
-const Wrap = styled.div`
+export const Wrap = styled.div`
   width: 375px;
   height: 812px;
 
