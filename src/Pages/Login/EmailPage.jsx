@@ -1,12 +1,12 @@
 import React from "react";
-import EmailLogin from "../Components/Login/EmailLogin";
-import Header from "../Components/Header/Header";
+import Header from "../../Components/Header/Header";
 import styled from "styled-components";
+import EmailLogin from "./../../Components/Login/EmailLogin";
 
 const EmailPage = () => {
   return (
     <Wrap>
-      <Header msg={"이메일로 시작하기"} />
+      <Header msg={"이메일로 시작하기"} margin="63px" />
       <EmailLogin />
     </Wrap>
   );

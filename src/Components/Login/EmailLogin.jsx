@@ -7,6 +7,9 @@ const EmailLogin = () => {
   const passwordMiss = () => {
     navigate("/reset");
   };
+  const signinHandler = () => {
+    navigate("/agree");
+  };
   return (
     <Wrap>
       <LoginForm>
@@ -20,7 +23,7 @@ const EmailLogin = () => {
       </PasswordMiss>
       <NoaccountBox>
         <Noaccount>계정이 없으신가요?</Noaccount>
-        <EmailSign>이메일로 회원가입</EmailSign>
+        <EmailSign onClick={signinHandler}>이메일로 회원가입</EmailSign>
       </NoaccountBox>
     </Wrap>
   );
@@ -85,4 +88,5 @@ const Noaccount = styled.span`
 `;
 const EmailSign = styled.span`
   color: #333333;
+  cursor: pointer;
 `;

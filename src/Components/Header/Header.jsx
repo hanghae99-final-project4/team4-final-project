@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeaderIcon from "../../Element/HeaderIcon";
 
-const Header = ({ msg }) => {
+const Header = ({ msg, margin }) => {
   return (
     <div>
       {" "}
@@ -11,7 +11,7 @@ const Header = ({ msg }) => {
         <PointerBox>
           <HeaderIcon />
         </PointerBox>
-        <MessageBox>{msg}</MessageBox>
+        <MessageBox margin={margin}>{msg}</MessageBox>
       </MainHeader>
     </div>
   );
@@ -38,5 +38,5 @@ const PointerBox = styled.div`
   margin-left: 16px;
 `;
 const MessageBox = styled.div`
-  margin-left: 63px;
+  margin-left: ${(props) => props.margin};
 `;
