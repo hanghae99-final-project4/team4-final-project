@@ -1,7 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Auth = () => {
+  const navigate = useNavigate();
+  const completeHandler = () => {
+    navigate("/complete");
+  };
   return (
     <Wrap>
       <TextBox>
@@ -9,14 +14,14 @@ const Auth = () => {
         <TextSpan>인증번호가 전송될 인증 수단을 선택해주세요</TextSpan>
       </TextBox>
       <AuthDiv>
-        <Emailinput type="radio" id="email" />
+        <Emailinput type="radio" id="email" checked />
         <AuthBox>
           <Authemail for="email">등록된 이메일주소로 인증</Authemail>
           <Email for="email">{"wyswhsl21@naver.com"}</Email>
         </AuthBox>
       </AuthDiv>
 
-      <ConfirmButton>확인</ConfirmButton>
+      <ConfirmButton onClick={completeHandler}>확인</ConfirmButton>
     </Wrap>
   );
 };
@@ -28,7 +33,7 @@ const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const AuthDiv = styled.div`
+const AuthDiv = styled.label`
   margin-top: 33px;
   display: flex;
   margin-right: 155px;
@@ -36,9 +41,26 @@ const AuthDiv = styled.div`
 `;
 
 const Emailinput = styled.input`
-  border-bottom: 1px solid #e3e3e3;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  appearance: none;
+  border: max(2px, 0.1em) solid #cfcfcf;
+  border-radius: 50%;
+
+  &:checked {
+    background-color: white;
+    border: 1px solid #cfcfcf;
+  }
+  &:checked::before {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    margin: 3px;
+    background-color: #cfcfcf;
+    border-radius: 50%;
+  }
 `;
 
 const Passwordinput = styled.input`
@@ -51,7 +73,7 @@ const ConfirmButton = styled.button`
   width: 343px;
   height: 50px;
   color: #ffffff;
-  background-color: rgba(250, 58, 69, 0.3);
+  background-color: #fa3a45;
 `;
 
 const NoaccountBox = styled.div`
@@ -87,13 +109,13 @@ const TextSpan = styled.span`
   text-align: center;
   color: #838383;
 `;
-const Authemail = styled.label`
+const Authemail = styled.span`
   font-family: Pretendard;
   font-weight: 500;
   font-size: 14px;
   line-height: 16.71px;
 `;
-const Email = styled.label`
+const Email = styled.span`
   font-family: Pretendard;
   font-weight: 400;
   font-size: 14px;

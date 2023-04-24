@@ -17,6 +17,7 @@ import GoogleLogin from "../Pages/GoogleLogin";
 import EmailPage from "../Pages/EmailPage";
 import ResetPage from "../Pages/ResetPage";
 import AuthPage from "../Pages/AuthPage";
+import CompletePage from "../Pages/CompletePage";
 
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
@@ -34,6 +35,7 @@ const Router = () => {
           <Route path="/email" element={<EmailPage />} />
           <Route path="/reset" element={<ResetPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/complete" element={<CompletePage />} />
           <Route path="/subsign" element={<SubSign />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
