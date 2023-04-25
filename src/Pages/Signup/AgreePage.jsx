@@ -1,8 +1,7 @@
 import React from "react";
 import { Wrap } from "../Login/EmailPage";
 import Header from "../../Components/Header/Header";
-import Agree from "../../Components/Signin/Agree";
-
+import Agree from "../../Components/Signup/Agree";
 const AgreePage = () => {
   return (
     <Wrap>

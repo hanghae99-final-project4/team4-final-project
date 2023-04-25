@@ -17,7 +17,8 @@ import ResetPage from "../Pages/Login/ResetPage";
 import AuthPage from "../Pages/Login/AuthPage";
 import CompletePage from "../Pages/Login/CompletePage";
 import EmailPage from "../Pages/Login/EmailPage";
-import AgreePage from "./../Pages/Signin/AgreePage";
+import AgreePage from "../Pages/Signup/AgreePage";
+import SignupPage from "../Pages/Signup/SignupPage";
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
 const MyPage = lazy(() => import("../Components/Profile/Mypage"));
@@ -38,6 +39,7 @@ const Router = () => {
           <Route path="/complete" element={<CompletePage />} />
           {/* 회원가입 라우터 */}
           <Route path="/agree" element={<AgreePage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/subsign" element={<SubSign />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />

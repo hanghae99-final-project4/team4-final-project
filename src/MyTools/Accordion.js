@@ -58,7 +58,7 @@ const Title = styled.div`
   align-items: center;
   font-weight: 400;
   position: absolute;
-  left: -25px;
+  left: -35px;
 `;
 const Button = styled.div`
   font-size: 14px;
