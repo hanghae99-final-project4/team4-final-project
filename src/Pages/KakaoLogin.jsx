@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { trainApi } from "../apis/Instance";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "../MyTools/Hooks/MyCookie";
+import styled from "styled-components";
+import Loadinglogo from "../Assets/Loading.svg";
 const KakaoLogin = () => {
   const kakao_restapikey = `${process.env.REACT_APP_KAKAO_KEY}`;
   const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URI}`;
@@ -31,7 +33,35 @@ const KakaoLogin = () => {
     }
   };
 
-  return <div>카카오 소셜 로그인 중...</div>;
+  return (
+    <Wrap>
+      <LoadingDiv>
+        <img src={Loadinglogo} alt="logo" />
+      </LoadingDiv>
+    </Wrap>
+  );
 };
 
 export default KakaoLogin;
+
+const Wrap = styled.div`
+  width: 375px;
+  height: 100vh;
+
+  margin: 0 auto;
+  padding: 0;
+  outline: 0;
+  border: 0;
+
+  @media screen and (min-width: 320px) and (max-width: 375px) {
+    font-size: 1rem;
+  } ;
+`;
+const LoadingDiv = styled.div`
+  height: 812px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin: 0 auto;
+  background-color: #fa3a45;
+`;

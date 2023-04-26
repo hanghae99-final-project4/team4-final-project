@@ -3,27 +3,43 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeaderIcon from "../../Element/HeaderIcon";
 
-const Header = () => {
-  const navigate = useNavigate();
+const Header = ({ msg, margin }) => {
   return (
     <div>
       {" "}
       <MainHeader>
-        <HeaderIcon />
-        나의정보
+        <PointerBox>
+          <HeaderIcon />
+        </PointerBox>
+        <MessageBox margin={margin}>{msg}</MessageBox>
       </MainHeader>
     </div>
   );
 };
 export default Header;
 const MainHeader = styled.div`
-  background-color: #c3f4ff;
-  height: 44px;
+  position: absolute;
+  font-family: Pretendard;
+  font-style: Medium;
+  border-bottom: 1px solid #f5f5f5;
+  background-color: #ffffff;
+  height: 48px;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
   font-size: 18px;
   font-weight: 400;
   line-height: 21.78px;
-  width: 100vw;
+  width: 375px;
+`;
+const PointerBox = styled.div`
+  margin-left: 16px;
+`;
+const MessageBox = styled.div`
+  margin-left: ${(props) => props.margin};
+  font-family: Pretendard;
+  font-weight: 500;
+  font-size: 17px;
 `;
