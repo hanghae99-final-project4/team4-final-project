@@ -5,7 +5,7 @@ import Agree from "../../Components/Signup/Agree";
 const AgreePage = () => {
   return (
     <Wrap>
-      <Header msg={"회원가입 약관 및 개인정보 수집 동의"} margin="3px" />
+      <Header msg={"회원가입 약관 및 개인정보 수집 동의"} margin="auto" />
       <Agree />
     </Wrap>
   );

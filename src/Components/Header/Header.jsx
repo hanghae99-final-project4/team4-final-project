@@ -39,4 +39,7 @@ const PointerBox = styled.div`
 `;
 const MessageBox = styled.div`
   margin-left: ${(props) => props.margin};
+  font-family: Pretendard;
+  font-weight: 500;
+  font-size: 17px;
 `;

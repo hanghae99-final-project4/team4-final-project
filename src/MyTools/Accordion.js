@@ -18,6 +18,7 @@ const Accordion = (props) => {
         parentRef.current.style.height = "0";
       } else {
         parentRef.current.style.height = `${childRef.current.clientHeight}px`;
+        parentRef.current.style.width = `inherit`;
       }
       setIsCollapse(!isCollapse);
     },
@@ -75,7 +76,7 @@ const Button = styled.div`
 `;
 const ContentsWrapper = styled.div`
   height: 0px;
-  width: inherit;
+  width: 25px;
   padding: 0 8px;
   overflow: hidden;
   background-color: gray;

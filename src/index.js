@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyle from "./Pages/GlobalStyle";
 import { CookiesProvider } from "react-cookie";
-
+import "../src/Fonts/Font.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
