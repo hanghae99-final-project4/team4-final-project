@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
         vertical-align: baseline;
     }
     body{
-        font-family: 'Noto Sans KR', sans-serif;
+        font-family: Pretendard;
         font-style:normal;
         background-color: #ffffff;
         
@@ -28,6 +28,9 @@ const GlobalStyle = createGlobalStyle`
         background: transparent;
         border-radius: 4px;
         cursor: pointer;
+    }
+    input {
+        outline: none;
     }
 
 

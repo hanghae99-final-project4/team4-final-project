@@ -47,7 +47,7 @@ const TextBox = styled.div`
   margin-right: 114px;
 `;
 const AuthSpan = styled.span`
-  width: 130px;
+  width: 112px;
   height: 20px;
   font-family: Pretendard;
   font-weight: 600;
@@ -55,7 +55,7 @@ const AuthSpan = styled.span`
   text-align: center;
 `;
 const TextSpan = styled.span`
-  width: 379px;
+  width: 325px;
   height: 14px;
   font-family: Pretendard;
   font-weight: 500;

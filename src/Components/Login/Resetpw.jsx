@@ -41,6 +41,7 @@ const Emailinput = styled.input`
   border-bottom: 1px solid #e3e3e3;
   width: 343px;
   height: 50px;
+  outline: none;
 `;
 
 const Passwordinput = styled.input`
@@ -73,7 +74,7 @@ const TextBox = styled.div`
   margin-right: 114px;
 `;
 const ResetSpan = styled.span`
-  width: 125px;
+  width: 107px;
   height: 20px;
   font-family: Pretendard;
   font-weight: 600;
@@ -81,7 +82,7 @@ const ResetSpan = styled.span`
   text-align: center;
 `;
 const TextSpan = styled.span`
-  width: 268px;
+  width: 229px;
   height: 14px;
   font-family: Pretendard;
   font-weight: 500;

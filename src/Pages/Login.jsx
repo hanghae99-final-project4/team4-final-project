@@ -97,27 +97,19 @@ const Login = () => {
             <TitleSpan>3초 만에 가입하기</TitleSpan> <Grayline2 />
           </Signbox>
           <SocialBox>
+            {/* 네이버로그인 */}
+            <button className="rounded-[4px] " onClick={naverLogin}>
+              <img src={Naverlogo} alt="snsNaver" />
+            </button>
             {/* 카카오로그인 */}
-            <button
-              className="rounded-[4px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-              onClick={kakoLogin}
-            >
+            <button className="rounded-[4px] " onClick={kakoLogin}>
               <img src={Kakaologo} alt="kakao" />
             </button>
             {/* 구글로그인 */}
-            <button
-              className="rounded-[4px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-              onClick={googleLogin}
-            >
+            <button className="rounded-[4px] " onClick={googleLogin}>
               <img src={Googlelogo} alt="snsGoogle" />
             </button>
-            {/* 네이버로그인 */}
-            <button
-              className="rounded-[4px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-              onClick={naverLogin}
-            >
-              <img src={Naverlogo} alt="snsNaver" />
-            </button>
+
             {/* 이메일로그인 */}
             <button onClick={emailLogin}>
               <img src={Emaillogo} alt="Email" />

@@ -70,7 +70,7 @@ const PasswordMiss = styled.div`
   color: #696969;
   border-bottom: 1px solid #696969;
   align-items: center;
-  width: 182px;
+  width: 158px;
   height: 14px;
   font-size: 12px;
   font-weight: 500;
