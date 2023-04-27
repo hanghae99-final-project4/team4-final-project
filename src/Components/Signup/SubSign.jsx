@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import useInput from "../MyTools/Hooks/UseInput";
-import FrontHeader from "../Components/Header/FrontHeader";
+import useInput from "../../MyTools/Hooks/UseInput";
+import FrontHeader from "../Header/FrontHeader";
 import { useCookies } from "react-cookie";
 import userid from "../Assets/SubSign/UserId.svg";
 import pw from "../Assets/SubSign/Password.svg";
 import pwConfirm from "../Assets/SubSign/PasswordConfirm.svg";
 import norminfo from "../Assets/SubSign/NormInfo.svg";
 import { useNavigate } from "react-router-dom";
-import { trainApi } from "../apis/Instance";
+import { trainApi } from "../../apis/Instance";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,7 @@ const SubSign = () => {
     confirmpassword: "",
     nickname: "",
   });
+
   //yup schema
   const schema = yup.object().shape({
     name: yup
@@ -47,7 +48,11 @@ const SubSign = () => {
       ) // 정규식 체크 후
       .min(8, "비밀번호는 최소 8글자 이상입니다.") //비밀번호 최소 자리 체크
       .max(30, "비밀번호는 최대 30글자 이상입니다."), // 비밀번호 최대 자리 체크
+    passwordconfirm: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "비밀번호가 일치하지 않습니다."),
   });
+
   //react-hook-form
   const {
     register,
@@ -81,9 +86,12 @@ const SubSign = () => {
       });
   };
   //확인버튼
-  const onSignup = async (e) => {
+  const onSignup = async (data) => {
+    const email = data.email;
+    const name = data.name;
+    const password = data.password;
+    const passwordconfirm = data.passwordconfirm;
     try {
-      e.preventDefault();
       const { data } = await trainApi.postSubSign({
         account: Info.account,
         password: Info.password,
@@ -121,7 +129,7 @@ const SubSign = () => {
 
   return (
     <Wrap>
-      <SignForm onSubmit={handleSubmit(onsubmit)}>
+      <SignForm onSubmit={handleSubmit(onSignup)}>
         <InfoBox>
           <Emailinput type="text" placeholder="이름" {...register("name")} />
           <Errormessage>{errors?.name?.message}</Errormessage>
@@ -138,8 +146,14 @@ const SubSign = () => {
           />
           <Errormessage>{errors?.password?.message}</Errormessage>
         </InfoBox>
-
-        <Emailinput type="password" placeholder="비밀번호 확인" />
+        <InfoBox>
+          <Emailinput
+            type="password"
+            placeholder="비밀번호 확인"
+            {...register("passwordconfirm")}
+          />
+          <Errormessage>{errors?.passwordconfirm?.message}</Errormessage>
+        </InfoBox>
         <SignupButton type="submit">다음</SignupButton>
       </SignForm>
     </Wrap>
