@@ -10,7 +10,6 @@ import SubwayPage from "../Pages/SubwayPage";
 import { Suspense, lazy } from "react";
 import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
 import CustomerNotice from "../Components/Profile/CustomerNotice";
-import SubSign from "../Pages/SubSign";
 import KakaoLogin from "../Pages/KakaoLogin";
 import GoogleLogin from "../Pages/GoogleLogin";
 import ResetPage from "../Pages/Login/ResetPage";
@@ -19,6 +18,7 @@ import CompletePage from "../Pages/Login/CompletePage";
 import EmailPage from "../Pages/Login/EmailPage";
 import AgreePage from "../Pages/Signup/AgreePage";
 import SignupPage from "../Pages/Signup/SignupPage";
+import ProfilePage from "../Pages/Signup/ProfilePage";
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
 const MyPage = lazy(() => import("../Components/Profile/Mypage"));
@@ -40,7 +40,7 @@ const Router = () => {
           {/* 회원가입 라우터 */}
           <Route path="/agree" element={<AgreePage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/subsign" element={<SubSign />} />
+          <Route path="/setprofile" element={<ProfilePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
