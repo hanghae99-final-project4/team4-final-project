@@ -2,7 +2,7 @@ import React from "react";
 import { Wrap } from "../Login/EmailPage";
 import ProfileSet from "../../Components/Signup/ProfileSet";
 
-const ProfilePage = () => {
+const SetProfilePage = () => {
   return (
     <Wrap>
       <ProfileSet />
@@ -10,4 +10,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default SetProfilePage;
