@@ -1,48 +1,70 @@
 import React from "react";
 import styled from "styled-components";
-import progress from "../../Assets/SetProfile/nextprogress.svg";
+import progress from "../../Assets/SetProfile/progress.svg";
 import hello from "../../Assets/SetProfile/hello.gif";
 import nextbutton from "../../Assets/SetProfile/nextbutton.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import avatar from "../../Assets/SetProfile/avatar.svg";
-import { useRef } from "react";
-const ProfileSet = () => {
-  const fileref = useRef();
-  const navigate = useNavigate();
 
-  const startbuttonHandler = () => {
+const GenderSet = () => {
+  const navigate = useNavigate();
+  const [isClick, setIsClick] = useState("1");
+  const [isChecked, setIsChecked] = useState(false);
+
+  const genderClickHandler = (e) => {
+    setIsChecked((prev) => !prev);
+    setIsClick((prev) => {
+      return e.target.value;
+    });
+  };
+  const nextbuttonHandler = () => {
     navigate("/setprofile");
   };
-
-  //   파일 업로드 핸들러
-  const fileuploadHandler = () => {
-    fileref.current.click();
-  };
-
+  const GenderList = [
+    { value: "1", name: "여성", id: "girl" },
+    { value: "2", name: "남성", id: "gender" },
+  ];
+  console.log(isClick);
   return (
     <Wrap>
       <GifBox>
         <ProgressImg src={progress} alt="progress" />
-
+        <Hello src={hello} alt="hello" />
         <SpanBox>
-          <Profile>
+          <Welcome>반갑습니다!</Welcome>
+          <Gender>
             <Transfercitizen>환승시민</Transfercitizen>에서 사용하실
             <br />
-            프로필을 설정해주세요.
-          </Profile>
+            성별을 알려주세요
+          </Gender>
         </SpanBox>
-        <Avatar onClick={fileuploadHandler} src={avatar} alt="avatar" />
-        <input ref={fileref} type="file" />
       </GifBox>
-      <GenderBox></GenderBox>
-      <NextButton onClick={startbuttonHandler} src={nextbutton} alt="nextimg" />
-      <NextSpan>시작</NextSpan>
+      <GenderBox>
+        {GenderList.map((item, index) => (
+          <GenderButton
+            id={item.id}
+            value={item.value}
+            className={item.value === isClick ? "active" : ""}
+            key={index}
+            onClick={genderClickHandler}
+          >
+            <GenderSpan>{item.name}</GenderSpan>
+
+            <Activeinput
+              className={item.value === isClick ? "active" : ""}
+              value={item.value}
+              type="radio"
+            />
+          </GenderButton>
+        ))}
+      </GenderBox>
+      <NextButton onClick={nextbuttonHandler} src={nextbutton} alt="nextimg" />
+      <NextSpan>다음</NextSpan>
     </Wrap>
   );
 };
 
-export default ProfileSet;
+export default GenderSet;
 
 const Wrap = styled.div`
   margin-top: 16px;
@@ -54,9 +76,9 @@ const GifBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 147px;
-  height: 235px;
-  margin-top: 92px;
+  width: 140px;
+  height: 251px;
+  margin-top: 100px;
 `;
 const ProgressImg = styled.img`
   width: 26px;
@@ -64,30 +86,33 @@ const ProgressImg = styled.img`
   margin-top: 10px;
 `;
 const SpanBox = styled.div`
-  margin-top: 45px;
   width: 134px;
   height: 82px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-const Avatar = styled.img`
-  cursor: pointer;
-  margin-top: 29px;
-  width: 100px;
-  height: 100px;
+const Transfercitizen = styled.span`
+  font-weight: 500;
+  font-size: 15px;
 `;
-const Profile = styled.span`
-  width: 147px;
-  height: 53px;
+const Welcome = styled.span`
+  width: 102px;
+  height: 26px;
+  font-size: 22px;
+  font-weight: 500;
+`;
+const Hello = styled.img`
+  width: 240px;
+  height: 220px;
+`;
+const Gender = styled.span`
+  width: 134px;
+  height: 36px;
   font-size: 15px;
   font-weight: 400;
   margin-top: 20px;
   text-align: center;
-`;
-const Transfercitizen = styled.span`
-  font-weight: 500;
-  font-size: 17px;
 `;
 const GenderBox = styled.div`
   margin-top: 39px;
