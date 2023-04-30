@@ -25,7 +25,6 @@ const Resetpw = () => {
 export default Resetpw;
 
 const Wrap = styled.div`
-  margin-top: 98px;
   display: flex;
   flex-direction: column;
   align-items: center;
