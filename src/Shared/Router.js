@@ -20,6 +20,7 @@ import AgreePage from "../Pages/Signup/AgreePage";
 import SignupPage from "../Pages/Signup/SignupPage";
 import SetGenderPage from "../Pages/Signup/SetGenderPage";
 import SetProfilePage from "../Pages/Signup/SetProfilePage";
+import PickProfilePage from "../Pages/Signup/PickProfilePage";
 const LoginPage = lazy(() => import("../Pages/Login"));
 const ConversPage = lazy(() => import("../Pages/ConversPage"));
 const MyPage = lazy(() => import("../Components/Profile/Mypage"));
@@ -43,6 +44,7 @@ const Router = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/setgender" element={<SetGenderPage />} />
           <Route path="/setprofile" element={<SetProfilePage />} />
+          <Route path="/pickprofile" element={<PickProfilePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
           <Route path="/disclaimer" element={<Disclaimer />} />

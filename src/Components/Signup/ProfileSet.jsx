@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import progress from "../../Assets/SetProfile/nextprogress.svg";
-import hello from "../../Assets/SetProfile/hello.gif";
-import nextbutton from "../../Assets/SetProfile/nextbutton.svg";
-import { useState } from "react";
+import startbutton from "../../Assets/SetProfile/startbutton.svg";
 import { useNavigate } from "react-router-dom";
 import avatar from "../../Assets/SetProfile/avatar.svg";
 import { useRef } from "react";
@@ -11,20 +9,14 @@ const ProfileSet = () => {
   const fileref = useRef();
   const navigate = useNavigate();
 
-  const startbuttonHandler = () => {
-    navigate("/setprofile");
-  };
-
-  //   파일 업로드 핸들러
-  const fileuploadHandler = () => {
-    fileref.current.click();
+  const profileuploadHandler = () => {
+    navigate("/pickprofile");
   };
 
   return (
     <Wrap>
       <GifBox>
         <ProgressImg src={progress} alt="progress" />
-
         <SpanBox>
           <Profile>
             <Transfercitizen>환승시민</Transfercitizen>에서 사용하실
@@ -32,12 +24,12 @@ const ProfileSet = () => {
             프로필을 설정해주세요.
           </Profile>
         </SpanBox>
-        <Avatar onClick={fileuploadHandler} src={avatar} alt="avatar" />
-        <input ref={fileref} type="file" />
+        <Avatar onClick={profileuploadHandler} src={avatar} alt="avatar" />
       </GifBox>
-      <GenderBox></GenderBox>
-      <NextButton onClick={startbuttonHandler} src={nextbutton} alt="nextimg" />
-      <NextSpan>시작</NextSpan>
+      <Nickname placeholder="사용하실 닉네임" />
+
+      <StartButton src={startbutton} alt="startimg" />
+      <StartSpan>시작</StartSpan>
     </Wrap>
   );
 };
@@ -45,18 +37,18 @@ const ProfileSet = () => {
 export default ProfileSet;
 
 const Wrap = styled.div`
-  margin-top: 16px;
+  margin-top: 36px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 const GifBox = styled.div`
+  margin-top: 92px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 147px;
   height: 235px;
-  margin-top: 92px;
 `;
 const ProgressImg = styled.img`
   width: 26px;
@@ -77,91 +69,34 @@ const Avatar = styled.img`
   width: 100px;
   height: 100px;
 `;
+const Nickname = styled.input`
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 40px;
+  width: 281px;
+  height: 40px;
+  border: 1px solid #bcbcbc;
+  &::placeholder {
+    color: #747474;
+    opacity: 1;
+  }
+`;
 const Profile = styled.span`
   width: 147px;
   height: 53px;
   font-size: 15px;
   font-weight: 400;
-  margin-top: 20px;
+
   text-align: center;
 `;
 const Transfercitizen = styled.span`
   font-weight: 500;
   font-size: 17px;
 `;
-const GenderBox = styled.div`
-  margin-top: 39px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 300px;
-  height: 140px;
-  gap: 20px;
-`;
-const GenderButton = styled.button`
-  position: relative;
-  width: 300px;
-  height: 60px;
-  border: 1px solid #d6d6d6;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  cursor: pointer;
-  &.active {
-    color: #ffffff;
-    background-color: #fa3a45;
-  }
-`;
-const Activeinput = styled.input`
-  position: absolute;
-  right: 20px;
 
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  appearance: none;
-  background-color: #ffffff;
-  border: max(2px, 0.1em) solid #cfcfcf;
-  border-radius: 50%;
-
-  &::before {
-    content: "";
-    display: block;
-    width: 12px;
-    height: 12px;
-    margin: 2px;
-    background-color: #cfcfcf;
-    border-radius: 50%;
-  }
-  &.active {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    appearance: none;
-    background-color: #ffffff;
-    border: max(2px, 0.1em) solid #ffffff;
-    border-radius: 50%;
-
-    &::before {
-      content: "";
-      display: block;
-      width: 12px;
-      height: 12px;
-      margin: 2px;
-      background-color: #fa3a45;
-      border-radius: 50%;
-    }
-  }
+const StartButton = styled.img`
+  margin-top: 227px;
 `;
-
-const GenderSpan = styled.span`
-  margin-left: 20px;
-`;
-
-const NextButton = styled.img`
-  margin-top: 131px;
-  cursor: pointer;
-`;
-const NextSpan = styled.span`
+const StartSpan = styled.span`
   margin-top: 10px;
 `;

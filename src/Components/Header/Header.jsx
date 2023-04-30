@@ -18,7 +18,7 @@ const Header = ({ msg, margin }) => {
 };
 export default Header;
 const MainHeader = styled.div`
-  position: absolute;
+  position: relative;
   font-family: Pretendard;
   font-style: Medium;
   border-bottom: 1px solid #f5f5f5;

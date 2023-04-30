@@ -67,7 +67,7 @@ const GenderSet = () => {
 export default GenderSet;
 
 const Wrap = styled.div`
-  margin-top: 16px;
+  margin-top: 36px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,7 +83,6 @@ const GifBox = styled.div`
 const ProgressImg = styled.img`
   width: 26px;
   height: 8px;
-  margin-top: 10px;
 `;
 const SpanBox = styled.div`
   width: 134px;
