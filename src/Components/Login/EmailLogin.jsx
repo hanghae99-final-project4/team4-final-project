@@ -1,6 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { trainApi } from "../../apis/Instance";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 const EmailLogin = () => {
   const navigate = useNavigate();
@@ -10,14 +14,76 @@ const EmailLogin = () => {
   const signinHandler = () => {
     navigate("/agree");
   };
+  const loginHandler = async (data) => {
+    console.log(data);
+    const email = data.email;
+    const password = data.password;
+    try {
+      const { data } = await trainApi.postSignIn({
+        account: email,
+        password: password,
+      });
+      console.log(data);
+      const userId = data?.data.rest?.user_id;
+      const token = data?.data.token;
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("token", token);
+      console.log(data?.data.rest?.nickname);
+      data?.data.rest?.nickname === null
+        ? navigate("/setgender")
+        : navigate("/subwaypage");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //yup schema
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .required("이메일을 입력해주세요")
+      .matches(
+        /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{3}$/,
+        "올바른 이메일 형식으로 작성 해주세요."
+      ),
+
+    password: yup
+      .string() //문자열 체크
+
+      .required("비밀번호를 입력해주세요") // 빈칸인지 체크
+      .matches(
+        /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,15}$/,
+        "영어+숫자를  8글자 이상 입력해주세요"
+      ) // 정규식 체크 후
+      .min(8, "비밀번호는 최소 8글자 이상입니다.") //비밀번호 최소 자리 체크
+      .max(30, "비밀번호는 최대 30글자 이상입니다."), // 비밀번호 최대 자리 체크
+  });
+
+  //react-hook-form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
+
   return (
     <Wrap>
-      <LoginForm>
-        <Emailinput placeholder="이메일" />
-        <Passwordinput placeholder="비밀번호"></Passwordinput>
+      <LoginForm onSubmit={handleSubmit(loginHandler)}>
+        <Emailinput type="text" placeholder="이메일" {...register("email")} />
+        <Errormessage>{errors?.email?.message}</Errormessage>
+        <Passwordinput
+          type="password"
+          placeholder="비밀번호"
+          {...register("password")}
+        ></Passwordinput>
+        <Errormessage>{errors?.password?.message}</Errormessage>
+        <LoginButton type="submit">로그인</LoginButton>
       </LoginForm>
 
-      <LoginButton>로그인</LoginButton>
       <PasswordMiss onClick={passwordMiss}>
         비밀번호가 생각나지 않으시나요?
       </PasswordMiss>
@@ -89,4 +155,12 @@ const Noaccount = styled.span`
 const EmailSign = styled.span`
   color: #333333;
   cursor: pointer;
+`;
+const Errormessage = styled.div`
+  color: #d14343;
+  height: 17px;
+  font-weight: 500;
+  margin-top: 3.33px;
+
+  font-size: 14px;
 `;

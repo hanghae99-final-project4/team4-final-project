@@ -3,7 +3,11 @@ import styled from "styled-components";
 import Accordion from "../../MyTools/Accordion";
 import { useNavigate } from "react-router-dom";
 import { vector } from "../../Assets/Checkbox/Vector.png";
+import { useRecoilState } from "recoil";
+import { useAgreeState } from "../../Recoil/userList";
+
 const Agree = () => {
+  const [agreepi, setAgreepi] = useRecoilState(useAgreeState);
   const navigate = useNavigate();
   const allRef = useRef();
   const checkbox1 = useRef();
@@ -15,13 +19,22 @@ const Agree = () => {
       checkbox1.current.checked &&
       checkbox2.current.checked &&
       checkbox3.current.checked;
+
+    isChecked ? setAgreepi(false) : setAgreepi(true);
+
     checkbox1.current.checked = !isChecked;
     checkbox2.current.checked = !isChecked;
     checkbox3.current.checked = !isChecked;
     allRef.current.checked = !isChecked;
+    console.log(isChecked);
   };
+  console.log(agreepi);
   const nextHandler = () => {
-    navigate("/signup");
+    if (agreepi === true) {
+      navigate("/signup");
+    } else {
+      window.alert("개인정보 수집에 모두 동의해주세요");
+    }
   };
 
   const contents = <p>보기</p>;

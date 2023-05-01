@@ -5,13 +5,17 @@ import hello from "../../Assets/SetProfile/hello.gif";
 import nextbutton from "../../Assets/SetProfile/nextbutton.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { useUserState } from "../../Recoil/userList";
 
 const GenderSet = () => {
   const navigate = useNavigate();
   const [isClick, setIsClick] = useState("1");
   const [isChecked, setIsChecked] = useState(false);
+  const [user, setUser] = useRecoilState(useUserState);
 
   const genderClickHandler = (e) => {
+    setUser({ gender: e.target.name });
     setIsChecked((prev) => !prev);
     setIsClick((prev) => {
       return e.target.value;
@@ -24,7 +28,7 @@ const GenderSet = () => {
     { value: "1", name: "여성", id: "girl" },
     { value: "2", name: "남성", id: "gender" },
   ];
-  console.log(isClick);
+  console.log(user);
   return (
     <Wrap>
       <GifBox>
@@ -43,6 +47,7 @@ const GenderSet = () => {
         {GenderList.map((item, index) => (
           <GenderButton
             id={item.id}
+            name={item.name}
             value={item.value}
             className={item.value === isClick ? "active" : ""}
             key={index}

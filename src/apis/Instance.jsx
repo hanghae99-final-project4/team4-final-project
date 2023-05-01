@@ -64,8 +64,8 @@ export const trainApi = {
       authorizationCode: code,
     }),
   postName: (payload) => instance.post("/", payload),
-  postAuthPhone: (payload) => instance.post("/auth2/phone", payload),
-  postAuthCode: (payload) => instance.post("/auth2/compare", payload),
+  postProfile: (userId, payload) =>
+    instance.post(`/user/edit/${userId}`, payload),
 
   getConvers: (userId) => instance.get(`/user/${userId}`),
 
