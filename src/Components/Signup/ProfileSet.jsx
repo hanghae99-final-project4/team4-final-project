@@ -8,10 +8,20 @@ import avatar from "../../Assets/SetProfile/avatar.svg";
 import upload from "../../Assets/SetProfile/profile.svg";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
-import { usePrimaryState } from "../../Recoil/userList";
+import {
+  useInfoState,
+  usePrimaryState,
+  useUserState,
+} from "../../Recoil/userList";
 import useInput from "../../MyTools/Hooks/UseInput";
+import { trainApi, trainApi2 } from "../../apis/Instance";
 const ProfileSet = () => {
-  const [profile, setProfile] = useRecoilState(usePrimaryState);
+  // 프로필 정보 전역상태
+  const [image, setImage] = useRecoilState(useInfoState);
+  // 메인 프로필 정보 전역상태
+  const [primaryImage, setPrimaryImage] = useRecoilState(usePrimaryState);
+  // gender와 nickname 에 관한 전역상태
+  const [gender, setGender] = useRecoilState(useUserState);
   const [form, setForm, OnChangeHandler] = useInput([]);
   const fileref = useRef();
   const navigate = useNavigate();
@@ -19,7 +29,51 @@ const ProfileSet = () => {
   const profileuploadHandler = () => {
     navigate("/pickprofile");
   };
-  console.log(form);
+  async function nickname() {
+    try {
+      const userId = localStorage.getItem("user");
+      const { data } = await trainApi.postProfile(userId, {
+        gender: gender.gender,
+        nickname: form.nickname,
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const uploadFile = async () => {
+    const formData = new FormData();
+    for (let i = 0; i < image.length; i++) {
+      if (image[i].file !== undefined)
+        formData.append("otherImages", image[i].file);
+    }
+    if (primaryImage[0]?.file !== undefined)
+      formData.append("primaryImage", primaryImage[0]?.file);
+
+    console.log(Array.from(formData.entries()));
+    const form = formData.getAll("otherImages");
+    formData.delete("otherImages");
+    console.log(form);
+    console.log(primaryImage[0]?.file);
+
+    form
+      .filter((item) => item.name !== primaryImage[0]?.file?.name)
+      .forEach((item) => formData.append("otherImages", item));
+
+    console.log(Array.from(formData.entries()));
+
+    try {
+      const Id = localStorage.getItem("userId");
+      const { data } = await trainApi2.postProfile(Id, formData);
+      nickname();
+      navigate("/subwaypage");
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Wrap>
       <GifBox>
@@ -32,11 +86,11 @@ const ProfileSet = () => {
           </Profile>
         </SpanBox>
         {/* primary image 가 있으면 ? */}
-        {profile[0]?.url && true ? (
+        {primaryImage[0]?.url && true ? (
           <>
             <Avatar
               onClick={profileuploadHandler}
-              src={profile[0]?.url}
+              src={primaryImage[0]?.url}
               alt="avatar"
             />
             <Upload src={upload} alt="upload" />
@@ -54,9 +108,10 @@ const ProfileSet = () => {
         name="nickname"
         placeholder="사용하실 닉네임"
       />
-      {profile[0]?.url && true && form.nickname && true ? (
+      {primaryImage[0]?.url && true && form.nickname && true ? (
         <>
           <StartButton
+            onClick={uploadFile}
             style={{ cursor: "pointer" }}
             src={startbutton}
             alt="startimg"

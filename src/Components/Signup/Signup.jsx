@@ -6,6 +6,8 @@ import { trainApi } from "../../apis/Instance";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import { useAgreeState } from "../../Recoil/userList";
 
 const Signup = () => {
   const navigator = useNavigate();
@@ -15,15 +17,10 @@ const Signup = () => {
     confirmpassword: "",
     nickname: "",
   });
+  const agreepi = useRecoilValue(useAgreeState);
 
   //yup schema
   const schema = yup.object().shape({
-    name: yup
-      .string() //문자열 제일먼저 체크
-
-      .required("이름을 입력해주세요.") //다음 빈칸인지 체크
-      .matches(/^[가-힣]{2,20}$/, "2~20자로 입력해주세요."), //다음 정규식 체크
-
     email: yup
       .string()
       .required("이메일을 입력해주세요")
@@ -59,37 +56,18 @@ const Signup = () => {
   });
   console.log(errors);
 
-  // 아이디 중복
-  const IdOk = async (e) => {
-    await trainApi
-      .postUserId({
-        account: Info.account,
-      })
-      .then((res) => {
-        // console.log(res);
-        const msg = res.data.msg;
-        alert(msg);
-      })
-      .catch((err) => {
-        // console.log(err.status);
-        const status = err.status;
-        const msg = err.response.data.error;
-
-        alert(msg);
-        return;
-      });
-  };
   //확인버튼
   const onSignup = async (data) => {
     const email = data.email;
-    const name = data.name;
+
     const password = data.password;
     const passwordconfirm = data.passwordconfirm;
     try {
       const { data } = await trainApi.postSubSign({
-        account: Info.account,
-        password: Info.password,
-        password2: Info.confirmpassword,
+        account: email,
+        password: password,
+        password2: passwordconfirm,
+        agreepi: agreepi,
       });
       console.log(data);
       const msg = data.msg;
@@ -98,36 +76,13 @@ const Signup = () => {
         navigator("/");
       }
     } catch (err) {
-      // console.log(err);
-      const status = err.response.status;
-      const errMsg = err.response.data;
-      const error = err.response.data.error;
-      if (
-        status === 422 &&
-        errMsg === '"password" is not allowed to be empty'
-      ) {
-        alert("패스워드는 필수 입력 정보입니다.");
-      } else if (
-        status === 422 &&
-        errMsg === '"confirmpassword" must be [ref:password]'
-      ) {
-        alert("비밀번호가 일치하지 않습니다.");
-      } else if (status === 422) {
-        alert(errMsg);
-      } else if (status === 400) {
-        alert(error);
-      }
-      return;
+      console.log(err);
     }
   };
 
   return (
     <Wrap>
       <SignForm onSubmit={handleSubmit(onSignup)}>
-        <InfoBox>
-          <Emailinput type="text" placeholder="이름" {...register("name")} />
-          <Errormessage>{errors?.name?.message}</Errormessage>
-        </InfoBox>
         <InfoBox>
           <Emailinput type="text" placeholder="이메일" {...register("email")} />
           <Errormessage>{errors?.email?.message}</Errormessage>

@@ -2,8 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import camera from "../../Assets/SetProfile/camera.svg";
 import { useRef } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { useInfoState, usePrimaryState } from "../../Recoil/userList";
+import { useRecoilState } from "recoil";
+import {
+  useAgreeState,
+  useInfoState,
+  usePrimaryState,
+} from "../../Recoil/userList";
 import { useState } from "react";
 import { trainApi2 } from "../../apis/Instance";
 import { CloseCircleFilled } from "@ant-design/icons";
@@ -13,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 const PickProfile = () => {
   const navigate = useNavigate();
+
   const [image, setImage] = useRecoilState(useInfoState);
   const [profile, setProfile] = useRecoilState(usePrimaryState);
   const [files, setFiles] = useState([]);
@@ -43,37 +48,6 @@ const PickProfile = () => {
     setImage(temp.concat(files));
   };
 
-  //preview 이미지 함수
-  const thumb = image.map((item, index) => {
-    return (
-      <div>
-        <CloseCircleFilled
-          onClick={() => removeProfile(item.image_url)}
-          style={{
-            position: "relative",
-            top: "18px",
-            zIndex: "999",
-            right: "0px",
-            cursor: "pointer",
-          }}
-        />
-        <ThumbImg
-          onClick={() =>
-            setPrimaryImage([
-              {
-                file: item.file,
-                url: item.image_url,
-              },
-            ])
-          }
-          key={index}
-          src={item.image_url}
-          alt="image"
-        />
-      </div>
-    );
-  });
-
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
     const Id = localStorage.getItem("userId");
@@ -85,7 +59,11 @@ const PickProfile = () => {
     }
   };
   const cancelHandler = () => {
-    navigate(-1);
+    if (window.confirm("사진 첨부를 취소하시겠어요?") === true) {
+      setImage([]);
+      setProfile([]);
+      navigate(-1);
+    }
   };
 
   return (
@@ -96,9 +74,9 @@ const PickProfile = () => {
       </SpanBox>
       <ImgBox>
         <Camera onClick={uploadHandler} src={camera} alt="camera" />
-        {image.map((item, index) => (
+        {image?.map((item, index) => (
           <CameraBox
-            className={item.image_url === profile[0]?.url ? "main" : null}
+            className={item?.image_url === profile[0]?.url ? "main" : null}
           >
             <DeleteImg
               onClick={() => removeProfile(item.image_url)}
@@ -127,7 +105,7 @@ const PickProfile = () => {
       </ImgBox>
       <ButtonBox>
         <CancelButton onClick={cancelHandler}>취소</CancelButton>
-        <ApplyButton>적용</ApplyButton>
+        <ApplyButton onClick={() => navigate("/setprofile")}>적용</ApplyButton>
       </ButtonBox>
     </Wrap>
   );
