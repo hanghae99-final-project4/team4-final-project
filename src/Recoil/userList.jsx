@@ -1,10 +1,16 @@
 import { atom } from "recoil";
 
 const USER_KEY = "user";
+const PRIMARY_KEY = "primary";
 
 const useInfoState = atom({
   key: USER_KEY,
   default: [],
 });
 
-export { useInfoState };
+const usePrimaryState = atom({
+  key: PRIMARY_KEY,
+  default: [],
+});
+
+export { useInfoState, usePrimaryState };
