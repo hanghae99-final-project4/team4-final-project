@@ -1,20 +1,20 @@
-import React from "react";
-import styled from "styled-components";
-import progress from "../../Assets/SetProfile/nextprogress.svg";
-import pendingbutton from "../../Assets/SetProfile/pendingbutton.svg";
-import startbutton from "../../Assets/SetProfile/startbutton.svg";
-import { useNavigate } from "react-router-dom";
-import avatar from "../../Assets/SetProfile/avatar.svg";
-import upload from "../../Assets/SetProfile/profile.svg";
-import { useRef } from "react";
-import { useRecoilState } from "recoil";
+import React from 'react';
+import styled from 'styled-components';
+import progress from '../../Assets/SetProfile/nextprogress.svg';
+import pendingbutton from '../../Assets/SetProfile/pendingbutton.svg';
+import startbutton from '../../Assets/SetProfile/startbutton.svg';
+import { useNavigate } from 'react-router-dom';
+import avatar from '../../Assets/SetProfile/avatar.svg';
+import upload from '../../Assets/SetProfile/profile.svg';
+import { useRef } from 'react';
+import { useRecoilState } from 'recoil';
 import {
   useInfoState,
   usePrimaryState,
   useUserState,
-} from "../../Recoil/userList";
-import useInput from "../../MyTools/Hooks/UseInput";
-import { trainApi, trainApi2 } from "../../apis/Instance";
+} from '../../Recoil/userList';
+import useInput from '../../MyTools/Hooks/UseInput';
+import { trainApi, trainApi2 } from '../../apis/Instance';
 const ProfileSet = () => {
   // 프로필 정보 전역상태
   const [image, setImage] = useRecoilState(useInfoState);
@@ -27,11 +27,11 @@ const ProfileSet = () => {
   const navigate = useNavigate();
 
   const profileuploadHandler = () => {
-    navigate("/pickprofile");
+    navigate('/pickprofile');
   };
   async function nickname() {
     try {
-      const userId = localStorage.getItem("user");
+      const userId = localStorage.getItem('userId');
       const { data } = await trainApi.postProfile(userId, {
         gender: gender.gender,
         nickname: form.nickname,
@@ -46,28 +46,28 @@ const ProfileSet = () => {
     const formData = new FormData();
     for (let i = 0; i < image.length; i++) {
       if (image[i].file !== undefined)
-        formData.append("otherImages", image[i].file);
+        formData.append('otherImages', image[i].file);
     }
     if (primaryImage[0]?.file !== undefined)
-      formData.append("primaryImage", primaryImage[0]?.file);
+      formData.append('primaryImage', primaryImage[0]?.file);
 
     console.log(Array.from(formData.entries()));
-    const form = formData.getAll("otherImages");
-    formData.delete("otherImages");
+    const form = formData.getAll('otherImages');
+    formData.delete('otherImages');
     console.log(form);
     console.log(primaryImage[0]?.file);
 
     form
       .filter((item) => item.name !== primaryImage[0]?.file?.name)
-      .forEach((item) => formData.append("otherImages", item));
+      .forEach((item) => formData.append('otherImages', item));
 
     console.log(Array.from(formData.entries()));
 
     try {
-      const Id = localStorage.getItem("userId");
+      const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
       nickname();
-      navigate("/subwaypage");
+      navigate('/subwaypage');
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -112,7 +112,7 @@ const ProfileSet = () => {
         <>
           <StartButton
             onClick={uploadFile}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
             src={startbutton}
             alt="startimg"
           />

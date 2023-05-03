@@ -116,7 +116,7 @@ const Errormessage = styled.div`
   height: 25px;
   font-weight: 500;
   margin-top: 3.33px;
-  font-family: "Pretendard";
+
   font-size: 14px;
 `;
 const InfoBox = styled.div`
