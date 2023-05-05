@@ -1,10 +1,10 @@
-import React from "react";
-import GuideIcon from "../../Element/GuideIcon";
-import styled from "styled-components";
-import GuideExit from "../../Element/GuideExit";
-import FrontHeader from "../Header/FrontHeader";
-import HomeMenu from "../HomeMenu/HomeMenu";
-import HeaderIcon from "../../Element/HeaderIcon";
+import React from 'react';
+import GuideIcon from '../../Element/GuideIcon';
+import styled from 'styled-components';
+import GuideExit from '../../Element/GuideExit';
+import FrontHeader from '../Header/MainHeader';
+import HomeMenu from '../HomeMenu/HomeMenu';
+import HeaderIcon from '../../Element/HeaderIcon';
 const CustomerUserGuide = () => {
   return (
     <>
@@ -15,7 +15,7 @@ const CustomerUserGuide = () => {
         </FrontHeadDiv>
         <TitleBox>
           <div>
-            <p style={{ fontSize: "24px", fontWeight: "700" }}>
+            <p style={{ fontSize: '24px', fontWeight: '700' }}>
               고객 이용 가이드
             </p>
           </div>
