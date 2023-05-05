@@ -1,19 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import camera from "../../Assets/SetProfile/camera.svg";
-import { useRef } from "react";
-import { useRecoilState } from "recoil";
+import React from 'react';
+import styled from 'styled-components';
+import camera from '../../Assets/SetProfile/camera.svg';
+import { useRef } from 'react';
+import { useRecoilState } from 'recoil';
 import {
   useAgreeState,
   useInfoState,
   usePrimaryState,
-} from "../../Recoil/userList";
-import { useState } from "react";
-import { trainApi2 } from "../../apis/Instance";
-import { CloseCircleFilled } from "@ant-design/icons";
-import deleteimg from "../../Assets/SetProfile/close.svg";
-import useInput from "../../MyTools/Hooks/UseInput";
-import { useNavigate } from "react-router-dom";
+} from '../../Recoil/userList';
+import { useState } from 'react';
+import { trainApi2 } from '../../apis/Instance';
+import { CloseCircleFilled } from '@ant-design/icons';
+import deleteimg from '../../Assets/SetProfile/close.svg';
+import useInput from '../../MyTools/Hooks/UseInput';
+import { useNavigate } from 'react-router-dom';
 
 const PickProfile = () => {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const PickProfile = () => {
 
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
-    const Id = localStorage.getItem("userId");
+    const Id = localStorage.getItem('userId');
     console.log(deleteUrl);
     try {
       setImage(image.filter((item) => item.image_url !== deleteUrl));
@@ -59,7 +59,7 @@ const PickProfile = () => {
     }
   };
   const cancelHandler = () => {
-    if (window.confirm("사진 첨부를 취소하시겠어요?") === true) {
+    if (window.confirm('사진 첨부를 취소하시겠어요?') === true) {
       setImage([]);
       setProfile([]);
       navigate(-1);
@@ -76,14 +76,14 @@ const PickProfile = () => {
         <Camera onClick={uploadHandler} src={camera} alt="camera" />
         {image?.map((item, index) => (
           <CameraBox
-            className={item?.image_url === profile[0]?.url ? "main" : null}
+            className={item?.image_url === profile[0]?.url ? 'main' : null}
           >
             <DeleteImg
               onClick={() => removeProfile(item.image_url)}
               src={deleteimg}
               alt="delete"
             />
-            <Camera
+            <Profile
               onClick={() =>
                 setProfile([{ file: item.file, url: item.image_url }])
               }
@@ -105,7 +105,7 @@ const PickProfile = () => {
       </ImgBox>
       <ButtonBox>
         <CancelButton onClick={cancelHandler}>취소</CancelButton>
-        <ApplyButton onClick={() => navigate("/setprofile")}>적용</ApplyButton>
+        <ApplyButton onClick={() => navigate('/setprofile')}>적용</ApplyButton>
       </ButtonBox>
     </Wrap>
   );
@@ -142,11 +142,18 @@ const SpanBox = styled.div`
   flex-direction: column;
 `;
 const Camera = styled.img`
-  margin-top: 3px;
+  width: 114px;
+  height: 120px;
+  cursor: pointer;
+  position: relative;
+  object-fit: cover;
+`;
+const Profile = styled.img`
   width: 110px;
   height: 110px;
   cursor: pointer;
   position: relative;
+  object-fit: cover;
 `;
 const Input = styled.input`
   display: none;
@@ -174,17 +181,21 @@ const DeleteImg = styled.img`
 `;
 const CameraBox = styled.div`
   position: relative;
+  width: 110px;
+  height: 110px;
   border: none;
+  margin: 0 auto;
 
   &.main {
     border-radius: 4px;
     border: 2px solid #fa3a45;
-    width: 114px;
-    height: 120px;
+    margin: 0 auto;
+    width: 110px;
+    height: 114px;
     position: relative;
   }
   &.main::before {
-    content: "";
+    content: '';
     position: absolute;
     width: 37px;
     height: 20px;

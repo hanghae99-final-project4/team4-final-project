@@ -25,7 +25,7 @@ const ProfileSet = () => {
   const [form, setForm, OnChangeHandler] = useInput([]);
   const fileref = useRef();
   const navigate = useNavigate();
-
+  console.log(gender);
   const profileuploadHandler = () => {
     navigate('/pickprofile');
   };
@@ -34,6 +34,7 @@ const ProfileSet = () => {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.postProfile(userId, {
         gender: gender.gender,
+        age: gender.age,
         nickname: form.nickname,
       });
       console.log(data);
@@ -158,11 +159,13 @@ const SpanBox = styled.div`
   align-items: center;
 `;
 const Avatar = styled.img`
-  border-radius: 50%;
+  border-radius: 100%;
   cursor: pointer;
   margin-top: 29px;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  transform: scale(1);
 `;
 const Nickname = styled.input`
   border-radius: 4px;
@@ -198,4 +201,5 @@ const StartSpan = styled.span`
 const Upload = styled.img`
   margin-left: 79px;
   margin-top: -34px;
+  z-index: 999;
 `;

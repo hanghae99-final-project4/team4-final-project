@@ -1,16 +1,16 @@
 ////src/Redux/Modules/Instance.js
-import axios from "axios";
-import { Cookies, useCookies } from "react-cookie";
-import { getCookie, removeCookie, setCookie } from "../MyTools/Hooks/MyCookie";
-import mem from "mem";
-import { memoizedRefreshToken } from "./../Recoil/Modules/refreshToken";
+import axios from 'axios';
+import { Cookies, useCookies } from 'react-cookie';
+import { getCookie, removeCookie, setCookie } from '../MyTools/Hooks/MyCookie';
+import mem from 'mem';
+import { memoizedRefreshToken } from './../Recoil/Modules/refreshToken';
 
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
 //axios로 따로 써줄 경우는 header 매번 넣어줘야 함.
 //인스턴스 - api 전역관리
 
 const yhURL = process.env.REACT_APP_TH_S_HOST;
-const token = localStorage.getItem("token");
+const token = localStorage.getItem('token');
 console.log(token);
 //일반데이터 Instance
 export const instance = axios.create({
@@ -23,20 +23,20 @@ export const instance = axios.create({
 export const instanceF = axios.create({
   baseURL: `${yhURL}`,
   headers: {
-    "Content-Type": "multipart/form-data",
+    'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${token}`,
   },
 });
 
 export const api = axios.create({
-  baseURL: "https://kauth.kakao.com",
+  baseURL: 'https://kauth.kakao.com',
   headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
   },
 });
 export const trainApi2 = {
   //signup
-  postProficForm: (payload) => instanceF.post("/user", payload),
+  postProficForm: (payload) => instanceF.post('/user', payload),
   postProfile: (Id, payload) => instanceF.post(`/user/upload/${Id}`, payload),
   chattingForm: (name, formData) =>
     instanceF.post(`/user/chatimg/${name}`, formData),
@@ -63,20 +63,20 @@ export const trainApi = {
     axios.post(`${yhURL}/social/gauth/callback`, {
       authorizationCode: code,
     }),
-  postName: (payload) => instance.post("/", payload),
+  postName: (payload) => instance.post('/', payload),
   postProfile: (userId, payload) =>
     instance.post(`/user/edit/${userId}`, payload),
 
   getConvers: (userId) => instance.get(`/user/${userId}`),
 
-  postSubSign: (payload) => instance.post("/user/signup", payload),
-  postUserId: (payload) => instance.post("/user/checkid", payload),
-  postSignIn: (payload) => instance.post("/user/login", payload),
+  postSubSign: (payload) => instance.post('/user/signup', payload),
+  postUserId: (payload) => instance.post('/user/checkid', payload),
+  postSignIn: (payload) => instance.post('/user/login', payload),
 };
 // 인터셉터
 instance.interceptors.request.use(
   async (config) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     console.log(token);
     if (token) {
       config.headers = {
@@ -91,7 +91,7 @@ instance.interceptors.request.use(
 
 instanceF.interceptors.request.use(
   async (config) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     console.log(token);
     if (token) {
       config.headers = {
@@ -118,7 +118,7 @@ instance.interceptors.response.use(
           Authorization: `Bearer ${result?.acctoken}`,
         };
       } else {
-        window.location.href = "/";
+        window.location.href = '/';
       }
       return instance(config);
     }
@@ -140,7 +140,7 @@ instanceF.interceptors.response.use(
           Authorization: `Bearer ${result?.acctoken}`,
         };
       } else {
-        window.location.href = "/";
+        window.location.href = '/';
       }
       return instance(config);
     }

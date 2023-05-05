@@ -1,29 +1,30 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NaverLogin from "../Pages/NaverLogin";
-import ChatPage from "../Pages/ChatPage";
-import MainPage from "../Pages/MainPage";
-import ProfilePic from "../Components/Profile/ProfilePic";
-import Disclaimer from "../Components/Agreement/Disclaimer";
-import ChattingPage from "../Pages/ChattingPage";
-import SubwayPage from "../Pages/SubwayPage";
-import { Suspense, lazy } from "react";
-import CustomerUserGuide from "../Components/Profile/CustomerUserGuide";
-import CustomerNotice from "../Components/Profile/CustomerNotice";
-import KakaoLogin from "../Pages/KakaoLogin";
-import GoogleLogin from "../Pages/GoogleLogin";
-import ResetPage from "../Pages/Login/ResetPage";
-import AuthPage from "../Pages/Login/AuthPage";
-import CompletePage from "../Pages/Login/CompletePage";
-import EmailPage from "../Pages/Login/EmailPage";
-import AgreePage from "../Pages/Signup/AgreePage";
-import SignupPage from "../Pages/Signup/SignupPage";
-import SetGenderPage from "../Pages/Signup/SetGenderPage";
-import SetProfilePage from "../Pages/Signup/SetProfilePage";
-import PickProfilePage from "../Pages/Signup/PickProfilePage";
-const LoginPage = lazy(() => import("../Pages/Login"));
-const ConversPage = lazy(() => import("../Pages/ConversPage"));
-const MyPage = lazy(() => import("../Components/Profile/Mypage"));
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import NaverLogin from '../Pages/NaverLogin';
+import ChatPage from '../Pages/ChatPage';
+import MainPage from '../Pages/MainPage';
+import ProfilePic from '../Components/Profile/ProfilePic';
+import Disclaimer from '../Components/Agreement/Disclaimer';
+import ChattingPage from '../Pages/ChattingPage';
+import SubwayPage from '../Pages/SubwayPage';
+import { Suspense, lazy } from 'react';
+import CustomerUserGuide from '../Components/Profile/CustomerUserGuide';
+import CustomerNotice from '../Components/Profile/CustomerNotice';
+import KakaoLogin from '../Pages/KakaoLogin';
+import GoogleLogin from '../Pages/GoogleLogin';
+import ResetPage from '../Pages/Login/ResetPage';
+import AuthPage from '../Pages/Login/AuthPage';
+import CompletePage from '../Pages/Login/CompletePage';
+import EmailPage from '../Pages/Login/EmailPage';
+import AgreePage from '../Pages/Signup/AgreePage';
+import SignupPage from '../Pages/Signup/SignupPage';
+import SetGenderPage from '../Pages/Signup/SetGenderPage';
+import SetProfilePage from '../Pages/Signup/SetProfilePage';
+import PickProfilePage from '../Pages/Signup/PickProfilePage';
+import SetAgePage from '../Pages/Signup/SetAgePage';
+const LoginPage = lazy(() => import('../Pages/Login'));
+const ConversPage = lazy(() => import('../Pages/ConversPage'));
+const MyPage = lazy(() => import('../Components/Profile/Mypage'));
 
 const Router = () => {
   return (
@@ -43,6 +44,7 @@ const Router = () => {
           <Route path="/agree" element={<AgreePage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/setgender" element={<SetGenderPage />} />
+          <Route path="/setage" element={<SetAgePage />} />
           <Route path="/setprofile" element={<SetProfilePage />} />
           <Route path="/pickprofile" element={<PickProfilePage />} />
           <Route path="/mypage" element={<MyPage />} />
