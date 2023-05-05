@@ -1,36 +1,36 @@
-import React, { useCallback, useEffect } from "react";
-import { io } from "socket.io-client";
-import { useNavigate } from "react-router-dom";
-import useInput from "../MyTools/Hooks/UseInput";
-import styled from "styled-components";
-import axios from "axios";
-import { Cookies } from "react-cookie";
-import HomeMenu from "../Components/HomeMenu/HomeMenu";
-import Header from "../Components/Header/Header";
+import React, { useCallback, useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
+import useInput from '../MyTools/Hooks/UseInput';
+import styled from 'styled-components';
+import axios from 'axios';
+import { Cookies } from 'react-cookie';
+import HomeMenu from '../Components/HomeMenu/HomeMenu';
+import Header from '../Components/Header/Header';
 
-import FrontHeader from "../Components/Header/FrontHeader";
-import { ReactComponent as HowIcon } from "../Assets/Convers/How.svg";
-import { useState } from "react";
-import HelpModal from "../Components/Modal/HelpModal";
-import { trainApi } from "../apis/Instance";
+import FrontHeader from '../Components/Header/MainHeader';
+import { ReactComponent as HowIcon } from '../Assets/Convers/How.svg';
+import { useState } from 'react';
+import HelpModal from '../Components/Modal/HelpModal';
+import { trainApi } from '../apis/Instance';
 const cookies = new Cookies();
 
-const token = cookies.get("token");
+const token = cookies.get('token');
 const ConversPage = () => {
   const initialState = {
-    nickname: "",
-    msg: "",
-    gender: "",
-    train: "",
-    dropstation: "",
+    nickname: '',
+    msg: '',
+    gender: '',
+    train: '',
+    dropstation: '',
     from: false,
   };
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
-  const name = JSON.parse(localStorage?.getItem("nickname"))?.value;
-  const Id = localStorage.getItem("userId");
+  const name = JSON.parse(localStorage?.getItem('nickname'))?.value;
+  const Id = localStorage.getItem('userId');
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
     const obj = {
@@ -47,24 +47,24 @@ const ConversPage = () => {
 
   const conversHandler = () => {
     const primary = message.images.filter((item) => item.is_primary === true);
-    setItemWithExpireTime("train", message.train, 3000000000);
-    setItemWithExpireTime("profile", primary[0]?.image_url, 3000000000);
-    setItemWithExpireTime("nickname", message.result.nickname, 30000000000);
-    setItemWithExpireTime("dropstation", message.dropstation, 30000000000);
+    setItemWithExpireTime('train', message.train, 3000000000);
+    setItemWithExpireTime('profile', primary[0]?.image_url, 3000000000);
+    setItemWithExpireTime('nickname', message.result.nickname, 30000000000);
+    setItemWithExpireTime('dropstation', message.dropstation, 30000000000);
     if (message?.train.length !== 4) {
-      window.alert("칸 정보는 숫자로만 4자리만 입력해주세요!!");
+      window.alert('칸 정보는 숫자로만 4자리만 입력해주세요!!');
     } else {
-      reset("");
+      reset('');
 
-      navigate("/chattingpage");
+      navigate('/chattingpage');
     }
   };
   const CanselHandler = () => {
-    navigate("/subwaypage");
+    navigate('/subwaypage');
   };
   useEffect(() => {
     async function getNickname() {
-      const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
       console.log(data);
       setMessage(data.userInfo);
@@ -77,12 +77,12 @@ const ConversPage = () => {
       <FrontHeader msg="환승시민" />
       <CoversCtn>
         <ProfileBox>
-          <InfoDiv style={{ fontSize: "30px" }}>
-            <span style={{ fontWeight: "700", fontSize: "20px" }}>
+          <InfoDiv style={{ fontSize: '30px' }}>
+            <span style={{ fontWeight: '700', fontSize: '20px' }}>
               몇 호선, 몇번 칸에 계신가요!
             </span>
             <span
-              style={{ color: "#828282", fontWeight: "300", fontSize: "12px" }}
+              style={{ color: '#828282', fontWeight: '300', fontSize: '12px' }}
             >
               기입하신 정보를 바탕으로 자동 1:1 매칭이 이루어집니다.
             </span>
@@ -90,11 +90,11 @@ const ConversPage = () => {
           <StationDiv>
             <SquareInfo>
               <HowDiv>
-                <span style={{ fontSize: "14px", fontWeight: "1000" }}>
+                <span style={{ fontSize: '14px', fontWeight: '1000' }}>
                   칸 정보
                 </span>
                 <HowIcon
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => setModal(!modal)}
                 />
                 {modal && <HelpModal modal={modal} setModal={setModal} />}
@@ -112,7 +112,7 @@ const ConversPage = () => {
             </SquareInfo>
 
             <DropStationInfo>
-              <span style={{ fontSize: "14px", fontWeight: "1000" }}>
+              <span style={{ fontSize: '14px', fontWeight: '1000' }}>
                 내리는 역
               </span>
               <DropStation
@@ -125,20 +125,20 @@ const ConversPage = () => {
           </StationDiv>
           <SpanDiv>
             <span
-              style={{ fontSize: "20px", fontWeight: "600", marginTop: "px" }}
+              style={{ fontSize: '20px', fontWeight: '600', marginTop: 'px' }}
             >
               소중한 만남을 시작하시겠습니까?
             </span>
           </SpanDiv>
           <ButtonDiv>
             <CanselBtn
-              style={{ fontWeight: "700", fontSize: "20px", color: "#5B5B5B" }}
+              style={{ fontWeight: '700', fontSize: '20px', color: '#5B5B5B' }}
               onClick={CanselHandler}
             >
               취소
             </CanselBtn>
             <StartCoversBtn
-              style={{ fontWeight: "700", fontSize: "20px", color: "#5B5B5B" }}
+              style={{ fontWeight: '700', fontSize: '20px', color: '#5B5B5B' }}
               onClick={conversHandler}
             >
               다음

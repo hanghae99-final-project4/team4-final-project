@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import Subway from "../Components/Chatting/Subway";
-import { useCookies } from "react-cookie";
-import { useEffect } from "react";
-import styled from "styled-components";
-import { trainApi } from "../apis/Instance";
-import { getCookie } from "../MyTools/Hooks/MyCookie";
+import React, { useState } from 'react';
+import Subway from '../Components/Chatting/Subway';
+import { useCookies } from 'react-cookie';
+import styled from 'styled-components';
+import TransferHeader from '../Components/Header/MainHeader';
 
 const SubwayPage = () => {
-  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookie, setCookie, removeCookie] = useCookies(['token']);
   //쿼리 token 가져오기
   // eslint-disable-next-line no-undef
 
@@ -15,6 +13,7 @@ const SubwayPage = () => {
 
   return (
     <SubWayDiv>
+      <TransferHeader />
       <Subway />
     </SubWayDiv>
   );
@@ -22,5 +21,12 @@ const SubwayPage = () => {
 
 export default SubwayPage;
 const SubWayDiv = styled.div`
+  width: 375px;
+
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+
+  z-index: 1;
 `;
