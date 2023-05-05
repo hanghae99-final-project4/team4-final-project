@@ -1,9 +1,9 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
-const USER_KEY = "user";
-const PRIMARY_KEY = "primary";
-const AGREE_KEY = "agree";
-const NAME_KEY = "nickname";
+const USER_KEY = 'user';
+const PRIMARY_KEY = 'primary';
+const AGREE_KEY = 'agree';
+const NAME_KEY = 'nickname';
 
 const useInfoState = atom({
   key: USER_KEY,
@@ -22,8 +22,9 @@ const useUserState = atom({
   key: NAME_KEY,
   default: [
     {
-      gender: "",
-      nickname: "",
+      age: '',
+      gender: '',
+      nickname: '',
     },
   ],
 });

@@ -1,16 +1,16 @@
-import React from "react";
-import styled from "styled-components";
-import progress from "../../Assets/SetProfile/progress.svg";
-import hello from "../../Assets/SetProfile/hello.gif";
-import nextbutton from "../../Assets/SetProfile/nextbutton.svg";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { useUserState } from "../../Recoil/userList";
+import React from 'react';
+import styled from 'styled-components';
+import progress from '../../Assets/SetProfile/progress.svg';
+import hello from '../../Assets/SetProfile/hello.gif';
+import nextbutton from '../../Assets/SetProfile/nextbutton.svg';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { useUserState } from '../../Recoil/userList';
 
 const GenderSet = () => {
   const navigate = useNavigate();
-  const [isClick, setIsClick] = useState("1");
+  const [isClick, setIsClick] = useState('2');
   const [isChecked, setIsChecked] = useState(false);
   const [user, setUser] = useRecoilState(useUserState);
 
@@ -22,11 +22,11 @@ const GenderSet = () => {
     });
   };
   const nextbuttonHandler = () => {
-    navigate("/setprofile");
+    navigate('/setage');
   };
   const GenderList = [
-    { value: "1", name: "여성", id: "girl" },
-    { value: "2", name: "남성", id: "gender" },
+    { value: '1', name: '여성', id: 'girl' },
+    { value: '2', name: '남성', id: 'gender' },
   ];
   console.log(user);
   return (
@@ -49,14 +49,14 @@ const GenderSet = () => {
             id={item.id}
             name={item.name}
             value={item.value}
-            className={item.value === isClick ? "active" : ""}
+            className={item.value === isClick ? 'active' : ''}
             key={index}
             onClick={genderClickHandler}
           >
             <GenderSpan>{item.name}</GenderSpan>
 
             <Activeinput
-              className={item.value === isClick ? "active" : ""}
+              className={item.value === isClick ? 'active' : ''}
               value={item.value}
               type="radio"
             />
@@ -154,7 +154,7 @@ const Activeinput = styled.input`
   border-radius: 50%;
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     width: 12px;
     height: 12px;
@@ -172,7 +172,7 @@ const Activeinput = styled.input`
     border-radius: 50%;
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       width: 12px;
       height: 12px;
