@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import SubwayIcon from '../../Element/SubwayIcon';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useInput from '../../MyTools/Hooks/UseInput';
 import { useNavigate } from 'react-router-dom';
-import HomeMenu from '../HomeMenu/HomeMenu';
-import SubwayHome from '../HomeMenu/SubwayHome';
 import guide from '../../Assets/Main/guidebutton.svg';
 import write from '../../Assets/Main/write.svg';
 import setting from '../../Assets/Main/setting.svg';
 import hand from '../../Assets/Main/hand.svg';
+import line from '../../Assets/Main/line.svg';
+import station from '../../Assets/Main/station.svg';
 import { trainApi } from './../../apis/Instance';
-import { yup } from 'yup';
+import Slick from '../Slick/Slick';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
@@ -25,9 +24,14 @@ const Subway = () => {
   }, []);
   //프로필 조회 함수
   async function getProfile() {
-    const userId = localStorage.getItem('userId');
-    const { data } = await trainApi.getConvers(userId);
-    setProfile(data.userInfo);
+    try {
+      const userId = localStorage.getItem('userId');
+      const { data } = await trainApi.getConvers(userId);
+      console.log(data);
+      setProfile(data.userInfo);
+    } catch (err) {
+      console.log(err);
+    }
   }
   console.log(profile);
   return (
@@ -44,7 +48,7 @@ const Subway = () => {
       <ProfileBox>
         <Profile>
           <Img>
-            <img src={profile?.images[0]?.image_url} alt="profile" />
+            <img src={profile?.images?.[0]?.image_url} alt="profile" />
           </Img>
           <NicknameBox>
             <Nickname>{profile?.result?.nickname}</Nickname>
@@ -68,6 +72,43 @@ const Subway = () => {
           인연을 찾기 전 출발역과 도착역을 지정 해 주세요.
         </span>
       </SearchBox>
+      {/* 지하철 역 */}
+      <StationBox>
+        <Line>
+          <img src={line} alt="line" />
+        </Line>
+
+        <Station>
+          <Start>
+            <span>출발</span>
+            <div>
+              <img src={station} alt="station" />
+              <span>출발역</span>
+            </div>
+          </Start>
+          <Arrive>
+            <span>도착</span>
+            <div>
+              <img src={station} alt="station" />
+              <span>도착역</span>
+            </div>
+          </Arrive>
+        </Station>
+      </StationBox>
+      <MatchBtn>매칭</MatchBtn>
+      {/* 이벤트 */}
+      <Event>
+        <span>이벤트</span>
+        <span className="event">
+          행운이 팡팡 터지는 이벤트에 참여 해 보세요!
+        </span>
+      </Event>
+      {/* 슬라이더 */}
+      <Slick />
+
+      <History>
+        <span>매칭이력</span>
+      </History>
     </SubwayDiv>
   );
 };
@@ -81,7 +122,18 @@ const SubwayDiv = styled.div`
   flex-direction: column;
 
   width: 375px;
-  height: 812px;
+  height: 875px;
+  overflow: auto;
+  overflow-x: hidden;
+  .SubwayDiv::-webkit-scrollbar {
+    width: 10px;
+  }
+  .SubwayDiv::-webkit-scrollbar-thumb {
+    background-color: #2f3542;
+  }
+  .SubwayDiv::-webkit-scrollbar-track {
+    background-color: grey;
+  }
 `;
 const GuideBox = styled.div`
   width: 342px;
@@ -123,7 +175,7 @@ const ProfileBox = styled.div`
   border: 1px solid #f5f3f3;
   border-radius: 4px;
   stroke: #f5f3f3;
-  offset: 0px, 1px rgba(220, 220, 220, 0.25);
+  box-shadow: 0px 1px 4px 1px #dcdcdc40;
 `;
 const Profile = styled.div`
   margin-left: 10px;
@@ -194,5 +246,115 @@ const SearchBox = styled.div`
       font-weight: 500;
       font-size: 24px;
     }
+  }
+`;
+const StationBox = styled.div`
+  margin-top: 18px;
+  width: 343px;
+  height: 218px;
+  display: flex;
+  gap: 10px;
+  border: 1px solid #c3c3c340;
+  box-shadow: 0px 0px 4px 1px #c3c3c340;
+
+  border-radius: 4px;
+`;
+const Line = styled.div`
+  margin-top: 21px;
+  margin-left: 11px;
+`;
+const Station = styled.div`
+  margin-top: 18px;
+  width: 293px;
+  height: 182px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
+const Start = styled.div`
+  display: flex;
+  gap: 13px;
+  flex-direction: column;
+  width: 293px;
+  height: 78px;
+  span {
+    color: #4e4e4e;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  div {
+    width: 293px;
+    height: 44px;
+    border: 1px solid #dadada;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    span {
+      font-weight: 400;
+      color: #585858;
+      font-size: 16px;
+    }
+  }
+`;
+const Arrive = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 291px;
+  height: 74px;
+  gap: 9px;
+  span {
+    color: #4e4e4e;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  div {
+    width: 293px;
+    height: 44px;
+    border: 1px solid #dadada;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    span {
+      font-weight: 400;
+      color: #585858;
+      font-size: 16px;
+    }
+  }
+`;
+const MatchBtn = styled.button`
+  margin-top: 18px;
+  width: 343px;
+  height: 40px;
+  font-weight: 600;
+  font-size: 16px;
+
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: #fa3a45;
+`;
+const Event = styled.div`
+  margin-top: 40px;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  span {
+    font-size: 24px;
+    font-weight: 500;
+    color: #404040;
+  }
+  span.event {
+    font-weight: 400;
+    font-size: 14px;
+    color: #ababab;
+  }
+`;
+const History = styled.div`
+  width: 343;
+
+  overflow: scroll;
+  overflow-x: hidden;
+  span {
+    font-weight: 500;
+    font-size: 24px;
   }
 `;

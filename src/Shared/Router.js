@@ -4,7 +4,6 @@ import NaverLogin from '../Pages/NaverLogin';
 import ChatPage from '../Pages/ChatPage';
 import MainPage from '../Pages/MainPage';
 import ProfilePic from '../Components/Profile/ProfilePic';
-import Disclaimer from '../Components/Agreement/Disclaimer';
 import ChattingPage from '../Pages/ChattingPage';
 import SubwayPage from '../Pages/SubwayPage';
 import { Suspense, lazy } from 'react';
@@ -49,7 +48,6 @@ const Router = () => {
           <Route path="/pickprofile" element={<PickProfilePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="profilepic" element={<ProfilePic />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
 
           <Route path="/main" element={<MainPage />} />
           <Route path="/chatpage" element={<ChatPage />} />
