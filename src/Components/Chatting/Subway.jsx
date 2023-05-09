@@ -10,6 +10,7 @@ import line from '../../Assets/Main/line.svg';
 import station from '../../Assets/Main/station.svg';
 import { trainApi } from './../../apis/Instance';
 import Slick from '../Slick/Slick';
+import Kakao from '../Kakao/Kakao';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
@@ -95,7 +96,10 @@ const Subway = () => {
           </Arrive>
         </Station>
       </StationBox>
-      <MatchBtn>매칭</MatchBtn>
+      <div>
+        <MatchBtn>매칭</MatchBtn>
+      </div>
+
       {/* 이벤트 */}
       <Event>
         <span>이벤트</span>
@@ -106,9 +110,10 @@ const Subway = () => {
       {/* 슬라이더 */}
       <Slick />
 
-      <History>
+      <HistoryBox>
         <span>매칭이력</span>
-      </History>
+      </HistoryBox>
+      <Kakao />
     </SubwayDiv>
   );
 };
@@ -120,19 +125,20 @@ const SubwayDiv = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-
   width: 375px;
   height: 875px;
-  overflow: auto;
+  overflow: scroll;
   overflow-x: hidden;
-  .SubwayDiv::-webkit-scrollbar {
-    width: 10px;
+  &::-webkit-scrollbar {
+    width: 5px;
   }
-  .SubwayDiv::-webkit-scrollbar-thumb {
-    background-color: #2f3542;
+  &::-webkit-scrollbar-thumb {
+    height: 1%;
+    background-color: #6b9394;
+    border-radius: 10px;
   }
-  .SubwayDiv::-webkit-scrollbar-track {
-    background-color: grey;
+  &::-webkit-scrollbar-track {
+    background: rgba(33, 122, 244, 0.1);
   }
 `;
 const GuideBox = styled.div`
@@ -174,7 +180,7 @@ const ProfileBox = styled.div`
   background-color: #fefefe;
   border: 1px solid #f5f3f3;
   border-radius: 4px;
-  stroke: #f5f3f3;
+  stroke: solid #f5f3f3;
   box-shadow: 0px 1px 4px 1px #dcdcdc40;
 `;
 const Profile = styled.div`
@@ -231,7 +237,7 @@ const SearchBox = styled.div`
   margin-top: 48px;
   display: flex;
   flex-direction: column;
-  width: 272px;
+  width: 271px;
   height: 54px;
   gap: 8px;
 
@@ -249,14 +255,14 @@ const SearchBox = styled.div`
   }
 `;
 const StationBox = styled.div`
-  margin-top: 18px;
+  padding-bottom: 20px;
+  margin-top: 17px;
   width: 343px;
   height: 218px;
   display: flex;
-  gap: 10px;
+  gap: 6px;
   border: 1px solid #c3c3c340;
   box-shadow: 0px 0px 4px 1px #c3c3c340;
-
   border-radius: 4px;
 `;
 const Line = styled.div`
@@ -348,11 +354,11 @@ const Event = styled.div`
     color: #ababab;
   }
 `;
-const History = styled.div`
-  width: 343;
+const HistoryBox = styled.div`
+  margin-top: 40px;
+  width: 343px;
+  height: 351px;
 
-  overflow: scroll;
-  overflow-x: hidden;
   span {
     font-weight: 500;
     font-size: 24px;

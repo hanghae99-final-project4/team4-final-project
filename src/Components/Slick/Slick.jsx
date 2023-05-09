@@ -48,10 +48,7 @@ const Slick = () => {
 
 export default Slick;
 const Container = styled.div`
-  width: 343px;
-  height: 123px;
-  margin: 18px;
-
+  margin-top: 18px;
   .slick-dots {
     button::before {
       color: #c1c1c1;
@@ -63,8 +60,4 @@ const Container = styled.div`
     }
   }
 `;
-const Img = styled.div`
-  background-image: url('../../Assets/Slick/playstore-icon.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-`;
+const Img = styled.div``;
