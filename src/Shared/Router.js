@@ -21,6 +21,7 @@ import SetGenderPage from '../Pages/Signup/SetGenderPage';
 import SetProfilePage from '../Pages/Signup/SetProfilePage';
 import PickProfilePage from '../Pages/Signup/PickProfilePage';
 import SetAgePage from '../Pages/Signup/SetAgePage';
+import Loading from '../Components/Loading/Loading';
 const LoginPage = lazy(() => import('../Pages/Login'));
 const ConversPage = lazy(() => import('../Pages/ConversPage'));
 const MyPage = lazy(() => import('../Components/Profile/Mypage'));
@@ -28,7 +29,7 @@ const MyPage = lazy(() => import('../Components/Profile/Mypage'));
 const Router = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/social/oauth/callback" element={<KakaoLogin />} />
