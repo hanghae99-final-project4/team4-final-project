@@ -1,19 +1,19 @@
-import React from 'react';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
-import styled from 'styled-components';
-import slick from '../../Assets/Slick/playstore-icon.png';
+import React from "react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import styled from "styled-components";
+import slick from "../../Assets/Slick/playstore-icon.png";
 const Slick = () => {
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 2000,
-    cssEase: 'linear',
+    lazyLoad: true,
+    speed: 500,
+    initialSlide: 2,
+    cssEase: "linear",
   };
   return (
     <Container>
@@ -22,23 +22,11 @@ const Slick = () => {
           <img src={slick} alt="playstore" />
         </Img>
         <Img>
-          {' '}
+          {" "}
           <img src={slick} alt="playstore" />
         </Img>
         <Img>
-          {' '}
-          <img src={slick} alt="playstore" />
-        </Img>
-        <Img>
-          {' '}
-          <img src={slick} alt="playstore" />
-        </Img>
-        <Img>
-          {' '}
-          <img src={slick} alt="playstore" />
-        </Img>
-        <Img>
-          {' '}
+          {" "}
           <img src={slick} alt="playstore" />
         </Img>
       </Slider>
@@ -60,4 +48,10 @@ const Container = styled.div`
     }
   }
 `;
-const Img = styled.div``;
+const Img = styled.div`
+  width: 343px;
+  height: 100px;
+  img {
+    object-fit: cover;
+  }
+`;

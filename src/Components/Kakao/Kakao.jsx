@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import React, { useEffect, useState } from "react";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { useRecoilState } from "recoil";
+import { useStationState } from "../../Recoil/userList";
 
 const { kakao } = window;
+
 function Kakao() {
   const [state, setState] = useState({
     center: {
@@ -14,6 +17,7 @@ function Kakao() {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
+  const [station, setStation] = useRecoilState(useStationState);
 
   //------------------자기 위치 찾기 ----------------
   const getCurrentLocation = async () => {
@@ -31,7 +35,7 @@ function Kakao() {
       } else {
         // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-        rej(new Error('현재 위치를 불러 올 수 없습니다.'));
+        rej(new Error("현재 위치를 불러 올 수 없습니다."));
       }
     });
   };
@@ -47,13 +51,13 @@ function Kakao() {
         size: 6,
         sort: kakao.maps.services.SortBy.DISTANCE,
       };
-      const keyword = '지하철';
+      const keyword = "지하철";
       ps.keywordSearch(keyword, placesSearchCB, options);
     };
     const ps = new kakao.maps.services.Places();
 
     const placesSearchCB = (data, status, _pagination) => {
-      console.log(data[0]);
+      setStation(data[0]?.place_name?.split("역")[0]);
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -88,8 +92,8 @@ function Kakao() {
         lng: 126.9786567,
       }}
       style={{
-        width: '100%',
-        height: '350px',
+        width: "100%",
+        height: "350px",
       }}
       level={3}
       onCreate={setMap}
@@ -101,7 +105,7 @@ function Kakao() {
           onClick={() => setInfo(marker)}
         >
           {info && info.content === marker.content && (
-            <div style={{ color: '#000' }}>{marker.content}</div>
+            <div style={{ color: "#000" }}>{marker.content}</div>
           )}
         </MapMarker>
       ))}

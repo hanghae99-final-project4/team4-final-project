@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Subway from '../Components/Chatting/Subway';
-import { useCookies } from 'react-cookie';
-import styled from 'styled-components';
-import TransferHeader from '../Components/Header/MainHeader';
+import React, { useState } from "react";
+import { useCookies } from "react-cookie";
+import Subway from "../../Components/Main/Subway";
+import styled from "styled-components";
+import TransferHeader from "../../Components/Header/MainHeader";
 
 const SubwayPage = () => {
-  const [cookie, setCookie, removeCookie] = useCookies(['token']);
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
   //쿼리 token 가져오기
   // eslint-disable-next-line no-undef
 

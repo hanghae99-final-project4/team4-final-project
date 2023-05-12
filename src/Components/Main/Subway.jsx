@@ -1,32 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import useInput from '../../MyTools/Hooks/UseInput';
-import { useNavigate } from 'react-router-dom';
-import guide from '../../Assets/Main/guidebutton.svg';
-import write from '../../Assets/Main/write.svg';
-import setting from '../../Assets/Main/setting.svg';
-import hand from '../../Assets/Main/hand.svg';
-import line from '../../Assets/Main/line.svg';
-import station from '../../Assets/Main/station.svg';
-import { trainApi } from './../../apis/Instance';
-import Slick from '../Slick/Slick';
-import Kakao from '../Kakao/Kakao';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import useInput from "../../MyTools/Hooks/UseInput";
+import { useNavigate } from "react-router-dom";
+import guide from "../../Assets/Main/guidebutton.svg";
+import write from "../../Assets/Main/write.svg";
+import setting from "../../Assets/Main/setting.svg";
+import hand from "../../Assets/Main/hand.svg";
+import line from "../../Assets/Main/line.svg";
+import stationimg from "../../Assets/Main/station.svg";
+import { trainApi } from "../../apis/Instance";
+import Slick from "../Slick/Slick";
+import Kakao from "../Kakao/Kakao";
+import { useRecoilState } from "recoil";
+import { useStationState } from "../../Recoil/userList";
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
   const initialState = {
-    station: '',
+    station: "",
   };
   const [subway, setSubway, onChangeHandler, reset] = useInput(initialState);
-
+  const [station, setStation] = useRecoilState(useStationState);
   useEffect(() => {
     getProfile();
   }, []);
+  const naviHandler = () => {
+    navigate("/stationselect");
+  };
   //프로필 조회 함수
   async function getProfile() {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem("userId");
       const { data } = await trainApi.getConvers(userId);
       console.log(data);
       setProfile(data.userInfo);
@@ -79,18 +84,18 @@ const Subway = () => {
           <img src={line} alt="line" />
         </Line>
 
-        <Station>
+        <Station onClick={naviHandler}>
           <Start>
             <span>출발</span>
             <div>
-              <img src={station} alt="station" />
-              <span>출발역</span>
+              <img src={stationimg} alt="station" />
+              {station && <span>{station}</span>}
             </div>
           </Start>
           <Arrive>
             <span>도착</span>
             <div>
-              <img src={station} alt="station" />
+              <img src={stationimg} alt="station" />
               <span>도착역</span>
             </div>
           </Arrive>
@@ -134,11 +139,10 @@ const SubwayDiv = styled.div`
   }
   &::-webkit-scrollbar-thumb {
     height: 1%;
-    background-color: #6b9394;
+
     border-radius: 10px;
   }
   &::-webkit-scrollbar-track {
-    background: rgba(33, 122, 244, 0.1);
   }
 `;
 const GuideBox = styled.div`
@@ -270,6 +274,7 @@ const Line = styled.div`
   margin-left: 11px;
 `;
 const Station = styled.div`
+  cursor: pointer;
   margin-top: 18px;
   width: 293px;
   height: 182px;
