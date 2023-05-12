@@ -1,37 +1,38 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import useInput from "../../MyTools/Hooks/UseInput";
-import { useNavigate } from "react-router-dom";
-import guide from "../../Assets/Main/guidebutton.svg";
-import write from "../../Assets/Main/write.svg";
-import setting from "../../Assets/Main/setting.svg";
-import hand from "../../Assets/Main/hand.svg";
-import line from "../../Assets/Main/line.svg";
-import stationimg from "../../Assets/Main/station.svg";
-import { trainApi } from "../../apis/Instance";
-import Slick from "../Slick/Slick";
-import Kakao from "../Kakao/Kakao";
-import { useRecoilState } from "recoil";
-import { useStationState } from "../../Recoil/userList";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import useInput from '../../MyTools/Hooks/UseInput';
+import { useNavigate } from 'react-router-dom';
+import guide from '../../Assets/Main/guidebutton.svg';
+import write from '../../Assets/Main/write.svg';
+import setting from '../../Assets/Main/setting.svg';
+import hand from '../../Assets/Main/hand.svg';
+import line from '../../Assets/Main/line.svg';
+import stationimg from '../../Assets/Main/station.svg';
+import { trainApi } from '../../apis/Instance';
+import Slick from '../Slick/Slick';
+import Kakao from '../Kakao/Kakao';
+import { useRecoilState } from 'recoil';
+import { useArriveState, useStationState } from '../../Recoil/userList';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
   const initialState = {
-    station: "",
+    station: '',
   };
   const [subway, setSubway, onChangeHandler, reset] = useInput(initialState);
   const [station, setStation] = useRecoilState(useStationState);
+  const [arrive, setArrive] = useRecoilState(useArriveState);
   useEffect(() => {
     getProfile();
   }, []);
   const naviHandler = () => {
-    navigate("/stationselect");
+    navigate('/stationselect');
   };
   //프로필 조회 함수
   async function getProfile() {
     try {
-      const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
       console.log(data);
       setProfile(data.userInfo);
@@ -89,14 +90,18 @@ const Subway = () => {
             <span>출발</span>
             <div>
               <img src={stationimg} alt="station" />
-              {station && <span>{station}</span>}
+              {station && true ? (
+                <span>{station}</span>
+              ) : (
+                <span>{'출발역'}</span>
+              )}
             </div>
           </Start>
           <Arrive>
             <span>도착</span>
             <div>
               <img src={stationimg} alt="station" />
-              <span>도착역</span>
+              {arrive && true ? <span>{arrive}</span> : <span>도착역</span>}
             </div>
           </Arrive>
         </Station>

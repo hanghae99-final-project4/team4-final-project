@@ -1,12 +1,23 @@
-import React from "react";
-import styled from "styled-components";
-import line from "../../Assets/Main/line.svg";
-import stationimg from "../../Assets/Main/station.svg";
-import { useRecoilState } from "recoil";
-import { useStationState } from "../../Recoil/userList";
+import React from 'react';
+import styled from 'styled-components';
+import line from '../../Assets/Main/line.svg';
+import stationimg from '../../Assets/Main/station.svg';
+import { useRecoilState } from 'recoil';
+import { useArriveState, useStationState } from '../../Recoil/userList';
+import { useNavigate } from 'react-router-dom';
 
 const StationSelect = () => {
+  const navigate = useNavigate();
   const [station, setStation] = useRecoilState(useStationState);
+  const [arrive, setArrive] = useRecoilState(useArriveState);
+  const naviHandler = () => {
+    navigate('/stationsearch');
+  };
+  const buttonHandler = () => {
+    navigate('/subwaypage');
+  };
+  console.log(station);
+
   return (
     <SubwayDiv>
       {/* 지하철 역 */}
@@ -20,18 +31,23 @@ const StationSelect = () => {
             <span>출발</span>
             <div>
               <img src={stationimg} alt="station" />
-              {station && <span>{station}</span>}
+              {station && true ? (
+                <span>{station}</span>
+              ) : (
+                <span>{'도착역'}</span>
+              )}
             </div>
           </Start>
-          <Arrive>
+          <Arrive onClick={naviHandler}>
             <span>도착</span>
             <div>
               <img src={stationimg} alt="station" />
-              <span>도착역</span>
+              {arrive && true ? <span>{arrive}</span> : <span>도착역</span>}
             </div>
           </Arrive>
         </Station>
       </StationBox>
+      <OKBtn onClick={buttonHandler}>확인</OKBtn>
     </SubwayDiv>
   );
 };
@@ -74,7 +90,6 @@ const Line = styled.div`
   margin-left: 11px;
 `;
 const Station = styled.div`
-  cursor: pointer;
   margin-top: 18px;
   width: 293px;
   height: 182px;
@@ -108,6 +123,7 @@ const Start = styled.div`
   }
 `;
 const Arrive = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: 291px;
@@ -131,4 +147,11 @@ const Arrive = styled.div`
       font-size: 16px;
     }
   }
+`;
+const OKBtn = styled.button`
+  margin-top: 30px;
+  width: 343px;
+  height: 50px;
+  background-color: #fa3a45;
+  color: #ffffff;
 `;

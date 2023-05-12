@@ -68,7 +68,7 @@ export const trainApi = {
     instance.post(`/user/edit/${userId}`, payload),
 
   getConvers: (userId) => instance.get(`/user/${userId}`),
-
+  getStation: (keyword) => instance.get(`list/station/${keyword}`),
   postSubSign: (payload) => instance.post('/user/signup', payload),
   postUserId: (payload) => instance.post('/user/checkid', payload),
   postSignIn: (payload) => instance.post('/user/login', payload),
