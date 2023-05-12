@@ -1,9 +1,9 @@
-import React from "react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
-import styled from "styled-components";
-import slick from "../../Assets/Slick/playstore-icon.png";
+import React from 'react';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
+import styled from 'styled-components';
+import slick from '../../Assets/Slick/slick.svg';
 const Slick = () => {
   const settings = {
     dots: true,
@@ -13,7 +13,7 @@ const Slick = () => {
     lazyLoad: true,
     speed: 500,
     initialSlide: 2,
-    cssEase: "linear",
+    cssEase: 'linear',
   };
   return (
     <Container>
@@ -22,11 +22,11 @@ const Slick = () => {
           <img src={slick} alt="playstore" />
         </Img>
         <Img>
-          {" "}
+          {' '}
           <img src={slick} alt="playstore" />
         </Img>
         <Img>
-          {" "}
+          {' '}
           <img src={slick} alt="playstore" />
         </Img>
       </Slider>

@@ -1,17 +1,17 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import HeaderIcon from "../../Element/HeaderIcon";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import HeaderIcon from '../../Element/HeaderIcon';
 
-const Header = ({ msg, margin }) => {
+const Header = ({ msg, margin, children }) => {
   return (
     <div>
-      {" "}
+      {' '}
       <MainHeader>
         <PointerBox>
           <HeaderIcon />
         </PointerBox>
-        <MessageBox margin={margin}>{msg}</MessageBox>
+        {children}
       </MainHeader>
     </div>
   );
@@ -37,7 +37,7 @@ const MainHeader = styled.div`
 const PointerBox = styled.div`
   margin-left: 16px;
 `;
-const MessageBox = styled.div`
+export const MessageBox = styled.div`
   margin-left: ${(props) => props.margin};
   font-family: Pretendard;
   font-weight: 500;
