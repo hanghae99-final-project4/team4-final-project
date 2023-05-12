@@ -57,7 +57,11 @@ function Kakao() {
     const ps = new kakao.maps.services.Places();
 
     const placesSearchCB = (data, status, _pagination) => {
+<<<<<<< HEAD
       setStation(data[0]?.place_name?.split("역")[0]);
+=======
+      console.log(data[0].place_name.split('역')[0]);
+>>>>>>> ba60e7f504d372f7bfddd63ba58c92afe8d7e55d
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다

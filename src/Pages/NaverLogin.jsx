@@ -1,10 +1,11 @@
-import React from "react";
-import axios from "axios";
-import { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { Cookies, useCookies } from "react-cookie";
-import FirstLogo from "../Assets/FirstLogo.svg";
-import { trainApi } from "../apis/Instance";
+import React from 'react';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Cookies, useCookies } from 'react-cookie';
+import FirstLogo from '../Assets/FirstLogo.svg';
+import { trainApi } from '../apis/Instance';
+import Loading from '../Components/Loading/Loading';
 
 const NaverLogin = () => {
   const navigate = useNavigate();
@@ -13,8 +14,8 @@ const NaverLogin = () => {
     naverLogin();
   }, []);
 
-  const code = new URL(window.location.href).searchParams.get("code");
-  const state = new URL(window.location.href).searchParams.get("state");
+  const code = new URL(window.location.href).searchParams.get('code');
+  const state = new URL(window.location.href).searchParams.get('state');
   console.log(code, state);
   const naverLogin = async () => {
     try {
@@ -23,20 +24,16 @@ const NaverLogin = () => {
       const token = data.token;
       const userId = data.result[0].id;
       if (data.token) {
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("token", token);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('token', token);
       }
-      navigate("/subwaypage");
+      navigate('/subwaypage');
     } catch (error) {
       console.log(error);
     }
   };
 
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <img src={FirstLogo} alt="firstlogo" className="block m-[auto]" />
-    </div>
-  );
+  return <Loading />;
 };
 //네이버로그인
 //
