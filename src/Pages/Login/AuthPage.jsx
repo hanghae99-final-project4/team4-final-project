@@ -1,13 +1,18 @@
-import React from "react";
+import React from 'react';
 
-import Auth from "../../Components/Login/Auth";
-import { Wrap } from "./EmailPage";
-import Header from "../../Components/Header/Header";
+import Auth from '../../Components/Login/Auth';
+import { Wrap } from './EmailPage';
+import Header, { PointerBox } from '../../Components/Header/Header';
+import HeaderIcon from '../../Element/HeaderIcon';
 
 const AuthPage = () => {
   return (
     <Wrap>
-      <Header msg={""} margin="63px" />
+      <Header msg={''} margin="63px">
+        <PointerBox>
+          <HeaderIcon />
+        </PointerBox>
+      </Header>
       <Auth />
     </Wrap>
   );

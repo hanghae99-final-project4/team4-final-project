@@ -104,11 +104,23 @@ const Station = styled.div`
   }
 `;
 const SearchBox = styled.div`
+  overflow-y: auto;
+
   width: 343px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 1%;
+
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+  }
 `;
 const SearchList = styled.div`
   gap: 4px;
