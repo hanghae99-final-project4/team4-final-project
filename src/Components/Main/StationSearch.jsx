@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import searchimg from '../../Assets/Station/search.svg';
 import result from '../../Assets/Station/result.svg';
 import { useNavigate } from 'react-router-dom';
+import remove from '../../Assets/Station/remove.svg';
 
 const StationSearch = () => {
   const navigate = useNavigate();
@@ -16,19 +17,42 @@ const StationSearch = () => {
   const [arrive, setArrive] = useRecoilState(useArriveState);
   const [history, setHistory] = useRecoilState(useHistoryState);
   const searchHandler = (item) => {
-    console.log(item?.station_name);
     setHistory([...history, item]);
+
     setArrive(item?.station_name);
-    // navigate('/stationselect');
+    navigate('/stationselect');
   };
-  console.log(history);
+
+  const set = new Set(history);
+  const newhistory = [...set];
+  const removeHandler = (id) => {
+    console.log(newhistory.id);
+    setHistory((newhistory) => newhistory.filter((item) => item.id !== id));
+  };
+  console.log(newhistory);
   console.log(arrive);
   return (
     <>
       <Span>최근 검색어</Span>
-      <StationBox>
-        <Station>건대입구</Station>
-      </StationBox>
+
+      {newhistory.length !== 0 ? (
+        <StationBox>
+          {newhistory?.map((item, i) => (
+            <Station id={item.id}>
+              {item.station_name}
+              <img
+                id={item.id}
+                onClick={() => removeHandler(item.id)}
+                src={remove}
+                alt="remove"
+              />
+            </Station>
+          ))}{' '}
+        </StationBox>
+      ) : (
+        <StationBox></StationBox>
+      )}
+
       {/* 여기부터 검색창 리스트 */}
       {search?.length !== 0 ? (
         <SearchBox>
@@ -72,8 +96,12 @@ const Station = styled.div`
   font-weight: 400;
   font-size: 13px;
   border-radius: 999px;
+  width: auto;
   height: 34px;
   border: 1px solid #eaeaea;
+  img {
+    cursor: pointer;
+  }
 `;
 const SearchBox = styled.div`
   width: 343px;

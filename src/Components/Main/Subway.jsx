@@ -90,10 +90,10 @@ const Subway = () => {
             <span>출발</span>
             <div>
               <img src={stationimg} alt="station" />
-              {station && true ? (
+              {station.length !== 0 ? (
                 <span>{station}</span>
               ) : (
-                <span>{'출발역'}</span>
+                <span>출발역</span>
               )}
             </div>
           </Start>
@@ -101,7 +101,11 @@ const Subway = () => {
             <span>도착</span>
             <div>
               <img src={stationimg} alt="station" />
-              {arrive && true ? <span>{arrive}</span> : <span>도착역</span>}
+              {arrive.length !== 0 ? (
+                <span>{arrive}</span>
+              ) : (
+                <span>도착역</span>
+              )}
             </div>
           </Arrive>
         </Station>
