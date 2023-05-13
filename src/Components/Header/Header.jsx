@@ -7,12 +7,7 @@ const Header = ({ msg, margin, children }) => {
   return (
     <div>
       {' '}
-      <MainHeader>
-        <PointerBox>
-          <HeaderIcon />
-        </PointerBox>
-        {children}
-      </MainHeader>
+      <MainHeader>{children}</MainHeader>
     </div>
   );
 };
@@ -34,7 +29,7 @@ const MainHeader = styled.div`
   line-height: 21.78px;
   width: 375px;
 `;
-const PointerBox = styled.div`
+export const PointerBox = styled.div`
   margin-left: 16px;
 `;
 export const MessageBox = styled.div`
