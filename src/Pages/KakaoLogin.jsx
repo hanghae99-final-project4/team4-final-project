@@ -29,7 +29,6 @@ const KakaoLogin = () => {
           ? navigate("/setgender")
           : navigate("/subwaypage");
       }
-      navigate("/subwaypage");
     } catch (error) {
       console.log(error);
     }
