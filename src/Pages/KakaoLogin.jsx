@@ -25,8 +25,10 @@ const KakaoLogin = () => {
       if (data.token) {
         localStorage.setItem("userId", userId);
         localStorage.setItem("token", token);
+        data.result?.[0]?.nickname === null
+          ? navigate("/setgender")
+          : navigate("/subwaypage");
       }
-
       navigate("/subwaypage");
     } catch (error) {
       console.log(error);
