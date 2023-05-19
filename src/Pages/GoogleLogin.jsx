@@ -24,8 +24,6 @@ const GoogleLogin = () => {
           ? navigate("/setgender")
           : navigate("/subwaypage");
       }
-
-      navigate("/subwaypage");
     } catch (error) {
       console.log(error);
     }
