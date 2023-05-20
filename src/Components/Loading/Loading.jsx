@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import Loadinglogo from '../../Assets/Loading/Group 146.gif';
+import React from "react";
+import styled from "styled-components";
+import Loadinglogo from "../../Assets/Loading/Group 146.gif";
 
 const Loading = () => {
   return (
@@ -23,12 +23,13 @@ const Wrap = styled.div`
     font-size: 1rem;
   } ;
 `;
-const LoadingDiv = styled.div`
+export const LoadingDiv = styled.div`
   width: 375px;
   height: 812px;
   align-items: center;
   justify-content: center;
   display: flex;
+  flex-direction: column;
   margin: 0 auto;
   background-color: #fa3a45;
 `;

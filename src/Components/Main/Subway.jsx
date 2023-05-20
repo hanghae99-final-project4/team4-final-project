@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import useInput from '../../MyTools/Hooks/UseInput';
-import { useNavigate } from 'react-router-dom';
-import guide from '../../Assets/Main/guidebutton.svg';
-import write from '../../Assets/Main/write.svg';
-import setting from '../../Assets/Main/setting.svg';
-import hand from '../../Assets/Main/hand.svg';
-import line from '../../Assets/Main/line.svg';
-import stationimg from '../../Assets/Main/station.svg';
-import { trainApi } from '../../apis/Instance';
-import Slick from '../Slick/Slick';
-import Kakao from '../Kakao/Kakao';
-import { useRecoilState } from 'recoil';
-import { useArriveState, useStationState } from '../../Recoil/userList';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import useInput from "../../MyTools/Hooks/UseInput";
+import { useNavigate } from "react-router-dom";
+import guide from "../../Assets/Main/guidebutton.svg";
+import write from "../../Assets/Main/write.svg";
+import setting from "../../Assets/Main/setting.svg";
+import hand from "../../Assets/Main/hand.svg";
+import line from "../../Assets/Main/line.svg";
+import stationimg from "../../Assets/Main/station.svg";
+import { trainApi } from "../../apis/Instance";
+import Slick from "../Slick/Slick";
+import Kakao from "../Kakao/Kakao";
+import { useRecoilState } from "recoil";
+import { useArriveState, useStationState } from "../../Recoil/userList";
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
   const initialState = {
-    station: '',
+    station: "",
   };
   const [subway, setSubway, onChangeHandler, reset] = useInput(initialState);
   const [station, setStation] = useRecoilState(useStationState);
@@ -27,12 +27,12 @@ const Subway = () => {
     getProfile();
   }, []);
   const naviHandler = () => {
-    navigate('/stationselect');
+    navigate("/stationselect");
   };
   //프로필 조회 함수
   async function getProfile() {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem("userId");
       const { data } = await trainApi.getConvers(userId);
       console.log(data);
       setProfile(data.userInfo);
@@ -40,6 +40,9 @@ const Subway = () => {
       console.log(err);
     }
   }
+  const buttonHandler = () => {
+    navigate("/chattingpage");
+  };
   console.log(profile);
   return (
     <SubwayDiv>
@@ -111,7 +114,7 @@ const Subway = () => {
         </Station>
       </StationBox>
       <div>
-        <MatchBtn>매칭</MatchBtn>
+        <MatchBtn onClick={() => buttonHandler()}>매칭</MatchBtn>
       </div>
 
       {/* 이벤트 */}
