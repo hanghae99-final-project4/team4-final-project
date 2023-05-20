@@ -1,0 +1,40 @@
+<svg  width="226" height="12" viewBox="0 0 226 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect class="progress" width="226" height="12" rx="6" fill="white"/>
+<style>
+
+@keyframes fill {
+    from {
+        width:28px
+    }
+    12%{
+        width:56px
+    }
+    24%{
+        width:84px
+    }
+    36%{
+        width:112px
+    }
+    48%{
+        width:140px
+    }
+    60%{
+        width:168px
+    }
+    72%{
+        width:196px
+    }
+    84%{
+        width:224px
+    }
+    to{
+        width:226px
+    }
+} 
+.progress{
+    animation: fill 10s linear 2s infinite;
+} 
+</style>
+
+</svg>
+
