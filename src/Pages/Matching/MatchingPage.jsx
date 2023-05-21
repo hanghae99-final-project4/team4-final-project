@@ -21,7 +21,7 @@ const MatchingPage = () => {
 };
 
 export default MatchingPage;
-const MatchWrap = styled.div`
+export const MatchWrap = styled.div`
   width: 375px;
   height: 812px;
   align-items: center;
@@ -70,7 +70,7 @@ const MatchWrap = styled.div`
     }
   }
 `;
-const MatchDiv = styled.div`
+export const MatchDiv = styled.div`
   margin-bottom: 30px;
   font-weight: 500;
   font-size: 28px;
