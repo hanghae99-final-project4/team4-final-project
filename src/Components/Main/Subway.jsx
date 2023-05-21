@@ -1,38 +1,42 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import useInput from "../../MyTools/Hooks/UseInput";
-import { useNavigate } from "react-router-dom";
-import guide from "../../Assets/Main/guidebutton.svg";
-import write from "../../Assets/Main/write.svg";
-import setting from "../../Assets/Main/setting.svg";
-import hand from "../../Assets/Main/hand.svg";
-import line from "../../Assets/Main/line.svg";
-import stationimg from "../../Assets/Main/station.svg";
-import { trainApi } from "../../apis/Instance";
-import Slick from "../Slick/Slick";
-import Kakao from "../Kakao/Kakao";
-import { useRecoilState } from "recoil";
-import { useArriveState, useStationState } from "../../Recoil/userList";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import useInput from '../../MyTools/Hooks/UseInput';
+import { useNavigate } from 'react-router-dom';
+import guide from '../../Assets/Main/guidebutton.svg';
+import write from '../../Assets/Main/write.svg';
+import setting from '../../Assets/Main/setting.svg';
+import hand from '../../Assets/Main/hand.svg';
+import line from '../../Assets/Main/line.svg';
+import stationimg from '../../Assets/Main/station.svg';
+import { trainApi } from '../../apis/Instance';
+import Slick from '../Slick/Slick';
+import Kakao from '../Kakao/Kakao';
+import { useRecoilState } from 'recoil';
+import { useArriveState, useStationState } from '../../Recoil/userList';
+import { useStation } from '../../MyTools/quries/station';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
   const initialState = {
-    station: "",
+    station: '',
   };
+
   const [subway, setSubway, onChangeHandler, reset] = useInput(initialState);
   const [station, setStation] = useRecoilState(useStationState);
   const [arrive, setArrive] = useRecoilState(useArriveState);
+  const { data } = useStation(station?.place_name?.split('역')[0]);
+  localStorage.setItem('line', data?.[0]?.line_number);
   useEffect(() => {
     getProfile();
   }, []);
   const naviHandler = () => {
-    navigate("/stationselect");
+    navigate('/stationselect');
   };
   //프로필 조회 함수
   async function getProfile() {
     try {
-      const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
       console.log(data);
       setProfile(data.userInfo);
@@ -40,8 +44,25 @@ const Subway = () => {
       console.log(err);
     }
   }
+  // localstorage 객체 배열로 만드는 함수
+  function setItemWithExpireTime(keyName, keyValue, tts) {
+    // localStorage에 저장할 객체
+    const obj = {
+      value: keyValue,
+      expire: Date.now() + tts,
+    };
+
+    // 객체를 JSON 문자열로 변환
+    const objString = JSON.stringify(obj);
+
+    // setItem
+    window.localStorage.setItem(keyName, objString);
+  }
   const buttonHandler = () => {
-    navigate("/chattingpage");
+    localStorage.setItem(arrive.station_name, arrive.line_number);
+    setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
+    setItemWithExpireTime('profile', profile?.images?.[0]?.image_url, 3000000);
+    navigate('/chattingpage');
   };
   console.log(profile);
   return (
@@ -93,8 +114,8 @@ const Subway = () => {
             <span>출발</span>
             <div>
               <img src={stationimg} alt="station" />
-              {station.length !== 0 ? (
-                <span>{station}</span>
+              {station?.place_name?.length !== 0 ? (
+                <span>{station?.place_name?.split('역')[0]}</span>
               ) : (
                 <span>출발역</span>
               )}
@@ -104,8 +125,8 @@ const Subway = () => {
             <span>도착</span>
             <div>
               <img src={stationimg} alt="station" />
-              {arrive.length !== 0 ? (
-                <span>{arrive}</span>
+              {arrive?.station_name?.length !== 0 ? (
+                <span>{arrive?.station_name}</span>
               ) : (
                 <span>도착역</span>
               )}

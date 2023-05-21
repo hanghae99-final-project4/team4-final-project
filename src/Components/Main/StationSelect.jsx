@@ -17,7 +17,7 @@ const StationSelect = () => {
     navigate('/subwaypage');
   };
   console.log(station);
-
+  console.log(arrive);
   return (
     <SubwayDiv>
       {/* 지하철 역 */}
@@ -32,7 +32,7 @@ const StationSelect = () => {
             <div>
               <img src={stationimg} alt="station" />
               {station && true ? (
-                <span>{station}</span>
+                <span>{station?.place_name?.split('역')[0]}</span>
               ) : (
                 <span>{'도착역'}</span>
               )}
@@ -42,7 +42,11 @@ const StationSelect = () => {
             <span>도착</span>
             <div>
               <img src={stationimg} alt="station" />
-              {arrive && true ? <span>{arrive}</span> : <span>도착역</span>}
+              {arrive && true ? (
+                <span>{arrive?.station_name}</span>
+              ) : (
+                <span>도착역</span>
+              )}
             </div>
           </Arrive>
         </Station>

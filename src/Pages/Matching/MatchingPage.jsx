@@ -1,9 +1,9 @@
-import React from "react";
-import { Wrap } from "../Login/EmailPage";
-import match from "../../Assets/Matching/matching.gif";
-import styled from "styled-components";
-import { LoadingDiv } from "../../Components/Loading/Loading";
-import progressbar from "../../Assets/Matching/progressbar.svg";
+import React from 'react';
+import { Wrap } from '../Login/EmailPage';
+import match from '../../Assets/Matching/matching.gif';
+import styled from 'styled-components';
+import { LoadingDiv } from '../../Components/Loading/Loading';
+import progressbar from '../../Assets/Matching/progressbar.svg';
 const MatchingPage = () => {
   return (
     <MatchWrap>
@@ -76,10 +76,10 @@ const MatchDiv = styled.div`
   font-size: 28px;
   color: #ffffff;
 
-  .bounce {
+  /* .bounce {
     position: relative;
     animation: bounce 1s infinite linear;
-  }
+  } */
   @keyframes bounce {
     0% {
       top: 0;
