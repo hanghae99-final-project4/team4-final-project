@@ -19,6 +19,7 @@ import { trainApi2 } from '../../apis/Instance';
 import Matching from '../../Pages/Matching/MatchingPage';
 import { useRecoilValue } from 'recoil';
 import { useArriveState, useStationState } from '../../Recoil/userList';
+import FailPage from '../../Pages/Matching/FailPage';
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -136,71 +137,76 @@ const Chatting = () => {
     });
     console.log(counterUser, '난 카운터 유저 ');
   };
-
+  console.log(JSON.parse(localStorage.getItem('nickname')).value);
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
     socket.emit('leaveRoom', roomkey);
     console.log(roomkey);
     socket.emit('nickname', JSON.parse(localStorage.getItem('nickname')).value);
 
-    // console.log(roomkey);
     socket.emit(
       'updatelocation',
       [lon, lat],
       [`${startStation}:${startLine}`, `${station}:${line}`]
     );
 
-    socket.on(`${name}`, (message) => {
-      //roomkey 를 가지고 있는 상태이면
+    const handleSocketMessage = (message) => {
       if (message.roomkey !== null) {
         console.log(message.roomkey);
         console.log(message, `입장 시 불러오는 socket.on`);
 
         setCounter(message);
 
-        //server 에 interval 돌아가는 코드를 강제로 종료 시킴 매칭 중복x
-        socket.emit('stop', '');
-        socket.emit('joinroom', message.roomkey);
-        socket.emit('chat-bot', message.roomkey);
         console.log(message.roomkey);
         if (message.roomkey !== undefined) {
           setRoom(message.roomkey);
         }
         localStorage.setItem('room', message.roomkey);
 
-        //roomkey 들어오면 success 값 true
         if (
-          message.fail !== '매칭 가능한 상대방이 없습니다. 다시 시도해주세요.'
+          message.fail !==
+          '매칭 가능한 상대방이 없습니다. 다시 시도해주세요. 뀨잉뀨잉'
         ) {
+          socket.emit('stop', message.roomkey);
+          socket.emit('joinroom', message.roomkey);
+          socket.emit('chat-bot', message.roomkey);
           setSuccess(true);
           console.log('실행됨', success);
         } else {
-          alert(message.fail);
-          navigate('/subwaypage');
+          socket.off('stop', handleSocketMessage);
+          socket.off('joinroom', handleSocketMessage);
+          socket.off('chat-bot', handleSocketMessage);
+          navigate('/failpage');
+          console.log(message);
         }
         console.log('success', success);
-
-        //메시지 들어온대로 렌더 해주기
-        socket.on('broadcast', (message) => {
-          console.log(message);
-          console.log(chatArr);
-
-          setChatArr((chatArr) => [
-            ...chatArr,
-            {
-              roomkey: message.roomkey,
-              nickname: message.name,
-              msg: message.msg,
-              profile: message.profile,
-              url: message.url,
-            },
-          ]);
-        });
-      } else {
-        setFail(fail);
-        console.log(message);
       }
-    });
+      socket.off(`${name}`, handleSocketMessage);
+    };
+
+    const handleBroadcastMessage = (message) => {
+      console.log(message);
+      console.log(chatArr);
+
+      setChatArr((prevChatArr) => [
+        ...prevChatArr,
+        {
+          roomkey: message.roomkey,
+          nickname: message.name,
+          msg: message.msg,
+          profile: message.profile,
+          url: message.url,
+        },
+      ]);
+    };
+
+    socket.on(`${name}`, handleSocketMessage);
+    socket.on('broadcast', handleBroadcastMessage);
+
+    return () => {
+      socket.off(`${name}`, handleSocketMessage);
+      socket.off('broadcast', handleBroadcastMessage);
+    };
   }, []);
   console.log(fail);
   useEffect(() => {
@@ -268,9 +274,12 @@ const Chatting = () => {
   });
   const leaveHandler = () => {
     console.log('작동');
+    socket.off('stop');
+    socket.off('joinroom');
+    socket.off('chat-bot');
     socket.emit('leaveRoom', roomkey);
     // localStorage.removeItem('room');
-    // navigate('/subwaypage');
+    navigate('/subwaypage');
   };
   // console.log(chatArr?.url, chatArr?.nickname, chatArr);
 
@@ -419,10 +428,6 @@ const Chatting = () => {
           </div>
           <ChattingHome />
         </FooterBox>
-      ) : fail === true ? (
-        <>
-          <Matching />
-        </>
       ) : (
         <>
           <Matching />
