@@ -27,7 +27,8 @@ function Kakao() {
         navigator.geolocation.getCurrentPosition((position) => {
           const lat = position.coords.latitude, // 위도
             lon = position.coords.longitude; // 경도
-
+          localStorage.setItem('lat', lat); //위도
+          localStorage.setItem('lon', lon); //경도
           const locPosition = new kakao.maps.LatLng(lat, lon);
           res(locPosition);
         });
@@ -57,7 +58,11 @@ function Kakao() {
     const ps = new kakao.maps.services.Places();
 
     const placesSearchCB = (data, status, _pagination) => {
-      setStation(data[0]?.place_name?.split('역')[0]);
+      setStation(data[0]);
+      localStorage.setItem(
+        data[0]?.place_name?.split('역')[0],
+        data[0]?.place_name?.split('역')[1]
+      );
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다

@@ -18,8 +18,8 @@ const StationSearch = () => {
   const [history, setHistory] = useRecoilState(useHistoryState);
   const searchHandler = (item) => {
     setHistory([...history, item]);
-
-    setArrive(item?.station_name);
+    console.log(item);
+    setArrive(item);
     navigate('/stationselect');
   };
 
