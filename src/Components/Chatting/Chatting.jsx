@@ -8,13 +8,12 @@ import axios from 'axios';
 import _ from 'lodash';
 import HomeMenu from '../HomeMenu/HomeMenu';
 import LoadingIcon from '../../Element/LoadingIcon';
-import Header, { MessageBox, PointerBox } from '../Header/Header';
+import Header, { ImgBox, MessageBox, PointerBox } from '../Header/Header';
 import ImageFormIcon from '../../Element/ImageFormIcon';
 import CounterProfileModal from '../Modal/CounterProfileModal';
 import { Cookies } from 'react-cookie';
 import { ReactComponent as HeaderPointer } from '../../Assets/HeaderItem/HeaderPointer.svg';
-
-import ChattingHome from '../HomeMenu/ChattingHome';
+import sendbtn from '../../Assets/Chatting/trans.svg';
 import { trainApi2 } from '../../apis/Instance';
 import Matching from '../../Pages/Matching/MatchingPage';
 import { useRecoilValue } from 'recoil';
@@ -53,7 +52,7 @@ const Chatting = () => {
   const line = arrive?.line_number;
   //출발역
   const start = useRecoilValue(useStationState);
-  const startStation = start?.place_name.split('역')[0];
+  const startStation = start?.place_name?.split('역')[0];
   const startLine = localStorage.getItem('line');
   //위도 ,경도
   const lat = localStorage.getItem('lat');
@@ -66,8 +65,6 @@ const Chatting = () => {
   const cookies = new Cookies();
   const token = cookies.get('token');
   const thURL = process.env.REACT_APP_TH_S_HOST;
-
-  console.log(arrive);
 
   // function setItemWithExpireTime(keyName, keyValue, tts) {
   //   // localStorage에 저장할 객체
@@ -146,8 +143,8 @@ const Chatting = () => {
 
     socket.emit(
       'updatelocation',
-      [lon, lat],
-      [`${startStation}:${startLine}`, `${station}:${line}`]
+      [lon, lat], //현재 위치 위도, 경도
+      [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
     );
 
     const handleSocketMessage = (message) => {
@@ -166,7 +163,7 @@ const Chatting = () => {
         if (
           message.fail !==
           '매칭 가능한 상대방이 없습니다. 다시 시도해주세요. 뀨잉뀨잉'
-        ) {
+        ) { 
           socket.emit('stop', message.roomkey);
           socket.emit('joinroom', message.roomkey);
           socket.emit('chat-bot', message.roomkey);
@@ -176,14 +173,14 @@ const Chatting = () => {
           socket.off('stop', handleSocketMessage);
           socket.off('joinroom', handleSocketMessage);
           socket.off('chat-bot', handleSocketMessage);
-          navigate('/failpage');
+          // navigate('/failpage');
           console.log(message);
         }
         console.log('success', success);
       }
       socket.off(`${name}`, handleSocketMessage);
     };
-
+    console.log(counterUser);
     const handleBroadcastMessage = (message) => {
       console.log(message);
       console.log(chatArr);
@@ -221,6 +218,7 @@ const Chatting = () => {
 
   //submithandler
   const SubmitHandler = (e) => {
+    console.log(e);
     e.preventDefault();
     if (file?.name !== undefined) {
       postSend();
@@ -301,7 +299,8 @@ const Chatting = () => {
                   onClick={() => leaveHandler()}
                 />
               </PointerBox>
-              <MessageBox margin="94px">{counter?.fair}</MessageBox>
+              <ImgBox margin="63px" />
+              <MessageBox margin="6px">{counter?.fair}</MessageBox>
             </Header>
             <AllChatDiv>
               <ChatMainDiv ref={boxRef}>
@@ -341,7 +340,43 @@ const Chatting = () => {
                         {name === item.nickname ? (
                           <UserProfileDiv>
                             <UserProfileImg style={{ display: 'none' }} />
-                            <div style={{ display: 'none' }}></div>
+                            <ChatBoxTime>
+                              <Time>
+                                {new Date().getHours() +
+                                  ':' +
+                                  new Date().getMinutes()}
+                              </Time>
+                              {item.msg ? (
+                                <ChatDiv
+                                  className={name === item.nickname && 'owner'}
+                                >
+                                  {item.msg}
+                                </ChatDiv>
+                              ) : item.url?.split('.')[5] == 'mp4' ? (
+                                <>
+                                  <ChatVideo
+                                    className={
+                                      name === item.nickname && 'owner'
+                                    }
+                                    src={item?.url}
+                                  />
+                                  <Download href={item?.url}>다운로드</Download>
+                                </>
+                              ) : (
+                                // <div>mp4</div>
+                                <>
+                                  <ChatImg
+                                    className={
+                                      name === item.nickname && 'owner'
+                                    }
+                                    imgurl={item?.url}
+                                  />
+                                  <Download href={item?.url}>다운로드</Download>
+                                </>
+
+                                // <div>img</div>
+                              )}
+                            </ChatBoxTime>
                           </UserProfileDiv>
                         ) : // profile 이 없는 사람은 기본 프로필 설정 삼항 연산자
 
@@ -351,7 +386,44 @@ const Chatting = () => {
                               onClick={(e) => CounterUserHandler(e)}
                               src={item.profile}
                             />
-                            <UserProfileName>{item.nickname}</UserProfileName>
+                            <UserProfileNameChat>
+                              <UserProfileName>{item.nickname}</UserProfileName>
+                              {item.msg ? (
+                                <ChatDiv
+                                  className={name === item.nickname && 'owner'}
+                                >
+                                  {item.msg}
+                                </ChatDiv>
+                              ) : item.url?.split('.')[5] == 'mp4' ? (
+                                <>
+                                  <ChatVideo
+                                    className={
+                                      name === item.nickname && 'owner'
+                                    }
+                                    src={item?.url}
+                                  />
+                                  <Download href={item?.url}>다운로드</Download>
+                                </>
+                              ) : (
+                                // <div>mp4</div>
+                                <>
+                                  <ChatImg
+                                    className={
+                                      name === item.nickname && 'owner'
+                                    }
+                                    imgurl={item?.url}
+                                  />
+                                  <Download href={item?.url}>다운로드</Download>
+                                </>
+
+                                // <div>img</div>
+                              )}
+                              <Time>
+                                {new Date().getHours() +
+                                  ':' +
+                                  new Date().getMinutes()}
+                              </Time>
+                            </UserProfileNameChat>
                           </UserProfileDiv>
                         ) : (
                           <UserProfileDiv>
@@ -361,39 +433,50 @@ const Chatting = () => {
                                 'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg'
                               }
                             />
-                            <UserProfileName>{item.nickname}</UserProfileName>
+                            <UserProfileNameChat>
+                              <UserProfileName>{item.nickname}</UserProfileName>
+                              {item.msg ? (
+                                <ChatDiv
+                                  className={name === item.nickname && 'owner'}
+                                >
+                                  {item.msg}
+                                </ChatDiv>
+                              ) : item.url?.split('.')[5] == 'mp4' ? (
+                                <>
+                                  <ChatVideo
+                                    className={
+                                      name === item.nickname && 'owner'
+                                    }
+                                    src={item?.url}
+                                  />
+                                  <Download href={item?.url}>다운로드</Download>
+                                </>
+                              ) : (
+                                // <div>mp4</div>
+                                <>
+                                  <ChatImg
+                                    className={
+                                      name === item.nickname && 'owner'
+                                    }
+                                    imgurl={item?.url}
+                                  />
+                                  <Download href={item?.url}>다운로드</Download>
+                                </>
+
+                                // <div>img</div>
+                              )}
+                            </UserProfileNameChat>
+                            <Time>
+                              {new Date().getHours() +
+                                ':' +
+                                new Date().getMinutes()}
+                            </Time>
                           </UserProfileDiv>
                         )}
 
                         {/* 맨 처음에는 메시지가 없기때문에 문제가 되는군 */}
                         {/* 삼항연산자 중첩해서 사용하니, 코드가 가독성이 많이 떨어지는 것 같다 */}
                         {/* 차라리 이미지 확장자를 따로 변수에 넣어 &&연산자를 사용하는 것이 가장 좋을것 같다/ */}
-                        {item.msg ? (
-                          <ChatDiv
-                            className={name === item.nickname && 'owner'}
-                          >
-                            {item.msg}
-                          </ChatDiv>
-                        ) : item.url?.split('.')[5] == 'mp4' ? (
-                          <>
-                            <ChatVideo
-                              className={name === item.nickname && 'owner'}
-                              src={item?.url}
-                            />
-                            <Download href={item?.url}>다운로드</Download>
-                          </>
-                        ) : (
-                          // <div>mp4</div>
-                          <>
-                            <ChatImg
-                              className={name === item.nickname && 'owner'}
-                              imgurl={item?.url}
-                            />
-                            <Download href={item?.url}>다운로드</Download>
-                          </>
-
-                          // <div>img</div>
-                        )}
                       </UserChatDiv>
                     </div>
                   ))}{' '}
@@ -401,7 +484,7 @@ const Chatting = () => {
                 </ChatBox>
               </ChatMainDiv>
 
-              <FooterDiv>
+              <FooterDiv onSubmit={(e) => SubmitHandler(e)}>
                 <Forminput
                   ref={inputRef}
                   type="file"
@@ -413,20 +496,22 @@ const Chatting = () => {
                   onChange={(e) => setFile(e.target.files[0])}
                 />
                 <ImageFormIcon inputRef={inputRef} />
-                <ChatInput
-                  placeholder="이미지 첨부는 이미지 첨부 후 전송 버튼 누르시오"
-                  type="text"
-                  value={message.msg}
-                  name="msg"
-                  onChange={onChangeHandler}
-                />
-                <ChatSendBtn onClick={(e) => SubmitHandler(e)}>
-                  전송
-                </ChatSendBtn>
+                <InputSendBox>
+                  <ChatInput
+                    placeholder=""
+                    type="text"
+                    value={message.msg}
+                    name="msg"
+                    onChange={onChangeHandler}
+                  />
+                  <ChatSendBtn
+                    src={sendbtn}
+                    onClick={(e) => SubmitHandler(e)}
+                  />
+                </InputSendBox>
               </FooterDiv>
             </AllChatDiv>
           </div>
-          <ChattingHome />
         </FooterBox>
       ) : (
         <>
@@ -450,7 +535,7 @@ const PostPictureDiv = styled.div`
 //전체 채팅방
 const ChatMainDiv = styled.div`
   overflow-y: hidden;
-  height: 620px;
+  height: 661px;
   width: 375px;
   padding: 0 0px;
 `;
@@ -458,17 +543,16 @@ const SitdownHeader = styled.div`
   background-color: #f5f5f5;
   height: 60px;
 `;
+//채팅 카메라 / 채팅칸 / 전송버튼
 const FooterDiv = styled.form`
   display: flex;
-  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
-  justify-content: space-between;
+
   align-items: center;
   position: relative;
-  border-top: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
+
   bottom: -30px;
   background-color: #ffffff;
-  height: 67px;
+  height: 48px;
   width: 375px;
 `;
 const Forminput = styled.input`
@@ -490,93 +574,82 @@ const UserChatDiv = styled.div`
 const ChatBox = styled.div`
   border: none;
   overflow-y: scroll;
-  width: 100%;
-  height: 100%;
+
   overflow-x: hidden;
 `;
 //프로필 이미지
 const UserProfileImg = styled.img`
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 22px;
   border: none;
 `;
 //이름 + 프로필 이미지 div
 const UserProfileDiv = styled.div`
-  width: 200px;
-  height: 50px;
   display: flex;
 
   flex-direction: row;
-  justify-content: space-between;
 `;
-
+const UserProfileNameChat = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+`;
 // 말풍선
 const ChatDiv = styled.div`
-  margin-top: 20px;
-  padding: 10px 30px;
-  width: 201px;
-  min-height: 50px;
-  position: relative;
-  border-radius: 2em;
-  font-size: 13px;
+  margin-top: 6px;
+  padding: 8px 10px 8px 10px;
+  max-width: 163px;
+
+  border-radius: 20px;
+  font-weight: 400;
+  font-size: 12px;
   border: none;
-  background-color: #e6e6e6;
+  background-color: #ececec;
   //발신 메시지일때 말풍선 색깔
   &.owner {
-    background-color: #dcf9ff;
-    ::after {
-      content: '';
-      position: absolute;
-      top: 0;
-
-      left: 80%;
-      width: 0;
-      height: 0;
-      border: 20px solid transparent;
-      border-bottom-color: #dcf9ff;
-      border-top: 0;
-      border-right: 0;
-      margin-left: -10px;
-      margin-top: -20px;
-    }
+    color: #fff;
+    background-color: #fa3a45;
+    margin-right: 16px;
   }
-
-  ::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 20%;
-    width: 0;
-    height: 0;
-    border: 20px solid transparent;
-    border-bottom-color: #eaeaea;
-    border-top: 0;
-    border-left: 0;
-    margin-left: -10px;
-    margin-top: -20px;
-  }
+`;
+//말풍선 + 시간
+const ChatBoxTime = styled.div`
+  display: flex;
+`;
+const Time = styled.span`
+  margin-right: 4px;
+  display: flex;
+  align-items: end;
+  font-family: Pretendard;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 12px;
+  color: #999999;
+`;
+//채팅 칸 + 전송버튼
+const InputSendBox = styled.div`
+  display: flex;
+  padding-left: 17px;
+  margin-left: 4px;
+  width: 309px;
+  height: 45px;
+  justify-content: space-between;
+  border-radius: 9999px;
+  border: 1px solid #e7e7e7;
 `;
 //채팅 칸
 const ChatInput = styled.input`
   padding-left: 10px;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 14px;
   outline: none;
   border: none;
-  background-color: #eaeaea;
-  border-radius: 30px;
-  position: relative;
-  left: 0%;
-  width: 250px;
-  height: 40px;
 `;
 //전송버튼
-const ChatSendBtn = styled.button`
-  background-color: #dcf9ff;
-  margin-right: 13px;
-  border-radius: 20px;
+const ChatSendBtn = styled.img`
   cursor: pointer;
-  border: none;
+
   width: 52px;
   height: 40px;
 `;
@@ -630,13 +703,12 @@ const LoadingDiv = styled.div`
   }
 `;
 const UserProfileName = styled.div`
-  width: 120px;
-  height: 19px;
+  height: 12px;
   border: none;
-  position: relative;
-  top: 35%;
-  margin-right: 28px;
-  font-size: 16px;
+  font-weight: 400;
+  color: #686868;
+  font-size: 10px;
+  margin-left: 4px;
 `;
 //전체 채팅 화면
 const AllChatDiv = styled.div`

@@ -38,3 +38,6 @@ export const MessageBox = styled.div`
   font-weight: 500;
   font-size: 17px;
 `;
+export const ImgBox = styled.img`
+  margin-left: ${(props) => props.margin};
+`;

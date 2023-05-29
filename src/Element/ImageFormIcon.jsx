@@ -1,5 +1,5 @@
-import React from "react";
-import { ReactComponent as ImageFormHandler } from "../Assets/Chatting/ImageForm.svg";
+import React from 'react';
+import { ReactComponent as ImageFormHandler } from '../Assets/Chatting/ImageForm.svg';
 const ImageFormIcon = ({ inputRef }) => {
   const formHandler = () => {
     inputRef.current.click();
@@ -9,10 +9,10 @@ const ImageFormIcon = ({ inputRef }) => {
       <ImageFormHandler
         onClick={formHandler}
         style={{
-          width: "27px",
-          height: "48px",
-          cursor: "pointer",
-          marginLeft: "15px",
+          width: '40px',
+          height: '40px',
+          cursor: 'pointer',
+          marginLeft: '16px',
         }}
       />
     </>
