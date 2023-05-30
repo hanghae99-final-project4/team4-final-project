@@ -4,10 +4,7 @@ import { io } from 'socket.io-client';
 import useInput from '../../MyTools/Hooks/UseInput';
 import { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import _ from 'lodash';
-import HomeMenu from '../HomeMenu/HomeMenu';
-import LoadingIcon from '../../Element/LoadingIcon';
 import Header, { ImgBox, MessageBox, PointerBox } from '../Header/Header';
 import ImageFormIcon from '../../Element/ImageFormIcon';
 import CounterProfileModal from '../Modal/CounterProfileModal';
@@ -121,24 +118,24 @@ const Chatting = () => {
   // }
 
   //상대방 프로필
-  const CounterUserHandler = () => {
-    setIsModal(true);
-    socket.emit('counteruser', {
-      fair: counter.fair,
-      ownself: counter.ownself,
-    });
-    socket.on(`${name}`, (message) => {
-      console.log(message, 'counteruser 메시지 잘 받아요');
+  // const CounterUserHandler = () => {
+  //   setIsModal(true);
+  //   socket.emit('counteruser', {
+  //     fair: counter.fair,
+  //     ownself: counter.ownself,
+  //   });
+  //   socket.on(`${name}`, (message) => {
+  //     console.log(message, 'counteruser 메시지 잘 받아요');
 
-      setCounterUser(message);
-    });
-    console.log(counterUser, '난 카운터 유저 ');
-  };
-  console.log(JSON.parse(localStorage.getItem('nickname')).value);
+  //     setCounterUser(message);
+  //   });
+  //   console.log(counterUser, '난 카운터 유저 ');
+  // };
+  // console.log(JSON.parse(localStorage.getItem('nickname')).value);
+
+  //매칭 시작 nickname 보내고 위도 경도 / 출발호선 출발역/ 도착호선 도착역 보낸 다음 socket.on 받는데 ..
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
-    socket.emit('leaveRoom', roomkey);
-    console.log(roomkey);
     socket.emit('nickname', JSON.parse(localStorage.getItem('nickname')).value);
 
     socket.emit(
@@ -146,14 +143,17 @@ const Chatting = () => {
       [lon, lat], //현재 위치 위도, 경도
       [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
     );
-
+    socket.on(`${name}`, (message) => console.log(message));
+    socket.on('환승', (message) => console.log(message));
     const handleSocketMessage = (message) => {
+      console.log('작동');
+
       if (message.roomkey !== null) {
         console.log(message.roomkey);
         console.log(message, `입장 시 불러오는 socket.on`);
 
         setCounter(message);
-
+        console.log(message);
         console.log(message.roomkey);
         if (message.roomkey !== undefined) {
           setRoom(message.roomkey);
@@ -163,7 +163,7 @@ const Chatting = () => {
         if (
           message.fail !==
           '매칭 가능한 상대방이 없습니다. 다시 시도해주세요. 뀨잉뀨잉'
-        ) { 
+        ) {
           socket.emit('stop', message.roomkey);
           socket.emit('joinroom', message.roomkey);
           socket.emit('chat-bot', message.roomkey);
@@ -173,14 +173,14 @@ const Chatting = () => {
           socket.off('stop', handleSocketMessage);
           socket.off('joinroom', handleSocketMessage);
           socket.off('chat-bot', handleSocketMessage);
-          // navigate('/failpage');
+          navigate('/failpage');
           console.log(message);
         }
         console.log('success', success);
       }
       socket.off(`${name}`, handleSocketMessage);
     };
-    console.log(counterUser);
+
     const handleBroadcastMessage = (message) => {
       console.log(message);
       console.log(chatArr);
@@ -205,7 +205,7 @@ const Chatting = () => {
       socket.off('broadcast', handleBroadcastMessage);
     };
   }, []);
-  console.log(fail);
+
   useEffect(() => {
     if (scrollState) {
       scrollRef?.current?.scrollIntoView({ behavior: 'smooth' });
@@ -276,7 +276,7 @@ const Chatting = () => {
     socket.off('joinroom');
     socket.off('chat-bot');
     socket.emit('leaveRoom', roomkey);
-    // localStorage.removeItem('room');
+    localStorage.removeItem('room');
     navigate('/subwaypage');
   };
   // console.log(chatArr?.url, chatArr?.nickname, chatArr);
@@ -299,7 +299,7 @@ const Chatting = () => {
                   onClick={() => leaveHandler()}
                 />
               </PointerBox>
-              <ImgBox margin="63px" />
+              {/* <ImgBox margin="63px" /> */}
               <MessageBox margin="6px">{counter?.fair}</MessageBox>
             </Header>
             <AllChatDiv>
@@ -383,7 +383,7 @@ const Chatting = () => {
                         item.profile !== undefined ? (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={(e) => CounterUserHandler(e)}
+                              // onClick={(e) => CounterUserHandler(e)}
                               src={item.profile}
                             />
                             <UserProfileNameChat>
@@ -428,7 +428,7 @@ const Chatting = () => {
                         ) : (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={(e) => CounterUserHandler(e)}
+                              // onClick={(e) => CounterUserHandler(e)}
                               src={
                                 'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg'
                               }
@@ -574,7 +574,7 @@ const UserChatDiv = styled.div`
 const ChatBox = styled.div`
   border: none;
   overflow-y: scroll;
-
+  height: 661px;
   overflow-x: hidden;
 `;
 //프로필 이미지
@@ -713,6 +713,7 @@ const UserProfileName = styled.div`
 //전체 채팅 화면
 const AllChatDiv = styled.div`
   position: relative;
+  height: 551px;
 `;
 
 const Download = styled.a`
