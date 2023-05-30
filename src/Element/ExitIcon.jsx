@@ -1,5 +1,5 @@
-import React from "react";
-import { ReactComponent as ExitIconItem } from "../Assets/Chatting/Exit.svg";
+import React from 'react';
+import { ReactComponent as ExitIconItem } from '../Assets/Chatting/Exit.svg';
 
 const ExitIcon = ({ isModal, setIsModal }) => {
   return (
@@ -7,10 +7,10 @@ const ExitIcon = ({ isModal, setIsModal }) => {
       <ExitIconItem
         onClick={() => setIsModal(!isModal)}
         style={{
-          cursor: "pointer",
-          position: "absolute",
-          right: "10px",
-          top: "5px",
+          cursor: 'pointer',
+          position: 'absolute',
+          right: '10px',
+          top: '5px',
         }}
       />
     </div>

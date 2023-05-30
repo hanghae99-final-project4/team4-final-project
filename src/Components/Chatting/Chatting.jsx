@@ -5,7 +5,13 @@ import useInput from '../../MyTools/Hooks/UseInput';
 import { useState } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
-import Header, { ImgBox, MessageBox, PointerBox } from '../Header/Header';
+import Header, {
+  Ban,
+  Chatbot,
+  ImgBox,
+  MessageBox,
+  PointerBox,
+} from '../Header/Header';
 import ImageFormIcon from '../../Element/ImageFormIcon';
 import CounterProfileModal from '../Modal/CounterProfileModal';
 import { Cookies } from 'react-cookie';
@@ -15,7 +21,10 @@ import { trainApi2 } from '../../apis/Instance';
 import Matching from '../../Pages/Matching/MatchingPage';
 import { useRecoilValue } from 'recoil';
 import { useArriveState, useStationState } from '../../Recoil/userList';
+import chatbot from '../../Assets/Chatting/chatbot.svg';
+import ban from '../../Assets/Chatting/ban.svg';
 import FailPage from '../../Pages/Matching/FailPage';
+import Timer from '../Timer/Timer';
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -118,20 +127,19 @@ const Chatting = () => {
   // }
 
   //상대방 프로필
-  // const CounterUserHandler = () => {
-  //   setIsModal(true);
-  //   socket.emit('counteruser', {
-  //     fair: counter.fair,
-  //     ownself: counter.ownself,
-  //   });
-  //   socket.on(`${name}`, (message) => {
-  //     console.log(message, 'counteruser 메시지 잘 받아요');
+  const CounterUserHandler = () => {
+    setIsModal(true);
+    socket.emit('counteruser', {
+      fair: counter.fair,
+      ownself: counter.ownself,
+    });
+    socket.on(`${name}`, (message) => {
+      console.log(message, 'counteruser 메시지 잘 받아요');
 
-  //     setCounterUser(message);
-  //   });
-  //   console.log(counterUser, '난 카운터 유저 ');
-  // };
-  // console.log(JSON.parse(localStorage.getItem('nickname')).value);
+      setCounterUser(message);
+    });
+    console.log(counterUser, '난 카운터 유저 ');
+  };
 
   //매칭 시작 nickname 보내고 위도 경도 / 출발호선 출발역/ 도착호선 도착역 보낸 다음 socket.on 받는데 ..
   ///매칭 순서대로 randomjoin => maching => name
@@ -143,11 +151,8 @@ const Chatting = () => {
       [lon, lat], //현재 위치 위도, 경도
       [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
     );
-    socket.on(`${name}`, (message) => console.log(message));
-    socket.on('환승', (message) => console.log(message));
-    const handleSocketMessage = (message) => {
-      console.log('작동');
 
+    const handleSocketMessage = (message) => {
       if (message.roomkey !== null) {
         console.log(message.roomkey);
         console.log(message, `입장 시 불러오는 socket.on`);
@@ -279,7 +284,7 @@ const Chatting = () => {
     localStorage.removeItem('room');
     navigate('/subwaypage');
   };
-  // console.log(chatArr?.url, chatArr?.nickname, chatArr);
+  console.log(counter);
 
   return (
     <div
@@ -299,24 +304,32 @@ const Chatting = () => {
                   onClick={() => leaveHandler()}
                 />
               </PointerBox>
-              {/* <ImgBox margin="63px" /> */}
+              <ImgBox src={counter?.profile} margin="63px" />
+
               <MessageBox margin="6px">{counter?.fair}</MessageBox>
+              <Chatbot margin="15px" src={chatbot} />
+              <Ban src={ban} />
             </Header>
             <AllChatDiv>
+              <ConversatonTime>
+                <span>대화 시간</span>
+                <Timer margin="80px" />
+                <button>추가</button>
+              </ConversatonTime>
+
               <ChatMainDiv ref={boxRef}>
                 {isModal && (
                   <CounterProfileModal
                     gender={counterUser?.gender}
                     statusmessage={counterUser?.statusmessage}
-                    nickname={counterUser?.nickname}
-                    representProfile={counterUser?.representProfile}
+                    nickname={counter?.fair}
+                    representProfile={counter?.profile}
                     setCounterUser={setCounterUser}
                     couterUser={counterUser}
                     isModal={isModal}
                     setIsModal={setIsModal}
                   />
                 )}
-
                 <ChatBox>
                   {' '}
                   {chatArr?.map((item, index) => (
@@ -344,7 +357,10 @@ const Chatting = () => {
                               <Time>
                                 {new Date().getHours() +
                                   ':' +
-                                  new Date().getMinutes()}
+                                  String(new Date().getMinutes()).padStart(
+                                    2,
+                                    '0'
+                                  )}
                               </Time>
                               {item.msg ? (
                                 <ChatDiv
@@ -383,7 +399,7 @@ const Chatting = () => {
                         item.profile !== undefined ? (
                           <UserProfileDiv>
                             <UserProfileImg
-                              // onClick={(e) => CounterUserHandler(e)}
+                              onClick={(e) => CounterUserHandler(e)}
                               src={item.profile}
                             />
                             <UserProfileNameChat>
@@ -418,17 +434,20 @@ const Chatting = () => {
 
                                 // <div>img</div>
                               )}
-                              <Time>
-                                {new Date().getHours() +
-                                  ':' +
-                                  new Date().getMinutes()}
-                              </Time>
                             </UserProfileNameChat>
+                            <Time>
+                              {new Date().getHours() +
+                                ':' +
+                                String(new Date().getMinutes()).padStart(
+                                  2,
+                                  '0'
+                                )}
+                            </Time>
                           </UserProfileDiv>
                         ) : (
                           <UserProfileDiv>
                             <UserProfileImg
-                              // onClick={(e) => CounterUserHandler(e)}
+                              onClick={(e) => CounterUserHandler(e)}
                               src={
                                 'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg'
                               }
@@ -469,7 +488,10 @@ const Chatting = () => {
                             <Time>
                               {new Date().getHours() +
                                 ':' +
-                                new Date().getMinutes()}
+                                String(new Date().getMinutes()).padStart(
+                                  2,
+                                  '0'
+                                )}
                             </Time>
                           </UserProfileDiv>
                         )}
@@ -535,7 +557,7 @@ const PostPictureDiv = styled.div`
 //전체 채팅방
 const ChatMainDiv = styled.div`
   overflow-y: hidden;
-  height: 661px;
+  height: 551px;
   width: 375px;
   padding: 0 0px;
 `;
@@ -574,7 +596,7 @@ const UserChatDiv = styled.div`
 const ChatBox = styled.div`
   border: none;
   overflow-y: scroll;
-  height: 661px;
+  height: 551px;
   overflow-x: hidden;
 `;
 //프로필 이미지
@@ -590,6 +612,7 @@ const UserProfileDiv = styled.div`
 
   flex-direction: row;
 `;
+// 닉네임 + 챗
 const UserProfileNameChat = styled.div`
   display: flex;
   flex-direction: column;
@@ -611,6 +634,30 @@ const ChatDiv = styled.div`
     color: #fff;
     background-color: #fa3a45;
     margin-right: 16px;
+  }
+`;
+const ConversatonTime = styled.div`
+  width: 343px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 14px;
+    font-weight: 400;
+
+    color: #808080;
+
+    margin-left: 20px;
+  }
+  button {
+    height: 26px;
+    width: 50px;
+    border-radius: 4px;
+    background-color: #fa3a45;
+    color: #fff;
+    margin-left: 82px;
+    font-size: 10px;
+    font-weight: 400;
   }
 `;
 //말풍선 + 시간
@@ -712,8 +759,9 @@ const UserProfileName = styled.div`
 `;
 //전체 채팅 화면
 const AllChatDiv = styled.div`
-  position: relative;
-  height: 551px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Download = styled.a`
