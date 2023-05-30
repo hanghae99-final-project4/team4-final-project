@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import HeaderIcon from '../../Element/HeaderIcon';
 
-const Header = ({ msg, margin, children }) => {
+const Header = ({ msg, margin, children, profile }) => {
   return (
     <div>
       {' '}
@@ -39,5 +39,17 @@ export const MessageBox = styled.div`
   font-size: 17px;
 `;
 export const ImgBox = styled.img`
+  width: 24px;
+  height: 24px;
+
+  border-radius: 100%;
+  margin-left: ${(props) => props.margin};
+`;
+export const Chatbot = styled.img`
+  margin-left: ${(props) => props.margin};
+  cursor: pointer;
+`;
+export const Ban = styled.img`
+  cursor: pointer;
   margin-left: ${(props) => props.margin};
 `;
