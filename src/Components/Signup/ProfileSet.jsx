@@ -15,6 +15,9 @@ import {
 } from '../../Recoil/userList';
 import useInput from '../../MyTools/Hooks/UseInput';
 import { trainApi, trainApi2 } from '../../apis/Instance';
+import beforebutton from '../../Assets/SetProfile/beforebutton.svg';
+import nextbutton from '../../Assets/SetProfile/nextbutton.svg';
+
 const ProfileSet = () => {
   // 프로필 정보 전역상태
   const [image, setImage] = useRecoilState(useInfoState);
@@ -25,7 +28,6 @@ const ProfileSet = () => {
   const [form, setForm, OnChangeHandler] = useInput([]);
   const fileref = useRef();
   const navigate = useNavigate();
-  console.log(gender);
   const profileuploadHandler = () => {
     navigate('/pickprofile');
   };
@@ -37,11 +39,13 @@ const ProfileSet = () => {
         age: gender.age,
         nickname: form.nickname,
       });
-      console.log(data);
     } catch (err) {
-      console.log(err);
+      return;
     }
   }
+  const beforeHandler = () => {
+    navigate(-1);
+  };
 
   const uploadFile = async () => {
     const formData = new FormData();
@@ -52,26 +56,20 @@ const ProfileSet = () => {
     if (primaryImage[0]?.file !== undefined)
       formData.append('primaryImage', primaryImage[0]?.file);
 
-    console.log(Array.from(formData.entries()));
     const form = formData.getAll('otherImages');
     formData.delete('otherImages');
-    console.log(form);
-    console.log(primaryImage[0]?.file);
 
     form
       .filter((item) => item.name !== primaryImage[0]?.file?.name)
       .forEach((item) => formData.append('otherImages', item));
-
-    console.log(Array.from(formData.entries()));
 
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
       nickname();
       navigate('/subwaypage');
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
 
@@ -111,20 +109,27 @@ const ProfileSet = () => {
       />
       {primaryImage[0]?.url && true && form.nickname && true ? (
         <>
-          <StartButton
-            onClick={uploadFile}
-            style={{ cursor: 'pointer' }}
-            src={startbutton}
-            alt="startimg"
-          />
+          <ButtonBox>
+            <div onClick={beforeHandler}>
+              <img src={beforebutton} alt="before" />
+              <span>이전</span>
+            </div>
+            <div onClick={uploadFile}>
+              <img src={nextbutton} alt="next" />
+              <span>시작</span>
+            </div>
+          </ButtonBox>
         </>
       ) : (
         <>
-          <StartButton src={pendingbutton} alt="startimg" />
+          <ButtonBox>
+            <div onClick={beforeHandler}>
+              <img src={beforebutton} alt="before" />
+              <span>이전</span>
+            </div>
+          </ButtonBox>
         </>
       )}
-
-      <StartSpan>시작</StartSpan>
     </Wrap>
   );
 };
@@ -202,4 +207,22 @@ const Upload = styled.img`
   margin-left: 79px;
   margin-top: -34px;
   z-index: 999;
+`;
+const ButtonBox = styled.div`
+  margin-top: 203px;
+  width: 343px;
+  height: 67px;
+  display: flex;
+  justify-content: space-between;
+  div {
+    width: 40px;
+    height: 67px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    img {
+      cursor: pointer;
+    }
+  }
 `;

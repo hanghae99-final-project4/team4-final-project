@@ -89,7 +89,6 @@ function Kakao() {
     };
     searchPlaces();
   }, [map]);
-  console.log(station);
   return (
     <Map // 로드뷰를 표시할 Container
       center={{

@@ -23,12 +23,10 @@ const EmailLogin = () => {
         account: email,
         password: password,
       });
-      console.log(data);
       const userId = data?.data.rest?.user_id;
       const token = data?.data.token;
       localStorage.setItem('userId', userId);
       localStorage.setItem('token', token);
-      console.log(data?.data.rest?.nickname);
       data?.data.rest?.nickname === null
         ? navigate('/setgender')
         : navigate('/subwaypage');
@@ -52,7 +50,7 @@ const EmailLogin = () => {
 
       .required('비밀번호를 입력해주세요') // 빈칸인지 체크
       .matches(
-        /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,15}$/,
+        /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,25}$/,
         '영어+숫자를  8글자 이상 입력해주세요'
       ) // 정규식 체크 후
       .min(8, '비밀번호는 최소 8글자 이상입니다.') //비밀번호 최소 자리 체크
@@ -65,10 +63,12 @@ const EmailLogin = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    getValues,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
+  const getFields = getValues();
 
   return (
     <Wrap>
@@ -81,7 +81,19 @@ const EmailLogin = () => {
           {...register('password')}
         ></Passwordinput>
         <Errormessage>{errors?.password?.message}</Errormessage>
-        <LoginButton type="submit">로그인</LoginButton>
+        <LoginButton
+          className={
+            !errors?.email?.message &&
+            !errors?.password?.message &&
+            getFields.email !== '' &&
+            getFields.password !== ''
+              ? 'active'
+              : ''
+          }
+          type="submit"
+        >
+          로그인
+        </LoginButton>
       </LoginForm>
 
       <PasswordMiss onClick={passwordMiss}>
@@ -128,6 +140,9 @@ const LoginButton = styled.button`
   height: 50px;
   color: #ffffff;
   background-color: rgba(250, 58, 69, 0.3);
+  &.active {
+    background-color: #fa3a45;
+  }
 `;
 const PasswordMiss = styled.div`
   cursor: pointer;
@@ -144,7 +159,7 @@ const PasswordMiss = styled.div`
   font-family: Pretendard;
 `;
 const NoaccountBox = styled.div`
-  margin-top: 240px;
+  margin-top: 100px;
   gap: 16.5px;
   display: flex;
   flex-direction: column;
@@ -156,7 +171,7 @@ const EmailSign = styled.span`
   color: #333333;
   cursor: pointer;
 `;
-const Errormessage = styled.div`
+export const Errormessage = styled.div`
   color: #d14343;
   height: 17px;
   font-weight: 500;

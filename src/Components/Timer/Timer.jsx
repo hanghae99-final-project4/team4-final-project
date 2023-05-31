@@ -7,11 +7,11 @@ const Timer = ({ margin, leave, setLeave, reset, setTimeReset }) => {
 
   const timerId = useRef(null);
   const time = useRef(180);
-
+  console.log(reset);
   useEffect(() => {
     if (reset) {
       time.current += 180;
-      setTimeReset(false);
+      setTimeReset(!reset);
     }
     timerId.current = setInterval(() => {
       setMin(String(parseInt(time.current / 60)).padStart(2, '0'));

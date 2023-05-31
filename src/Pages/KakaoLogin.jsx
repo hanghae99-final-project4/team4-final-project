@@ -19,7 +19,7 @@ const KakaoLogin = () => {
   const kakaoLogin = async () => {
     try {
       const { data } = await trainApi.kakaoLogin(code);
-      console.log(data);
+
       const token = data.token;
       const userId = data.result[0].id;
       if (data.token) {
@@ -30,7 +30,7 @@ const KakaoLogin = () => {
           : navigate('/subwaypage');
       }
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
 

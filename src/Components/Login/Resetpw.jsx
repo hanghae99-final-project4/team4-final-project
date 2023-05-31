@@ -1,11 +1,35 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { yupResolver } from '@hookform/resolvers/yup';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import * as yup from 'yup';
+import { Errormessage } from './EmailLogin';
 
 const Resetpw = () => {
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .required('이메일을 입력해주세요')
+      .matches(
+        /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{3}$/,
+        '올바른 이메일 형식으로 작성 해주세요.'
+      ),
+  });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    getValues,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+  const getFields = getValues();
   const navigate = useNavigate();
   const confirmHandler = () => {
-    navigate("/auth");
+    navigate('/auth');
   };
   return (
     <Wrap>
@@ -14,10 +38,20 @@ const Resetpw = () => {
         <TextSpan>회원가입 시 등록한 이메일 주소를 입력해 주세요.</TextSpan>
       </TextBox>
       <LoginForm>
-        <Emailinput placeholder="이메일 주소" />
+        <Emailinput placeholder="이메일 주소" {...register('email')} />
+        {errors?.email?.message && (
+          <Errormessage>{errors?.email?.message}</Errormessage>
+        )}
       </LoginForm>
 
-      <ConfirmButton onClick={confirmHandler}>확인</ConfirmButton>
+      <ConfirmButton
+        className={
+          !errors?.email?.message && getFields.email !== '' ? 'active' : ''
+        }
+        onClick={confirmHandler}
+      >
+        확인
+      </ConfirmButton>
     </Wrap>
   );
 };
@@ -54,6 +88,9 @@ const ConfirmButton = styled.button`
   height: 50px;
   color: #ffffff;
   background-color: rgba(250, 58, 69, 0.3);
+  &.active {
+    background-color: #fa3a45;
+  }
 `;
 
 const NoaccountBox = styled.div`

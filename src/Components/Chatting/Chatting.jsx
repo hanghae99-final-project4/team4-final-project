@@ -197,6 +197,9 @@ const Chatting = () => {
     };
 
     const handleBroadcastMessage = (message) => {
+      if (message.leave === true) {
+        setLeave(true);
+      }
       console.log(message);
       console.log(chatArr);
 
@@ -264,13 +267,10 @@ const Chatting = () => {
     formData.append('chatImage', file);
 
     for (const key of formData.entries()) {
-      console.log(key);
     }
-    console.log(file);
     try {
       const name = JSON.parse(localStorage.getItem('nickname')).value;
       const { data } = await trainApi2.chattingForm(name, formData);
-      console.log('잘받음', data);
       socket.emit('persnalchat', {
         profile: message.url,
         url: data?.url,
@@ -278,7 +278,7 @@ const Chatting = () => {
         roomkey: room,
       });
     } catch (error) {
-      console.log(error);
+      return;
     }
   }
 
@@ -287,7 +287,6 @@ const Chatting = () => {
   });
   // 나가기 동작 핸들러
   const leaveHandler = () => {
-    console.log('작동');
     socket.off('stop');
     socket.off('joinroom');
     socket.off('chat-bot');
@@ -455,7 +454,6 @@ const Chatting = () => {
                                     }
                                     src={item?.url}
                                   />
-                                  <Download href={item?.url}>다운로드</Download>
                                 </>
                               ) : (
                                 // <div>mp4</div>
@@ -466,7 +464,6 @@ const Chatting = () => {
                                     }
                                     imgurl={item?.url}
                                   />
-                                  <Download href={item?.url}>다운로드</Download>
                                 </>
 
                                 // <div>img</div>
@@ -497,7 +494,6 @@ const Chatting = () => {
                                     }
                                     src={item?.url}
                                   />
-                                  <Download href={item?.url}>다운로드</Download>
                                 </>
                               ) : (
                                 // <div>mp4</div>
@@ -508,7 +504,6 @@ const Chatting = () => {
                                     }
                                     imgurl={item?.url}
                                   />
-                                  <Download href={item?.url}>다운로드</Download>
                                 </>
 
                                 // <div>img</div>
