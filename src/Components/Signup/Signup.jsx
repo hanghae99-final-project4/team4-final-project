@@ -34,7 +34,7 @@ const Signup = () => {
 
       .required('비밀번호를 입력해주세요') // 빈칸인지 체크
       .matches(
-        /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,15}$/,
+        /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,25}$/,
         '영어+숫자를  8글자 이상 입력해주세요'
       ) // 정규식 체크 후
       .min(8, '비밀번호는 최소 8글자 이상입니다.') //비밀번호 최소 자리 체크
@@ -50,12 +50,13 @@ const Signup = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    getValues,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
-  console.log(errors);
-
+  const getFields = getValues();
+  console.log(getFields);
   //확인버튼
   const onSignup = async (data) => {
     const email = data.email;
@@ -69,7 +70,7 @@ const Signup = () => {
         password2: passwordconfirm,
         agreepi: agreepi,
       });
-      console.log(data);
+
       const msg = data.msg;
       if (msg === '성공') {
         alert('회원가입이 되셨습니다.');
@@ -103,7 +104,21 @@ const Signup = () => {
           />
           <Errormessage>{errors?.passwordconfirm?.message}</Errormessage>
         </InfoBox>
-        <SignupButton type="submit">다음</SignupButton>
+        <SignupButton
+          className={
+            !errors?.email?.message &&
+            !errors?.password?.message &&
+            !errors?.passwordconfirm?.message &&
+            getFields.email !== '' &&
+            getFields.password !== '' &&
+            getFields.passwordconfirm !== ''
+              ? 'active'
+              : ''
+          }
+          type="submit"
+        >
+          다음
+        </SignupButton>
       </SignForm>
     </Wrap>
   );
@@ -155,4 +170,7 @@ const SignupButton = styled.button`
   height: 50px;
   color: #ffffff;
   background-color: rgba(250, 58, 69, 0.3);
+  &.active {
+    background-color: #fa3a45;
+  }
 `;

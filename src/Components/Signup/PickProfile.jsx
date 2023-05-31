@@ -28,34 +28,41 @@ const PickProfile = () => {
     cameraref.current.click();
   };
 
-  console.log(primaryImage[0]?.url);
-  console.log(image);
   //사진 업로드 시 파일
   const formSubmit = (e) => {
     let temp = [...image];
     const photoList = e.target.files;
+
     for (let i = 0; i < photoList.length; i++) {
-      temp.push({
+      const photo = {
         id: photoList[i]?.name,
         file: photoList?.[i],
         image_url: URL?.createObjectURL(photoList[i]),
-      });
+      };
+
+      temp.push(photo);
     }
 
     if (temp.length > 5) {
       temp = temp.slice(0, 5);
     }
+
+    // 첫 번째 사진을 기본 프로필로 설정
+    if (temp.length > 0) {
+      temp[0].isMainProfile = true;
+      setProfile([{ file: temp[0].file, url: temp[0].image_url }]);
+    }
+
     setImage(temp.concat(files));
   };
 
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
     const Id = localStorage.getItem('userId');
-    console.log(deleteUrl);
     try {
       setImage(image.filter((item) => item.image_url !== deleteUrl));
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
   const cancelHandler = () => {
@@ -64,6 +71,15 @@ const PickProfile = () => {
       setProfile([]);
       navigate(-1);
     }
+  };
+
+  const handleProfileClick = (item) => {
+    console.log(item);
+    const updatedImage = image.map((photo) => ({
+      ...photo,
+      isMainProfile: photo === item,
+    }));
+    setImage(updatedImage);
   };
 
   return (
@@ -76,7 +92,8 @@ const PickProfile = () => {
         <Camera onClick={uploadHandler} src={camera} alt="camera" />
         {image?.map((item, index) => (
           <CameraBox
-            className={item?.image_url === profile[0]?.url ? 'main' : null}
+            onClick={() => handleProfileClick(item)}
+            className={item?.isMainProfile ? 'main' : null}
           >
             <DeleteImg
               onClick={() => removeProfile(item.image_url)}

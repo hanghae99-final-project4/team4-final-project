@@ -28,7 +28,6 @@ const GenderSet = () => {
     { value: '1', name: '여성', id: 'girl' },
     { value: '2', name: '남성', id: 'gender' },
   ];
-  console.log(user);
   return (
     <Wrap>
       <GifBox>
@@ -63,8 +62,16 @@ const GenderSet = () => {
           </GenderButton>
         ))}
       </GenderBox>
-      <NextButton onClick={nextbuttonHandler} src={nextbutton} alt="nextimg" />
-      <NextSpan>다음</NextSpan>
+      <BtnBox>
+        <Next>
+          <NextButton
+            onClick={nextbuttonHandler}
+            src={nextbutton}
+            alt="nextimg"
+          />
+          <NextSpan>다음</NextSpan>
+        </Next>
+      </BtnBox>
     </Wrap>
   );
 };
@@ -188,9 +195,19 @@ const GenderSpan = styled.span`
 `;
 
 const NextButton = styled.img`
-  margin-top: 131px;
   cursor: pointer;
 `;
 const NextSpan = styled.span`
   margin-top: 10px;
+`;
+const BtnBox = styled.div`
+  justify-content: end;
+  margin-top: 97px;
+  display: flex;
+  width: 343px;
+  height: 67px;
+`;
+const Next = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

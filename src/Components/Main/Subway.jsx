@@ -38,10 +38,9 @@ const Subway = () => {
     try {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
-      console.log(data);
       setProfile(data.userInfo);
     } catch (err) {
-      console.log(err);
+      return;
     }
   }
   // localstorage 객체 배열로 만드는 함수
@@ -64,7 +63,6 @@ const Subway = () => {
     setItemWithExpireTime('profile', profile?.images?.[0]?.image_url, 3000000);
     navigate('/chattingpage');
   };
-  console.log(profile);
   return (
     <SubwayDiv>
       <GuideBox>

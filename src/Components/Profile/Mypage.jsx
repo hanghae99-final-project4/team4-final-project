@@ -1,17 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import useInput from "../../MyTools/Hooks/UseInput";
-import { useRef } from "react";
-import { CloseCircleFilled } from "@ant-design/icons";
-import { Cookies } from "react-cookie";
-import { trainApi, trainApi2 } from "../../apis/Instance";
-import { useNavigate } from "react-router-dom";
-import HomeMenu from "../HomeMenu/HomeMenu";
-import MypageHeader from "./MypageHeader";
-import { useRecoilState } from "recoil";
-import { useInfoState } from "../../Recoil/userList";
+import React from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import useInput from '../../MyTools/Hooks/UseInput';
+import { useRef } from 'react';
+import { CloseCircleFilled } from '@ant-design/icons';
+import { Cookies } from 'react-cookie';
+import { trainApi, trainApi2 } from '../../apis/Instance';
+import { useNavigate } from 'react-router-dom';
+import HomeMenu from '../HomeMenu/HomeMenu';
+import MypageHeader from './MypageHeader';
+import { useRecoilState } from 'recoil';
+import { useInfoState } from '../../Recoil/userList';
 
 const MyPage = () => {
   const [isModal, setIsModal] = useState(false);
@@ -21,7 +21,7 @@ const MyPage = () => {
   const [preview, setPreview] = useState();
   const [form, setForm, OnChangeHandler] = useInput([]);
   const cookies = new Cookies();
-  const token = cookies.get("token");
+  const token = cookies.get('token');
   const navigate = useNavigate();
   const [changeprofile, setChangeprofile] = useState([]);
   const [originprofile, setOriginprofile] = useState([]);
@@ -34,23 +34,20 @@ const MyPage = () => {
   }, []);
   //프로필 조회 함수
   async function getProfile() {
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem('userId');
     const { data } = await trainApi.getConvers(userId);
-    console.log(data);
     setImage(data.userInfo.images);
     setForm(data.userInfo);
     setChangeprofile(data.userInfo.images);
   }
-  console.log(image);
 
   const profile = form?.images?.filter((item) => item?.is_primary === true)?.[0]
     ?.image_url;
-  console.log(profile);
 
   // 프로필 정보들 저장 핸들러
   async function imgSubmitHandler() {
     try {
-      const Id = localStorage.getItem("userId");
+      const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.editProfile(
         Id,
         form.nickname,
@@ -58,51 +55,44 @@ const MyPage = () => {
       );
       setIsEdit(!isEdit);
       getProfile();
-      console.log(data);
-    } catch (error) {}
+    } catch (error) {
+      return;
+    }
   }
-  console.log(form);
   //사진 업로드
 
   const uploadFile = async () => {
     const formData = new FormData();
     for (let i = 0; i < image.length; i++) {
       if (image[i].file !== undefined)
-        formData.append("otherImages", image[i].file);
+        formData.append('otherImages', image[i].file);
     }
     if (primaryImage[0]?.file !== undefined)
-      formData.append("primaryImage", primaryImage[0]?.file);
+      formData.append('primaryImage', primaryImage[0]?.file);
 
-    console.log(Array.from(formData.entries()));
-    const form = formData.getAll("otherImages");
-    formData.delete("otherImages");
-    console.log(form);
-    console.log(primaryImage[0]?.file);
+    const form = formData.getAll('otherImages');
+    formData.delete('otherImages');
 
     form
       .filter((item) => item.name !== primaryImage[0]?.file?.name)
-      .forEach((item) => formData.append("otherImages", item));
-
-    console.log(Array.from(formData.entries()));
+      .forEach((item) => formData.append('otherImages', item));
 
     try {
-      const Id = localStorage.getItem("userId");
+      const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
-      console.log(data);
       setIsModal(!isModal);
       getProfile();
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
   //대표 프로필 수정
   const patchProfile = async () => {
-    console.log(primaryImage[0].url);
     //기존 대표 이미지
     const originProfile = changeprofile?.filter(
       (item) => item?.is_primary === true
     );
-    // console.log(originProfile);
+
     //프로필 사진들
     const newProfile = [...changeprofile];
     //새로운 대표 이미지
@@ -111,9 +101,6 @@ const MyPage = () => {
     );
     setChangeprofile(...changeprofile, changenewProfile);
 
-    // console.log("새로운 이미지", changenewProfile);
-    // console.log("url", changenewProfile[0].image_url);
-    // console.log("들어감", changeprofile);
     //기존의 있던 대표 이미지
     const changeProfile = changeprofile.filter(
       (item) => item.image_url === originProfile
@@ -128,8 +115,6 @@ const MyPage = () => {
       )
       .filter((item) => item.image_url === changenewProfile[0].image_url);
 
-    // );
-    // setOriginprofile(
     const origin = newProfile
       .map((item) =>
         item.image_url === originProfile[0].image_url
@@ -137,27 +122,17 @@ const MyPage = () => {
           : item
       )
       .filter((item) => item.image_url === originProfile[0].image_url);
-    // );
-    console.log(originProfile[0].image_url);
 
-    //console.log(changenewProfile);
-    // console.log(image);
-
-    console.log("새로운 프로필", newArr);
-    console.log("기존이미지", origin);
     try {
-      const Id = localStorage.getItem("userId");
+      const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.patchProfile(Id, newArr[0], origin[0]);
-      console.log(data);
       setIsModal(!isModal);
       getProfile();
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
-  console.log(changeprofile);
 
-  console.log("클릭한 이미지", primaryImage);
   //사진 업로드 시 파일 만들기
   const formSubmit = (e) => {
     let temp = [...image];
@@ -183,11 +158,11 @@ const MyPage = () => {
         <CloseCircleFilled
           onClick={() => removeProfile(item.image_url)}
           style={{
-            position: "relative",
-            top: "18px",
-            zIndex: "999",
-            right: "0px",
-            cursor: "pointer",
+            position: 'relative',
+            top: '18px',
+            zIndex: '999',
+            right: '0px',
+            cursor: 'pointer',
           }}
         />
         <ThumbImg
@@ -208,19 +183,16 @@ const MyPage = () => {
   });
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
-    const Id = localStorage.getItem("userId");
-    console.log(deleteUrl);
+    const Id = localStorage.getItem('userId');
     try {
       const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
-      console.log(data);
       setImage(image.filter((item) => item.image_url !== deleteUrl));
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
 
   const fileImagePreview = (fileBlob) => {
-    console.log(fileBlob);
     const reader = new FileReader();
     reader.readAsDataURL(fileBlob);
 
@@ -250,11 +222,11 @@ const MyPage = () => {
   return (
     <>
       <Wrap>
-        <MypageHeader msg={"나의정보"} />
+        <MypageHeader msg={'나의정보'} />
 
         <TitleBox>
           <div>
-            <p style={{ fontSize: "24px", fontWeight: "700" }}>프로필</p>
+            <p style={{ fontSize: '24px', fontWeight: '700' }}>프로필</p>
           </div>
         </TitleBox>
 
@@ -262,13 +234,13 @@ const MyPage = () => {
           <ImgWrap>
             {primaryImage?.length > 0 ? (
               <ImgBox
-                style={{ transform: "scale(1)", borderRadius: "10px" }}
+                style={{ transform: 'scale(1)', borderRadius: '10px' }}
                 id="img-preview"
                 src={primaryImage[0].url}
               />
             ) : (
               <ImgBox
-                style={{ transform: "scale(1)", borderRadius: "10px" }}
+                style={{ transform: 'scale(1)', borderRadius: '10px' }}
                 id="img-preview"
                 src={
                   form?.images?.filter((item) => item?.is_primary === true)?.[0]
@@ -302,20 +274,20 @@ const MyPage = () => {
                     value={form?.nickname}
                   ></InputInfo>
                 </li>
-                <li style={{ display: "flex", alignItems: "flex-start" }}></li>
+                <li style={{ display: 'flex', alignItems: 'flex-start' }}></li>
                 <li
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    boxShadow: '4px 4px 4px hsla(0, 0%, 0%, 0.25)',
                     margin: 0,
-                    borderRadius: "10px",
+                    borderRadius: '10px',
                   }}
                 >
                   <AreaTitle>상태 메세지</AreaTitle>
                   <input
-                    style={{ width: "100%", height: "40px" }}
+                    style={{ width: '100%', height: '40px' }}
                     onChange={OnChangeHandler}
                     name="statusmessage"
                     value={form?.statusmessage}
@@ -334,20 +306,20 @@ const MyPage = () => {
                     value={form?.result?.nickname}
                   ></InputInfo>
                 </li>
-                <li style={{ display: "flex", alignItems: "flex-start" }}></li>
+                <li style={{ display: 'flex', alignItems: 'flex-start' }}></li>
                 <li
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    boxShadow: "4px 4px 4px hsla(0, 0%, 0%, 0.25)",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    boxShadow: '4px 4px 4px hsla(0, 0%, 0%, 0.25)',
                     margin: 0,
-                    borderRadius: "10px",
+                    borderRadius: '10px',
                   }}
                 >
                   <AreaTitle>상태 메세지</AreaTitle>
                   <input
-                    style={{ width: "100%", height: "40px" }}
+                    style={{ width: '100%', height: '40px' }}
                     onChange={OnChangeHandler}
                     name="statusmessage"
                     value={form?.result?.introduction}
@@ -359,28 +331,28 @@ const MyPage = () => {
         </ProfileBox>
         {/* 수정 모드 / 저장 모드 바꾸기 */}
         {isEdit ? (
-          <div style={{ margin: "1rem", marginTop: "33px" }}>
-            <BottomStyle type={"save"} onClick={() => imgSubmitHandler()}>
+          <div style={{ margin: '1rem', marginTop: '33px' }}>
+            <BottomStyle type={'save'} onClick={() => imgSubmitHandler()}>
               저장
-            </BottomStyle>{" "}
+            </BottomStyle>{' '}
             <BottomStyle
-              type={"cancle"}
+              type={'cancle'}
               onClick={() => {
-                navigate("/subwaypage");
+                navigate('/subwaypage');
               }}
             >
               취소
             </BottomStyle>
           </div>
         ) : (
-          <div style={{ margin: "1rem", marginTop: "33px" }}>
-            <BottomStyle type={"save"} onClick={() => setIsEdit(!isEdit)}>
+          <div style={{ margin: '1rem', marginTop: '33px' }}>
+            <BottomStyle type={'save'} onClick={() => setIsEdit(!isEdit)}>
               수정
-            </BottomStyle>{" "}
+            </BottomStyle>{' '}
             <BottomStyle
-              type={"cancle"}
+              type={'cancle'}
               onClick={() => {
-                navigate("/subwaypage");
+                navigate('/subwaypage');
               }}
             >
               취소
@@ -392,7 +364,7 @@ const MyPage = () => {
           <button
             className="button-notice"
             onClick={() => {
-              navigate("/customerNotice");
+              navigate('/customerNotice');
             }}
           >
             고객유의사항
@@ -400,7 +372,7 @@ const MyPage = () => {
           <button
             className="button-guide"
             onClick={() => {
-              navigate("/customerUserGuide");
+              navigate('/customerUserGuide');
             }}
           >
             고객이용가이드
@@ -542,7 +514,7 @@ const BottomStyle = styled.button`
   width: 100%;
   height: 48px;
   box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
-  background: ${(props) => (props.type === "save" ? "#C3F4FF" : "#fff")};
+  background: ${(props) => (props.type === 'save' ? '#C3F4FF' : '#fff')};
   border-radius: 10px;
   margin-bottom: 16px;
 `;
@@ -555,7 +527,7 @@ const ModalCtn = styled.div`
   border: none;
   overflow: hidden;
   box-sizing: border-box;
-  display: ${(isModal) => (isModal ? "block" : "none")};
+  display: ${(isModal) => (isModal ? 'block' : 'none')};
   position: fixed;
   top: 0px;
   right: 0px;

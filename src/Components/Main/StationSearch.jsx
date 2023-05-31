@@ -18,7 +18,7 @@ const StationSearch = () => {
   const [history, setHistory] = useRecoilState(useHistoryState);
   const searchHandler = (item) => {
     setHistory([...history, item]);
-    console.log(item);
+
     setArrive(item);
     navigate('/stationselect');
   };
@@ -26,11 +26,9 @@ const StationSearch = () => {
   const set = new Set(history);
   const newhistory = [...set];
   const removeHandler = (id) => {
-    console.log(newhistory.id);
     setHistory((newhistory) => newhistory.filter((item) => item.id !== id));
   };
-  console.log(newhistory);
-  console.log(arrive);
+
   return (
     <>
       <Span>최근 검색어</Span>

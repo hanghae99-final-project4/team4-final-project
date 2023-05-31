@@ -13,12 +13,10 @@ const AgetSet = () => {
   const [age, setAge] = useRecoilState(useUserState);
   const clickHandler = (e) => {
     setAge({ ...age, age: e.target.name });
-    console.log(e.target.name);
     setIsAge((prev) => {
       return e.target.value;
     });
   };
-  console.log(age);
   const ageList = [
     { value: '1', name: '10대', id: '10' },
     { value: '2', name: '20대', id: '20' },

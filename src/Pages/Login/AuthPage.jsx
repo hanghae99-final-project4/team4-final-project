@@ -8,11 +8,6 @@ import HeaderIcon from '../../Element/HeaderIcon';
 const AuthPage = () => {
   return (
     <Wrap>
-      <Header msg={''} margin="63px">
-        <PointerBox>
-          <HeaderIcon />
-        </PointerBox>
-      </Header>
       <Auth />
     </Wrap>
   );

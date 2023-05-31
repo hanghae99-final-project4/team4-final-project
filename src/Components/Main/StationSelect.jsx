@@ -16,8 +16,7 @@ const StationSelect = () => {
   const buttonHandler = () => {
     navigate('/subwaypage');
   };
-  console.log(station);
-  console.log(arrive);
+
   return (
     <SubwayDiv>
       {/* 지하철 역 */}

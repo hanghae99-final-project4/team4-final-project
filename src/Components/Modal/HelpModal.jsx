@@ -1,14 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import { ReactComponent as HelpModalIcon } from "../../Assets/Convers/Convers.svg";
-import GuideExit from "../../Element/GuideExit";
+import React from 'react';
+import styled from 'styled-components';
+import { ReactComponent as HelpModalIcon } from '../../Assets/Convers/Convers.svg';
+import GuideExit from '../../Element/GuideExit';
 
 const HelpModal = ({ modal, setModal }) => {
-  console.log();
   return (
     <ModalCtn>
       <ModalWrap>
-        <HelpModalIcon style={{ postition: "relative", margin: "0 auto" }} />
+        <HelpModalIcon style={{ postition: 'relative', margin: '0 auto' }} />
         <GuideExit isModal={modal} setIsModal={setModal} />
       </ModalWrap>
     </ModalCtn>
@@ -23,7 +22,7 @@ const ModalCtn = styled.div`
   border: none;
   overflow: hidden;
   box-sizing: border-box;
-  display: ${(isModal) => (isModal ? "block" : "none")};
+  display: ${(isModal) => (isModal ? 'block' : 'none')};
   position: absolute;
 
   top: 0px;

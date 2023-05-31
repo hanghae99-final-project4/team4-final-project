@@ -1,27 +1,25 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Auth = () => {
   const navigate = useNavigate();
   const completeHandler = () => {
-    navigate("/complete");
+    navigate('/email');
   };
   return (
     <Wrap>
       <TextBox>
-        <AuthSpan>인증수단 선택</AuthSpan>
-        <TextSpan>인증번호가 전송될 인증 수단을 선택해주세요</TextSpan>
+        <AuthSpan>비밀번호를 전송했어요.</AuthSpan>
+        <TextSpan>
+          비밀번호 재설정을 위한 이메일을 전송했어요.
+          <br />
+          이메일이 오지 않았다면, 이메일이 맞는지 확인해주세요.
+        </TextSpan>
       </TextBox>
-      <AuthDiv>
-        <Emailinput type="radio" id="email" checked />
-        <AuthBox>
-          <Authemail for="email">등록된 이메일주소로 인증</Authemail>
-          <Email for="email">{"wyswhsl21@naver.com"}</Email>
-        </AuthBox>
-      </AuthDiv>
+      <AuthDiv>{'wyswhsl21@naver.com'}</AuthDiv>
 
-      <ConfirmButton onClick={completeHandler}>확인</ConfirmButton>
+      <ConfirmButton onClick={completeHandler}>로그인 하기</ConfirmButton>
     </Wrap>
   );
 };
@@ -33,11 +31,20 @@ const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const AuthDiv = styled.label`
-  margin-top: 33px;
+const AuthDiv = styled.div`
+  margin-top: 50px;
   display: flex;
-  margin-right: 155px;
-  gap: 10px;
+
+  justify-content: center;
+  height: 50px;
+  width: 343px;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #f9f9f9;
+
+  font-size: 16px;
+  font-weight: 500;
+  color: #2d2d2d;
 `;
 
 const Emailinput = styled.input`
@@ -53,7 +60,7 @@ const Emailinput = styled.input`
     border: 1px solid #cfcfcf;
   }
   &:checked::before {
-    content: "";
+    content: '';
     display: block;
     width: 12px;
     height: 12px;
@@ -84,28 +91,24 @@ const Noaccount = styled.span`
   color: #a0a0a0;
 `;
 const TextBox = styled.div`
-  width: 229px;
-  height: 44px;
-  /* margin-top: 30px; */
-  gap: 10px;
+  width: 260px;
+  height: 67px;
+
+  gap: 14px;
   display: flex;
+  align-items: center;
   flex-direction: column;
-  margin-right: 114px;
 `;
 const AuthSpan = styled.span`
-  width: 93px;
-  height: 20px;
   font-family: Pretendard;
-  font-weight: 600;
   font-size: 17px;
-  text-align: center;
+  font-weight: 600;
+  color: #2d2d2d;
 `;
 const TextSpan = styled.span`
-  width: 209px;
-  height: 14px;
-  font-family: Pretendard;
-  font-weight: 500;
   font-size: 12px;
+  font-weight: 400;
+  line-height: 12px;
   text-align: center;
   color: #838383;
 `;

@@ -66,7 +66,7 @@ const ConversPage = () => {
     async function getNickname() {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
-      console.log(data);
+
       setMessage(data.userInfo);
     }
     getNickname();
