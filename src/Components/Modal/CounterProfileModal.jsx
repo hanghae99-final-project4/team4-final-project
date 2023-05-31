@@ -62,7 +62,7 @@ const CounterProfileModal = ({
 
 export default CounterProfileModal;
 
-const ModalCtn = styled.div`
+export const ModalCtn = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);

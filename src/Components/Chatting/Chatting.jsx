@@ -25,6 +25,10 @@ import chatbot from '../../Assets/Chatting/chatbot.svg';
 import ban from '../../Assets/Chatting/ban.svg';
 import FailPage from '../../Pages/Matching/FailPage';
 import Timer from '../Timer/Timer';
+import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
+import addimg from '../../Assets/ChattingModal/add.svg';
+import exitimg from '../../Assets/ChattingModal/exit.svg';
+import leaveimg from '../../Assets/ChattingModal/leave.svg';
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -50,7 +54,13 @@ const Chatting = () => {
   const [scrollState, setScrollState] = useState(true);
   const [counter, setCounter] = useState([]);
   const [counterUser, setCounterUser] = useState([]);
-  const [fail, setFail] = useState(true);
+  const [leave, setLeave] = useState(false);
+  // 시간 추가 모달
+  const [addModal, setAddModal] = useState(false);
+  // 나가기 모달
+  const [isExit, setIsExit] = useState(false);
+  // 시간 추가 reset
+  const [timereset, setTimeReset] = useState(false);
 
   // 도착역
   const arrive = useRecoilValue(useArriveState);
@@ -275,6 +285,7 @@ const Chatting = () => {
   socket.on('imgaeUP', (message) => {
     console.log(message);
   });
+  // 나가기 동작 핸들러
   const leaveHandler = () => {
     console.log('작동');
     socket.off('stop');
@@ -284,7 +295,14 @@ const Chatting = () => {
     localStorage.removeItem('room');
     navigate('/subwaypage');
   };
-  console.log(counter);
+  // 시간 추가 동작 핸들러
+  const addTimeHandler = () => {
+    setAddModal(true);
+  };
+  const addTimeFunction = () => {
+    setTimeReset(true);
+    setAddModal(!addModal);
+  };
 
   return (
     <div
@@ -301,7 +319,7 @@ const Chatting = () => {
               <PointerBox>
                 <HeaderPointer
                   style={{ cursor: 'pointer' }}
-                  onClick={() => leaveHandler()}
+                  onClick={() => setIsExit(true)}
                 />
               </PointerBox>
               <ImgBox src={counter?.profile} margin="63px" />
@@ -313,11 +331,18 @@ const Chatting = () => {
             <AllChatDiv>
               <ConversatonTime>
                 <span>대화 시간</span>
-                <Timer margin="80px" />
-                <button>추가</button>
+                <Timer
+                  reset={timereset}
+                  setReset={setTimeReset}
+                  leave={leave}
+                  setLeave={setLeave}
+                  margin="80px"
+                />
+                <button onClick={addTimeHandler}>추가</button>
               </ConversatonTime>
 
               <ChatMainDiv ref={boxRef}>
+                {/* 상대방 프로필 모달 */}
                 {isModal && (
                   <CounterProfileModal
                     gender={counterUser?.gender}
@@ -329,6 +354,60 @@ const Chatting = () => {
                     isModal={isModal}
                     setIsModal={setIsModal}
                   />
+                )}
+                {addModal && (
+                  <ChattingModal>
+                    <img src={addimg} alt="addimg" />
+                    <span margin="20px" className="add">
+                      시간을 추가 할까요?
+                    </span>
+                    <span margin="5px" className="sub">
+                      시간 쿠폰은 이벤트로 얻을 수 있습니다.
+                    </span>
+                    <BtnBox margin="25px">
+                      <SubBtn>충전하기</SubBtn>
+                      <PriBtn onClick={() => addTimeFunction()}>
+                        1회 무료 추가
+                      </PriBtn>
+                    </BtnBox>
+                  </ChattingModal>
+                )}
+                {isExit && (
+                  <ChattingModal>
+                    <img src={exitimg} alt="exit" />
+                    <span margin="10px" className="exit">
+                      채팅방을 나가면 <br />
+                      다시 돌아올 수 없어요! <br />
+                      <span margin="6px" className="sub">
+                        그래도 나갈까요?
+                      </span>
+                    </span>
+                    <BtnBox margin="15px">
+                      <SubBtn onClick={() => setIsExit(!isExit)}>취소</SubBtn>
+                      <PriBtn onClick={() => leaveHandler()}>나가기</PriBtn>
+                    </BtnBox>
+                  </ChattingModal>
+                )}
+                {leave && (
+                  <ChattingModal>
+                    <img src={leaveimg} alt="leave" />
+                    <span margin="20px" className="exit">
+                      아쉽지만 대화가 <span className="leave">종료</span>
+                      되었어요!
+                    </span>
+                    <span margin="5px" className="sub">
+                      새로운 매칭을 할까요?
+                    </span>
+
+                    <BtnBox margin="21px">
+                      <SubBtn onClick={() => navigate('/subwaypage')}>
+                        홈으로
+                      </SubBtn>
+                      <PriBtn onClick={() => window.location.reload()}>
+                        매칭
+                      </PriBtn>
+                    </BtnBox>
+                  </ChattingModal>
                 )}
                 <ChatBox>
                   {' '}
@@ -605,6 +684,7 @@ const UserProfileImg = styled.img`
   height: 40px;
   border-radius: 22px;
   border: none;
+  cursor: pointer;
 `;
 //이름 + 프로필 이미지 div
 const UserProfileDiv = styled.div`
