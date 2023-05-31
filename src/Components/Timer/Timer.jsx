@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const Timer = ({ margin }) => {
+const Timer = ({ margin, leave, setLeave, reset, setTimeReset }) => {
   const [min, setMin] = useState(3);
   const [sec, setSec] = useState(0);
-  const time = useRef(180);
+
   const timerId = useRef(null);
+  const time = useRef(180);
 
   useEffect(() => {
+    if (reset) {
+      time.current += 180;
+      setTimeReset(false);
+    }
     timerId.current = setInterval(() => {
       setMin(String(parseInt(time.current / 60)).padStart(2, '0'));
       setSec(String(time.current % 60).padStart(2, '0'));
@@ -19,6 +24,7 @@ const Timer = ({ margin }) => {
 
   useEffect(() => {
     if (time.current <= 0) {
+      setLeave(!leave);
       clearInterval(timerId.current);
     }
   }, [sec]);
