@@ -56,8 +56,7 @@ const Subway = () => {
       return;
     }
   };
-  let a = match.map((item) => item);
-  console.log(a[0].User.nickname);
+
   // localstorage 객체 배열로 만드는 함수
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
