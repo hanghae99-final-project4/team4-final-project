@@ -1,12 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { useEmailState } from '../../Recoil/userList';
 
 const Auth = () => {
+  const email = useRecoilValue(useEmailState);
   const navigate = useNavigate();
   const completeHandler = () => {
     navigate('/email');
   };
+
   return (
     <Wrap>
       <TextBox>
@@ -17,7 +21,7 @@ const Auth = () => {
           이메일이 오지 않았다면, 이메일이 맞는지 확인해주세요.
         </TextSpan>
       </TextBox>
-      <AuthDiv>{'wyswhsl21@naver.com'}</AuthDiv>
+      <AuthDiv>{email}</AuthDiv>
 
       <ConfirmButton onClick={completeHandler}>로그인 하기</ConfirmButton>
     </Wrap>

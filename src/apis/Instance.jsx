@@ -66,12 +66,15 @@ export const trainApi = {
   postName: (payload) => instance.post('/', payload),
   postProfile: (userId, payload) =>
     instance.post(`/user/edit/${userId}`, payload),
-
+  getMatch: (userId) => instance.get(`/list/matched/${userId}`),
   getConvers: (userId) => instance.get(`/user/${userId}`),
   getStation: (keyword) => instance.get(`list/station/${keyword}`),
   postSubSign: (payload) => instance.post('/user/signup', payload),
   postUserId: (payload) => instance.post('/user/checkid', payload),
   postSignIn: (payload) => instance.post('/user/login', payload),
+  resetPw: (payload) => instance.post('/user/resetpw', payload),
+  postStatusmessage: (id, payload) =>
+    instance.post(`/user/edit/${id}`, payload),
 };
 // 인터셉터
 instance.interceptors.request.use(

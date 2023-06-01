@@ -163,7 +163,7 @@ const SpanBox = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const Avatar = styled.img`
+export const Avatar = styled.img`
   border-radius: 100%;
   cursor: pointer;
   margin-top: 29px;
@@ -172,7 +172,7 @@ const Avatar = styled.img`
   object-fit: cover;
   transform: scale(1);
 `;
-const Nickname = styled.input`
+export const Nickname = styled.input`
   border-radius: 4px;
   padding: 12px;
   margin-top: 40px;
@@ -203,7 +203,7 @@ const StartButton = styled.img`
 const StartSpan = styled.span`
   margin-top: 10px;
 `;
-const Upload = styled.img`
+export const Upload = styled.img`
   margin-left: 79px;
   margin-top: -34px;
   z-index: 999;

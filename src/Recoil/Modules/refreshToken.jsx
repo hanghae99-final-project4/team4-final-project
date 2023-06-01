@@ -1,28 +1,28 @@
-import mem from "mem";
+import mem from 'mem';
 
-import { instance } from "../../apis/Instance";
+import { instance } from '../../apis/Instance';
 import {
   getCookie,
   removeCookie,
   setCookie,
-} from "../../MyTools/Hooks/MyCookie";
+} from '../../MyTools/Hooks/MyCookie';
 
 const refreshTokenFn = async () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   try {
-    const { data } = await instance.post("/newtoken", { token: token });
+    const { data } = await instance.post('/newtoken', { token: token });
 
     const acctoken = data?.acctoken;
     console.log(acctoken);
     if (!acctoken) {
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
     }
-    localStorage.setItem("token", acctoken);
+    localStorage.setItem('token', acctoken);
     return data;
   } catch (error) {
     console.log(error);
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
   }
 };
 const maxAge = 10000;

@@ -12,8 +12,19 @@ import HomeMenu from '../HomeMenu/HomeMenu';
 import MypageHeader from './MypageHeader';
 import { useRecoilState } from 'recoil';
 import { useInfoState } from '../../Recoil/userList';
+import {
+  ApplySet,
+  Img,
+  Nickname,
+  NicknameBox,
+  Profile,
+  ProfileBox,
+} from '../Main/Subway';
+import write from '../../Assets/Main/write.svg';
+import arrowimg from '../../Assets/Mypage/arrow.svg';
 
 const MyPage = () => {
+  const [bottomSheet, setBottomSheet] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const inputRef = useRef();
   const [files, setFiles] = useState([]);
@@ -21,7 +32,7 @@ const MyPage = () => {
   const [preview, setPreview] = useState();
   const [form, setForm, OnChangeHandler] = useInput([]);
   const cookies = new Cookies();
-  const token = cookies.get('token');
+
   const navigate = useNavigate();
   const [changeprofile, setChangeprofile] = useState([]);
   const [originprofile, setOriginprofile] = useState([]);
@@ -38,6 +49,7 @@ const MyPage = () => {
     const { data } = await trainApi.getConvers(userId);
     setImage(data.userInfo.images);
     setForm(data.userInfo);
+
     setChangeprofile(data.userInfo.images);
   }
 
@@ -208,29 +220,64 @@ const MyPage = () => {
     inputRef.current.click();
   };
 
-  //성별 나중에 쓸 수도 있는 코드.
-  // const checkOnlyOne = (checkThis) => {
-  //   const checkboxes = document.getElementsByName("gender");
-  //   for (let i = 0; i < checkboxes.length; i++) {
-  //     if (checkboxes[i] !== checkThis) {
-  //       checkboxes[i].checked = false;
-  //     } else checkboxes[i].value === "1" ? setGender(true) : setGender(false);
-  //   }
-  // };
-
   //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
     <>
-      <Wrap>
-        <MypageHeader msg={'나의정보'} />
+      <TextBox margin="0px">프로필수정</TextBox>
+      <ProfileBox>
+        <Profile>
+          <Img>
+            <img
+              src={
+                form?.images?.filter((item) => item?.is_primary === true)?.[0]
+                  ?.image_url
+              }
+              alt="profile"
+            />
+          </Img>
+          <NicknameBox>
+            <Nickname>{form?.result?.nickname}</Nickname>
+            <ApplySet>
+              <img
+                onClick={() => setBottomSheet(!bottomSheet)}
+                src={write}
+                alt="write"
+              />
 
-        <TitleBox>
-          <div>
-            <p style={{ fontSize: '24px', fontWeight: '700' }}>프로필</p>
-          </div>
-        </TitleBox>
+              <span>반갑습니다.프로필을 설정 해 주세요</span>
+            </ApplySet>
+          </NicknameBox>
+        </Profile>
+      </ProfileBox>
+      <TextBox margin="30px">마이페이지</TextBox>
+      <TextBox className="item">
+        닉네임변경
+        <img onClick={() => navigate('/namechange')} src={arrowimg} />
+      </TextBox>
+      <TextBox className="item">
+        비밀번호 변경
+        <img src={arrowimg} />
+      </TextBox>
+      <TextBox margin="20px">고객센터</TextBox>
+      <TextBox margin="20px">
+        공지사항
+        <img src={arrowimg} />
+      </TextBox>
+      <TextBox margin="20px">
+        자주 묻는 질문
+        <img src={arrowimg} />
+      </TextBox>
+      <TextBox margin="20px">
+        신고하기
+        <img src={arrowimg} />
+      </TextBox>
 
-        <ProfileBox>
+      {/* 수정 모드 / 저장 모드 바꾸기 */}
+
+      {isModal ? (
+        //
+
+        <>
           <ImgWrap>
             {primaryImage?.length > 0 ? (
               <ImgBox
@@ -263,123 +310,7 @@ const MyPage = () => {
               사진 업로드
             </ImgButton>
           </ImgWrap>
-          {isEdit ? (
-            <InfoWrap>
-              <ul>
-                <li>
-                  <span>닉네임</span>
-                  <InputInfo
-                    onChange={OnChangeHandler}
-                    name="nickname"
-                    value={form?.nickname}
-                  ></InputInfo>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start' }}></li>
-                <li
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    boxShadow: '4px 4px 4px hsla(0, 0%, 0%, 0.25)',
-                    margin: 0,
-                    borderRadius: '10px',
-                  }}
-                >
-                  <AreaTitle>상태 메세지</AreaTitle>
-                  <input
-                    style={{ width: '100%', height: '40px' }}
-                    onChange={OnChangeHandler}
-                    name="statusmessage"
-                    value={form?.statusmessage}
-                  ></input>
-                </li>
-              </ul>
-            </InfoWrap>
-          ) : (
-            <InfoWrap>
-              <ul>
-                <li>
-                  <span>닉네임</span>
-                  <InputInfo
-                    onChange={OnChangeHandler}
-                    name="nickname"
-                    value={form?.result?.nickname}
-                  ></InputInfo>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start' }}></li>
-                <li
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    boxShadow: '4px 4px 4px hsla(0, 0%, 0%, 0.25)',
-                    margin: 0,
-                    borderRadius: '10px',
-                  }}
-                >
-                  <AreaTitle>상태 메세지</AreaTitle>
-                  <input
-                    style={{ width: '100%', height: '40px' }}
-                    onChange={OnChangeHandler}
-                    name="statusmessage"
-                    value={form?.result?.introduction}
-                  ></input>
-                </li>
-              </ul>
-            </InfoWrap>
-          )}
-        </ProfileBox>
-        {/* 수정 모드 / 저장 모드 바꾸기 */}
-        {isEdit ? (
-          <div style={{ margin: '1rem', marginTop: '33px' }}>
-            <BottomStyle type={'save'} onClick={() => imgSubmitHandler()}>
-              저장
-            </BottomStyle>{' '}
-            <BottomStyle
-              type={'cancle'}
-              onClick={() => {
-                navigate('/subwaypage');
-              }}
-            >
-              취소
-            </BottomStyle>
-          </div>
-        ) : (
-          <div style={{ margin: '1rem', marginTop: '33px' }}>
-            <BottomStyle type={'save'} onClick={() => setIsEdit(!isEdit)}>
-              수정
-            </BottomStyle>{' '}
-            <BottomStyle
-              type={'cancle'}
-              onClick={() => {
-                navigate('/subwaypage');
-              }}
-            >
-              취소
-            </BottomStyle>
-          </div>
-        )}
-
-        <Customer>
-          <button
-            className="button-notice"
-            onClick={() => {
-              navigate('/customerNotice');
-            }}
-          >
-            고객유의사항
-          </button>
-          <button
-            className="button-guide"
-            onClick={() => {
-              navigate('/customerUserGuide');
-            }}
-          >
-            고객이용가이드
-          </button>
-        </Customer>
-        <div></div>
-        {isModal ? (
+          //
           <ModalCtn>
             <ModalWrap>
               <ModalProfileDiv>{thumb}</ModalProfileDiv>
@@ -402,9 +333,8 @@ const MyPage = () => {
               </ProfileCloseBtn>
             </ModalWrap>
           </ModalCtn>
-        ) : null}
-      </Wrap>
-      <HomeMenu />
+        </>
+      ) : null}
     </>
   );
 };
@@ -443,17 +373,6 @@ const TitleBox = styled.div`
     align-items: center;
     justify-content: center;
   }
-`;
-
-const ProfileBox = styled.div`
-  height: 200px;
-  margin: 0 1rem 0 1rem;
-  padding: 2rem;
-
-  box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
 `;
 
 const ImgWrap = styled.div`
@@ -674,5 +593,31 @@ const Customer = styled.div`
     border-radius: 20px;
     font-size: 14px;
     line-height: 17px;
+  }
+`;
+const TextBox = styled.div`
+  margin-top: ${(props) => props.margin};
+  height: 50px;
+  width: 343px;
+  left: 16px;
+  top: 84px;
+  border-radius: 0px;
+  padding: 10px 0px 10px 0px;
+  border: 1px solid #fcfcfc;
+
+  font-size: 13px;
+  font-weight: 400;
+  color: #979797;
+  &.item {
+    font-size: 14px;
+    font-weight: 400;
+
+    text-align: left;
+    color: #333333;
+  }
+  display: flex;
+  justify-content: space-between;
+  img {
+    cursor: pointer;
   }
 `;

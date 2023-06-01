@@ -97,6 +97,7 @@ const ModalWrap = styled.div`
     width: 375px;
     height: 500px;
     display: flex;
+    transform: scale(1);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -122,6 +123,27 @@ const ImgWrap = styled.div`
   gap: 20px;
   &.profile {
     display: none;
+  }
+  img {
+    .rdg-image {
+      image-rendering: -moz-crisp-edges; /* Firefox */
+      image-rendering: -o-crisp-edges; /* Opera */
+      image-rendering: -webkit-optimize-contrast; /* Webkit 표준 X */
+      image-rendering: crisp-edges;
+      -ms-interpolation-mode: nearest-neighbor; /* IE 표준 X */
+    }
+
+    .rdg-image {
+      -ms-transform: translateZ(0); // ie
+      -moz-transform: translateZ(0); // firefox
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    .rdg-image {
+      -moz-backface-visibility: hidden; // firefox
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
   }
 `;
 
@@ -186,11 +208,32 @@ const NickNameTag = styled.span`
 `;
 //상대방 프로필 이미지
 const CounterProfileImg = styled.img`
+  transform: scale(1);
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 999px;
   cursor: pointer;
+
+  .rdg-image {
+    image-rendering: -moz-crisp-edges; /* Firefox */
+    image-rendering: -o-crisp-edges; /* Opera */
+    image-rendering: -webkit-optimize-contrast; /* Webkit 표준 X */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor; /* IE 표준 X */
+  }
+
+  .rdg-image {
+    -ms-transform: translateZ(0); // ie
+    -moz-transform: translateZ(0); // firefox
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  .rdg-image {
+    -moz-backface-visibility: hidden; // firefox
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
 `;
 //상태메시지 태그
 const StatusTag = styled.div`

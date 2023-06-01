@@ -5,8 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import * as yup from 'yup';
 import { Errormessage } from './EmailLogin';
+import { trainApi } from '../../apis/Instance';
+import { useRecoilState } from 'recoil';
+import { useEmailState } from '../../Recoil/userList';
 
 const Resetpw = () => {
+  const [userEmail, setUserEmail] = useRecoilState(useEmailState);
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -28,8 +32,16 @@ const Resetpw = () => {
   });
   const getFields = getValues();
   const navigate = useNavigate();
-  const confirmHandler = () => {
-    navigate('/auth');
+  const confirmHandler = async (data) => {
+    const email = data.email;
+    setUserEmail(email);
+    try {
+      const response = trainApi.resetPw({ email: email });
+
+      navigate('/auth');
+    } catch (err) {
+      return;
+    }
   };
   return (
     <Wrap>
@@ -37,21 +49,19 @@ const Resetpw = () => {
         <ResetSpan>비밀번호 재설정</ResetSpan>
         <TextSpan>회원가입 시 등록한 이메일 주소를 입력해 주세요.</TextSpan>
       </TextBox>
-      <LoginForm>
+      <LoginForm onSubmit={handleSubmit(confirmHandler)}>
         <Emailinput placeholder="이메일 주소" {...register('email')} />
         {errors?.email?.message && (
           <Errormessage>{errors?.email?.message}</Errormessage>
         )}
+        <ConfirmButton
+          className={
+            !errors?.email?.message && getFields.email !== '' ? 'active' : ''
+          }
+        >
+          확인
+        </ConfirmButton>
       </LoginForm>
-
-      <ConfirmButton
-        className={
-          !errors?.email?.message && getFields.email !== '' ? 'active' : ''
-        }
-        onClick={confirmHandler}
-      >
-        확인
-      </ConfirmButton>
     </Wrap>
   );
 };
@@ -83,7 +93,7 @@ const Passwordinput = styled.input`
   height: 50px;
 `;
 const ConfirmButton = styled.button`
-  margin-top: 56px;
+  margin-top: 30px;
   width: 343px;
   height: 50px;
   color: #ffffff;
