@@ -12,7 +12,10 @@ const useInfoState = atom({
   key: USER_KEY,
   default: [],
 });
-
+const useEmailState = atom({
+  key: 'email',
+  default: { email: '' },
+});
 const usePrimaryState = atom({
   key: PRIMARY_KEY,
   default: [],
@@ -56,4 +59,5 @@ export {
   useSearchState,
   useHistoryState,
   useArriveState,
+  useEmailState,
 };

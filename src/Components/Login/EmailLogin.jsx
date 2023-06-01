@@ -69,7 +69,7 @@ const EmailLogin = () => {
     mode: 'onChange',
   });
   const getFields = getValues();
-
+  console.log(getFields);
   return (
     <Wrap>
       <LoginForm onSubmit={handleSubmit(loginHandler)}>
@@ -85,7 +85,7 @@ const EmailLogin = () => {
           className={
             !errors?.email?.message &&
             !errors?.password?.message &&
-            getFields.email !== '' &&
+            getFields !== '' &&
             getFields.password !== ''
               ? 'active'
               : ''

@@ -25,6 +25,8 @@ import StationSelectPage from '../Pages/Main/StationSelectPage';
 import Loading from '../Components/Loading/Loading';
 import StationSearchPage from '../Pages/Main/StationSearchPage';
 import FailPage from '../Pages/Matching/FailPage';
+import MypagePage from '../Pages/Mypage/MypagePage';
+import NameChangePage from '../Pages/Mypage/NameChangePage';
 
 const LoginPage = lazy(() => import('../Pages/Login'));
 const ConversPage = lazy(() => import('../Pages/ConversPage'));
@@ -51,7 +53,8 @@ const Router = () => {
           <Route path="/setage" element={<SetAgePage />} />
           <Route path="/setprofile" element={<SetProfilePage />} />
           <Route path="/pickprofile" element={<PickProfilePage />} />
-          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage" element={<MypagePage />} />
+
           <Route path="profilepic" element={<ProfilePic />} />
           {/* 메인페이지 라우터 */}
           <Route path="/subwaypage" element={<SubwayPage />} />
@@ -63,9 +66,7 @@ const Router = () => {
           <Route path="/converspage" element={<ConversPage />} />
           <Route path="/chattingpage" element={<ChattingPage />} />
           <Route path="/failpage" element={<FailPage />} />
-
-          <Route path="/customeruserguide" element={<CustomerUserGuide />} />
-          <Route path="/customernotice" element={<CustomerNotice />} />
+          <Route path="/namechange" element={<NameChangePage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

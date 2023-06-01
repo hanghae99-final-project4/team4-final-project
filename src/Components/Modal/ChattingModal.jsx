@@ -11,7 +11,7 @@ const ChattingModal = ({ children }) => {
 };
 
 export default ChattingModal;
-const Modal = styled.div`
+export const Modal = styled.div`
   width: 258px;
   height: 207px;
   background-color: #fff;
