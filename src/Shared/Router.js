@@ -1,14 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NaverLogin from '../Pages/NaverLogin';
-import ChatPage from '../Pages/ChatPage';
 import MainPage from '../Pages/MainPage';
 import ProfilePic from '../Components/Profile/ProfilePic';
 import ChattingPage from '../Pages/ChattingPage';
 import SubwayPage from '../Pages/Main/SubwayPage';
 import { Suspense, lazy } from 'react';
-import CustomerUserGuide from '../Components/Profile/CustomerUserGuide';
-import CustomerNotice from '../Components/Profile/CustomerNotice';
 import KakaoLogin from '../Pages/KakaoLogin';
 import GoogleLogin from '../Pages/GoogleLogin';
 import ResetPage from '../Pages/Login/ResetPage';
@@ -26,7 +23,8 @@ import Loading from '../Components/Loading/Loading';
 import StationSearchPage from '../Pages/Main/StationSearchPage';
 import FailPage from '../Pages/Matching/FailPage';
 import MypagePage from '../Pages/Mypage/MypagePage';
-import NameChangePage from '../Pages/Mypage/NameChangePage';
+import NamePage from '../Pages/Mypage/NamePage';
+import GuidePage from '../Pages/Guide/GuidePage';
 
 const LoginPage = lazy(() => import('../Pages/Login'));
 const ConversPage = lazy(() => import('../Pages/ConversPage'));
@@ -54,6 +52,8 @@ const Router = () => {
           <Route path="/setprofile" element={<SetProfilePage />} />
           <Route path="/pickprofile" element={<PickProfilePage />} />
           <Route path="/mypage" element={<MypagePage />} />
+          <Route path="/changename" element={<NamePage />} />
+          <Route path="/guide" element={<GuidePage />} />
 
           <Route path="profilepic" element={<ProfilePic />} />
           {/* 메인페이지 라우터 */}
@@ -62,11 +62,9 @@ const Router = () => {
           <Route path="/stationsearch" element={<StationSearchPage />} />
 
           <Route path="/main" element={<MainPage />} />
-          <Route path="/chatpage" element={<ChatPage />} />
           <Route path="/converspage" element={<ConversPage />} />
           <Route path="/chattingpage" element={<ChattingPage />} />
           <Route path="/failpage" element={<FailPage />} />
-          <Route path="/namechange" element={<NameChangePage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

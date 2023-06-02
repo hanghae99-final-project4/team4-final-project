@@ -73,6 +73,8 @@ export const trainApi = {
   postUserId: (payload) => instance.post('/user/checkid', payload),
   postSignIn: (payload) => instance.post('/user/login', payload),
   resetPw: (payload) => instance.post('/user/resetpw', payload),
+  patchreputation: (Id, payload) =>
+    instance.patch(`/user/reputation/${Id}`, payload),
   postStatusmessage: (id, payload) =>
     instance.post(`/user/edit/${id}`, payload),
 };

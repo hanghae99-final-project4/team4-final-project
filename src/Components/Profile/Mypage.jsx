@@ -252,7 +252,7 @@ const MyPage = () => {
       <TextBox margin="30px">마이페이지</TextBox>
       <TextBox className="item">
         닉네임변경
-        <img onClick={() => navigate('/namechange')} src={arrowimg} />
+        <img onClick={() => navigate('/changename')} src={arrowimg} />
       </TextBox>
       <TextBox className="item">
         비밀번호 변경

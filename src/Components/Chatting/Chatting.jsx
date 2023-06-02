@@ -672,6 +672,16 @@ const ChatBox = styled.div`
   overflow-y: scroll;
   height: 551px;
   overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 1%;
+
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+  }
 `;
 //프로필 이미지
 const UserProfileImg = styled.img`
