@@ -15,7 +15,11 @@ import { useArriveState, useStationState } from '../../Recoil/userList';
 import { useStation } from '../../MyTools/quries/station';
 import { ModalCtn } from '../Modal/CounterProfileModal';
 import exit from '../../Assets/Modal/status.svg';
-
+import circleimg from '../../Assets/History/circle.svg';
+import upimg from '../../Assets/History/up.svg';
+import downimg from '../../Assets/History/down.svg';
+import normalupimg from '../../Assets/History/normalup.svg';
+import normaldownimg from '../../Assets/History/normaldown.svg';
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
@@ -38,7 +42,7 @@ const Subway = () => {
     navigate('/stationselect');
   };
   //프로필 조회 함수
-  async function getProfile() {
+  const getProfile = useCallback(async () => {
     try {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
@@ -46,8 +50,9 @@ const Subway = () => {
     } catch (err) {
       return;
     }
-  }
-  const getMatch = async () => {
+  }, []);
+
+  const getMatch = useCallback(async () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi.getMatch(Id);
@@ -55,7 +60,7 @@ const Subway = () => {
     } catch (err) {
       return;
     }
-  };
+  }, []);
 
   // localstorage 객체 배열로 만드는 함수
   function setItemWithExpireTime(keyName, keyValue, tts) {
@@ -80,8 +85,30 @@ const Subway = () => {
   const registerHandler = async () => {
     try {
       const id = localStorage.getItem('userId');
-      const { data } = await trainApi.postStatusmessage(id, status);
+      const { data } = await trainApi.postStatusmessage(id, {
+        introduction: status.status,
+      });
+      getProfile();
       setBottomSheet(!bottomSheet);
+    } catch (err) {
+      return;
+    }
+  };
+  const reputationDownHandler = async (Id) => {
+    try {
+      const { data } = await trainApi.patchreputation(Id, {
+        reputation: false,
+      });
+      getMatch();
+    } catch (err) {
+      return;
+    }
+  };
+
+  const reputationUpHandler = async (Id) => {
+    try {
+      const { data } = await trainApi.patchreputation(Id, { reputation: true });
+      getMatch();
     } catch (err) {
       return;
     }
@@ -95,6 +122,7 @@ const Subway = () => {
     },
     [status.status]
   );
+  console.log(profile);
   return (
     <SubwayDiv>
       {bottomSheet && <ModalCtn></ModalCtn>}
@@ -125,7 +153,7 @@ const Subway = () => {
           <span class="guide">환승시민 어떻게 이용하는지 모르시겠다면?</span>
         </div>
         <div>
-          <img src={guide} alt="guide" />
+          <img onClick={() => navigate('/guide')} src={guide} alt="guide" />
         </div>
       </GuideBox>
       <ProfileBox>
@@ -142,7 +170,11 @@ const Subway = () => {
                 alt="write"
               />
 
-              <span>반갑습니다.프로필을 설정 해 주세요</span>
+              <span>
+                {profile?.result?.introduction !== null
+                  ? profile?.result?.introduction
+                  : '반갑습니다. 프로필을 설정 해 주세요'}
+              </span>
             </ApplySet>
           </NicknameBox>
           <Setting onClick={() => navigate('/mypage')}>
@@ -207,27 +239,66 @@ const Subway = () => {
 
       <HistoryBox>
         <span>매칭이력</span>
-        {match.map((item, i) => {
+        {match.map((item, i) => (
           <HistoryItem key={i}>
             <MatchItem>
-              <div>매칭성공</div>
+              <MatchResultBox>
+                <img src={circleimg} />
+                <div>매칭성공</div>
+              </MatchResultBox>
+
               <span>
-                {`${item[i]?.updatedAt.slice(0, 4)} /
-                  ${item[i]?.updateAt.slice(5, 7)} /
-                  ${item[i]?.updateAt.slice(8, 10)}`}
+                {`${item?.updatedAt.slice(0, 4)} /${item?.updatedAt.slice(
+                  5,
+                  7
+                )}/${item?.updatedAt.slice(8, 10)}
+                 `}
               </span>
             </MatchItem>
 
             <MatchNic>
-              {item[i]?.User?.nickname}
+              {item?.User?.nickname}
               <span>님과 매칭 되었습니다.</span>
             </MatchNic>
             <Comment>
               <div>지속적으로 대화 하고 싶으신가요?</div>
-              <img />
+              {item.reputation ? (
+                <LikeBox>
+                  <img
+                    onClick={() => reputationDownHandler(item.id)}
+                    src={normaldownimg}
+                  />
+                  <img
+                    onClick={() => reputationUpHandler(item.id)}
+                    src={upimg}
+                  />
+                </LikeBox>
+              ) : item.reputation === null ? (
+                <LikeBox>
+                  <img
+                    onClick={() => reputationDownHandler(item.id)}
+                    src={normaldownimg}
+                  />
+                  <img
+                    onClick={() => reputationUpHandler(item.id)}
+                    src={normalupimg}
+                  />
+                </LikeBox>
+              ) : (
+                <LikeBox>
+                  <img
+                    onClick={() => reputationDownHandler(item.id)}
+                    src={downimg}
+                  />
+                  <img
+                    onClick={() => reputationUpHandler(item.id)}
+                    src={normalupimg}
+                  />
+                </LikeBox>
+              )}
             </Comment>
-          </HistoryItem>;
-        })}
+          </HistoryItem>
+        ))}
       </HistoryBox>
       <Kakao />
     </SubwayDiv>
@@ -343,6 +414,9 @@ export const ApplySet = styled.div`
 `;
 const Setting = styled.div`
   cursor: pointer;
+  position: absolute;
+  right: 23.3px;
+
   margin-left: 34px;
   width: 22.67px;
   height: 22.67px;
@@ -586,10 +660,28 @@ const MatchItem = styled.div`
   }
 `;
 const Comment = styled.div`
-  margin-top: 18px;
+  margin-top: 11px;
   font-size: 14px;
   font-weight: 400;
   color: #6c6c6c;
   display: flex;
   justify-content: space-between;
+`;
+const Curcle = styled.div`
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px soild #8fb398;
+`;
+const MatchResultBox = styled.div`
+  display: flex;
+  gap: 7px;
+`;
+const LikeBox = styled.div`
+  margin-bottom: 15px;
+  display: flex;
+  gap: 15px;
+  img {
+    cursor: pointer;
+  }
 `;
