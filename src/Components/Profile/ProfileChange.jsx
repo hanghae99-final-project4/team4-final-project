@@ -161,7 +161,7 @@ const ProfileChange = () => {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
       await patchProfile();
-      navigate('/mypage');
+      navigate('/changename');
     } catch (error) {
       return;
     }
