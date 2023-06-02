@@ -1,36 +1,37 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import camera from '../../Assets/SetProfile/camera.svg';
 import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import {
-  useAgreeState,
-  useInfoState,
-  usePrimaryState,
-} from '../../Recoil/userList';
+import { useInfoState, usePrimaryState } from '../../Recoil/userList';
 import { useState } from 'react';
-import { trainApi2 } from '../../apis/Instance';
+import { trainApi, trainApi2 } from '../../apis/Instance';
 import { CloseCircleFilled } from '@ant-design/icons';
 import deleteimg from '../../Assets/SetProfile/close.svg';
 import useInput from '../../MyTools/Hooks/UseInput';
 import { useNavigate } from 'react-router-dom';
 
-const PickProfile = () => {
+const ProfileChange = () => {
   const navigate = useNavigate();
 
   const [image, setImage] = useRecoilState(useInfoState);
-  const [profile, setProfile] = useRecoilState(usePrimaryState);
+  const [primary, setPrimary] = useRecoilState(usePrimaryState);
+  const [profile, setProfile] = useState([]);
   const [files, setFiles] = useState([]);
   const [form, setForm, OnChangeHandler] = useInput([]);
   const [primaryImage, setPrimaryImage] = useState([]);
+  const [changeprofile, setChangeprofile] = useState([]);
   const cameraref = useRef();
   const uploadHandler = () => {
     cameraref.current.click();
   };
-
+  console.log(profile);
   //사진 업로드 시 파일
+  useEffect(() => {
+    getProfile();
+  }, []);
   const formSubmit = (e) => {
-    let temp = [...image];
+    let temp = [...profile];
     const photoList = e.target.files;
 
     for (let i = 0; i < photoList.length; i++) {
@@ -50,18 +51,75 @@ const PickProfile = () => {
     // 첫 번째 사진을 기본 프로필로 설정
     if (temp.length > 0) {
       temp[0].isMainProfile = true;
-      setProfile([{ file: temp[0].file, url: temp[0].image_url }]);
+      setPrimary([{ file: temp[0].file, url: temp[0].image_url }]);
     }
 
-    setImage(temp.concat(files));
+    setProfile(temp.concat(files));
   };
 
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
     const Id = localStorage.getItem('userId');
     try {
-      setImage(image.filter((item) => item.image_url !== deleteUrl));
+      const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
+      setProfile(profile.filter((item) => item.image_url !== deleteUrl));
     } catch (error) {
+      return;
+    }
+  };
+
+  //대표 프로필 수정
+  const patchProfile = async () => {
+    //기존 대표 이미지
+    const originProfile = profile?.filter((item) => item?.is_primary === true);
+
+    //프로필 사진들
+    const newProfile = [...profile];
+    //새로운 대표 이미지
+    const changenewProfile = profile?.filter(
+      (item) => item.image_url === primaryImage[0].url
+    );
+    setProfile(profile, changenewProfile);
+
+    //기존의 있던 대표 이미지
+    const changeProfile = profile.filter(
+      (item) => item.image_url === originProfile
+    );
+
+    // setChangeprofile(
+    const newArr = newProfile
+      .map((item) =>
+        item.image_url === changenewProfile[0].image_url
+          ? { ...item, is_primary: true }
+          : item
+      )
+      .filter((item) => item.image_url === changenewProfile[0].image_url);
+
+    const origin = newProfile
+      .map((item) =>
+        item.image_url === originProfile[0].image_url
+          ? { ...item, is_primary: false }
+          : item
+      )
+      .filter((item) => item.image_url === originProfile[0].image_url);
+
+    try {
+      const Id = localStorage.getItem('userId');
+      const { data } = await trainApi2.patchProfile(Id, newArr[0], origin[0]);
+
+      getProfile();
+    } catch (error) {
+      return;
+    }
+  };
+
+  const getProfile = async () => {
+    try {
+      const userId = localStorage.getItem('userId');
+      const { data } = await trainApi.getConvers(userId);
+
+      setProfile(data.userInfo.images);
+    } catch (err) {
       return;
     }
   };
@@ -72,14 +130,22 @@ const PickProfile = () => {
       navigate(-1);
     }
   };
+  // 핸들클릭 이벤트
+  const handleProfileClick = (item) => {
+    console.log(item);
+    const updatedImage = profile.map((photo) => ({
+      ...photo,
+      isMainProfile: photo === item,
+    }));
+    setProfile(updatedImage);
+  };
 
-  //사진 업로드
-
+  //저장 핸들러
   const uploadFile = async () => {
     const formData = new FormData();
-    for (let i = 0; i < image.length; i++) {
-      if (image[i].file !== undefined)
-        formData.append('otherImages', image[i].file);
+    for (let i = 0; i < profile.length; i++) {
+      if (profile[i].file !== undefined)
+        formData.append('otherImages', profile[i].file);
     }
     if (primaryImage[0]?.file !== undefined)
       formData.append('primaryImage', primaryImage[0]?.file);
@@ -94,18 +160,11 @@ const PickProfile = () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
-      navigate('/changename');
+      await patchProfile();
+      navigate('/mypage');
     } catch (error) {
       return;
     }
-  };
-  const handleProfileClick = (item) => {
-    console.log(item);
-    const updatedImage = image.map((photo) => ({
-      ...photo,
-      isMainProfile: photo === item,
-    }));
-    setImage(updatedImage);
   };
 
   return (
@@ -116,7 +175,7 @@ const PickProfile = () => {
       </SpanBox>
       <ImgBox>
         <Camera onClick={uploadHandler} src={camera} alt="camera" />
-        {image?.map((item, index) => (
+        {profile?.map((item, index) => (
           <CameraBox
             onClick={() => handleProfileClick(item)}
             className={item?.isMainProfile ? 'main' : null}
@@ -128,7 +187,7 @@ const PickProfile = () => {
             />
             <Profile
               onClick={() =>
-                setProfile([{ file: item.file, url: item.image_url }])
+                setPrimaryImage([{ file: item.file, url: item.image_url }])
               }
               src={item.image_url}
               key={index}
@@ -154,7 +213,7 @@ const PickProfile = () => {
   );
 };
 
-export default PickProfile;
+export default ProfileChange;
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;

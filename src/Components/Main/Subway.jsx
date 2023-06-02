@@ -61,7 +61,7 @@ const Subway = () => {
       return;
     }
   }, []);
-
+  console.log(profile);
   // localstorage 객체 배열로 만드는 함수
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
@@ -159,7 +159,13 @@ const Subway = () => {
       <ProfileBox>
         <Profile>
           <Img>
-            <img src={profile?.images?.[0]?.image_url} alt="profile" />
+            <img
+              src={
+                profile?.images?.filter((item) => item.is_primary === true)?.[0]
+                  ?.image_url
+              }
+              alt="profile"
+            />
           </Img>
           <NicknameBox>
             <Nickname>{profile?.result?.nickname}</Nickname>

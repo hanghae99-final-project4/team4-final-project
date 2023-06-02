@@ -102,6 +102,7 @@ const ProfileSet = () => {
         )}
       </GifBox>
       <Nickname
+        margin="40px"
         onChange={OnChangeHandler}
         value={form.nickname}
         name="nickname"
@@ -142,7 +143,7 @@ const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const GifBox = styled.div`
+export const GifBox = styled.div`
   margin-top: 92px;
   display: flex;
   flex-direction: column;
@@ -175,7 +176,7 @@ export const Avatar = styled.img`
 export const Nickname = styled.input`
   border-radius: 4px;
   padding: 12px;
-  margin-top: 40px;
+  margin-top: ${(props) => props.margin};
   width: 281px;
   height: 40px;
   border: 1px solid #bcbcbc;
@@ -207,6 +208,7 @@ export const Upload = styled.img`
   margin-left: 79px;
   margin-top: -34px;
   z-index: 999;
+  cursor: pointer;
 `;
 const ButtonBox = styled.div`
   margin-top: 203px;
