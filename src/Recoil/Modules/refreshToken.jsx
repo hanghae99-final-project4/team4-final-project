@@ -15,9 +15,11 @@ const refreshTokenFn = async () => {
 
     const acctoken = data?.acctoken;
     console.log(acctoken);
-    if (!acctoken) {
-      localStorage.removeItem('token');
+    if (!acctoken || acctoken.error) {
+      alert('로그인이 만료되었습니다.');
+      window.location.href = '/';
     }
+
     localStorage.setItem('token', acctoken);
     return data;
   } catch (error) {

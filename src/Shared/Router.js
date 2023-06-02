@@ -25,6 +25,8 @@ import FailPage from '../Pages/Matching/FailPage';
 import MypagePage from '../Pages/Mypage/MypagePage';
 import NamePage from '../Pages/Mypage/NamePage';
 import GuidePage from '../Pages/Guide/GuidePage';
+import ProfileChange from '../Components/Profile/ProfileChange';
+import ProfilePage from '../Pages/Mypage/ProfilePage';
 
 const LoginPage = lazy(() => import('../Pages/Login'));
 const ConversPage = lazy(() => import('../Pages/ConversPage'));
@@ -54,6 +56,7 @@ const Router = () => {
           <Route path="/mypage" element={<MypagePage />} />
           <Route path="/changename" element={<NamePage />} />
           <Route path="/guide" element={<GuidePage />} />
+          <Route path="/changeprofile" element={<ProfilePage />} />
 
           <Route path="profilepic" element={<ProfilePic />} />
           {/* 메인페이지 라우터 */}

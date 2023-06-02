@@ -50,6 +50,11 @@ const useArriveState = atom({
   key: ARRIVE_KEY,
   default: [],
 });
+//프로필 변경
+const usePatchState = atom({
+  key: 'patch',
+  default: [],
+});
 export {
   useInfoState,
   usePrimaryState,
@@ -60,4 +65,5 @@ export {
   useHistoryState,
   useArriveState,
   useEmailState,
+  usePatchState,
 };
