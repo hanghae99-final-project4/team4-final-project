@@ -35,6 +35,20 @@ const NameChange = () => {
     [nickname.nickname]
   );
 
+  const patchnameHandler = async () => {
+    const Id = localStorage.getItem('userId');
+    try {
+      const { data } = trainApi.postStatusmessage(Id, {
+        nickname: nickname.nickname,
+      });
+      alert('닉네임이 변경 되었습니다.');
+      getProfile();
+      navigate('/mypage');
+    } catch (err) {
+      return;
+    }
+  };
+
   const changeprofileHandler = () => {
     navigate('/changeprofile');
   };
@@ -59,7 +73,7 @@ const NameChange = () => {
           name="nickname"
           placeholder="사용하실 닉네임"
         />
-        <button>중복확인</button>
+        <button onClick={patchnameHandler}>중복확인</button>
       </NicknameBox>
     </Wrap>
   );

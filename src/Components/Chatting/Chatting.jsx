@@ -202,11 +202,11 @@ const Chatting = () => {
       }
       console.log(message);
       console.log(chatArr);
-
+      console.log(room);
       setChatArr((prevChatArr) => [
         ...prevChatArr,
         {
-          roomkey: message.roomkey,
+          roomkey: roomkey,
           nickname: message.name,
           msg: message.msg,
           profile: message.profile,
@@ -235,13 +235,8 @@ const Chatting = () => {
   });
 
   //submithandler
-  const SubmitHandler = (e) => {
-    console.log(e);
+  const SubmitHandler = (e, callback) => {
     e.preventDefault();
-    if (file?.name !== undefined) {
-      postSend();
-      setFile([]);
-    }
     console.log('여기까지 실행');
 
     if (message.msg !== '') {
@@ -258,27 +253,43 @@ const Chatting = () => {
         profile: message.url,
       });
       reset(initialState);
+      if (callback) {
+        callback();
+      }
     }
   };
+  console.log(chatArr);
 
   //이미지 비디오 보내는 로직
-  async function postSend() {
-    const formData = new FormData();
-    formData.append('chatImage', file);
-
-    for (const key of formData.entries()) {
-    }
-    try {
-      const name = JSON.parse(localStorage.getItem('nickname')).value;
-      const { data } = await trainApi2.chattingForm(name, formData);
-      socket.emit('persnalchat', {
-        profile: message.url,
-        url: data?.url,
-        nickname: data?.id,
-        roomkey: room,
-      });
-    } catch (error) {
+  async function postSend(img) {
+    if (!img) {
+      console.log('No file selected');
       return;
+    }
+
+    if (img.size === 0) {
+      console.log('Empty file');
+      return;
+    }
+    if (img && img.size > 0) {
+      const formData = new FormData();
+      formData.append('chatImage', img);
+
+      try {
+        const name = JSON.parse(localStorage.getItem('nickname')).value;
+        const { data } = await trainApi2.chattingForm(name, formData);
+        console.log(data);
+        socket.emit('persnalchat', {
+          profile: message.url,
+          url: data?.url,
+          nickname: message?.nickname,
+          roomkey: room,
+        });
+      } catch (error) {
+        return;
+      }
+    } else {
+      console.log('Invalid log');
     }
   }
 
@@ -331,13 +342,14 @@ const Chatting = () => {
               <ConversatonTime>
                 <span>대화 시간</span>
                 <Timer
-                  reset={timereset}
-                  setReset={setTimeReset}
+                  addModal={addModal}
+                  setAddModal={setAddModal}
                   leave={leave}
                   setLeave={setLeave}
+                  setTimeReset={setTimeReset}
+                  timereset={timereset}
                   margin="80px"
                 />
-                <button onClick={addTimeHandler}>추가</button>
               </ConversatonTime>
 
               <ChatMainDiv ref={boxRef}>
@@ -446,15 +458,6 @@ const Chatting = () => {
                                 >
                                   {item.msg}
                                 </ChatDiv>
-                              ) : item.url?.split('.')[5] == 'mp4' ? (
-                                <>
-                                  <ChatVideo
-                                    className={
-                                      name === item.nickname && 'owner'
-                                    }
-                                    src={item?.url}
-                                  />
-                                </>
                               ) : (
                                 // <div>mp4</div>
                                 <>
@@ -470,8 +473,59 @@ const Chatting = () => {
                               )}
                             </ChatBoxTime>
                           </UserProfileDiv>
-                        ) : // profile 이 없는 사람은 기본 프로필 설정 삼항 연산자
+                        ) : item.nickname === '아이스 브레이킹 봇' ? (
+                          <UserProfileDiv>
+                            <UserProfileImg src={item.profile} />
+                            <UserProfileNameChat>
+                              <UserProfileName>{item.nickname}</UserProfileName>
+                              {item.msg ? (
+                                <ChatDiv
+                                  className={
+                                    item.nickname === '아이스 브레이킹 봇' &&
+                                    'bot'
+                                  }
+                                >
+                                  {item.msg}
+                                  <ButtonBox>
+                                    <button>산</button>
+                                    <button>바다</button>
+                                  </ButtonBox>
+                                </ChatDiv>
+                              ) : item.url?.split('.')[5] == 'mp4' ? (
+                                <>
+                                  <ChatVideo
+                                    className={
+                                      item.nickname === '아이스 브레이킹 봇' &&
+                                      'bot'
+                                    }
+                                    src={item?.url}
+                                  />
+                                </>
+                              ) : (
+                                // <div>mp4</div>
+                                <>
+                                  <ChatImg
+                                    className={
+                                      item.nickname === '아이스 브레이킹 봇' &&
+                                      'bot'
+                                    }
+                                    imgurl={item?.url}
+                                  />
+                                </>
 
+                                // <div>img</div>
+                              )}
+                            </UserProfileNameChat>
+                            <Time>
+                              {new Date().getHours() +
+                                ':' +
+                                String(new Date().getMinutes()).padStart(
+                                  2,
+                                  '0'
+                                )}
+                            </Time>
+                          </UserProfileDiv>
+                        ) : // profile 이 없는 사람은 기본 프로필 설정 삼항 연산자
                         item.profile !== undefined ? (
                           <UserProfileDiv>
                             <UserProfileImg
@@ -534,16 +588,6 @@ const Chatting = () => {
                                 >
                                   {item.msg}
                                 </ChatDiv>
-                              ) : item.url?.split('.')[5] == 'mp4' ? (
-                                <>
-                                  <ChatVideo
-                                    className={
-                                      name === item.nickname && 'owner'
-                                    }
-                                    src={item?.url}
-                                  />
-                                  <Download href={item?.url}>다운로드</Download>
-                                </>
                               ) : (
                                 // <div>mp4</div>
                                 <>
@@ -553,7 +597,6 @@ const Chatting = () => {
                                     }
                                     imgurl={item?.url}
                                   />
-                                  <Download href={item?.url}>다운로드</Download>
                                 </>
 
                                 // <div>img</div>
@@ -589,7 +632,7 @@ const Chatting = () => {
                   value={file?.picture}
                   accept="image/*,video/*"
                   multiple
-                  onChange={(e) => setFile(e.target.files[0])}
+                  onChange={(e) => postSend(e.target.files[0])}
                 />
                 <ImageFormIcon inputRef={inputRef} />
                 <InputSendBox>
@@ -720,6 +763,16 @@ const ChatDiv = styled.div`
     background-color: #fa3a45;
     margin-right: 16px;
   }
+  &.bot {
+    max-width: 240px;
+    max-height: 185px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: 4px;
+    padding: 8px 10px 15px 10px;
+  }
 `;
 const ConversatonTime = styled.div`
   width: 343px;
@@ -791,8 +844,8 @@ const ChatImg = styled.div`
   background-repeat: repeat;
   background-image: ${({ imgurl }) => `url(${imgurl})`};
   background-position: center;
-  width: 300px;
-  height: 300px;
+  width: 150px;
+  height: 150px;
   border-radius: 10%;
   border: none;
   @media only screen and (min-width: 320px) and (max-width: 650px) {
@@ -974,3 +1027,20 @@ const StatusMessage = styled.div`
   margin-left: 17px;
 `;
 //
+const ButtonBox = styled.div`
+  margin-top: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  button {
+    height: 30px;
+    width: 220px;
+
+    border-radius: 4px;
+    background-color: #8fb398;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+  }
+`;

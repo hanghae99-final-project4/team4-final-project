@@ -38,8 +38,7 @@ export const trainApi2 = {
   //signup
   postProficForm: (payload) => instanceF.post('/user', payload),
   postProfile: (Id, payload) => instanceF.post(`/user/upload/${Id}`, payload),
-  chattingForm: (name, formData) =>
-    instanceF.post(`/user/chatimg/${name}`, formData),
+  chattingForm: (name, formData) => instanceF.post(`/images`, formData),
   deleteProfile: (Id, deleteUrl) =>
     instance.delete(`user/images/${Id}`, { data: [{ url: deleteUrl }] }),
   patchProfile: (Id, otherimage, primaryimage) =>

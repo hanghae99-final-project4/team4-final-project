@@ -1,18 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const Timer = ({ margin, leave, setLeave, reset, setTimeReset }) => {
+const Timer = ({
+  margin,
+  leave,
+  setLeave,
+  addModal,
+  setAddModal,
+  timereset,
+  setTimeReset,
+}) => {
   const [min, setMin] = useState(3);
   const [sec, setSec] = useState(0);
+  const [add, setAdd] = useState(false);
 
   const timerId = useRef(null);
   const time = useRef(180);
-  console.log(reset);
+
+  const addTimeHandler = () => {
+    console.log(timereset);
+    setAddModal(!addModal);
+  };
+
   useEffect(() => {
-    if (reset) {
-      time.current += 180;
-      setTimeReset(!reset);
-    }
     timerId.current = setInterval(() => {
       setMin(String(parseInt(time.current / 60)).padStart(2, '0'));
       setSec(String(time.current % 60).padStart(2, '0'));
@@ -28,10 +38,17 @@ const Timer = ({ margin, leave, setLeave, reset, setTimeReset }) => {
       clearInterval(timerId.current);
     }
   }, [sec]);
+  useEffect(() => {
+    if (timereset) {
+      time.current += 180;
+      setTimeReset(false);
+    }
+  }, [timereset]);
 
   return (
     <TimerBox className={time.current <= 30 ? 'red' : ''}>
       {min}:{sec}
+      <button onClick={addTimeHandler}>추가</button>
     </TimerBox>
   );
 };
@@ -51,19 +68,11 @@ const TimerBox = styled.div`
 
     @keyframes bounce {
       0% {
-        top: 0;
-      }
-
-      50% {
-        top: -5px;
-      }
-
-      70% {
-        top: -50px;
+        opacity: 0;
       }
 
       100% {
-        top: 0;
+        opacity: 1;
       }
     }
   }
