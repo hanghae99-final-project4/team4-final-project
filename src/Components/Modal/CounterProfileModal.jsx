@@ -35,17 +35,18 @@ const CounterProfileModal = ({
           <img src={right} />
         </ImgWrap>
         <Nickname className={image ? 'profile' : ''}>
-          <NickNameTag>{nickname}</NickNameTag>
+          {nickname && <NickNameTag>{nickname}</NickNameTag>}
+          {!nickname && <NickNameTag>{'닉네임 설정을 해주세요'}</NickNameTag>}
 
           <Stick></Stick>
-          <NickNameTag>{'남자'}</NickNameTag>
+          {gender ? (
+            <NickNameTag>{gender}</NickNameTag>
+          ) : (
+            <NickNameTag>{'성별이 없습니다'}</NickNameTag>
+          )}
         </Nickname>
         <StatusTag className={image ? 'profile' : ''}>
-          <StatusMessage>
-            {
-              ' 내 나이를 물으신다면 대답 해 드리는게 인지상정 ! 나 로사, 나 로이 난 냐옹이다옹'
-            }
-          </StatusMessage>
+          <StatusMessage>{statusmessage}</StatusMessage>
         </StatusTag>
         <ExitBtn className={image ? 'profile' : ''} onClick={exitHandler}>
           닫기
