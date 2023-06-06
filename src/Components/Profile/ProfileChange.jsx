@@ -53,7 +53,7 @@ const ProfileChange = () => {
     // 첫 번째 사진을 기본 프로필로 설정
     if (temp.length > 0) {
       temp[0].isMainProfile = true;
-      setPrimary([{ file: temp[0].file, url: temp[0].image_url }]);
+      setPrimaryImage([{ file: temp[0].file, url: temp[0].image_url }]);
     }
 
     setProfile(temp.concat(files));
@@ -108,6 +108,9 @@ const ProfileChange = () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.patchProfile(Id, newArr[0], origin[0]);
+      if (data) {
+        window.alert('대표프로필이 수정 되었습니다.');
+      }
 
       getProfile();
     } catch (error) {
@@ -126,11 +129,9 @@ const ProfileChange = () => {
     }
   };
   const cancelHandler = () => {
-    if (window.confirm('사진 첨부를 취소하시겠어요?') === true) {
-      setImage([]);
-      setProfile([]);
-      navigate(-1);
-    }
+    setImage([]);
+    setProfile([]);
+    navigate(-1);
   };
   // 핸들클릭 이벤트
   const handleProfileClick = (item) => {
@@ -161,7 +162,15 @@ const ProfileChange = () => {
 
     try {
       const Id = localStorage.getItem('userId');
+      console.log(profile);
+
       const { data } = await trainApi2.postProfile(Id, formData);
+      if (data?.msg?.length !== 0) {
+        window.alert('프로필이 등록 되었습니다.');
+        navigate('/changename');
+      }
+      // 배열 &&  빈배열일때 빈배열 == 변경 값이 없을땐 patch
+
       await patchProfile();
       navigate('/changename');
     } catch (error) {
@@ -208,7 +217,7 @@ const ProfileChange = () => {
         />
       </ImgBox>
       <ButtonBox>
-        <CancelButton onClick={cancelHandler}>취소</CancelButton>
+        <CancelButton onClick={cancelHandler}>나가기</CancelButton>
         <ApplyButton onClick={() => uploadFile()}>적용</ApplyButton>
       </ButtonBox>
     </Wrap>
