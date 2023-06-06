@@ -43,7 +43,6 @@ const NameChange = () => {
       });
       alert('닉네임이 변경 되었습니다.');
       getProfile();
-      navigate('/mypage');
     } catch (err) {
       return;
     }

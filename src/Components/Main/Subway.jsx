@@ -20,6 +20,7 @@ import upimg from '../../Assets/History/up.svg';
 import downimg from '../../Assets/History/down.svg';
 import normalupimg from '../../Assets/History/normalup.svg';
 import normaldownimg from '../../Assets/History/normaldown.svg';
+import ProfileSlick from '../Slick/ProfileSlick';
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
