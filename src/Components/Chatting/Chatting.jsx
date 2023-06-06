@@ -92,7 +92,7 @@ const Chatting = () => {
   const randomChatHandler = (chatArray) => {
     return setChatData(chatArray[Math.floor(Math.random() * chatArray.length)]);
   };
-  console.log(chatData);
+
   // function setItemWithExpireTime(keyName, keyValue, tts) {
   //   // localStorage에 저장할 객체
   //   const obj = {
@@ -107,7 +107,6 @@ const Chatting = () => {
   //   window.localStorage.setItem(keyName, objString);
   // }
   const scrollEvent = _.debounce(() => {
-    console.log('scroll');
     const scrollTop = boxRef.current.scrollTop; //요소의 상단에서 맨 위에 표시 되는 콘텐츠까지의 거리를 측정한 것입니다.
     const clientHeight = boxRef.current.clientHeight; //뷰포트의 높이
     const scrollHeight = boxRef.current.scrollHeight; //뷰포트에 모든 콘텐츠를 맞추기 위해 요소에 필요한 최소 높이와 같습니다.
@@ -163,12 +162,8 @@ const Chatting = () => {
 
   const handleSocketMessage = (message) => {
     if (message.roomkey !== null) {
-      console.log(message.roomkey);
-      console.log(message, `입장 시 불러오는 socket.on`);
-
       setCounter(message);
-      console.log(message);
-      console.log(message.roomkey);
+
       if (message.roomkey !== undefined) {
         setRoom(message.roomkey);
       }
@@ -183,12 +178,9 @@ const Chatting = () => {
         socket.emit('joinroom', message.roomkey);
 
         setSuccess(true);
-        console.log('실행됨', success);
       } else {
         navigate('/failpage');
-        console.log(message);
       }
-      console.log('success', success);
     }
   };
 
@@ -197,9 +189,7 @@ const Chatting = () => {
     if (message.leave === true) {
       setLeave(true);
     }
-    console.log(message);
-    console.log(chatArr);
-    console.log(room);
+
     setChatArr((prevChatArr) => [
       ...prevChatArr,
       {
@@ -245,7 +235,6 @@ const Chatting = () => {
   //submithandler
   const SubmitHandler = (e, callback) => {
     e.preventDefault();
-    console.log('여기까지 실행');
 
     if (message.msg !== '') {
       socket.emit('persnalchat', {
@@ -254,29 +243,21 @@ const Chatting = () => {
         nickname: message.nickname,
         profile: message.url,
       });
-      console.log('chatting', {
-        roomkey: room,
-        name: message.nickname,
-        msg: message.msg,
-        profile: message.url,
-      });
+
       reset(initialState);
       if (callback) {
         callback();
       }
     }
   };
-  console.log(chatArr);
 
   //이미지 비디오 보내는 로직
   async function postSend(img) {
     if (!img) {
-      console.log('No file selected');
       return;
     }
 
     if (img.size === 0) {
-      console.log('Empty file');
       return;
     }
     if (img && img.size > 0) {
@@ -286,7 +267,7 @@ const Chatting = () => {
       try {
         const name = JSON.parse(localStorage.getItem('nickname')).value;
         const { data } = await trainApi2.chattingForm(name, formData);
-        console.log(data);
+
         socket.emit('persnalchat', {
           profile: message.url,
           url: data?.url,
@@ -297,13 +278,10 @@ const Chatting = () => {
         return;
       }
     } else {
-      console.log('Invalid log');
     }
   }
 
-  socket.on('imgaeUP', (message) => {
-    console.log(message);
-  });
+  socket.on('imgaeUP', (message) => {});
   // 나가기 동작 핸들러
   const leaveHandler = () => {
     socket.off('stop');
@@ -329,6 +307,14 @@ const Chatting = () => {
     }
 
     socket.emit('chat-bot', roomkey, chatArray[cnt]);
+  };
+  const buttonHandler = (item) => {
+    socket.emit('persnalchat', {
+      roomkey: room,
+      msg: item,
+      nickname: name,
+      profile: profile,
+    });
   };
 
   return (
@@ -508,10 +494,18 @@ const Chatting = () => {
                                 >
                                   {item.msg}
                                   <ButtonBox>
-                                    <button>
+                                    <button
+                                      onClick={() =>
+                                        buttonHandler(item?.chatbot[0])
+                                      }
+                                    >
                                       {item.chatbot && item?.chatbot[0]}
                                     </button>
-                                    <button>
+                                    <button
+                                      onClick={() =>
+                                        buttonHandler(item?.chatbot[1])
+                                      }
+                                    >
                                       {item.chatbot && item?.chatbot[1]}
                                     </button>
                                   </ButtonBox>
