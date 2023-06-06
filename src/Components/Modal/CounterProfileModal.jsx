@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import left from '../../Assets/Modal/left.svg';
 import right from '../../Assets/Modal/right.svg';
 import exit from '../../Assets/Chatting/Exit.svg';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 const CounterProfileModal = ({
   isModal,
   setIsModal,
@@ -13,26 +15,68 @@ const CounterProfileModal = ({
   representProfile,
 }) => {
   const [image, setImage] = useState(false);
+  //클릭하면 프로필 자세히보기
+  const [current, setCurrent] = useState(0);
+  const [profile, setProfile] = useState(representProfile?.[0]?.image_url);
+
+  // 슬라이드 이동 만들기
+
+  const [style, setStyle] = useState({
+    marginLeft: `-${current}00%`,
+  });
+
+  const imgSize = useRef(representProfile?.length);
+
+  // 슬라이드 버튼 이전 핸들러
+  const handleSwipe = (direction) => {
+    let next = current + direction;
+    if (next < 0) next = imgSize.current - 1;
+    else if (next >= imgSize.current) next = 0;
+
+    setCurrent(next);
+  };
+
+  // 자동으로 찾기
+  useEffect(() => {
+    setStyle({ marginLeft: `-${current}00%` });
+  }, [current]);
+
+  //슬라이드 버튼 다음 핸들러
+  //모달창 끄기 버튼
   const exitHandler = () => {
     setIsModal(!isModal);
   };
+
+  const ImageHandler = (img) => {
+    setImage(true);
+    setProfile(img);
+  };
+
   return (
     <ModalCtn className={image ? 'profile' : ''}>
-      <ModalWrap
-        background={representProfile}
-        className={image ? 'profile' : ''}
-      >
+      <ModalWrap background={profile} className={image ? 'profile' : ''}>
         <ImgWrap
           className={image ? 'profile' : ''}
-          background={representProfile}
+          background={representProfile?.[current]?.image_url}
         >
-          <img src={left} />
-          <CounterProfileImg
-            className={image ? 'profile' : ''}
-            onClick={() => setImage(true)}
-            src={representProfile}
-          />
-          <img src={right} />
+          <img onClick={() => handleSwipe(-1)} src={left} />
+          <div
+            representProfile={representProfile?.[current]?.image_url}
+            current={current}
+            className="slider-track"
+          >
+            <div style={style} className="flex">
+              {representProfile?.map((item, i) => (
+                <CounterProfileImg
+                  className={image ? 'profile' : ''}
+                  onClick={() => ImageHandler(item?.image_url)}
+                  src={item?.image_url}
+                />
+              ))}
+            </div>
+          </div>
+
+          <img onClick={() => handleSwipe(1)} src={right} />
         </ImgWrap>
         <Nickname className={image ? 'profile' : ''}>
           {nickname && <NickNameTag>{nickname}</NickNameTag>}
@@ -101,7 +145,7 @@ const ModalWrap = styled.div`
     transform: scale(1);
     background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     background-image: ${(props) => `url(${props.background})`};
   }
 `;
@@ -118,7 +162,7 @@ const ImgWrap = styled.div`
   background-size: cover;
   width: 300px;
   height: 162px;
-  filter: blur(1.5px);
+
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -126,6 +170,7 @@ const ImgWrap = styled.div`
     display: none;
   }
   img {
+    cursor: pointer;
     .rdg-image {
       image-rendering: -moz-crisp-edges; /* Firefox */
       image-rendering: -o-crisp-edges; /* Opera */
@@ -144,6 +189,19 @@ const ImgWrap = styled.div`
       -moz-backface-visibility: hidden; // firefox
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+    }
+  }
+  //
+  div {
+    transition: all 0.3s ease-in-out;
+    &.slider-track {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      overflow: hidden;
+    }
+    &.flex {
+      display: flex;
     }
   }
 `;
@@ -187,7 +245,7 @@ const Stick = styled.div`
 //닉네임 값
 const Nickname = styled.div`
   height: 30px;
-  width: 160px;
+
   position: relative;
   bottom: 15px;
   border-radius: 999px;
@@ -209,12 +267,13 @@ const NickNameTag = styled.span`
 `;
 //상대방 프로필 이미지
 const CounterProfileImg = styled.img`
-  transform: scale(1);
   width: 100px;
   height: 100px;
   object-fit: cover;
+  background-repeat: no-repeat;
   border-radius: 999px;
   cursor: pointer;
+  flex: none;
 
   .rdg-image {
     image-rendering: -moz-crisp-edges; /* Firefox */

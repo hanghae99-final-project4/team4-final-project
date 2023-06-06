@@ -355,7 +355,7 @@ const Chatting = () => {
                     gender={counterUser?.result?.gender}
                     statusmessage={counterUser?.result?.introduction}
                     nickname={counterUser?.result?.nickname}
-                    representProfile={counter?.profile}
+                    representProfile={counterUser?.images}
                     setCounterUser={setCounterUser}
                     couterUser={counterUser}
                     isModal={isModal}
