@@ -48,12 +48,6 @@ const Subway = () => {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
       setProfile(data.userInfo);
-      if (
-        data?.userInfo?.result?.gender === null &&
-        data?.userInfo?.result?.nickname === null
-      ) {
-        navigate('/setgender');
-      }
     } catch (err) {
       return;
     }
