@@ -26,10 +26,12 @@ const ProfileChange = () => {
     cameraref.current.click();
   };
   console.log(profile);
-  //사진 업로드 시 파일
+
   useEffect(() => {
     getProfile();
   }, []);
+
+  //사진 업로드 시 파일
   const formSubmit = (e) => {
     let temp = [...profile];
     const photoList = e.target.files;
@@ -331,4 +333,8 @@ const ApplyButton = styled.button`
   border-radius: 4px;
   background-color: rgba(250, 58, 69, 0.3);
   color: #ffffff;
+  transition: 0.1s background-color;
+  &:hover {
+    background-color: #fa3a45;
+  }
 `;

@@ -17,7 +17,7 @@ import CounterProfileModal from '../Modal/CounterProfileModal';
 import { Cookies } from 'react-cookie';
 import { ReactComponent as HeaderPointer } from '../../Assets/HeaderItem/HeaderPointer.svg';
 import sendbtn from '../../Assets/Chatting/trans.svg';
-import { trainApi2 } from '../../apis/Instance';
+import { trainApi, trainApi2 } from '../../apis/Instance';
 import Matching from '../../Pages/Matching/MatchingPage';
 import { useRecoilValue } from 'recoil';
 import { useArriveState, useStationState } from '../../Recoil/userList';
@@ -53,7 +53,7 @@ const Chatting = () => {
   const [message, setMessage, onChangeHandler, reset] = useInput(initialState);
   const [scrollState, setScrollState] = useState(true);
   const [counter, setCounter] = useState([]);
-  const [counterUser, setCounterUser] = useState([]);
+  const [counterUser, setCounterUser] = useState([{}]);
   const [leave, setLeave] = useState(false);
   // 시간 추가 모달
   const [addModal, setAddModal] = useState(false);
@@ -137,18 +137,68 @@ const Chatting = () => {
   // }
 
   //상대방 프로필
-  const CounterUserHandler = () => {
+  const CounterUserHandler = async () => {
     setIsModal(true);
-    socket.emit('counteruser', {
-      fair: counter.fair,
-      ownself: counter.ownself,
-    });
-    socket.on(`${name}`, (message) => {
-      console.log(message, 'counteruser 메시지 잘 받아요');
+    try {
+      const Id = localStorage.getItem('fairId');
+      const { data } = await trainApi.getConvers(Id);
+      setCounterUser(data.userInfo);
+    } catch (err) {
+      return;
+    }
+  };
 
-      setCounterUser(message);
-    });
-    console.log(counterUser, '난 카운터 유저 ');
+  // name handle socket 핸들러
+
+  const handleSocketMessage = (message) => {
+    if (message.roomkey !== null) {
+      console.log(message.roomkey);
+      console.log(message, `입장 시 불러오는 socket.on`);
+
+      setCounter(message);
+      console.log(message);
+      console.log(message.roomkey);
+      if (message.roomkey !== undefined) {
+        setRoom(message.roomkey);
+      }
+      localStorage.setItem('room', message.roomkey);
+      localStorage.setItem('fairId', message.id);
+
+      if (
+        message.fail !==
+        '매칭 가능한 상대방이 없습니다. 다시 시도해주세요. 뀨잉뀨잉'
+      ) {
+        socket.emit('stop', message.roomkey);
+        socket.emit('joinroom', message.roomkey);
+        socket.emit('chat-bot', message.roomkey);
+        setSuccess(true);
+        console.log('실행됨', success);
+      } else {
+        navigate('/failpage');
+        console.log(message);
+      }
+      console.log('success', success);
+    }
+  };
+
+  // broad casting 핸들러
+  const handleBroadcastMessage = (message) => {
+    if (message.leave === true) {
+      setLeave(true);
+    }
+    console.log(message);
+    console.log(chatArr);
+    console.log(room);
+    setChatArr((prevChatArr) => [
+      ...prevChatArr,
+      {
+        roomkey: roomkey,
+        nickname: message.name,
+        msg: message.msg,
+        profile: message.profile,
+        url: message.url,
+      },
+    ]);
   };
 
   //매칭 시작 nickname 보내고 위도 경도 / 출발호선 출발역/ 도착호선 도착역 보낸 다음 socket.on 받는데 ..
@@ -162,64 +212,10 @@ const Chatting = () => {
       [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
     );
 
-    const handleSocketMessage = (message) => {
-      if (message.roomkey !== null) {
-        console.log(message.roomkey);
-        console.log(message, `입장 시 불러오는 socket.on`);
-
-        setCounter(message);
-        console.log(message);
-        console.log(message.roomkey);
-        if (message.roomkey !== undefined) {
-          setRoom(message.roomkey);
-        }
-        localStorage.setItem('room', message.roomkey);
-
-        if (
-          message.fail !==
-          '매칭 가능한 상대방이 없습니다. 다시 시도해주세요. 뀨잉뀨잉'
-        ) {
-          socket.emit('stop', message.roomkey);
-          socket.emit('joinroom', message.roomkey);
-          socket.emit('chat-bot', message.roomkey);
-          setSuccess(true);
-          console.log('실행됨', success);
-        } else {
-          socket.off('stop', handleSocketMessage);
-          socket.off('joinroom', handleSocketMessage);
-          socket.off('chat-bot', handleSocketMessage);
-          navigate('/failpage');
-          console.log(message);
-        }
-        console.log('success', success);
-      }
-      socket.off(`${name}`, handleSocketMessage);
-    };
-
-    const handleBroadcastMessage = (message) => {
-      if (message.leave === true) {
-        setLeave(true);
-      }
-      console.log(message);
-      console.log(chatArr);
-      console.log(room);
-      setChatArr((prevChatArr) => [
-        ...prevChatArr,
-        {
-          roomkey: roomkey,
-          nickname: message.name,
-          msg: message.msg,
-          profile: message.profile,
-          url: message.url,
-        },
-      ]);
-    };
-
-    socket.on(`${name}`, handleSocketMessage);
+    socket.once(`${name}`, handleSocketMessage);
     socket.on('broadcast', handleBroadcastMessage);
 
     return () => {
-      socket.off(`${name}`, handleSocketMessage);
       socket.off('broadcast', handleBroadcastMessage);
     };
   }, []);
@@ -356,9 +352,9 @@ const Chatting = () => {
                 {/* 상대방 프로필 모달 */}
                 {isModal && (
                   <CounterProfileModal
-                    gender={counterUser?.gender}
-                    statusmessage={counterUser?.statusmessage}
-                    nickname={counter?.fair}
+                    gender={counterUser?.result?.gender}
+                    statusmessage={counterUser?.result?.introduction}
+                    nickname={counterUser?.result?.nickname}
                     representProfile={counter?.profile}
                     setCounterUser={setCounterUser}
                     couterUser={counterUser}
@@ -529,7 +525,7 @@ const Chatting = () => {
                         item.profile !== undefined ? (
                           <UserProfileDiv>
                             <UserProfileImg
-                              onClick={(e) => CounterUserHandler(e)}
+                              onClick={() => CounterUserHandler()}
                               src={item.profile}
                             />
                             <UserProfileNameChat>

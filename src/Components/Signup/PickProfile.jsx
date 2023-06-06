@@ -17,8 +17,9 @@ import { useNavigate } from 'react-router-dom';
 
 const PickProfile = () => {
   const navigate = useNavigate();
-
+  //프로필 정보 전역 state
   const [image, setImage] = useRecoilState(useInfoState);
+  //메인 프로필 전역 state
   const [profile, setProfile] = useRecoilState(usePrimaryState);
   const [files, setFiles] = useState([]);
   const [form, setForm, OnChangeHandler] = useInput([]);
@@ -60,6 +61,7 @@ const PickProfile = () => {
   const removeProfile = async (deleteUrl) => {
     const Id = localStorage.getItem('userId');
     try {
+      const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
       setImage(image.filter((item) => item.image_url !== deleteUrl));
     } catch (error) {
       return;
@@ -94,7 +96,7 @@ const PickProfile = () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
-      navigate('/changename');
+      navigate('/setprofile');
     } catch (error) {
       return;
     }
@@ -148,7 +150,12 @@ const PickProfile = () => {
       </ImgBox>
       <ButtonBox>
         <CancelButton onClick={cancelHandler}>취소</CancelButton>
-        <ApplyButton onClick={() => uploadFile()}>적용</ApplyButton>
+        <ApplyButton
+          className={image && 'active'}
+          onClick={() => navigate('/setprofile')}
+        >
+          적용
+        </ApplyButton>
       </ButtonBox>
     </Wrap>
   );
@@ -272,4 +279,7 @@ const ApplyButton = styled.button`
   border-radius: 4px;
   background-color: rgba(250, 58, 69, 0.3);
   color: #ffffff;
+  &.active {
+    background-color: #fa3a45;
+  }
 `;

@@ -17,12 +17,11 @@ const GoogleLogin = () => {
       const { data } = await trainApi.googleLogin(code);
       const token = data.token;
       const userId = data.result[0].id;
+      const nickname = data?.result?.[0]?.nickname;
       if (data.token) {
         localStorage.setItem('userId', userId);
         localStorage.setItem('token', token);
-        data.result?.[0]?.nickname === null
-          ? navigate('/setgender')
-          : navigate('/subwaypage');
+        nickname === null ? navigate('/setgender') : navigate('/subwaypage');
       }
     } catch (error) {
       return;
