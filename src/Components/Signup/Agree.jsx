@@ -13,12 +13,14 @@ const Agree = () => {
   const checkbox1 = useRef();
   const checkbox2 = useRef();
   const checkbox3 = useRef();
+  const checkbox4 = useRef();
 
   const handleCheckboxChange = () => {
     const isChecked =
       checkbox1.current.checked &&
       checkbox2.current.checked &&
-      checkbox3.current.checked;
+      checkbox3.current.checked &&
+      checkbox4.current.checked;
 
     setAgreepi(isChecked);
 
@@ -35,6 +37,7 @@ const Agree = () => {
     checkbox1.current.checked = isChecked;
     checkbox2.current.checked = isChecked;
     checkbox3.current.checked = isChecked;
+    checkbox4.current.checked = isChecked;
     setAgreepi(isChecked);
   };
 
@@ -46,7 +49,7 @@ const Agree = () => {
     }
   };
 
-  const contents = <p>보기</p>;
+  const contents = <p></p>;
   return (
     <Wrap>
       <AgreeBox>
@@ -68,7 +71,12 @@ const Agree = () => {
             onChange={handleCheckboxChange}
           ></Input>
           <Label for="checkbox1">이용 약관(필수)</Label>
-          <Accordion contents={contents} />
+          <a
+            href="https://grizzly-topaz-b36.notion.site/310bfe9713d944e7b59870b2d833deaf?pvs=4"
+            target="_blank"
+          >
+            보기
+          </a>
         </AgreeLabel>
 
         <AgreeLabel for="checkbox2">
@@ -79,7 +87,12 @@ const Agree = () => {
             onChange={handleCheckboxChange}
           ></Input>
           <Label for="checkbox2">개인정보 수집 및 이용 동의 (필수)</Label>
-          <Accordion contents={contents} />
+          <a
+            href="https://grizzly-topaz-b36.notion.site/391da1db78f74c7da9f6a9f0a252cfe7?pvs=4"
+            target="_blank"
+          >
+            보기
+          </a>
         </AgreeLabel>
         <AgreeLabel for="checkbox3">
           <Input
@@ -89,7 +102,21 @@ const Agree = () => {
             onChange={handleCheckboxChange}
           ></Input>
           <Label for="checkbox3">만 14세 이상입니다. (필수)</Label>
-          <Accordion contents={contents} />
+        </AgreeLabel>
+        <AgreeLabel for="checkbox4">
+          <Input
+            ref={checkbox4}
+            type="checkbox"
+            id="checkbox4"
+            onChange={handleCheckboxChange}
+          ></Input>
+          <Label for="checkbox4">위치이용기반 서비스 동의 (필수)</Label>
+          <a
+            href="https://grizzly-topaz-b36.notion.site/5bf8fd32fd9f476e8afb94101a2a57aa?pvs=4"
+            target="_blank"
+          >
+            보기
+          </a>
         </AgreeLabel>
       </AgreeBox>
       <LoginButton className={agreepi && 'active'} onClick={nextHandler}>

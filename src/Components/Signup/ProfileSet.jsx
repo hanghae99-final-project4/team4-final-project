@@ -43,6 +43,7 @@ const ProfileSet = () => {
       return;
     }
   }
+
   const beforeHandler = () => {
     navigate(-1);
   };
@@ -152,7 +153,7 @@ export const GifBox = styled.div`
   height: 235px;
 `;
 const ProgressImg = styled.img`
-  width: 26px;
+  width: 44px;
   height: 8px;
   margin-top: 10px;
 `;
