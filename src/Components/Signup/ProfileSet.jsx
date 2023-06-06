@@ -43,6 +43,7 @@ const ProfileSet = () => {
       return;
     }
   }
+
   const beforeHandler = () => {
     navigate(-1);
   };

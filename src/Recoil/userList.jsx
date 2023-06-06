@@ -26,13 +26,7 @@ const useAgreeState = atom({
 });
 const useUserState = atom({
   key: NAME_KEY,
-  default: [
-    {
-      age: '',
-      gender: '',
-      nickname: '',
-    },
-  ],
+  default: [],
 });
 const useStationState = atom({
   key: STATION_KEY,
