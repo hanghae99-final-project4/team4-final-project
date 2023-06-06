@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import useInput from "../MyTools/Hooks/UseInput";
-import { trainApi } from "../apis/Instance";
-import Kakaologo from "../Assets/Kakaologo.svg";
-import Naverlogo from "../Assets/Naverlogo.svg";
-import Googlelogo from "../Assets/Googlelogo.svg";
-import Emaillogo from "../Assets/Email.svg";
-import logo from "../Assets/Logo.svg";
-import signmsg from "../Assets/SignIn/SignMsg.svg";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import signintext from "../Assets/SignIn/signinText.svg";
-import axios from "axios";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import useInput from '../MyTools/Hooks/UseInput';
+import { trainApi } from '../apis/Instance';
+import Kakaologo from '../Assets/Kakaologo.svg';
+import Naverlogo from '../Assets/Naverlogo.svg';
+import Googlelogo from '../Assets/Googlelogo.svg';
+import Emaillogo from '../Assets/Email.svg';
+import logo from '../Assets/Logo.svg';
+import signmsg from '../Assets/SignIn/SignMsg.svg';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import signintext from '../Assets/SignIn/signinText.svg';
+import axios from 'axios';
 
 //카카오 소셜 로그인
 
@@ -34,8 +34,8 @@ const Login = () => {
   const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_restapikey}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
 
   const [Info, setInfo, onChangeValue, reset] = useInput({
-    account: "",
-    password: "",
+    account: '',
+    password: '',
   });
 
   //가지고 있던 토큰 없애기
@@ -59,32 +59,30 @@ const Login = () => {
 
   const onSignIn = async (e) => {
     try {
-      console.log(Info.account, Info.password);
       e.preventDefault();
       const { data } = await trainApi.postSignIn({
         account: Info.account,
         password: Info.password,
       });
-      console.log(data);
+
       const token = data.data.token;
       const userId = data?.data.rest?.user_id;
 
       if (token) {
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("token", token);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('token', token);
       }
 
-      navigate("/subwaypage");
+      navigate('/subwaypage');
       // }
     } catch (err) {
-      console.log(err);
       const errMsg = err.response.data.message;
       alert(errMsg);
     }
   };
 
   const emailLogin = () => {
-    navigate("/email");
+    navigate('/email');
   };
 
   return (

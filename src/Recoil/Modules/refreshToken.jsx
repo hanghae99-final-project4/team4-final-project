@@ -14,7 +14,7 @@ const refreshTokenFn = async () => {
     const { data } = await instance.post('/newtoken', { token: token });
 
     const acctoken = data?.acctoken;
-    console.log(acctoken);
+
     if (!acctoken || acctoken.error) {
       alert('로그인이 만료되었습니다.');
       window.location.href = '/';
@@ -23,7 +23,6 @@ const refreshTokenFn = async () => {
     localStorage.setItem('token', acctoken);
     return data;
   } catch (error) {
-    console.log(error);
     localStorage.removeItem('token');
   }
 };

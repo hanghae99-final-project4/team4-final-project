@@ -39,7 +39,7 @@ const MyPage = () => {
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useRecoilState(useInfoState);
-
+  const local = form?.result?.account_type;
   useEffect(() => {
     getProfile();
   }, []);
@@ -254,10 +254,12 @@ const MyPage = () => {
         닉네임변경
         <img onClick={() => navigate('/changename')} src={arrowimg} />
       </TextBox>
-      <TextBox className="item">
-        비밀번호 변경
-        <img src={arrowimg} />
-      </TextBox>
+      {local === 'local' && (
+        <TextBox onClick={() => navigate('/changepw')} className="item">
+          비밀번호 변경
+          <img src={arrowimg} />
+        </TextBox>
+      )}
       <TextBox margin="20px">고객센터</TextBox>
       <TextBox margin="20px">
         공지사항

@@ -14,7 +14,6 @@ const Agree = () => {
   const checkbox2 = useRef();
   const checkbox3 = useRef();
 
-  console.log(agreepi);
   const handleCheckboxChange = () => {
     const isChecked =
       checkbox1.current.checked &&

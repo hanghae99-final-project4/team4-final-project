@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 const ProfileSlick = () => {
   const [profile, setProfile] = useState([]);
-  console.log(profile);
+
   useEffect(() => {
     getProfile();
   }, []);
