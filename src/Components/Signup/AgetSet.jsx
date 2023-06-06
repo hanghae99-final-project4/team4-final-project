@@ -35,9 +35,10 @@ const AgetSet = () => {
   return (
     <Wrap>
       <Box>
-        <img src={progress} alt="progress" />
+        <ProgressImg src={progress} alt="progress" />
         <span>본인의 연령대를 선택해주세요 :)</span>
       </Box>
+
       <AgeBox>
         {ageList.map((item, index) => (
           <Age
@@ -68,6 +69,7 @@ const AgetSet = () => {
 
 export default AgetSet;
 
+const ProgressImg = styled.img``;
 const Wrap = styled.div`
   margin-top: 36px;
   display: flex;

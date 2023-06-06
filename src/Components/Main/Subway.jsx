@@ -48,6 +48,12 @@ const Subway = () => {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
       setProfile(data.userInfo);
+      if (
+        data?.userInfo?.result?.gender === null &&
+        data?.userInfo?.result?.nickname === null
+      ) {
+        navigate('/setgender');
+      }
     } catch (err) {
       return;
     }
@@ -62,7 +68,7 @@ const Subway = () => {
       return;
     }
   }, []);
-  console.log(profile);
+
   // localstorage 객체 배열로 만드는 함수
   function setItemWithExpireTime(keyName, keyValue, tts) {
     // localStorage에 저장할 객체
@@ -123,7 +129,7 @@ const Subway = () => {
     },
     [status.status]
   );
-  console.log(profile);
+
   return (
     <SubwayDiv>
       {bottomSheet && <ModalCtn></ModalCtn>}

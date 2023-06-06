@@ -1,7 +1,7 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from 'react';
 
-import { memo } from "react";
-import styled from "styled-components";
+import { memo } from 'react';
+import styled from 'styled-components';
 
 const Accordion = (props) => {
   const parentRef = useRef(null);
@@ -11,11 +11,11 @@ const Accordion = (props) => {
   const handleButtonClick = useCallback(
     (event) => {
       event.stopPropagation();
-      if (parentRef.current === null || childRef === null) {
+      if (parentRef.current === null || childRef.current === null) {
         return;
       }
       if (parentRef.current.clientHeight > 0) {
-        parentRef.current.style.height = "0";
+        parentRef.current.style.height = '0';
       } else {
         parentRef.current.style.height = `${childRef.current.clientHeight}px`;
         parentRef.current.style.width = `inherit`;
@@ -24,8 +24,9 @@ const Accordion = (props) => {
     },
     [isCollapse]
   );
-  const parentRefHeight = parentRef?.current?.style?.height ?? "0px";
-  const buttonText = parentRefHeight === "0px" ? "보기" : "닫기";
+
+  const parentRefHeight = parentRef?.current?.style?.height ?? '0px';
+  const buttonText = parentRefHeight === '0px' ? '보기' : '닫기';
   return (
     <Container>
       <Header onClick={handleButtonClick}>
@@ -41,6 +42,7 @@ const Accordion = (props) => {
 export default memo(Accordion);
 
 const Container = styled.div`
+  cursor: pointer;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -82,7 +84,7 @@ const ContentsWrapper = styled.div`
   background-color: gray;
   color: white;
   transition: height 0.35s ease, background 0.35s ease;
-  margin-top: ${(props) => (props.isCollapse ? "0" : "-10px")};
+  margin-top: ${(props) => (props.isCollapse ? '0' : '-10px')};
 `;
 const Contents = styled.div`
   padding: 0.1px;

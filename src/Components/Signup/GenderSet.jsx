@@ -93,7 +93,7 @@ const GifBox = styled.div`
   margin-top: 100px;
 `;
 const ProgressImg = styled.img`
-  width: 26px;
+  width: 44px;
   height: 8px;
 `;
 const SpanBox = styled.div`
