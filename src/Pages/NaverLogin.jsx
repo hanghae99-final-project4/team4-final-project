@@ -20,9 +20,9 @@ const NaverLogin = () => {
   const naverLogin = async () => {
     try {
       const { data } = await trainApi.naverLogin(code, state);
-
+      console.log(data?.result);
       const nickname = data?.result?.[0]?.nickname;
-
+      const image = data?.result;
       const token = data.token;
       const userId = data.result[0].id;
       if (data.token) {
