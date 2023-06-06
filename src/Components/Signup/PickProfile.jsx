@@ -102,7 +102,6 @@ const PickProfile = () => {
     }
   };
   const handleProfileClick = (item) => {
-    console.log(item);
     const updatedImage = image.map((photo) => ({
       ...photo,
       isMainProfile: photo === item,

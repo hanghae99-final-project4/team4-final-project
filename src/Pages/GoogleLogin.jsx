@@ -11,7 +11,7 @@ const GoogleLogin = () => {
     googleLogin();
   }, []);
   const code = new URL(window.location.href).searchParams.get('code');
-  console.log(code);
+
   const googleLogin = async () => {
     try {
       const { data } = await trainApi.googleLogin(code);

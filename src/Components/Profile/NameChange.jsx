@@ -51,7 +51,7 @@ const NameChange = () => {
   const changeprofileHandler = () => {
     navigate('/changeprofile');
   };
-  console.log(profile);
+
   return (
     <Wrap>
       {/* primary image 가 있으면 ? */}

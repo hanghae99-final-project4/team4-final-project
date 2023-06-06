@@ -18,7 +18,6 @@ const Timer = ({
   const time = useRef(180);
 
   const addTimeHandler = () => {
-    console.log(timereset);
     setAddModal(!addModal);
   };
 

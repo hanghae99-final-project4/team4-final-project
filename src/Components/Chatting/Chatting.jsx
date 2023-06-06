@@ -55,6 +55,7 @@ const Chatting = () => {
   const [counter, setCounter] = useState([]);
   const [counterUser, setCounterUser] = useState([{}]);
   const [leave, setLeave] = useState(false);
+  const [chatData, setChatData] = useState(['산', '바다']);
   // 시간 추가 모달
   const [addModal, setAddModal] = useState(false);
   // 나가기 모달
@@ -81,7 +82,17 @@ const Chatting = () => {
   const cookies = new Cookies();
   const token = cookies.get('token');
   const thURL = process.env.REACT_APP_TH_S_HOST;
-
+  const [cnt, setCnt] = useState(0);
+  //챗봇 데이터 배열
+  const chatArray = [
+    ['산', '바다'],
+    ['여름', '겨울'],
+    ['자장면', '짬뽕'],
+  ];
+  const randomChatHandler = (chatArray) => {
+    return setChatData(chatArray[Math.floor(Math.random() * chatArray.length)]);
+  };
+  console.log(chatData);
   // function setItemWithExpireTime(keyName, keyValue, tts) {
   //   // localStorage에 저장할 객체
   //   const obj = {
@@ -170,7 +181,7 @@ const Chatting = () => {
       ) {
         socket.emit('stop', message.roomkey);
         socket.emit('joinroom', message.roomkey);
-        socket.emit('chat-bot', message.roomkey);
+
         setSuccess(true);
         console.log('실행됨', success);
       } else {
@@ -192,6 +203,7 @@ const Chatting = () => {
     setChatArr((prevChatArr) => [
       ...prevChatArr,
       {
+        chatbot: message.chatbot,
         roomkey: roomkey,
         nickname: message.name,
         msg: message.msg,
@@ -309,6 +321,15 @@ const Chatting = () => {
     setTimeReset(true);
     setAddModal(!addModal);
   };
+  const chatBotHandler = () => {
+    const roomkey = localStorage.getItem('room');
+
+    if (cnt <= 2) {
+      setCnt(cnt + 1);
+    }
+
+    socket.emit('chat-bot', roomkey, chatArray[cnt]);
+  };
 
   return (
     <div
@@ -331,7 +352,11 @@ const Chatting = () => {
               <ImgBox src={counter?.profile} margin="63px" />
 
               <MessageBox margin="6px">{counter?.fair}</MessageBox>
-              <Chatbot margin="15px" src={chatbot} />
+              <Chatbot
+                onClick={() => chatBotHandler()}
+                margin="15px"
+                src={chatbot}
+              />
               <Ban src={ban} />
             </Header>
             <AllChatDiv>
@@ -465,7 +490,7 @@ const Chatting = () => {
                                   />
                                 </>
 
-                                // <div>img</div>
+                                // 아이스 브레이킹 봇 일때
                               )}
                             </ChatBoxTime>
                           </UserProfileDiv>
@@ -483,8 +508,12 @@ const Chatting = () => {
                                 >
                                   {item.msg}
                                   <ButtonBox>
-                                    <button>산</button>
-                                    <button>바다</button>
+                                    <button>
+                                      {item.chatbot && item?.chatbot[0]}
+                                    </button>
+                                    <button>
+                                      {item.chatbot && item?.chatbot[1]}
+                                    </button>
                                   </ButtonBox>
                                 </ChatDiv>
                               ) : item.url?.split('.')[5] == 'mp4' ? (

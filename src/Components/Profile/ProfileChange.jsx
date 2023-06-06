@@ -25,7 +25,6 @@ const ProfileChange = () => {
   const uploadHandler = () => {
     cameraref.current.click();
   };
-  console.log(profile);
 
   useEffect(() => {
     getProfile();
@@ -135,7 +134,6 @@ const ProfileChange = () => {
   };
   // 핸들클릭 이벤트
   const handleProfileClick = (item) => {
-    console.log(item);
     const updatedImage = profile.map((photo) => ({
       ...photo,
       isMainProfile: photo === item,
@@ -162,7 +160,6 @@ const ProfileChange = () => {
 
     try {
       const Id = localStorage.getItem('userId');
-      console.log(profile);
 
       const { data } = await trainApi2.postProfile(Id, formData);
       if (data?.msg?.length !== 0) {

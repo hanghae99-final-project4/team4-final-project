@@ -76,6 +76,11 @@ export const trainApi = {
     instance.patch(`/user/reputation/${Id}`, payload),
   postStatusmessage: (id, payload) =>
     instance.post(`/user/edit/${id}`, payload),
+  patchPw: (id, password, newPassword) =>
+    instance.patch(`/user/pw/${id}`, {
+      password: password,
+      newpassword: newPassword,
+    }),
 };
 // 인터셉터
 instance.interceptors.request.use(
