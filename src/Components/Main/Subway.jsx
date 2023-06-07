@@ -380,7 +380,7 @@ const ProfileBox = styled.div`
 export const Profile = styled.div`
   margin-left: 10px;
   width: 323;
-  height: 60px;
+  height: 81px;
   display: flex;
   align-items: center;
 `;

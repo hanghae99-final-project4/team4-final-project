@@ -17,11 +17,15 @@ import useInput from '../../MyTools/Hooks/UseInput';
 import { trainApi, trainApi2 } from '../../apis/Instance';
 import beforebutton from '../../Assets/SetProfile/beforebutton.svg';
 import nextbutton from '../../Assets/SetProfile/nextbutton.svg';
+import { useState } from 'react';
 
 const ProfileSet = () => {
-  // 프로필 정보 전역상태
+  // 프로필 정보 전역상태 // 이미지 담는 배열
   const [image, setImage] = useRecoilState(useInfoState);
+  //이미지 컴프레션 상태
+
   // 메인 프로필 정보 전역상태
+
   const [primaryImage, setPrimaryImage] = useRecoilState(usePrimaryState);
   // gender와 nickname 에 관한 전역상태
   const [gender, setGender] = useRecoilState(useUserState);
@@ -36,7 +40,7 @@ const ProfileSet = () => {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.postProfile(userId, {
         gender: gender.gender,
-        age: gender.age,
+        age_group: gender.age,
         nickname: form.nickname,
       });
     } catch (err) {
@@ -70,7 +74,9 @@ const ProfileSet = () => {
       nickname();
       navigate('/subwaypage');
     } catch (error) {
-      return;
+      window.alert(
+        '사진 파일은 5MB, 사진 확장자는.jpg, .jpeg, .png, .gif, heic, heif만 가능합니다.'
+      );
     }
   };
 
@@ -93,12 +99,12 @@ const ProfileSet = () => {
               src={primaryImage[0]?.url}
               alt="avatar"
             />
-            <Upload src={upload} alt="upload" />
+            <Upload onClick={profileuploadHandler} src={upload} alt="upload" />
           </>
         ) : (
           <>
             <Avatar onClick={profileuploadHandler} src={avatar} alt="avatar" />
-            <Upload src={upload} alt="upload" />
+            <Upload onClick={profileuploadHandler} src={upload} alt="upload" />
           </>
         )}
       </GifBox>
@@ -150,7 +156,6 @@ export const GifBox = styled.div`
   flex-direction: column;
   align-items: center;
   width: 147px;
-  height: 235px;
 `;
 const ProgressImg = styled.img`
   width: 44px;
@@ -169,8 +174,8 @@ export const Avatar = styled.img`
   border-radius: 100%;
   cursor: pointer;
   margin-top: 29px;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   transform: scale(1);
 `;

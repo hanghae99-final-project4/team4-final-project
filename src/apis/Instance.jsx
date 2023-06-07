@@ -40,7 +40,7 @@ export const trainApi2 = {
   postProfile: (Id, payload) => instanceF.post(`/user/upload/${Id}`, payload),
   chattingForm: (name, formData) => instanceF.post(`/images`, formData),
   deleteProfile: (Id, deleteUrl) =>
-    instance.delete(`user/images/${Id}`, { data: [{ url: deleteUrl }] }),
+    instance.delete(`user/images/${Id}`, { data: { url: deleteUrl } }),
   patchProfile: (Id, otherimage, primaryimage) =>
     instance.patch(`user/images/${Id}`, [primaryimage, otherimage]),
   editProfile: (Id, nickname, introduction) =>
@@ -86,7 +86,7 @@ export const trainApi = {
 instance.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('token');
-    
+
     if (token) {
       config.headers = {
         ...config.headers,
@@ -101,7 +101,7 @@ instance.interceptors.request.use(
 instanceF.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('token');
-  
+
     if (token) {
       config.headers = {
         ...config.headers,
@@ -120,7 +120,7 @@ instance.interceptors.response.use(
     if (error.response.status === 401 && !config?.sent) {
       config.sent = true;
       const result = await memoizedRefreshToken();
-      
+
       if (result) {
         config.headers = {
           ...config.headers,
@@ -142,7 +142,7 @@ instanceF.interceptors.response.use(
     if (error.response.status === 401 && !config?.sent) {
       config.sent = true;
       const result = await memoizedRefreshToken();
-      
+
       if (result) {
         config.headers = {
           ...config.headers,

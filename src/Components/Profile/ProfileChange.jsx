@@ -10,7 +10,7 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import deleteimg from '../../Assets/SetProfile/close.svg';
 import useInput from '../../MyTools/Hooks/UseInput';
 import { useNavigate } from 'react-router-dom';
-
+import imageCompression from 'browser-image-compression';
 const ProfileChange = () => {
   const navigate = useNavigate();
 
@@ -21,6 +21,7 @@ const ProfileChange = () => {
   const [form, setForm, OnChangeHandler] = useInput([]);
   const [primaryImage, setPrimaryImage] = useState([]);
   const [changeprofile, setChangeprofile] = useState([]);
+  const [filecnt, setFileCnt] = useState(0);
   const cameraref = useRef();
   const uploadHandler = () => {
     cameraref.current.click();
@@ -31,18 +32,43 @@ const ProfileChange = () => {
   }, []);
 
   //사진 업로드 시 파일
-  const formSubmit = (e) => {
+  //사진 업로드 시 파일
+  const formSubmit = async (e) => {
     let temp = [...profile];
+
     const photoList = e.target.files;
 
+    // 들어온 파일의 길이만큼 for loop 돌고 돌면서 image resizing 시키기
     for (let i = 0; i < photoList.length; i++) {
-      const photo = {
-        id: photoList[i]?.name,
-        file: photoList?.[i],
-        image_url: URL?.createObjectURL(photoList[i]),
+      // 이미지 리사이즈 함수 옵션
+      const options = {
+        maxSizeMB: 0.2, // 이미지 최대 용량
+        maxWidthOrHeight: 1920, // 최대 넓이(혹은 높이)
+        useWebWorker: true,
       };
+      if (!(photoList[i] instanceof File || photoList[i] instanceof Blob)) {
+        continue;
+      }
 
-      temp.push(photo);
+      try {
+        const compressedFile = await imageCompression(photoList[i], options);
+        //Blob 형태의 데이터를 파일로 전환시키기
+        const compressedFileAsFile = new File(
+          [compressedFile],
+          photoList[i].name,
+          { type: image.type }
+        );
+
+        const imageUrl = URL.createObjectURL(compressedFileAsFile);
+        console.log(compressedFileAsFile);
+        console.log(imageUrl);
+        const photo = {
+          id: photoList[i]?.name,
+          file: compressedFileAsFile,
+          image_url: imageUrl,
+        };
+        temp.push(photo);
+      } catch (err) {}
     }
 
     if (temp.length > 5) {
@@ -50,9 +76,14 @@ const ProfileChange = () => {
     }
 
     // 첫 번째 사진을 기본 프로필로 설정
-    if (temp.length > 0) {
-      temp[0].isMainProfile = true;
-      setPrimaryImage([{ file: temp[0].file, url: temp[0].image_url }]);
+    //처음 파일을 올릴때 한번만 배열의 첫번째 프로필 메인 프로필로 설정하고 프로필이 있을땐 동작하지 않게
+    //수정
+    if (filecnt < 1) {
+      if (temp.length > 0) {
+        setFileCnt((prev) => prev + 1);
+        temp[0].isMainProfile = true;
+        setPrimaryImage([{ file: temp[0].file, url: temp[0].image_url }]);
+      }
     }
 
     setProfile(temp.concat(files));
@@ -65,7 +96,12 @@ const ProfileChange = () => {
       const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
       setProfile(profile.filter((item) => item.image_url !== deleteUrl));
     } catch (error) {
-      return;
+      // 프로필 등록을 아직 안한 상태일땐 // 즉 프로필이 화면상에서만 보일땐 filter로 삭제해주게끔
+      //수정!
+      const remove = await profile.filter(
+        (item) => item.image_url !== deleteUrl
+      );
+      setProfile(remove);
     }
   };
 

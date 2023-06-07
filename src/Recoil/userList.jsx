@@ -8,6 +8,7 @@ const STATION_KEY = 'station';
 const ARRIVE_KEY = 'arrive';
 const HISTORY_KEY = 'history';
 const SEARCH_KEY = 'search';
+
 const useInfoState = atom({
   key: USER_KEY,
   default: [],

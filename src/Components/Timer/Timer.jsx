@@ -46,7 +46,9 @@ const Timer = ({
 
   return (
     <TimerBox className={time.current <= 30 ? 'red' : ''}>
-      {min}:{sec}
+      <span>
+        {min}:{sec}
+      </span>
       <button onClick={addTimeHandler}>추가</button>
     </TimerBox>
   );
@@ -60,18 +62,20 @@ const TimerBox = styled.div`
   font-weight: 500;
   color: #8fb398;
   margin-left: 80px;
-  &.red {
-    color: #fa3a45;
-    position: relative;
-    animation: bounce 1s infinite linear;
+  span {
+    &.red {
+      color: #fa3a45;
+      position: relative;
+      animation: bounce 1s infinite linear;
 
-    @keyframes bounce {
-      0% {
-        opacity: 0;
-      }
+      @keyframes bounce {
+        0% {
+          opacity: 0;
+        }
 
-      100% {
-        opacity: 1;
+        100% {
+          opacity: 1;
+        }
       }
     }
   }
