@@ -362,11 +362,12 @@ const GuideBox = styled.div`
     cursor: pointer;
   }
 `;
-export const ProfileBox = styled.div`
+const ProfileBox = styled.div`
   display: flex;
   justify-items: center;
   margin-top: 32px;
   margin-left: 16px;
+
   width: 343px;
   height: 81px;
   align-items: center;
@@ -451,6 +452,7 @@ const SearchBox = styled.div`
   }
 `;
 const StationBox = styled.div`
+  margin-left: 16px;
   padding-bottom: 20px;
   margin-top: 17px;
   width: 343px;
@@ -525,6 +527,7 @@ const Arrive = styled.div`
   }
 `;
 const MatchBtn = styled.button`
+  margin-left: 16px;
   margin-top: 18px;
   width: 343px;
   height: 40px;
@@ -536,6 +539,7 @@ const MatchBtn = styled.button`
   background-color: #fa3a45;
 `;
 const Event = styled.div`
+  margin-left: 16px;
   margin-top: 40px;
   display: flex;
   gap: 8px;
@@ -552,6 +556,7 @@ const Event = styled.div`
   }
 `;
 const HistoryBox = styled.div`
+  margin-left: 16px;
   margin-top: 40px;
   width: 343px;
 

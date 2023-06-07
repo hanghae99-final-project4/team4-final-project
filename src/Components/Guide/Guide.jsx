@@ -67,6 +67,7 @@ const Guide = () => {
 
 export default Guide;
 const Wrap = styled.div`
+  margin-left: 16px;
   display: flex;
   flex-direction: column;
   overflow: scroll;

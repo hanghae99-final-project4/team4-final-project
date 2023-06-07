@@ -12,14 +12,7 @@ import HomeMenu from '../HomeMenu/HomeMenu';
 import MypageHeader from './MypageHeader';
 import { useRecoilState } from 'recoil';
 import { useInfoState } from '../../Recoil/userList';
-import {
-  ApplySet,
-  Img,
-  Nickname,
-  NicknameBox,
-  Profile,
-  ProfileBox,
-} from '../Main/Subway';
+import { ApplySet, Img, Nickname, NicknameBox, Profile } from '../Main/Subway';
 import write from '../../Assets/Main/write.svg';
 import arrowimg from '../../Assets/Mypage/arrow.svg';
 
@@ -222,7 +215,7 @@ const MyPage = () => {
 
   //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
-    <>
+    <Wrap>
       <TextBox margin="0px">프로필수정</TextBox>
       <ProfileBox>
         <Profile>
@@ -337,19 +330,32 @@ const MyPage = () => {
           </ModalCtn>
         </>
       ) : null}
-    </>
+    </Wrap>
   );
 };
 export default MyPage;
 
 const Wrap = styled.div`
-  margin: 0 auto;
+  margin-left: 16px;
   max-width: 412px;
   min-width: 375px;
   width: 100%;
   height: 100%;
 `;
+const ProfileBox = styled.div`
+  display: flex;
+  justify-items: center;
+  margin-top: 32px;
 
+  width: 343px;
+  height: 81px;
+  align-items: center;
+  background-color: #fefefe;
+  border: 1px solid #f5f3f3;
+  border-radius: 4px;
+  stroke: solid #f5f3f3;
+  box-shadow: 0px 1px 4px 1px #dcdcdc40;
+`;
 const Header = styled.div`
   height: 44px;
   background-color: #c3f4ff;

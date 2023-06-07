@@ -36,6 +36,7 @@ const Slick = () => {
 
 export default Slick;
 const Container = styled.div`
+  margin-left: 16px;
   margin-top: 18px;
   .slick-dots {
     button::before {

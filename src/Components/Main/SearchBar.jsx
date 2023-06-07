@@ -15,7 +15,6 @@ const SearchBar = () => {
   const [station, setStation, onChange, reset] = useInput();
   const { data } = useStation(station?.station);
   SetSearch(data);
-  // console.log(arrive);
 
   return (
     <Search

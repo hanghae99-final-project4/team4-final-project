@@ -54,7 +54,7 @@ const StationSearch = () => {
   const removeHandler = (id) => {
     setHistory((newhistory) => newhistory.filter((item) => item.id !== id));
   };
-  console.log(search);
+
   return (
     <>
       <Span>최근 검색어</Span>

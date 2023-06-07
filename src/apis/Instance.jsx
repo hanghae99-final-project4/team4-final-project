@@ -11,7 +11,7 @@ import { memoizedRefreshToken } from './../Recoil/Modules/refreshToken';
 
 const yhURL = process.env.REACT_APP_TH_S_HOST;
 const token = localStorage.getItem('token');
-console.log(token);
+
 //일반데이터 Instance
 export const instance = axios.create({
   baseURL: `${yhURL}`,
@@ -86,7 +86,7 @@ export const trainApi = {
 instance.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('token');
-    console.log(token);
+    
     if (token) {
       config.headers = {
         ...config.headers,
@@ -101,7 +101,7 @@ instance.interceptors.request.use(
 instanceF.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('token');
-    console.log(token);
+  
     if (token) {
       config.headers = {
         ...config.headers,
@@ -120,7 +120,7 @@ instance.interceptors.response.use(
     if (error.response.status === 401 && !config?.sent) {
       config.sent = true;
       const result = await memoizedRefreshToken();
-      console.log(result?.acctoken);
+      
       if (result) {
         config.headers = {
           ...config.headers,
@@ -142,7 +142,7 @@ instanceF.interceptors.response.use(
     if (error.response.status === 401 && !config?.sent) {
       config.sent = true;
       const result = await memoizedRefreshToken();
-      console.log(result?.acctoken);
+      
       if (result) {
         config.headers = {
           ...config.headers,
