@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import first from '../../Assets/Guide/first.svg';
 import second from '../../Assets/Guide/second.svg';
 import third from '../../Assets/Guide/third.svg';
-import firstimg from '../../Assets/Guide/first.png';
-import secondimg from '../../Assets/Guide/second.png';
-import thirdimg from '../../Assets/Guide/third.png';
+import firstimg from '../../Assets/Guide/firstImg.svg';
+import secondimg from '../../Assets/Guide/secondImg.svg';
+import thirdimg from '../../Assets/Guide/thirdImg.svg';
 import chattingimg from '../../Assets/Guide/chatting.svg';
 const Guide = () => {
   const [guide, setguide] = useState('1');
@@ -76,7 +76,7 @@ const Wrap = styled.div`
   }
   &::-webkit-scrollbar-thumb {
     height: 1%;
-
+    background: #ccc;
     border-radius: 10px;
   }
   &::-webkit-scrollbar-track {

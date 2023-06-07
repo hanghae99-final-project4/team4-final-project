@@ -3,45 +3,67 @@ import styled from 'styled-components';
 import camera from '../../Assets/SetProfile/camera.svg';
 import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import {
-  useAgreeState,
-  useInfoState,
-  usePrimaryState,
-} from '../../Recoil/userList';
+import { useInfoState, usePrimaryState } from '../../Recoil/userList';
 import { useState } from 'react';
 import { trainApi2 } from '../../apis/Instance';
-import { CloseCircleFilled } from '@ant-design/icons';
 import deleteimg from '../../Assets/SetProfile/close.svg';
 import useInput from '../../MyTools/Hooks/UseInput';
 import { useNavigate } from 'react-router-dom';
+import imageCompression from 'browser-image-compression';
+import { useEffect } from 'react';
 
 const PickProfile = () => {
   const navigate = useNavigate();
   //프로필 정보 전역 state
   const [image, setImage] = useRecoilState(useInfoState);
+  //이미지 컴프레션 상태
+  const [imageUpload, setImageUpload] = useState(null);
   //메인 프로필 전역 state
   const [profile, setProfile] = useRecoilState(usePrimaryState);
   const [files, setFiles] = useState([]);
   const [form, setForm, OnChangeHandler] = useInput([]);
   const [primaryImage, setPrimaryImage] = useState([]);
+  const [filecnt, setFileCnt] = useState(0);
   const cameraref = useRef();
   const uploadHandler = () => {
     cameraref.current.click();
   };
 
   //사진 업로드 시 파일
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     let temp = [...image];
+
     const photoList = e.target.files;
-
+    // 들어온 파일의 길이만큼 for loop 돌고 돌면서 image resizing 시키기
     for (let i = 0; i < photoList.length; i++) {
-      const photo = {
-        id: photoList[i]?.name,
-        file: photoList?.[i],
-        image_url: URL?.createObjectURL(photoList[i]),
+      // 이미지 리사이즈 함수 옵션
+      const options = {
+        maxSizeMB: 0.2, // 이미지 최대 용량
+        maxWidthOrHeight: 1920, // 최대 넓이(혹은 높이)
+        useWebWorker: true,
       };
+      if (!(photoList[i] instanceof File || photoList[i] instanceof Blob)) {
+        continue;
+      }
 
-      temp.push(photo);
+      try {
+        const compressedFile = await imageCompression(photoList[i], options);
+        //Blob 형태의 데이터를 파일로 전환시키기
+        const compressedFileAsFile = new File(
+          [compressedFile],
+          photoList[i].name,
+          { type: image.type }
+        );
+
+        const imageUrl = URL.createObjectURL(compressedFileAsFile);
+
+        const photo = {
+          id: photoList[i]?.name,
+          file: compressedFileAsFile,
+          image_url: imageUrl,
+        };
+        temp.push(photo);
+      } catch (err) {}
     }
 
     if (temp.length > 5) {
@@ -49,9 +71,16 @@ const PickProfile = () => {
     }
 
     // 첫 번째 사진을 기본 프로필로 설정
-    if (temp.length > 0) {
-      temp[0].isMainProfile = true;
-      setProfile([{ file: temp[0].file, url: temp[0].image_url }]);
+
+    // 첫 번째 사진을 기본 프로필로 설정
+    //처음 파일을 올릴때 한번만 배열의 첫번째 프로필 메인 프로필로 설정하고 프로필이 있을땐 동작하지 않게
+    //수정
+    if (filecnt < 1) {
+      if (temp.length > 0) {
+        setFileCnt((prev) => prev + 1);
+        temp[0].isMainProfile = true;
+        setProfile([{ file: temp[0].file, url: temp[0].image_url }]);
+      }
     }
 
     setImage(temp.concat(files));
@@ -59,13 +88,12 @@ const PickProfile = () => {
 
   //이미지 삭제하는 함수
   const removeProfile = async (deleteUrl) => {
-    const Id = localStorage.getItem('userId');
-    try {
-      const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
-      setImage(image.filter((item) => item.image_url !== deleteUrl));
-    } catch (error) {
-      return;
-    }
+    // 삭제하고자 하는 이미지의 url과 다른 이미지들로 이루어진 새로운 배열을 만듦
+    const newArray = await image.filter(
+      (image) => image.image_url !== deleteUrl
+    );
+    console.log(newArray);
+    setImage(newArray);
   };
   const cancelHandler = () => {
     if (window.confirm('사진 첨부를 취소하시겠어요?') === true) {
@@ -74,41 +102,21 @@ const PickProfile = () => {
       navigate(-1);
     }
   };
+  useEffect(() => {
+    console.log('useInfoState updated:', image);
+  }, [image]);
 
   //사진 업로드
 
-  const uploadFile = async () => {
-    const formData = new FormData();
-    for (let i = 0; i < image.length; i++) {
-      if (image[i].file !== undefined)
-        formData.append('otherImages', image[i].file);
-    }
-    if (primaryImage[0]?.file !== undefined)
-      formData.append('primaryImage', primaryImage[0]?.file);
-
-    const form = formData.getAll('otherImages');
-    formData.delete('otherImages');
-
-    form
-      .filter((item) => item.name !== primaryImage[0]?.file?.name)
-      .forEach((item) => formData.append('otherImages', item));
-
-    try {
-      const Id = localStorage.getItem('userId');
-      const { data } = await trainApi2.postProfile(Id, formData);
-      navigate('/setprofile');
-    } catch (error) {
-      return;
-    }
-  };
   const handleProfileClick = (item) => {
     const updatedImage = image.map((photo) => ({
       ...photo,
       isMainProfile: photo === item,
     }));
     setImage(updatedImage);
+    setProfile(updatedImage);
   };
-
+  console.log(image);
   return (
     <Wrap>
       <SpanBox>
@@ -117,8 +125,9 @@ const PickProfile = () => {
       </SpanBox>
       <ImgBox>
         <Camera onClick={uploadHandler} src={camera} alt="camera" />
-        {image?.map((item, index) => (
+        {image?.map((item, i) => (
           <CameraBox
+            key={item.id}
             onClick={() => handleProfileClick(item)}
             className={item?.isMainProfile ? 'main' : null}
           >
@@ -132,7 +141,7 @@ const PickProfile = () => {
                 setProfile([{ file: item.file, url: item.image_url }])
               }
               src={item.image_url}
-              key={index}
+              key={item.id}
               alt="image"
             />
           </CameraBox>

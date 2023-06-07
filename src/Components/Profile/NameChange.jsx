@@ -57,6 +57,7 @@ const NameChange = () => {
       {/* primary image 가 있으면 ? */}
       <GifBox>
         <Avatar
+          onClick={changeprofileHandler}
           src={
             profile?.images?.filter((item) => item?.is_primary === true)?.[0]
               ?.image_url
