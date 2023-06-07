@@ -15,7 +15,6 @@ const EmailLogin = () => {
     navigate('/agree');
   };
   const loginHandler = async (data) => {
-    console.log(data);
     const email = data.email;
     const password = data.password;
     try {
@@ -69,7 +68,7 @@ const EmailLogin = () => {
     mode: 'onChange',
   });
   const getFields = getValues();
-  console.log(getFields);
+
   return (
     <Wrap>
       <LoginForm onSubmit={handleSubmit(loginHandler)}>

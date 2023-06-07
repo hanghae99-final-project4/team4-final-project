@@ -304,9 +304,8 @@ const Chatting = () => {
 
     if (cnt <= 2) {
       setCnt(cnt + 1);
+      socket.emit('chat-bot', roomkey, chatArray[cnt]);
     }
-
-    socket.emit('chat-bot', roomkey, chatArray[cnt]);
   };
   const buttonHandler = (item) => {
     socket.emit('persnalchat', {
