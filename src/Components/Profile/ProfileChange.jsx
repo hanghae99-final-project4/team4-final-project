@@ -60,8 +60,7 @@ const ProfileChange = () => {
         );
 
         const imageUrl = URL.createObjectURL(compressedFileAsFile);
-        console.log(compressedFileAsFile);
-        console.log(imageUrl);
+       
         const photo = {
           id: photoList[i]?.name,
           file: compressedFileAsFile,

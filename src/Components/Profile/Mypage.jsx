@@ -12,26 +12,33 @@ import HomeMenu from '../HomeMenu/HomeMenu';
 import MypageHeader from './MypageHeader';
 import { useRecoilState } from 'recoil';
 import { useInfoState } from '../../Recoil/userList';
-import { ApplySet, Img, Nickname, NicknameBox, Profile } from '../Main/Subway';
+import {
+  ApplySet,
+  Exit,
+  Img,
+  InputDiv,
+  Modal,
+  Nickname,
+  NicknameBox,
+  Profile,
+  Status,
+} from '../Main/Subway';
 import write from '../../Assets/Main/write.svg';
 import arrowimg from '../../Assets/Mypage/arrow.svg';
+import { useCallback } from 'react';
+import exit from '../../Assets/Modal/status.svg';
 
 const MyPage = () => {
   const [bottomSheet, setBottomSheet] = useState(false);
-  const [isModal, setIsModal] = useState(false);
-  const inputRef = useRef();
-  const [files, setFiles] = useState([]);
-  const [primaryImage, setPrimaryImage] = useState([]);
-  const [preview, setPreview] = useState();
+
   const [form, setForm, OnChangeHandler] = useInput([]);
-  const cookies = new Cookies();
+  const [status, setStatus] = useState('');
 
   const navigate = useNavigate();
   const [changeprofile, setChangeprofile] = useState([]);
-  const [originprofile, setOriginprofile] = useState([]);
-  const thURL = process.env.REACT_APP_TH_S_HOST;
-  const [isEdit, setIsEdit] = useState(false);
+
   const [image, setImage] = useRecoilState(useInfoState);
+
   const local = form?.result?.account_type;
   useEffect(() => {
     getProfile();
@@ -49,173 +56,53 @@ const MyPage = () => {
   const profile = form?.images?.filter((item) => item?.is_primary === true)?.[0]
     ?.image_url;
 
-  // 프로필 정보들 저장 핸들러
-  async function imgSubmitHandler() {
+  // status Handler
+  const statusHandler = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+
+      setStatus((status) => ({ ...status, [name]: value }));
+    },
+    [status.status]
+  );
+  // register Handler
+  const registerHandler = async () => {
     try {
-      const Id = localStorage.getItem('userId');
-      const { data } = await trainApi2.editProfile(
-        Id,
-        form.nickname,
-        form.statusmessage
-      );
-      setIsEdit(!isEdit);
-      getProfile();
-    } catch (error) {
-      return;
-    }
-  }
-  //사진 업로드
-
-  const uploadFile = async () => {
-    const formData = new FormData();
-    for (let i = 0; i < image.length; i++) {
-      if (image[i].file !== undefined)
-        formData.append('otherImages', image[i].file);
-    }
-    if (primaryImage[0]?.file !== undefined)
-      formData.append('primaryImage', primaryImage[0]?.file);
-
-    const form = formData.getAll('otherImages');
-    formData.delete('otherImages');
-
-    form
-      .filter((item) => item.name !== primaryImage[0]?.file?.name)
-      .forEach((item) => formData.append('otherImages', item));
-
-    try {
-      const Id = localStorage.getItem('userId');
-      const { data } = await trainApi2.postProfile(Id, formData);
-      setIsModal(!isModal);
-      getProfile();
-    } catch (error) {
-      return;
-    }
-  };
-  //대표 프로필 수정
-  const patchProfile = async () => {
-    //기존 대표 이미지
-    const originProfile = changeprofile?.filter(
-      (item) => item?.is_primary === true
-    );
-
-    //프로필 사진들
-    const newProfile = [...changeprofile];
-    //새로운 대표 이미지
-    const changenewProfile = changeprofile?.filter(
-      (item) => item.image_url === primaryImage[0].url
-    );
-    setChangeprofile(...changeprofile, changenewProfile);
-
-    //기존의 있던 대표 이미지
-    const changeProfile = changeprofile.filter(
-      (item) => item.image_url === originProfile
-    );
-
-    // setChangeprofile(
-    const newArr = newProfile
-      .map((item) =>
-        item.image_url === changenewProfile[0].image_url
-          ? { ...item, is_primary: true }
-          : item
-      )
-      .filter((item) => item.image_url === changenewProfile[0].image_url);
-
-    const origin = newProfile
-      .map((item) =>
-        item.image_url === originProfile[0].image_url
-          ? { ...item, is_primary: false }
-          : item
-      )
-      .filter((item) => item.image_url === originProfile[0].image_url);
-
-    try {
-      const Id = localStorage.getItem('userId');
-      const { data } = await trainApi2.patchProfile(Id, newArr[0], origin[0]);
-      setIsModal(!isModal);
-      getProfile();
-    } catch (error) {
-      return;
-    }
-  };
-
-  //사진 업로드 시 파일 만들기
-  const formSubmit = (e) => {
-    let temp = [...image];
-    const photoList = e.target.files;
-    for (let i = 0; i < photoList.length; i++) {
-      temp.push({
-        id: photoList[i]?.name,
-        file: photoList?.[i],
-        image_url: URL?.createObjectURL(photoList[i]),
+      const id = localStorage.getItem('userId');
+      const { data } = await trainApi.postStatusmessage(id, {
+        introduction: status.status,
       });
-    }
-
-    if (temp.length > 5) {
-      temp = temp.slice(0, 5);
-    }
-    setImage(temp.concat(files));
-  };
-
-  //preview 이미지 함수
-  const thumb = image.map((item, index) => {
-    return (
-      <div>
-        <CloseCircleFilled
-          onClick={() => removeProfile(item.image_url)}
-          style={{
-            position: 'relative',
-            top: '18px',
-            zIndex: '999',
-            right: '0px',
-            cursor: 'pointer',
-          }}
-        />
-        <ThumbImg
-          onClick={() =>
-            setPrimaryImage([
-              {
-                file: item.file,
-                url: item.image_url,
-              },
-            ])
-          }
-          key={index}
-          src={item.image_url}
-          alt="image"
-        />
-      </div>
-    );
-  });
-  //이미지 삭제하는 함수
-  const removeProfile = async (deleteUrl) => {
-    const Id = localStorage.getItem('userId');
-    try {
-      const { data } = await trainApi2.deleteProfile(Id, deleteUrl);
-      setImage(image.filter((item) => item.image_url !== deleteUrl));
-    } catch (error) {
+      getProfile();
+      setBottomSheet(!bottomSheet);
+    } catch (err) {
       return;
     }
   };
 
-  const fileImagePreview = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setPreview(reader.result);
-        resolve();
-      };
-    });
-  };
-
-  const PictureUpload = () => {
-    inputRef.current.click();
-  };
-
-  //컴포넌트로 할거면 다 컴포넌트로 할것.
   return (
     <Wrap>
+      {bottomSheet && <ModalCtn></ModalCtn>}
+      <Modal className={bottomSheet ? 'open' : ''}>
+        <Status>
+          <span>상태 메시지 수정</span>
+          <Exit onClick={() => setBottomSheet(!bottomSheet)} src={exit} />
+        </Status>
+
+        <InputDiv>
+          <input
+            maxLength={20}
+            onChange={statusHandler}
+            value={status.status}
+            name="status"
+            placeholder="안녕하세요 잘 부탁드려요!"
+          />
+          <span className="sub">
+            {status?.status?.length}/{20}
+          </span>
+        </InputDiv>
+
+        <button onClick={registerHandler}>확인</button>
+      </Modal>
       <TextBox margin="0px">프로필수정</TextBox>
       <ProfileBox>
         <Profile>
@@ -237,7 +124,11 @@ const MyPage = () => {
                 alt="write"
               />
 
-              <span>반갑습니다.프로필을 설정 해 주세요</span>
+              <span onClick={() => setBottomSheet(!bottomSheet)}>
+                {form?.result?.introduction !== null
+                  ? form?.result?.introduction
+                  : '반갑습니다. 프로필을 설정 해 주세요'}
+              </span>
             </ApplySet>
           </NicknameBox>
         </Profile>
@@ -266,70 +157,6 @@ const MyPage = () => {
         신고하기
         <img src={arrowimg} />
       </TextBox>
-
-      {/* 수정 모드 / 저장 모드 바꾸기 */}
-
-      {isModal ? (
-        //
-
-        <>
-          <ImgWrap>
-            {primaryImage?.length > 0 ? (
-              <ImgBox
-                style={{ transform: 'scale(1)', borderRadius: '10px' }}
-                id="img-preview"
-                src={primaryImage[0].url}
-              />
-            ) : (
-              <ImgBox
-                style={{ transform: 'scale(1)', borderRadius: '10px' }}
-                id="img-preview"
-                src={
-                  form?.images?.filter((item) => item?.is_primary === true)?.[0]
-                    ?.image_url
-                }
-              />
-            )}
-
-            <UploadImage
-              maxSize={314572800}
-              type="file"
-              name="profile"
-              ref={inputRef}
-              value={form?.profile}
-              accept="image/*"
-              multiple
-              onChange={(e) => formSubmit(e)}
-            />
-            <ImgButton onClick={() => setIsModal(!isModal)}>
-              사진 업로드
-            </ImgButton>
-          </ImgWrap>
-          //
-          <ModalCtn>
-            <ModalWrap>
-              <ModalProfileDiv>{thumb}</ModalProfileDiv>
-              <ProfileSetBtn onClick={() => PictureUpload()}>
-                사진 업로드
-              </ProfileSetBtn>
-              <button onClick={() => uploadFile()}>저장</button>
-              <button onClick={() => patchProfile()}>대표프로필 수정</button>
-              <ProfileCloseBtn
-                onClick={() => {
-                  if (primaryImage[0]?.file === undefined) {
-                    setIsModal(!isModal);
-                  } else {
-                    fileImagePreview(primaryImage[0]?.file);
-                    setIsModal(!isModal);
-                  }
-                }}
-              >
-                나가기
-              </ProfileCloseBtn>
-            </ModalWrap>
-          </ModalCtn>
-        </>
-      ) : null}
     </Wrap>
   );
 };

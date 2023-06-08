@@ -92,7 +92,7 @@ const PickProfile = () => {
     const newArray = await image.filter(
       (image) => image.image_url !== deleteUrl
     );
-    console.log(newArray);
+
     setImage(newArray);
   };
   const cancelHandler = () => {
@@ -102,9 +102,7 @@ const PickProfile = () => {
       navigate(-1);
     }
   };
-  useEffect(() => {
-    console.log('useInfoState updated:', image);
-  }, [image]);
+  useEffect(() => {}, [image]);
 
   //사진 업로드
 
@@ -116,7 +114,7 @@ const PickProfile = () => {
     setImage(updatedImage);
     setProfile(updatedImage);
   };
-  console.log(image);
+
   return (
     <Wrap>
       <SpanBox>

@@ -162,6 +162,7 @@ const ImgWrap = styled.div`
   background-size: cover;
   width: 300px;
   height: 162px;
+  border-radius: 4px;
 
   display: flex;
   flex-direction: row;
