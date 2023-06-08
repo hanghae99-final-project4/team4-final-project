@@ -10,7 +10,7 @@ import { useUserState } from '../../Recoil/userList';
 
 const GenderSet = () => {
   const navigate = useNavigate();
-  const [isClick, setIsClick] = useState('2');
+  const [isClick, setIsClick] = useState('남성');
   const [isChecked, setIsChecked] = useState(false);
   const [user, setUser] = useRecoilState(useUserState);
 
@@ -18,10 +18,11 @@ const GenderSet = () => {
     setUser({ gender: e.target.name });
     setIsChecked((prev) => !prev);
     setIsClick((prev) => {
-      return e.target.value;
+      return e.target.name;
     });
   };
   const nextbuttonHandler = () => {
+    setUser({ gender: isClick });
     navigate('/setage');
   };
   const GenderList = [
@@ -48,14 +49,14 @@ const GenderSet = () => {
             id={item.id}
             name={item.name}
             value={item.value}
-            className={item.value === isClick ? 'active' : ''}
+            className={item.name === isClick ? 'active' : ''}
             key={index}
             onClick={genderClickHandler}
           >
             <GenderSpan>{item.name}</GenderSpan>
 
             <Activeinput
-              className={item.value === isClick ? 'active' : ''}
+              className={item.name === isClick ? 'active' : ''}
               value={item.value}
               type="radio"
             />

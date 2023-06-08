@@ -65,6 +65,9 @@ export const trainApi = {
   postName: (payload) => instance.post('/', payload),
   postProfile: (userId, payload) =>
     instance.post(`/user/edit/${userId}`, payload),
+  authEmail: (email) => instance.post(`/user/email`, email),
+  authId: (email) => instance.post(`/user/checkid`, email),
+  authCode: (payload) => instance.post(`/user/authcode`, payload),
   getMatch: (userId) => instance.get(`/list/matched/${userId}`),
   getConvers: (userId) => instance.get(`/user/${userId}`),
   getStation: (keyword) => instance.get(`list/station/${keyword}`),

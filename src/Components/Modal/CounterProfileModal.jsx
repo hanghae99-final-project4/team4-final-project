@@ -26,7 +26,7 @@ const CounterProfileModal = ({
   });
 
   const imgSize = useRef(representProfile?.length);
-
+  console.log(representProfile);
   // 슬라이드 버튼 이전 핸들러
   const handleSwipe = (direction) => {
     let next = current + direction;
@@ -59,7 +59,11 @@ const CounterProfileModal = ({
           className={image ? 'profile' : ''}
           background={representProfile?.[current]?.image_url}
         >
-          <img onClick={() => handleSwipe(-1)} src={left} />
+          <DirectionImg
+            onClick={() => (handleSwipe(-1), 1000)}
+            src={left}
+            alt="left"
+          />
           <div
             representProfile={representProfile?.[current]?.image_url}
             current={current}
@@ -76,7 +80,11 @@ const CounterProfileModal = ({
             </div>
           </div>
 
-          <img onClick={() => handleSwipe(1)} src={right} />
+          <DirectionImg
+            onClick={() => (handleSwipe(1), 1000)}
+            src={right}
+            alt="right"
+          />
         </ImgWrap>
         <Nickname className={image ? 'profile' : ''}>
           {nickname && <NickNameTag>{nickname}</NickNameTag>}
@@ -89,9 +97,16 @@ const CounterProfileModal = ({
             <NickNameTag>{'성별이 없습니다'}</NickNameTag>
           )}
         </Nickname>
-        <StatusTag className={image ? 'profile' : ''}>
-          <StatusMessage>{statusmessage}</StatusMessage>
-        </StatusTag>
+        {statusmessage ? (
+          <StatusTag className={image ? 'profile' : ''}>
+            <StatusMessage>{statusmessage}</StatusMessage>
+          </StatusTag>
+        ) : (
+          <StatusTag className={image ? 'profile' : ''}>
+            <StatusMessage>안녕하세요. 반갑습니다!</StatusMessage>
+          </StatusTag>
+        )}
+
         <ExitBtn className={image ? 'profile' : ''} onClick={exitHandler}>
           닫기
         </ExitBtn>
@@ -313,4 +328,8 @@ const StatusMessage = styled.span`
   font-weight: 400;
   text-align: left;
   color: #1f1f1f;
+`;
+const DirectionImg = styled.img`
+  width: 12px;
+  height: 24px;
 `;

@@ -21,6 +21,7 @@ import downimg from '../../Assets/History/down.svg';
 import normalupimg from '../../Assets/History/normalup.svg';
 import normaldownimg from '../../Assets/History/normaldown.svg';
 import ProfileSlick from '../Slick/ProfileSlick';
+import nomatchImg from '../../Assets/Matching/nomatch.svg';
 const Subway = () => {
   const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Subway = () => {
   const [bottomSheet, setBottomSheet] = useState(false);
   const [status, setStatus] = useState('');
   const [match, setMatch] = useState([]);
+
   const { data } = useStation(station?.place_name?.split('역')[0]);
   localStorage.setItem('line', data?.[0]?.line_number);
   useEffect(() => {
@@ -246,66 +248,75 @@ const Subway = () => {
 
       <HistoryBox>
         <span>매칭이력</span>
-        {match.map((item, i) => (
-          <HistoryItem key={i}>
-            <MatchItem>
-              <MatchResultBox>
-                <img src={circleimg} />
-                <div>매칭성공</div>
-              </MatchResultBox>
+        {match ? (
+          <>
+            {match.map((item, i) => (
+              <HistoryItem key={i}>
+                <MatchItem>
+                  <MatchResultBox>
+                    <img src={circleimg} />
+                    <div>매칭성공</div>
+                  </MatchResultBox>
 
-              <span>
-                {`${item?.updatedAt.slice(0, 4)} /${item?.updatedAt.slice(
-                  5,
-                  7
-                )}/${item?.updatedAt.slice(8, 10)}
+                  <span>
+                    {`${item?.updatedAt.slice(0, 4)} /${item?.updatedAt.slice(
+                      5,
+                      7
+                    )}/${item?.updatedAt.slice(8, 10)}
                  `}
-              </span>
-            </MatchItem>
+                  </span>
+                </MatchItem>
 
-            <MatchNic>
-              {item?.User?.nickname}
-              <span>님과 매칭 되었습니다.</span>
-            </MatchNic>
-            <Comment>
-              <div>지속적으로 대화 하고 싶으신가요?</div>
-              {item.reputation ? (
-                <LikeBox>
-                  <img
-                    onClick={() => reputationDownHandler(item.id)}
-                    src={normaldownimg}
-                  />
-                  <img
-                    onClick={() => reputationUpHandler(item.id)}
-                    src={upimg}
-                  />
-                </LikeBox>
-              ) : item.reputation === null ? (
-                <LikeBox>
-                  <img
-                    onClick={() => reputationDownHandler(item.id)}
-                    src={normaldownimg}
-                  />
-                  <img
-                    onClick={() => reputationUpHandler(item.id)}
-                    src={normalupimg}
-                  />
-                </LikeBox>
-              ) : (
-                <LikeBox>
-                  <img
-                    onClick={() => reputationDownHandler(item.id)}
-                    src={downimg}
-                  />
-                  <img
-                    onClick={() => reputationUpHandler(item.id)}
-                    src={normalupimg}
-                  />
-                </LikeBox>
-              )}
-            </Comment>
-          </HistoryItem>
-        ))}
+                <MatchNic>
+                  {item?.User?.nickname}
+                  <span>님과 매칭 되었습니다.</span>
+                </MatchNic>
+                <Comment>
+                  <div>지속적으로 대화 하고 싶으신가요?</div>
+                  {item.reputation ? (
+                    <LikeBox>
+                      <img
+                        onClick={() => reputationDownHandler(item.id)}
+                        src={normaldownimg}
+                      />
+                      <img
+                        onClick={() => reputationUpHandler(item.id)}
+                        src={upimg}
+                      />
+                    </LikeBox>
+                  ) : item.reputation === null ? (
+                    <LikeBox>
+                      <img
+                        onClick={() => reputationDownHandler(item.id)}
+                        src={normaldownimg}
+                      />
+                      <img
+                        onClick={() => reputationUpHandler(item.id)}
+                        src={normalupimg}
+                      />
+                    </LikeBox>
+                  ) : (
+                    <LikeBox>
+                      <img
+                        onClick={() => reputationDownHandler(item.id)}
+                        src={downimg}
+                      />
+                      <img
+                        onClick={() => reputationUpHandler(item.id)}
+                        src={normalupimg}
+                      />
+                    </LikeBox>
+                  )}
+                </Comment>
+              </HistoryItem>
+            ))}
+          </>
+        ) : (
+          <NoMatchBox>
+            <img src={nomatchImg} />
+            <div>매칭 이력이 없습니다</div>
+          </NoMatchBox>
+        )}
       </HistoryBox>
       <Kakao />
     </SubwayDiv>
@@ -699,4 +710,13 @@ const LikeBox = styled.div`
   img {
     cursor: pointer;
   }
+`;
+const NoMatchBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 343px;
+  height: 335px;
+  gap: 20px;
 `;
