@@ -442,10 +442,12 @@ const RetryBox = styled.div`
     }
   }
 `;
-const ToastMessage = styled.div`
+export const ToastMessage = styled.div`
+  position: fixed;
   display: flex;
   gap: 10px;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-top: 14px;
   width: 300px;

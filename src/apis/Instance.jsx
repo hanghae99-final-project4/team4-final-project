@@ -67,6 +67,8 @@ export const trainApi = {
     instance.post(`/user/edit/${userId}`, payload),
   authEmail: (email) => instance.post(`/user/email`, email),
   authId: (email) => instance.post(`/user/checkid`, email),
+  duplicationNickname: (nickname) =>
+    instance.post(`/user/checknickname`, nickname),
   authCode: (payload) => instance.post(`/user/authcode`, payload),
   getMatch: (userId) => instance.get(`/list/matched/${userId}`),
   getConvers: (userId) => instance.get(`/user/${userId}`),

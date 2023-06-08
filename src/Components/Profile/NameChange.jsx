@@ -1,19 +1,39 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Avatar, Nickname, Upload } from '../Signup/ProfileSet';
+import {
+  Avatar,
+  ErrorMessageBox,
+  Nickname,
+  Upload,
+} from '../Signup/ProfileSet';
 import { trainApi } from '../../apis/Instance';
 import upload from '../../Assets/SetProfile/profile.svg';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { usePatchState } from '../../Recoil/userList';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Errormessage } from '../Login/EmailLogin';
+import { ToastMessage } from '../Signup/Signup';
+
 const NameChange = () => {
   const [profile, setProfile] = useState([]);
   const [nickname, setNickname] = useState([]);
   const [patch, setPatch] = useRecoilState(usePatchState);
+  // 듀플 성공하면 Toast 진행
+  const [duplicSuccess, setDuplicSuccess] = useState(false);
+  const [toast, setToast] = useState(false);
+  // 중복 검사 실패
+  const [duplicFail, setDuplicFail] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
+    setTimeout(() => setDuplicSuccess(false), 2000);
+
+    setDuplicFail(false);
+    setToast(false);
     getProfile();
-  }, []);
+  }, [duplicSuccess]);
 
   const getProfile = async () => {
     try {
@@ -35,13 +55,14 @@ const NameChange = () => {
     [nickname.nickname]
   );
 
-  const patchnameHandler = async () => {
+  const patchnameHandler = async (data) => {
     const Id = localStorage.getItem('userId');
     try {
-      const { data } = trainApi.postStatusmessage(Id, {
-        nickname: nickname.nickname,
+      const response = await trainApi.postStatusmessage(Id, {
+        nickname: data,
       });
-      alert('닉네임이 변경 되었습니다.');
+      setToast(true);
+
       getProfile();
     } catch (err) {
       return;
@@ -51,10 +72,54 @@ const NameChange = () => {
   const changeprofileHandler = () => {
     navigate('/changeprofile');
   };
+  const schema = yup.object().shape({
+    nickname: yup
+      .string()
+      .required('닉네임을 입력해주세요.')
+      .matches(
+        /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/,
+        '문자+숫자 포함 2글자 이상'
+      ),
+  });
 
+  //react-hook-form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    getValues,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+  const getFields = getValues();
+  const getValue = watch();
+
+  const duplicationConfirmHandler = async (data) => {
+    setDuplicSuccess(false);
+    const nickname = data.nickname;
+    try {
+      const response = await trainApi.duplicationNickname({
+        nickname: nickname,
+      });
+
+      if (response.data) {
+        setDuplicSuccess(true);
+        await patchnameHandler(nickname);
+      }
+    } catch (err) {
+      setDuplicFail(true);
+    }
+  };
+  console.log(errors);
+  console.log(getFields.nickname);
+  console.log(getValue.nickname);
+  console.log(duplicSuccess);
   return (
     <Wrap>
       {/* primary image 가 있으면 ? */}
+      {toast && <ToastMessage>닉네임이 변경 되었습니다.</ToastMessage>}
       <GifBox>
         <Avatar
           onClick={changeprofileHandler}
@@ -66,15 +131,41 @@ const NameChange = () => {
         />
         <Upload onClick={changeprofileHandler} src={upload} alt="upload" />
       </GifBox>
-      <NicknameBox>
+      <NicknameBox onSubmit={handleSubmit(duplicationConfirmHandler)}>
         <Nickname
-          onChange={OnChangeHandler}
-          value={nickname.nickname}
+          {...register('nickname')}
           name="nickname"
           placeholder="사용하실 닉네임"
         />
-        <button onClick={patchnameHandler}>중복확인</button>
+        <button
+          disabled={
+            getFields.nickname !== '' && !errors?.nickname?.message
+              ? false
+              : true
+          }
+          className={
+            getFields.nickname !== '' && !errors?.nickname?.message
+              ? 'active'
+              : ''
+          }
+          onClick={patchnameHandler}
+        >
+          중복확인
+        </button>
       </NicknameBox>
+      <ErrorMessageBox>
+        {duplicFail ? (
+          <Errormessage>닉네임이 중복 입니다.</Errormessage>
+        ) : errors?.nickname?.message ? (
+          <Errormessage>{errors?.nickname?.message}</Errormessage>
+        ) : getFields.nickname !== '' && duplicSuccess === true ? (
+          <Errormessage className="useable">
+            사용가능한 닉네임 입니다.
+          </Errormessage>
+        ) : (
+          ''
+        )}
+      </ErrorMessageBox>
     </Wrap>
   );
 };
@@ -85,7 +176,7 @@ const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const NicknameBox = styled.div`
+export const NicknameBox = styled.form`
   margin-top: 40px;
   align-items: center;
   justify-content: center;
@@ -98,11 +189,14 @@ const NicknameBox = styled.div`
     border-radius: 4px;
     padding: 10px;
 
-    background-color: #fa3a45;
+    background: rgba(250, 58, 69, 0.3);
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 500;
     color: #ffffff;
+    &.active {
+      background-color: #fa3a45;
+    }
   }
 `;
 const GifBox = styled.div`
