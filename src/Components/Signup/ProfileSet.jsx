@@ -54,7 +54,7 @@ const ProfileSet = () => {
     }
   }
   console.log(gender);
-
+  console.log(primaryImage);
   const beforeHandler = () => {
     navigate(-1);
   };
@@ -65,14 +65,23 @@ const ProfileSet = () => {
       if (image[i].file !== undefined)
         formData.append('otherImages', image[i].file);
     }
-    if (primaryImage[0]?.file !== undefined)
-      formData.append('primaryImage', primaryImage[0]?.file);
+    if (
+      image.filter((i, v) => i.isMainProfile === true)?.[0]?.file !== undefined
+    )
+      formData.append(
+        'primaryImage',
+        image.filter((i, v) => i.isMainProfile === true)?.[0]?.file
+      );
 
     const form = formData.getAll('otherImages');
     formData.delete('otherImages');
 
     form
-      .filter((item) => item.name !== primaryImage[0]?.file?.name)
+      .filter(
+        (item) =>
+          item.name !==
+          image.filter((i, v) => i.isMainProfile === true)?.[0]?.file?.name
+      )
       .forEach((item) => formData.append('otherImages', item));
 
     try {
@@ -111,7 +120,7 @@ const ProfileSet = () => {
   const getFields = getValues();
 
   const duplicationConfirmHandler = async (data) => {
-    setToast(!toast);
+    setToast(false);
     try {
       const response = await trainApi.duplicationNickname({
         nickname: data.nickname,
@@ -121,7 +130,7 @@ const ProfileSet = () => {
       }
     } catch (err) {}
   };
-  console.log(errors);
+
   return (
     <Wrap>
       {toast && <ToastMessage>사용 가능한 닉네임 입니다.</ToastMessage>}
@@ -135,11 +144,13 @@ const ProfileSet = () => {
           </Profile>
         </SpanBox>
         {/* primary image 가 있으면 ? */}
-        {primaryImage[0]?.url && true ? (
+        {image[0]?.image_url && true ? (
           <>
             <Avatar
               onClick={profileuploadHandler}
-              src={primaryImage[0]?.url}
+              src={
+                image.filter((i, v) => i.isMainProfile === true)?.[0]?.image_url
+              }
               alt="avatar"
             />
             <Upload onClick={profileuploadHandler} src={upload} alt="upload" />
@@ -176,7 +187,7 @@ const ProfileSet = () => {
         <Errormessage>{errors?.nickname?.message}</Errormessage>
       </ErrorMessageBox>
 
-      {primaryImage[0]?.url && toast ? (
+      {image[0]?.image_url && toast ? (
         <>
           <ButtonBox>
             <div onClick={beforeHandler}>
