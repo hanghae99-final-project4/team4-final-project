@@ -29,6 +29,8 @@ import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
 import addimg from '../../Assets/ChattingModal/add.svg';
 import exitimg from '../../Assets/ChattingModal/exit.svg';
 import leaveimg from '../../Assets/ChattingModal/leave.svg';
+import imageCompression from 'browser-image-compression';
+import chatImg from '../../Assets/Chatting/chatprofile.svg';
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -55,7 +57,7 @@ const Chatting = () => {
   const [counter, setCounter] = useState([]);
   const [counterUser, setCounterUser] = useState([{}]);
   const [leave, setLeave] = useState(false);
-  const [chatData, setChatData] = useState(['산', '바다']);
+
   // 시간 추가 모달
   const [addModal, setAddModal] = useState(false);
   // 나가기 모달
@@ -75,7 +77,8 @@ const Chatting = () => {
   const lat = localStorage.getItem('lat');
   const lon = localStorage.getItem('lon');
   const navigate = useNavigate();
-
+  //버튼 클릭하면 disable 시키기
+  const [disabled, setDisabled] = useState([]);
   const boxRef = useRef(null);
   const scrollRef = useRef();
   const inputRef = useRef();
@@ -84,13 +87,53 @@ const Chatting = () => {
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [cnt, setCnt] = useState(0);
   //챗봇 데이터 배열
-  const chatArray = [
+  const [chatArray, setChatArray] = useState([
     ['산', '바다'],
     ['여름', '겨울'],
     ['자장면', '짬뽕'],
-  ];
-  const randomChatHandler = (chatArray) => {
-    return setChatData(chatArray[Math.floor(Math.random() * chatArray.length)]);
+    ['집착 심한 애인', '애정표현 없는 애인'],
+    ['애인이랑 스킨십만 1년', '애인이랑 스킨십 전혀 없이 1년'],
+    ['게임에 미쳐버린 애인', '술에 미쳐버린 애인'],
+    ['가장 친한 친구가 내 험담', '나의 애인이 내 험담'],
+    ['이성친구와 여행 가는 애인', '전 애인과 밤새 술마시는 애인'],
+    ['정장입고 1박 2일 자전거 타기', '바이크복 입고 1박2일 일하기'],
+    [
+      '술 먹고 다음날 일어났더니 전 애인한테 부재중 발신 21건',
+      '술 먹고 다음날 일어났더니 전공교수님과 통화 내역 1건',
+    ],
+    ['로또 당첨되면 애인에게 바로 말한다', '숨긴다'],
+    ['빚이 30억 있는 이상형 만나기', '부자지만 내가 싫어하는 사람과 연애'],
+    ['잠수 이별', '환승 이별'],
+    [
+      '새 신발인데 물웅덩이에 빠지고 1시간 이상 돌아다니기',
+      '양말 젖어서 1시간 이상 돌아다니는데 발 냄새 심하게 나기',
+    ],
+    ['1년 동안 폰 없이 살기', '1년동안 친구 없기'],
+    ['여름에 히터 틀고 자기', '겨울에 에어컨 켜고 자기'],
+    ['애인한테 꼬리 치는 베프', '베프한테 꼬리 치는 애인'],
+    ['연하', '연상'],
+    ['낮져밤이', '낮이밤져'],
+    ['매일 사랑을 표현하는 애인', '말 없이 깜짝 이벤트 해주는 애인'],
+    ['원하는 얼굴로 태어나기', '원하는 몸매로 태어나기'],
+  ]);
+  const [chatData, setChatData] = useState(
+    chatArray[Math.floor(Math.random() * chatArray.length)]
+  );
+
+  const year = new Date().getFullYear();
+  const month = String(new Date().getMonth()).padStart(2, '0');
+  const day = String(new Date().getDate()).padStart(2, '0');
+  // 랜덤 벨류 뽑아주는 핸들러
+  //랜덤 벨류 만들고 chatArray 에서 randomValue 값이 포함 되면 그 랜덤 벨류를 제외한 값으로 바꾸기
+  const randomChatHandler = () => {
+    const randomValue = chatArray[Math.floor(Math.random() * chatArray.length)];
+
+    if (chatArray.includes(randomValue)) {
+      const newChatArr = chatArray.filter((i, v) => i !== randomValue);
+
+      setChatArray(newChatArr);
+    }
+    setChatData(randomValue);
   };
 
   // function setItemWithExpireTime(keyName, keyValue, tts) {
@@ -261,10 +304,21 @@ const Chatting = () => {
       return;
     }
     if (img && img.size > 0) {
-      const formData = new FormData();
-      formData.append('chatImage', img);
+      const options = {
+        maxSizeMB: 1, // 허용하는 최대 사이즈 지정
+        maxWidthOrHeight: 1920, // 허용하는 최대 width, height 값 지정
+        useWebWorker: true, // webworker 사용 여부
+      };
 
       try {
+        //resizing 시키기 추가
+        const compressedFile = await imageCompression(img, options);
+        const compressedFileAsFile = new File([compressedFile], img.name, {
+          type: img.type,
+        });
+        const formData = new FormData();
+        formData.append('chatImage', compressedFileAsFile);
+
         const name = JSON.parse(localStorage.getItem('nickname')).value;
         const { data } = await trainApi2.chattingForm(name, formData);
 
@@ -299,15 +353,18 @@ const Chatting = () => {
     setTimeReset(true);
     setAddModal(!addModal);
   };
+  //챗봇 노출 핸들러
   const chatBotHandler = () => {
     const roomkey = localStorage.getItem('room');
-
-    if (cnt <= 2) {
+    randomChatHandler();
+    if (cnt <= 3) {
       setCnt(cnt + 1);
-      socket.emit('chat-bot', roomkey, chatArray[cnt]);
+      socket.emit('chat-bot', roomkey, chatData);
+    } else {
     }
   };
-  const buttonHandler = (item) => {
+  const buttonHandler = (item, index) => {
+    setDisabled([...disabled, index]);
     socket.emit('persnalchat', {
       roomkey: room,
       msg: item,
@@ -372,6 +429,7 @@ const Chatting = () => {
                     setIsModal={setIsModal}
                   />
                 )}
+                {/* 시간 추가 모달 */}
                 {addModal && (
                   <ChattingModal>
                     <img src={addimg} alt="addimg" />
@@ -389,6 +447,7 @@ const Chatting = () => {
                     </BtnBox>
                   </ChattingModal>
                 )}
+                {/* 채팅방 나가면 뜨는 모달 */}
                 {isExit && (
                   <ChattingModal>
                     <img src={exitimg} alt="exit" />
@@ -426,8 +485,36 @@ const Chatting = () => {
                     </BtnBox>
                   </ChattingModal>
                 )}
+
                 <ChatBox>
-                  {' '}
+                  <LineBox>
+                    <Line />{' '}
+                    <span>
+                      {year}.{month}.{day}
+                    </span>{' '}
+                    <Line />
+                  </LineBox>
+                  {/* 아이스 브래킹 봇 */}
+                  <UserProfileDiv>
+                    <UserProfileImg src={chatImg} />
+                    <UserProfileNameChat>
+                      <UserProfileName>아이스 브래킹 봇</UserProfileName>
+
+                      <ChatDiv className={'bot'}>
+                        안녕하세요? <br />
+                        저는 어색한 분위기를 타파 시켜줄
+                        <br /> ‘아이스 브래킹 봇’ 입니다.
+                        <br />
+                        <br />
+                        제가 필요하면 오른쪽 상단의 ‘Quiz 버튼’ 을 눌러주세요.
+                      </ChatDiv>
+                    </UserProfileNameChat>
+                    <Time>
+                      {String(new Date().getHours()).padStart(2, '0') +
+                        ':' +
+                        String(new Date().getMinutes()).padStart(2, '0')}
+                    </Time>
+                  </UserProfileDiv>
                   {chatArr?.map((item, index) => (
                     <div
                       style={
@@ -451,7 +538,10 @@ const Chatting = () => {
                             <UserProfileImg style={{ display: 'none' }} />
                             <ChatBoxTime>
                               <Time>
-                                {new Date().getHours() +
+                                {String(new Date().getHours()).padStart(
+                                  2,
+                                  '0'
+                                ) +
                                   ':' +
                                   String(new Date().getMinutes()).padStart(
                                     2,
@@ -474,12 +564,11 @@ const Chatting = () => {
                                     imgurl={item?.url}
                                   />
                                 </>
-
-                                // 아이스 브레이킹 봇 일때
                               )}
                             </ChatBoxTime>
                           </UserProfileDiv>
-                        ) : item.nickname === '아이스 브레이킹 봇' ? (
+                        ) : // 아이스 브레이킹 봇 일때
+                        item.nickname === '아이스 브레이킹 봇' ? (
                           <UserProfileDiv>
                             <UserProfileImg src={item.profile} />
                             <UserProfileNameChat>
@@ -494,15 +583,17 @@ const Chatting = () => {
                                   {item.msg}
                                   <ButtonBox>
                                     <button
+                                      disabled={disabled.includes(index)}
                                       onClick={() =>
-                                        buttonHandler(item?.chatbot[0])
+                                        buttonHandler(item?.chatbot[0], index)
                                       }
                                     >
                                       {item.chatbot && item?.chatbot[0]}
                                     </button>
                                     <button
+                                      disabled={disabled.includes(index)}
                                       onClick={() =>
-                                        buttonHandler(item?.chatbot[1])
+                                        buttonHandler(item?.chatbot[1], index)
                                       }
                                     >
                                       {item.chatbot && item?.chatbot[1]}
@@ -535,7 +626,7 @@ const Chatting = () => {
                               )}
                             </UserProfileNameChat>
                             <Time>
-                              {new Date().getHours() +
+                              {String(new Date().getHours()).padStart(2, '0') +
                                 ':' +
                                 String(new Date().getMinutes()).padStart(
                                   2,
@@ -582,7 +673,7 @@ const Chatting = () => {
                               )}
                             </UserProfileNameChat>
                             <Time>
-                              {new Date().getHours() +
+                              {String(new Date().getHours()).padStart(2, '0') +
                                 ':' +
                                 String(new Date().getMinutes()).padStart(
                                   2,
@@ -621,7 +712,7 @@ const Chatting = () => {
                               )}
                             </UserProfileNameChat>
                             <Time>
-                              {new Date().getHours() +
+                              {String(new Date().getHours()).padStart(2, '0') +
                                 ':' +
                                 String(new Date().getMinutes()).padStart(
                                   2,
@@ -729,6 +820,7 @@ const UserChatDiv = styled.div`
 `;
 //전체 채팅방
 const ChatBox = styled.div`
+  margin-top: 20px;
   border: none;
   overflow-y: scroll;
   height: 551px;
@@ -800,9 +892,7 @@ const ConversatonTime = styled.div`
   span {
     font-size: 14px;
     font-weight: 400;
-
     color: #808080;
-
     margin-left: 20px;
   }
   button {
@@ -1060,5 +1150,27 @@ const ButtonBox = styled.div`
     font-size: 12px;
     font-weight: 500;
     color: #ffffff;
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+`;
+const Line = styled.div`
+  border-top: 1px solid #ebebeb;
+  width: 135px;
+  height: 0px;
+`;
+const LineBox = styled.div`
+  margin-left: 16px;
+  width: 343px;
+  height: 17px;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  span {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: 400;
+    color: #888888;
   }
 `;

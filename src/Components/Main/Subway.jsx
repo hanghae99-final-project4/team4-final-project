@@ -159,7 +159,7 @@ const Subway = () => {
       </GuideBox>
       <ProfileBox>
         <Profile>
-          <Img>
+          <Img onClick={() => navigate('/changeprofile')}>
             <img
               src={
                 profile?.images?.filter((item) => item.is_primary === true)?.[0]
@@ -177,7 +177,7 @@ const Subway = () => {
                 alt="write"
               />
 
-              <span>
+              <span onClick={() => setBottomSheet(!bottomSheet)}>
                 {profile?.result?.introduction !== null
                   ? profile?.result?.introduction
                   : '반갑습니다. 프로필을 설정 해 주세요'}
@@ -385,12 +385,14 @@ export const Profile = styled.div`
   align-items: center;
 `;
 export const Img = styled.div`
+  cursor: pointer;
   transform: scale(1);
   width: 60px;
   height: 60px;
   overflow: hidden;
   margin: 0 auto;
   border-radius: 100%;
+  object-fit: cover;
 
   img {
     width: 100%;
@@ -412,6 +414,7 @@ export const ApplySet = styled.div`
   display: flex;
   gap: 6px;
   span {
+    cursor: pointer;
     font-size: 12px;
     font-weight: 400;
     color: #575757;
@@ -566,7 +569,7 @@ const HistoryBox = styled.div`
   }
 `;
 // 상태프로필 모달
-const Modal = styled.div`
+export const Modal = styled.div`
   background: #fff;
   width: 375px;
   height: 812px;
@@ -608,7 +611,7 @@ const Modal = styled.div`
     color: #ffffff;
   }
 `;
-const InputDiv = styled.div`
+export const InputDiv = styled.div`
   margin-top: 40px;
   width: 343px;
   height: 76px;
@@ -625,11 +628,11 @@ const InputDiv = styled.div`
     justify-content: end;
   }
 `;
-const Exit = styled.img`
+export const Exit = styled.img`
   cursor: pointer;
   margin-right: 10px;
 `;
-const Status = styled.div`
+export const Status = styled.div`
   display: flex;
   width: 225px;
   height: 48px;

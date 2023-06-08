@@ -45,11 +45,13 @@ const Timer = ({
   }, [timereset]);
 
   return (
-    <TimerBox className={time.current <= 30 ? 'red' : ''}>
-      <span>
+    <TimerBox>
+      <Time className={time.current <= 30 ? 'red' : ''}>
         {min}:{sec}
-      </span>
-      <button onClick={addTimeHandler}>추가</button>
+      </Time>
+      <div>
+        <button onClick={addTimeHandler}>추가</button>
+      </div>
     </TimerBox>
   );
 };
@@ -60,22 +62,26 @@ const TimerBox = styled.div`
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
-  color: #8fb398;
+  display: flex;
+  align-items: center;
   margin-left: 80px;
-  span {
-    &.red {
-      color: #fa3a45;
-      position: relative;
-      animation: bounce 1s infinite linear;
+`;
+const Time = styled.div`
+  width: 39px;
+  height: 17px;
+  color: #8fb398;
+  &.red {
+    color: #fa3a45;
+    position: relative;
+    animation: bounce 1s infinite linear;
 
-      @keyframes bounce {
-        0% {
-          opacity: 0;
-        }
+    @keyframes bounce {
+      0% {
+        opacity: 0;
+      }
 
-        100% {
-          opacity: 1;
-        }
+      100% {
+        opacity: 1;
       }
     }
   }
