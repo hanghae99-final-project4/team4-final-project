@@ -18,7 +18,12 @@ import { trainApi, trainApi2 } from '../../apis/Instance';
 import beforebutton from '../../Assets/SetProfile/beforebutton.svg';
 import nextbutton from '../../Assets/SetProfile/nextbutton.svg';
 import { useState } from 'react';
-
+import { NicknameBox } from '../Profile/NameChange';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { Errormessage } from '../Login/EmailLogin';
+import { ToastMessage } from './Signup';
 const ProfileSet = () => {
   // 프로필 정보 전역상태 // 이미지 담는 배열
   const [image, setImage] = useRecoilState(useInfoState);
@@ -32,6 +37,7 @@ const ProfileSet = () => {
   const [form, setForm, OnChangeHandler] = useInput([]);
   const fileref = useRef();
   const navigate = useNavigate();
+  const [toast, setToast] = useState(false);
   const profileuploadHandler = () => {
     navigate('/pickprofile');
   };
@@ -41,7 +47,7 @@ const ProfileSet = () => {
       const { data } = await trainApi.postProfile(userId, {
         gender: gender.gender,
         age_group: gender.age,
-        nickname: form.nickname,
+        nickname: getFields.nickname,
       });
     } catch (err) {
       return;
@@ -52,7 +58,7 @@ const ProfileSet = () => {
   const beforeHandler = () => {
     navigate(-1);
   };
-
+  // 프로필 업로더 핸들러
   const uploadFile = async () => {
     const formData = new FormData();
     for (let i = 0; i < image.length; i++) {
@@ -81,8 +87,44 @@ const ProfileSet = () => {
     }
   };
 
+  const schema = yup.object().shape({
+    nickname: yup
+      .string()
+      .required('닉네임을 입력해주세요.')
+      .matches(
+        /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/,
+        '문자+숫자 포함 2글자 이상'
+      ),
+  });
+
+  //react-hook-form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    getValues,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+  const getFields = getValues();
+
+  const duplicationConfirmHandler = async (data) => {
+    setToast(!toast);
+    try {
+      const response = await trainApi.duplicationNickname({
+        nickname: data.nickname,
+      });
+      if (response.data) {
+        setToast(true);
+      }
+    } catch (err) {}
+  };
+  console.log(errors);
   return (
     <Wrap>
+      {toast && <ToastMessage>사용 가능한 닉네임 입니다.</ToastMessage>}
       <GifBox>
         <ProgressImg src={progress} alt="progress" />
         <SpanBox>
@@ -109,14 +151,32 @@ const ProfileSet = () => {
           </>
         )}
       </GifBox>
-      <Nickname
-        margin="40px"
-        onChange={OnChangeHandler}
-        value={form.nickname}
-        name="nickname"
-        placeholder="사용하실 닉네임"
-      />
-      {primaryImage[0]?.url && true && form.nickname && true ? (
+      <NicknameBox onSubmit={handleSubmit(duplicationConfirmHandler)}>
+        <Nickname
+          name="nickname"
+          placeholder="사용하실 닉네임"
+          {...register('nickname')}
+        />
+        <button
+          disabled={
+            getFields.nickname !== '' && !errors?.nickname?.message
+              ? false
+              : true
+          }
+          className={
+            getFields.nickname !== '' && !errors?.nickname?.message
+              ? 'active'
+              : ''
+          }
+        >
+          중복확인
+        </button>
+      </NicknameBox>
+      <ErrorMessageBox>
+        <Errormessage>{errors?.nickname?.message}</Errormessage>
+      </ErrorMessageBox>
+
+      {primaryImage[0]?.url && toast ? (
         <>
           <ButtonBox>
             <div onClick={beforeHandler}>
@@ -234,4 +294,7 @@ const ButtonBox = styled.div`
       cursor: pointer;
     }
   }
+`;
+export const ErrorMessageBox = styled.div`
+  width: 350px;
 `;

@@ -177,4 +177,7 @@ export const Errormessage = styled.div`
   margin-top: 3.33px;
 
   font-size: 14px;
+  &.useable {
+    color: #8fb398;
+  }
 `;

@@ -59,7 +59,8 @@ const Subway = () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi.getMatch(Id);
-      setMatch(data);
+      console.log(data);
+      setMatch(data?.result);
     } catch (err) {
       return;
     }
