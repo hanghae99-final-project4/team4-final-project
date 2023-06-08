@@ -36,6 +36,7 @@ const Slick = () => {
 
 export default Slick;
 const Container = styled.div`
+  outline: none;
   margin-left: 16px;
   margin-top: 18px;
   .slick-dots {
@@ -50,6 +51,7 @@ const Container = styled.div`
   }
 `;
 const Img = styled.div`
+  outline: none;
   width: 343px;
   height: 100px;
   img {
