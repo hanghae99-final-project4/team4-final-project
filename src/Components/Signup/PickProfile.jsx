@@ -112,7 +112,6 @@ const PickProfile = () => {
       isMainProfile: photo === item,
     }));
     setImage(updatedImage);
-    setProfile(updatedImage);
   };
 
   return (

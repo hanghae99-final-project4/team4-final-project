@@ -15,6 +15,7 @@ const GenderSet = () => {
   const [user, setUser] = useRecoilState(useUserState);
 
   const genderClickHandler = (e) => {
+    console.log(e.target.name);
     setUser({ gender: e.target.name });
     setIsChecked((prev) => !prev);
     setIsClick((prev) => {
@@ -53,11 +54,23 @@ const GenderSet = () => {
             key={index}
             onClick={genderClickHandler}
           >
-            <GenderSpan>{item.name}</GenderSpan>
+            <GenderSpan
+              disabled={false}
+              id={item.id}
+              name={item.name}
+              value={item.value}
+              className={item.name === isClick ? 'active' : ''}
+              onClick={genderClickHandler}
+            >
+              {item.name}
+            </GenderSpan>
 
             <Activeinput
-              className={item.name === isClick ? 'active' : ''}
+              id={item.id}
+              name={item.name}
               value={item.value}
+              onClick={genderClickHandler}
+              className={item.name === isClick ? 'active' : ''}
               type="radio"
             />
           </GenderButton>
@@ -192,6 +205,8 @@ const Activeinput = styled.input`
 `;
 
 const GenderSpan = styled.span`
+  width: 30px;
+  height: 20px;
   margin-left: 20px;
 `;
 
