@@ -3,38 +3,25 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import useInput from '../../MyTools/Hooks/UseInput';
-import { useRef } from 'react';
-import { CloseCircleFilled } from '@ant-design/icons';
-import { Cookies } from 'react-cookie';
-import { trainApi, trainApi2 } from '../../apis/Instance';
+import { trainApi } from '../../apis/Instance';
 import { useNavigate } from 'react-router-dom';
-import HomeMenu from '../HomeMenu/HomeMenu';
-import MypageHeader from './MypageHeader';
 import { useRecoilState } from 'recoil';
 import { useInfoState } from '../../Recoil/userList';
-import {
-  ApplySet,
-  Exit,
-  Img,
-  InputDiv,
-  Modal,
-  Nickname,
-  NicknameBox,
-  Profile,
-  Status,
-} from '../Main/Subway';
-import write from '../../Assets/Main/write.svg';
+import { Exit, InputDiv, Modal, Status } from '../Main/Subway';
 import arrowimg from '../../Assets/Mypage/arrow.svg';
 import { useCallback } from 'react';
 import exit from '../../Assets/Modal/status.svg';
+import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
+import exitimg from '../../Assets/ChattingModal/exit.svg';
 
 const MyPage = () => {
   const [bottomSheet, setBottomSheet] = useState(false);
 
   const [form, setForm, OnChangeHandler] = useInput([]);
   const [status, setStatus] = useState('');
-
+  const [warn, setWarn] = useState(false);
   const navigate = useNavigate();
+  const [isOut, setIsOut] = useState(false);
   const [changeprofile, setChangeprofile] = useState([]);
 
   const [image, setImage] = useRecoilState(useInfoState);
@@ -78,10 +65,24 @@ const MyPage = () => {
       return;
     }
   };
+  // 준비중 핸들러
+  const warnHandler = () => {
+    if (!warn) {
+      setWarn(true);
+    }
+
+    setTimeout(() => setWarn(false), 4000);
+  };
+  // 로그아웃 핸들러
+  const logoutHandler = () => {
+    navigate('/');
+  };
+  //탈퇴하기 핸들러
+  const withDrawHandler = () => {};
 
   return (
     <Wrap>
-      {bottomSheet && <ModalCtn></ModalCtn>}
+      {warn && <SmallToast>준비중입니다</SmallToast>}
       <Modal className={bottomSheet ? 'open' : ''}>
         <Status>
           <span>상태 메시지 수정</span>
@@ -103,174 +104,74 @@ const MyPage = () => {
 
         <button onClick={registerHandler}>확인</button>
       </Modal>
-      <TextBox margin="0px">프로필수정</TextBox>
-      <ProfileBox>
-        <Profile>
-          <Img>
-            <img
-              src={
-                form?.images?.filter((item) => item?.is_primary === true)?.[0]
-                  ?.image_url
-              }
-              alt="profile"
-            />
-          </Img>
-          <NicknameBox>
-            <Nickname>{form?.result?.nickname}</Nickname>
-            <ApplySet>
-              <img
-                onClick={() => setBottomSheet(!bottomSheet)}
-                src={write}
-                alt="write"
-              />
+      <TextBox height="50px" margin="40px">
+        프로필수정
+      </TextBox>
 
-              <span onClick={() => setBottomSheet(!bottomSheet)}>
-                {form?.result?.introduction !== null
-                  ? form?.result?.introduction
-                  : '반갑습니다. 프로필을 설정 해 주세요'}
-              </span>
-            </ApplySet>
-          </NicknameBox>
-        </Profile>
-      </ProfileBox>
-      <TextBox margin="30px">마이페이지</TextBox>
-      <TextBox className="item">
-        닉네임변경
+      <TextBox height="50px" className="item">
+        프로필 관리
         <img onClick={() => navigate('/changename')} src={arrowimg} />
       </TextBox>
       {local === 'local' && (
-        <TextBox onClick={() => navigate('/changepw')} className="item">
-          비밀번호 변경
-          <img src={arrowimg} />
-        </TextBox>
+        <>
+          <TextBox height="50px">마이페이지</TextBox>
+          <TextBox
+            height="50px"
+            onClick={() => navigate('/changepw')}
+            className="item"
+          >
+            비밀번호 변경
+            <img src={arrowimg} />
+          </TextBox>
+        </>
       )}
-      <TextBox margin="20px">고객센터</TextBox>
-      <TextBox margin="20px">
+      <TextBox height="60px">고객센터</TextBox>
+      <TextBox height="50px" className="item">
         공지사항
-        <img src={arrowimg} />
+        <img onClick={() => warnHandler()} src={arrowimg} />
       </TextBox>
-      <TextBox margin="20px">
+      <TextBox height="50px" className="item">
         자주 묻는 질문
-        <img src={arrowimg} />
+        <img onClick={() => warnHandler()} src={arrowimg} />
       </TextBox>
-      <TextBox margin="20px">
+      <TextBox height="50px" className="item">
         신고하기
-        <img src={arrowimg} />
+        <img onClick={() => warnHandler()} src={arrowimg} />
       </TextBox>
+      <TextBox height="60px">기타</TextBox>
+      <TextBox height="50px" className="item">
+        로그아웃
+        <img onClick={() => setIsOut(!isOut)} src={arrowimg} />
+      </TextBox>
+      <TextBox height="50px" className="item">
+        탈퇴하기
+        <img onClick={() => navigate('/logoutpage')} src={arrowimg} />
+      </TextBox>
+      {isOut && (
+        <ChattingModal>
+          <img src={exitimg} alt="exit" />
+          <span margin="10px" className="exit">
+            정말로 로그아웃 하시겠습니까? <br />
+          </span>
+          <BtnBox margin="40px">
+            <SubBtn onClick={() => setIsOut(!isOut)}>취소</SubBtn>
+            <PriBtn onClick={() => logoutHandler()}>로그아웃</PriBtn>
+          </BtnBox>
+        </ChattingModal>
+      )}
     </Wrap>
   );
 };
 export default MyPage;
 
 const Wrap = styled.div`
-  margin-left: 16px;
   max-width: 412px;
   min-width: 375px;
   width: 100%;
   height: 100%;
-`;
-const ProfileBox = styled.div`
   display: flex;
-  justify-items: center;
-  margin-top: 32px;
-
-  width: 343px;
-  height: 81px;
-  align-items: center;
-  background-color: #fefefe;
-  border: 1px solid #f5f3f3;
-  border-radius: 4px;
-  stroke: solid #f5f3f3;
-  box-shadow: 0px 1px 4px 1px #dcdcdc40;
-`;
-const Header = styled.div`
-  height: 44px;
-  background-color: #c3f4ff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px 0 10px;
-`;
-
-const TitleBox = styled.div`
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-
-  div {
-    width: 114px;
-    height: 44px;
-    border: 2px solid #71c9dd;
-    border-radius: 30px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-
-const ImgWrap = styled.div`
-  display: flex;
-  width: 60%;
-  height: 140px;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-`;
-
-const ImgBox = styled.img`
-  border-radius: 20px;
-  width: 100px;
-  height: 100px;
-`;
-
-const ImgButton = styled.button`
-  width: 100px;
-  height: 20px;
-  background-color: FFFFFF;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 20px;
-`;
-
-const InfoWrap = styled.div`
-  width: 100%;
-  li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 6%;
-    span {
-      width: 50px;
-      margin-right: 5%;
-      font-size: 16px;
-    }
-  }
-`;
-
-const InputInfo = styled.input`
-  width: 70%;
-  height: 30px;
-  box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
-  border-radius: 10px;
-`;
-
-const CheckGender = styled.input`
-  font-size: 12px;
-  margin-right: 5px;
-`;
-
-const AreaTitle = styled.div`
-  width: 100%;
-  font-size: 14px;
-`;
-
-const BottomStyle = styled.button`
-  width: 100%;
-  height: 48px;
-  box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.25);
-  background: ${(props) => (props.type === 'save' ? '#C3F4FF' : '#fff')};
-  border-radius: 10px;
-  margin-bottom: 16px;
 `;
 
 const ModalCtn = styled.div`
@@ -290,152 +191,12 @@ const ModalCtn = styled.div`
   background: rgba(0, 0, 0, 0.4);
   z-index: 999;
 `;
-const ModalWrap = styled.div`
-  position: relative;
-  border-radius: 5px;
-  left: 30%;
-  top: 20%;
-  width: 800px;
-  height: 500px;
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  @media screen and (min-width: 350px) and (max-width: 600px) {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    position: relative;
-    width: 85%;
-    height: 40%;
-    left: 5%;
-    top: 20%;
-  }
-`;
 
-// 이미지 5장 움직 일 수 있는 곳입니다.
-const ModalProfileDiv = styled.div`
-  margin: 0 auto;
-  width: 800px;
-  height: 300px;
-  display: flex;
-  gap: 20px;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
-  right: -80px;
-  @media screen and (min-width: 320px) and (max-width: 650px) {
-    margin: 0 auto;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    right: -10%;
-    gap: 20px;
-  }
-`;
-//각각의 이미지
-const ThumbImg = styled.img`
-  cursor: pointer;
-  transform: scale(1);
-  width: 200px;
-  height: 200px;
-  @media screen and (min-width: 320px) and (max-width: 365px) {
-    width: 30%;
-
-    transform: scale(1);
-  }
-`;
-
-// 저장 하기 버튼입니다.
-const ProfileCloseBtn = styled.button`
-  position: relative;
-  bottom: -150px;
-  width: 150px;
-  height: 50px;
-  border: 2px solid #71c9dd;
-  border-radius: 30px;
-  right: 500px;
-  font-size: 14px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  @media screen and (min-width: 330px) and (max-width: 650px) {
-    right: 20%;
-    top: 40%;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    width: 100%;
-  }
-`;
-const ProfileSetBtn = styled.button`
-  width: 150px;
-  height: 50px;
-  position: relative;
-  bottom: -150px;
-  left: -100px;
-  border: 2px solid #71c9dd;
-  border-radius: 30px;
-  font-size: 14px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  @media screen and (min-width: 350px) and (max-width: 650px) {
-    right: 20%;
-    top: 40%;
-    width: 100%;
-  }
-`;
-
-const UploadImage = styled.input`
-  display: none;
-  height: 30px;
-`;
-
-const Customer = styled.div`
-  @media only screen and (min-width: 375px) and (max-width: 650px) {
-    margin-left: 2%;
-    width: 350px;
-    height: 30px;
-  }
-  justify-content: space-between;
-  margin-top: 30px;
-  width: 100%;
-  display: flex;
-
-  .button-notice {
-    @media only screen and (max-width: 375px) {
-      width: 110px;
-      height: 30px;
-    }
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 110px;
-    height: 30px;
-
-    border: 2px solid #71c9dd;
-    border-radius: 20px;
-
-    font-size: 14px;
-    line-height: 17px;
-  }
-  .button-guide {
-    @media only screen and (max-width: 375px) {
-      width: 110px;
-      height: 30px;
-    }
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 110px;
-    height: 30px;
-    border: 2px solid #71c9dd;
-    border-radius: 20px;
-    font-size: 14px;
-    line-height: 17px;
-  }
-`;
 const TextBox = styled.div`
   margin-top: ${(props) => props.margin};
-  height: 50px;
+  height: ${(props) => props.height};
   width: 343px;
-  left: 16px;
-  top: 84px;
+
   border-radius: 0px;
   padding: 10px 0px 10px 0px;
   border: 1px solid #fcfcfc;
@@ -454,5 +215,34 @@ const TextBox = styled.div`
   justify-content: space-between;
   img {
     cursor: pointer;
+  }
+`;
+export const SmallToast = styled.div`
+  left: calc(50% - 240px / 2 - 0.5px);
+  position: absolute;
+  padding: 10px;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 37px;
+
+  animation: fadeout 4s ease-in;
+  background: rgba(24, 24, 24, 0.6);
+  border-radius: 4px;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  text-align: left;
+
+  @keyframes fadeout {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
 `;

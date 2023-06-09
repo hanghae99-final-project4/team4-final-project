@@ -63,6 +63,8 @@ export const trainApi = {
       authorizationCode: code,
     }),
   postName: (payload) => instance.post('/', payload),
+  withdraw: (id, reason, password) =>
+    instance.delete(`/user${id}`, { reason: reason, password: password }),
   postProfile: (userId, payload) =>
     instance.post(`/user/edit/${userId}`, payload),
   authEmail: (email) => instance.post(`/user/email`, email),

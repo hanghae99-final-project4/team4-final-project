@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import useInput from '../../MyTools/Hooks/UseInput';
 import { useNavigate } from 'react-router-dom';
 import { trainApi } from '../../apis/Instance';
 import * as yup from 'yup';
@@ -11,17 +10,11 @@ import { useAgreeState } from '../../Recoil/userList';
 import Header, { MessageBox, PointerBox } from '../Header/Header';
 import HeaderIcon from '../../Element/HeaderIcon';
 import { useRef } from 'react';
-import { useEffect } from 'react';
 import AuthTimer from '../Timer/AuthTimer';
 
 const Signup = () => {
   const navigator = useNavigate();
-  const [Info, setInfo, onChangeValue, reset] = useInput({
-    account: '',
-    password: '',
-    confirmpassword: '',
-    nickname: '',
-  });
+
   const [auth, setAuth] = useState(false);
   const agreepi = useRecoilValue(useAgreeState);
   const inputRefs = useRef([]);
@@ -100,7 +93,6 @@ const Signup = () => {
       const { data } = await trainApi.authEmail({ email: getFields.email });
       if (getFields.email !== '' && getFields.email) {
         setAuth(!auth);
-        console.log(getFields.email);
       }
     } catch (err) {}
   };
@@ -148,12 +140,7 @@ const Signup = () => {
       currentInputIndex += 1;
     }
   };
-  console.log(
-    inputRefs.current[0]?.value +
-      inputRefs.current[1]?.value +
-      inputRefs.current[2]?.value
-  );
-  console.log(inputRefs);
+
   const authCodeHandler = async () => {
     if (authCnt < 5) {
       try {
@@ -192,6 +179,7 @@ const Signup = () => {
           <Wrap>
             <AuthCodeBox>
               <input
+                className={missAuth ? 'miss' : ''}
                 type="text"
                 ref={(ref) => (inputRefs.current[0] = ref)}
                 onChange={(e) => handleInputChange(0, e)}
@@ -200,6 +188,7 @@ const Signup = () => {
               />
 
               <input
+                className={missAuth ? 'miss' : ''}
                 type="text"
                 ref={(ref) => (inputRefs.current[1] = ref)}
                 onChange={(e) => handleInputChange(1, e)}
@@ -208,6 +197,7 @@ const Signup = () => {
               />
 
               <input
+                className={missAuth ? 'miss' : ''}
                 type="text"
                 ref={(ref) => (inputRefs.current[2] = ref)}
                 onChange={(e) => handleInputChange(2, e)}
@@ -215,7 +205,8 @@ const Signup = () => {
                 maxLength={1}
               />
             </AuthCodeBox>
-            {authTime ? <AuthTimer /> : ''}
+
+            {authTime ? <AuthTimer /> : <AuthTimer />}
             {missAuth ? (
               <>
                 <MissSpan className={missAuth ? 'miss' : ''}>
@@ -405,6 +396,9 @@ const AuthCodeBox = styled.div`
     border: 1px solid #e8e8e8;
     border-radius: 4px;
     padding: 10px;
+    &.miss {
+      color: #d14343;
+    }
   }
 `;
 const MissSpan = styled.div`

@@ -27,6 +27,7 @@ import NamePage from '../Pages/Mypage/NamePage';
 import GuidePage from '../Pages/Guide/GuidePage';
 import ProfilePage from '../Pages/Mypage/ProfilePage';
 import PasswordPage from '../Pages/Mypage/PasswordPage';
+import LogoutPage from '../Pages/Logout/LogoutPage';
 
 const LoginPage = lazy(() => import('../Pages/Login'));
 const ConversPage = lazy(() => import('../Pages/ConversPage'));
@@ -63,11 +64,11 @@ const Router = () => {
           <Route path="/subwaypage" element={<SubwayPage />} />
           <Route path="/stationselect" element={<StationSelectPage />} />
           <Route path="/stationsearch" element={<StationSearchPage />} />
-
           <Route path="/main" element={<MainPage />} />
           <Route path="/converspage" element={<ConversPage />} />
           <Route path="/chattingpage" element={<ChattingPage />} />
           <Route path="/failpage" element={<FailPage />} />
+          <Route path="/logoutpage" element={<LogoutPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

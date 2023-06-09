@@ -23,14 +23,21 @@ import { useRecoilValue } from 'recoil';
 import { useArriveState, useStationState } from '../../Recoil/userList';
 import chatbot from '../../Assets/Chatting/chatbot.svg';
 import ban from '../../Assets/Chatting/ban.svg';
-import FailPage from '../../Pages/Matching/FailPage';
 import Timer from '../Timer/Timer';
-import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
+import ChattingModal, {
+  BtnBox,
+  Exit,
+  PriBtn,
+  SubBtn,
+} from '../Modal/ChattingModal';
 import addimg from '../../Assets/ChattingModal/add.svg';
 import exitimg from '../../Assets/ChattingModal/exit.svg';
 import leaveimg from '../../Assets/ChattingModal/leave.svg';
 import imageCompression from 'browser-image-compression';
 import chatImg from '../../Assets/Chatting/chatprofile.svg';
+import close from '../../Assets/ChattingModal/close.svg';
+import { SmallToast } from '../Profile/Mypage';
+import { ToastMessage } from '../Signup/Signup';
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -57,6 +64,7 @@ const Chatting = () => {
   const [counter, setCounter] = useState([]);
   const [counterUser, setCounterUser] = useState([{}]);
   const [leave, setLeave] = useState(false);
+  const [prepare, setPrepare] = useState(false);
 
   // 시간 추가 모달
   const [addModal, setAddModal] = useState(false);
@@ -86,6 +94,7 @@ const Chatting = () => {
   const token = cookies.get('token');
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [cnt, setCnt] = useState(0);
+  const [missBot, setMissBot] = useState(false);
   //챗봇 데이터 배열
   const [chatArray, setChatArray] = useState([
     ['산', '바다'],
@@ -229,13 +238,15 @@ const Chatting = () => {
 
   // broad casting 핸들러
   const handleBroadcastMessage = (message) => {
+    // 상대방 나갔을 시
     if (message.leave === true) {
-      setLeave(true);
+      setTimeout(() => setLeave(true), 2000);
     }
 
     setChatArr((prevChatArr) => [
       ...prevChatArr,
       {
+        leave: message.leave,
         chatbot: message.chatbot,
         roomkey: roomkey,
         nickname: message.name,
@@ -360,9 +371,15 @@ const Chatting = () => {
     if (cnt <= 3) {
       setCnt(cnt + 1);
       socket.emit('chat-bot', roomkey, chatData);
+      // 노출 끝나고 채팅을 이어 가세요! 말해주기
     } else {
+      setMissBot(true);
     }
   };
+  useEffect(() => {
+    setTimeout(() => setMissBot(false), 3000);
+    setTimeout(() => setPrepare(false), 3000);
+  }, [missBot, prepare]);
   const buttonHandler = (item, index) => {
     setDisabled([...disabled, index]);
     socket.emit('persnalchat', {
@@ -399,9 +416,18 @@ const Chatting = () => {
                 margin="15px"
                 src={chatbot}
               />
-              <Ban src={ban} />
+              <Ban onClick={() => setPrepare(true)} src={ban} />
             </Header>
+
             <AllChatDiv>
+              {prepare && <SmallToast>준비중입니다.</SmallToast>}
+              {missBot && (
+                <ToastMessage>
+                  아쉽지만 챗봇의 기회가 끝났습니다.
+                  <br />
+                  이제 대화를 이어가보세요!
+                </ToastMessage>
+              )}
               <ConversatonTime>
                 <span>대화 시간</span>
                 <Timer
@@ -432,15 +458,18 @@ const Chatting = () => {
                 {/* 시간 추가 모달 */}
                 {addModal && (
                   <ChattingModal>
+                    <Exit onClick={() => setAddModal(!addModal)} src={close} />
                     <img src={addimg} alt="addimg" />
                     <span margin="20px" className="add">
                       시간을 추가 할까요?
                     </span>
                     <span margin="5px" className="sub">
-                      시간 쿠폰은 이벤트로 얻을 수 있습니다.
+                      쿠폰 이벤트 준비중입니다!".
                     </span>
                     <BtnBox margin="25px">
-                      <SubBtn>충전하기</SubBtn>
+                      <SubBtn onClick={() => setPrepare(!prepare)}>
+                        충전하기
+                      </SubBtn>
                       <PriBtn onClick={() => addTimeFunction()}>
                         1회 무료 추가
                       </PriBtn>
@@ -681,6 +710,14 @@ const Chatting = () => {
                                 )}
                             </Time>
                           </UserProfileDiv>
+                        ) : // 상대방 나갔을 시
+                        item.leave === true ? (
+                          <UserProfileDiv>
+                            <ChatDiv className={item.leave === true && 'leave'}>
+                              <span>{item.nickname}</span> 님이 채팅방을
+                              나가셨습니다.
+                            </ChatDiv>
+                          </UserProfileDiv>
                         ) : (
                           <UserProfileDiv>
                             <UserProfileImg
@@ -752,11 +789,8 @@ const Chatting = () => {
                     name="msg"
                     onChange={onChangeHandler}
                   />
-                  <ChatSendBtn
-                    src={sendbtn}
-                    onClick={(e) => SubmitHandler(e)}
-                  />
                 </InputSendBox>
+                <ChatSendBtn src={sendbtn} onClick={(e) => SubmitHandler(e)} />
               </FooterDiv>
             </AllChatDiv>
           </div>
@@ -882,6 +916,28 @@ const ChatDiv = styled.div`
     align-items: flex-start;
     border-radius: 4px;
     padding: 8px 10px 15px 10px;
+    background-color: #f3f3f3;
+  }
+  &.leave {
+    margin-top: 40px;
+    margin-left: 73px;
+    max-height: 37px;
+    max-width: 230px;
+    background-color: #eeeeee;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 400;
+
+    text-align: left;
+    span {
+      font-family: Pretendard;
+      font-size: 14px;
+      font-weight: 500;
+
+      text-align: left;
+    }
   }
 `;
 const ConversatonTime = styled.div`
@@ -925,7 +981,7 @@ const InputSendBox = styled.div`
   display: flex;
   padding-left: 17px;
   margin-left: 4px;
-  width: 309px;
+  width: 267px;
   height: 45px;
   justify-content: space-between;
   border-radius: 9999px;
