@@ -64,7 +64,7 @@ export const trainApi = {
     }),
   postName: (payload) => instance.post('/', payload),
   withdraw: (id, reason, password) =>
-    instance.delete(`/user${id}`, { reason: reason, password: password }),
+    instance.delete(`/user/${id}`, { reason: reason, password: password }),
   postProfile: (userId, payload) =>
     instance.post(`/user/edit/${userId}`, payload),
   authEmail: (email) => instance.post(`/user/email`, email),
@@ -73,6 +73,7 @@ export const trainApi = {
     instance.post(`/user/checknickname`, nickname),
   authCode: (payload) => instance.post(`/user/authcode`, payload),
   getMatch: (userId) => instance.get(`/list/matched/${userId}`),
+  getInfinite: (cursor) => instance.get(`list/matched/${cursor}`),
   getConvers: (userId) => instance.get(`/user/${userId}`),
   getStation: (keyword) => instance.get(`list/station/${keyword}`),
   postSubSign: (payload) => instance.post('/user/signup', payload),

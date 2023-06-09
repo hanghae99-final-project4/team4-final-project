@@ -8,6 +8,7 @@ const Logout = () => {
   const [reason, setReason] = useState('');
   const [password, setPassword] = useState('');
   const [isLocal, setIsLocal] = useState(false);
+  const [text, setText] = useState('');
   useEffect(() => {
     getProfile();
   }, []);
@@ -25,24 +26,45 @@ const Logout = () => {
   //checkbox 핸들러
   const checkBoxHandler = () => {
     const isCheckd = checkRef.current.checked;
-    setIsCheck(isCheckd);
+    if (checkRef.current.checked === isCheckd) {
+      setIsCheck(isCheckd);
+    } else {
+      setIsCheck(!isCheckd);
+    }
   };
   //select bar 핸들러
   const selectItemHandler = (e) => {
     const { value } = e.target;
+    setReason(value);
+  };
+  const TextHandler = (e) => {
+    const { value } = e.target;
+    setText(value);
   };
   const passwordHandler = (e) => {
     const { value } = e.target;
     setPassword(value);
   };
-
+  console.log(reason);
   //회원탈퇴 핸들러
   const withDrawHandler = async () => {
     try {
       const id = localStorage.getItem('userId');
-      const { data } = await trainApi.withdraw(id, reason, password);
+      if (isLocal) {
+        const { data } = await trainApi.withdraw(id, reason, password);
+      } else {
+        const { data } = await trainApi.withdraw(id, reason, password);
+      }
+
+      // reason이 기타이면 text로 보내고 아니면 reason 으로 보내기!
+      if (reason === '기타') {
+        const { data } = await trainApi.withdraw(id, text, password);
+      } else {
+        const { data } = await trainApi.withdraw(id, reason, password);
+      }
     } catch (err) {}
   };
+
   return (
     <Wrap>
       <div>
@@ -97,6 +119,17 @@ const Logout = () => {
           <option value="기타">기타</option>
         </Select>
       </SelectBox>
+      {reason === '기타' ? (
+        <TextArea
+          name="reason"
+          value={text}
+          onChange={TextHandler}
+          className="etc"
+          placeholder="계정을 삭제하려는 이유를 알려주세요."
+        />
+      ) : (
+        ''
+      )}
       <CheckBox>
         {' '}
         <input
@@ -110,7 +143,7 @@ const Logout = () => {
         </label>
       </CheckBox>
       <Button
-        disabled={password.password && reason && isCheck ? true : false}
+        disabled={reason && isCheck ? false : true}
         onClick={withDrawHandler}
       >
         환승시민 탈퇴
@@ -181,6 +214,13 @@ const Input = styled.input`
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
+  &.etc {
+    margin-top: 10px;
+    height: 71px;
+    width: 343px;
+    border: 1px solid rgba(120, 120, 120, 0.470588);
+    border-radius: 4px;
+  }
 `;
 const TexBox = styled.div`
   margin-top: 41px;
@@ -246,4 +286,16 @@ const Button = styled.button`
   font-size: 17px;
   font-weight: 500;
   color: #ffffff;
+`;
+const TextArea = styled.textarea`
+  outline: none;
+  resize: none;
+  &.etc {
+    margin-top: 10px;
+    height: 71px;
+    width: 343px;
+    border: 1px solid rgba(120, 120, 120, 0.470588);
+    border-radius: 4px;
+    padding: 13px 10px;
+  }
 `;
