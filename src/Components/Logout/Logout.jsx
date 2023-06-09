@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import select from '../../Assets/Logout/selecticon.svg';
 import check from '../../Assets/Logout/check.svg';
@@ -7,7 +7,21 @@ const Logout = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [reason, setReason] = useState('');
   const [password, setPassword] = useState('');
+  const [isLocal, setIsLocal] = useState(false);
+  useEffect(() => {
+    getProfile();
+  }, []);
 
+  const getProfile = async () => {
+    try {
+      const id = localStorage.getItem('userId');
+      const { data } = await trainApi.getConvers(id);
+      if (data?.userInfo?.result?.account_type === 'local') {
+        setIsLocal(true);
+      }
+      console.log(data);
+    } catch (err) {}
+  };
   const checkRef = useRef();
   //checkbox 핸들러
   const checkBoxHandler = () => {
@@ -17,8 +31,6 @@ const Logout = () => {
   //select bar 핸들러
   const selectItemHandler = (e) => {
     const { value } = e.target;
-    console.log(value);
-    setReason(value);
   };
   const passwordHandler = (e) => {
     const { value } = e.target;
@@ -30,9 +42,7 @@ const Logout = () => {
     try {
       const id = localStorage.getItem('userId');
       const { data } = await trainApi.withdraw(id, reason, password);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
   return (
     <Wrap>
@@ -48,19 +58,23 @@ const Logout = () => {
         </div>
       </WarnBox>
 
-      <TexBox>
-        <Text>비밀번호 입력</Text>
-        <Text type="password" className="essential">
-          (필수)
-        </Text>
-      </TexBox>
-      <Input
-        name="password"
-        value={password.password}
-        onChange={passwordHandler}
-        type="password"
-        placeholder="현재 비밀번호를 입력해주세요"
-      />
+      {isLocal && (
+        <>
+          <TexBox>
+            <Text>비밀번호 입력</Text>
+            <Text type="password" className="essential">
+              (필수)
+            </Text>
+          </TexBox>
+          <Input
+            name="password"
+            value={password.password}
+            onChange={passwordHandler}
+            type="password"
+            placeholder="현재 비밀번호를 입력해주세요"
+          />
+        </>
+      )}
 
       <TexBox>
         <Text>무엇이 불편하셨나요?</Text>
