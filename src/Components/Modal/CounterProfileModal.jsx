@@ -26,7 +26,7 @@ const CounterProfileModal = ({
   });
 
   const imgSize = useRef(representProfile?.length);
-  console.log(representProfile);
+
   // 슬라이드 버튼 이전 핸들러
   const handleSwipe = (direction) => {
     let next = current + direction;

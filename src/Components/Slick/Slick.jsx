@@ -19,15 +19,30 @@ const Slick = () => {
     <Container>
       <Slider {...settings}>
         <Img>
-          <img src={slick} alt="playstore" />
+          <a
+            href="https://docs.google.com/forms/d/1hoBUJrI2Y90C3vdjEylpsJ2LCxJhf3dVIzjmtmX1yjU/edit?ts=64798dbe"
+            target="_unblank"
+          >
+            <img src={slick} alt="playstore" />
+          </a>
         </Img>
         <Img>
           {' '}
-          <img src={slick} alt="playstore" />
+          <a
+            href="https://docs.google.com/forms/d/1hoBUJrI2Y90C3vdjEylpsJ2LCxJhf3dVIzjmtmX1yjU/edit?ts=64798dbe"
+            target="_unblank"
+          >
+            <img src={slick} alt="playstore" />
+          </a>
         </Img>
         <Img>
           {' '}
-          <img src={slick} alt="playstore" />
+          <a
+            href="https://docs.google.com/forms/d/1hoBUJrI2Y90C3vdjEylpsJ2LCxJhf3dVIzjmtmX1yjU/edit?ts=64798dbe"
+            target="_unblank"
+          >
+            <img src={slick} alt="playstore" />
+          </a>
         </Img>
       </Slider>
     </Container>
@@ -55,6 +70,10 @@ const Img = styled.div`
   width: 343px;
   height: 100px;
   img {
+    outline: none;
     object-fit: cover;
+  }
+  a {
+    outline: none;
   }
 `;

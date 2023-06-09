@@ -112,10 +112,7 @@ const NameChange = () => {
       setDuplicFail(true);
     }
   };
-  console.log(errors);
-  console.log(getFields.nickname);
-  console.log(getValue.nickname);
-  console.log(duplicSuccess);
+
   return (
     <Wrap>
       {/* primary image 가 있으면 ? */}

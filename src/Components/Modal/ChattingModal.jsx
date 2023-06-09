@@ -69,3 +69,11 @@ export const BtnBox = styled.div`
   gap: 20px;
   margin-top: ${(props) => props.margin};
 `;
+export const Exit = styled.img`
+  position: absolute;
+  cursor: pointer;
+  left: 75%;
+
+  top: 37%;
+  bottom: 25%;
+`;

@@ -13,7 +13,7 @@ const Timer = ({
   const [min, setMin] = useState(3);
   const [sec, setSec] = useState(0);
   const [add, setAdd] = useState(false);
-
+  const [coupon, setCoupon] = useState(0);
   const timerId = useRef(null);
   const time = useRef(180);
 
@@ -38,9 +38,12 @@ const Timer = ({
     }
   }, [sec]);
   useEffect(() => {
-    if (timereset) {
-      time.current += 180;
-      setTimeReset(false);
+    if (coupon < 1) {
+      if (timereset) {
+        time.current += 180;
+        setTimeReset(false);
+        setCoupon((prev) => prev + 1);
+      }
     }
   }, [timereset]);
 

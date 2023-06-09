@@ -60,7 +60,7 @@ const ProfileChange = () => {
         );
 
         const imageUrl = URL.createObjectURL(compressedFileAsFile);
-       
+
         const photo = {
           id: photoList[i]?.name,
           file: compressedFileAsFile,
@@ -199,12 +199,10 @@ const ProfileChange = () => {
       const { data } = await trainApi2.postProfile(Id, formData);
       if (data?.msg?.length !== 0) {
         window.alert('프로필이 등록 되었습니다.');
-        navigate('/changename');
       }
       // 배열 &&  빈배열일때 빈배열 == 변경 값이 없을땐 patch
 
       await patchProfile();
-      navigate('/changename');
     } catch (error) {
       return;
     }

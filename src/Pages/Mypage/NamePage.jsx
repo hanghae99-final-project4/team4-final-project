@@ -11,7 +11,7 @@ const NamePage = () => {
         <PointerBox>
           <HeaderIcon />
         </PointerBox>
-        <MessageBox margin="101px">닉네임변경</MessageBox>
+        <MessageBox margin="101px">프로필 관리</MessageBox>
       </Header>
       <NameChange />
     </Wrap>

@@ -53,8 +53,7 @@ const ProfileSet = () => {
       return;
     }
   }
-  console.log(gender);
-  console.log(primaryImage);
+
   const beforeHandler = () => {
     navigate(-1);
   };

@@ -15,7 +15,6 @@ const GenderSet = () => {
   const [user, setUser] = useRecoilState(useUserState);
 
   const genderClickHandler = (e) => {
-    console.log(e.target.name);
     setUser({ gender: e.target.name });
     setIsChecked((prev) => !prev);
     setIsClick((prev) => {
