@@ -19,7 +19,6 @@ const Logout = () => {
       if (data?.userInfo?.result?.account_type === 'local') {
         setIsLocal(true);
       }
-      console.log(data);
     } catch (err) {}
   };
   const checkRef = useRef();
