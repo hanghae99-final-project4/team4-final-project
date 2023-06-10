@@ -38,12 +38,11 @@ const Timer = ({
     }
   }, [sec]);
   useEffect(() => {
-    if (coupon < 1) {
-      if (timereset) {
-        time.current += 180;
-        setTimeReset(false);
-        setCoupon((prev) => prev + 1);
-      }
+    if (timereset) {
+      time.current += 180;
+
+      setCoupon((prev) => prev + 1);
+      return setTimeReset((prev) => !prev);
     }
   }, [timereset]);
 
