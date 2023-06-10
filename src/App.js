@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Router from './Shared/Router';
 import { RecoilRoot } from 'recoil';
+import { hotjar } from 'react-hotjar';
 const App = () => {
-  // if (1 === 1) {
-  //   console.log = function no_console() {};
-  //   console.warn = function no_console() {};
-  // }
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      hotjar.initialize(3528659, 6);
+    }
+  }, []);
 
   return (
     <RecoilRoot>
