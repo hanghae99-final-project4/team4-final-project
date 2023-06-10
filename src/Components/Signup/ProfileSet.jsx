@@ -55,7 +55,7 @@ const ProfileSet = () => {
       return;
     }
   }
-  console.log(gender);
+ 
   const beforeHandler = () => {
     navigate(-1);
   };
