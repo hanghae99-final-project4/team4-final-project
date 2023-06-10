@@ -118,7 +118,12 @@ const PickProfile = () => {
     <Wrap>
       <SpanBox>
         <Select>사진선택</Select>
-        <Maximum>최대 5장의 사진을 선택 해주세요.</Maximum>
+        <div>
+          <Maximum>최대 5장의 사진을 선택 해주세요.</Maximum>
+          <Maximum className="possible">
+            ( 5mb 미만의 이미지 , .jpg, .jpeg, .png 확장자만 가능합니다){' '}
+          </Maximum>
+        </div>
       </SpanBox>
       <ImgBox>
         <Camera onClick={uploadHandler} src={camera} alt="camera" />
@@ -179,22 +184,31 @@ const Select = styled.span`
   color: #2d2d2d;
 `;
 const Maximum = styled.span`
-  margin-left: -1px;
   font-family: Roboto;
-  width: 208px;
-  height: 16px;
+
   font-weight: 400;
   font-size: 14px;
   color: #535353;
+  &.possible {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 400;
+    color: #79797979;
+  }
 `;
 const SpanBox = styled.div`
+  height: 67px;
   margin-left: 16px;
   margin-top: 30px;
   gap: 10px;
-  width: 194px;
-  height: 50px;
+
   display: flex;
   flex-direction: column;
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
 `;
 const Camera = styled.img`
   width: 114px;

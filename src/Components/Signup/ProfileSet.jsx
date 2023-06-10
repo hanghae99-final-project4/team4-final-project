@@ -31,7 +31,7 @@ const ProfileSet = () => {
 
   // 메인 프로필 정보 전역상태
 
-  const [primaryImage, setPrimaryImage] = useRecoilState(usePrimaryState);
+  const [isnick, setIsNick] = useRecoilState(useInfoState);
   // gender와 nickname 에 관한 전역상태
   const [gender, setGender] = useRecoilState(useUserState);
   const [form, setForm, OnChangeHandler] = useInput([]);
@@ -40,6 +40,7 @@ const ProfileSet = () => {
   const [toast, setToast] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const profileuploadHandler = () => {
+    setGender(getFields.nickname);
     navigate('/pickprofile');
   };
   async function nickname() {
@@ -54,7 +55,7 @@ const ProfileSet = () => {
       return;
     }
   }
-
+  console.log(gender);
   const beforeHandler = () => {
     navigate(-1);
   };
