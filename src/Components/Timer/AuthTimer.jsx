@@ -18,6 +18,9 @@ const AuthTimer = ({}) => {
 
     return () => clearInterval(timerId.current);
   }, []);
+  useEffect(()=>{
+    
+  },[])
 
   return (
     <TimerBox>

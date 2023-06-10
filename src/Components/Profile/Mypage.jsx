@@ -73,7 +73,7 @@ const MyPage = () => {
 
     setTimeout(() => setWarn(false), 4000);
   };
-  console.log(form);
+  
   // 로그아웃 핸들러
   const logoutHandler = async () => {
     const { data } = await instance.delete('/user/logout', {
