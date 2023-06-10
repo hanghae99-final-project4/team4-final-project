@@ -244,10 +244,14 @@ const Chatting = () => {
     if (message.leave === true) {
       setTimeout(() => setLeave(true), 2000);
     }
+    if (message.addtime === true) {
+      setTimeReset(true);
+    }
 
     setChatArr((prevChatArr) => [
       ...prevChatArr,
       {
+        addtime: message.addtime,
         leave: message.leave,
         chatbot: message.chatbot,
         roomkey: roomkey,
@@ -358,13 +362,16 @@ const Chatting = () => {
     localStorage.removeItem('room');
     navigate('/subwaypage');
   };
+
   // 시간 추가 동작 핸들러
   const addTimeHandler = () => {
     setAddModal(true);
   };
   const addTimeFunction = () => {
+    const roomkey = localStorage.getItem('room');
     if (timeCnt < 1) {
-      setTimeReset(true);
+      socket.emit('timeset', roomkey, name);
+
       setTimeCnt((prev) => prev + 1);
     } else {
       setCoupon(true);
@@ -730,6 +737,13 @@ const Chatting = () => {
                               나가셨습니다.
                             </ChatDiv>
                           </UserProfileDiv>
+                        ) : item.addtime === true ? (
+                          <UserProfileDiv>
+                            <ChatDiv className={item.addtime === true && 'add'}>
+                              <span>{item.nickname}</span> 님이 시간을
+                              추가하셨습니다.
+                            </ChatDiv>
+                          </UserProfileDiv>
                         ) : (
                           <UserProfileDiv>
                             <UserProfileImg
@@ -948,6 +962,26 @@ const ChatDiv = styled.div`
       font-size: 14px;
       font-weight: 500;
 
+      text-align: left;
+    }
+  }
+  &.add {
+    margin-top: 40px;
+    margin-left: 73px;
+    max-height: 37px;
+    max-width: 230px;
+    background-color: #eeeeee;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 400;
+
+    text-align: left;
+    span {
+      font-family: Pretendard;
+      font-size: 14px;
+      font-weight: 500;
       text-align: left;
     }
   }
