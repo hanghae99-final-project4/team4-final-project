@@ -40,7 +40,6 @@ const ProfileSet = () => {
   const [toast, setToast] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const profileuploadHandler = () => {
-    setGender(getFields.nickname);
     navigate('/pickprofile');
   };
   async function nickname() {
@@ -55,7 +54,7 @@ const ProfileSet = () => {
       return;
     }
   }
- 
+
   const beforeHandler = () => {
     navigate(-1);
   };
@@ -88,7 +87,7 @@ const ProfileSet = () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi2.postProfile(Id, formData);
-      nickname();
+      await nickname();
       navigate('/subwaypage');
     } catch (error) {
       window.alert(

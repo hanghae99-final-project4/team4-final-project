@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Accordion from '../../MyTools/Accordion';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ const Agree = () => {
   const checkbox2 = useRef();
   const checkbox3 = useRef();
   const checkbox4 = useRef();
+  const [complete, setComplete] = useState(false);
 
   const handleCheckboxChange = () => {
     const isChecked =
@@ -27,8 +28,10 @@ const Agree = () => {
     // 개별 체크박스의 상태를 변경할 때, 전체 선택 체크박스의 상태도 함께 업데이트
     if (isChecked) {
       allRef.current.checked = true;
+      setComplete(true);
     } else {
       allRef.current.checked = false;
+      setComplete(false);
     }
   };
 
@@ -39,7 +42,9 @@ const Agree = () => {
     checkbox3.current.checked = isChecked;
     checkbox4.current.checked = isChecked;
     setAgreepi(isChecked);
+    setComplete(isChecked);
   };
+  console.log(agreepi, complete);
 
   const nextHandler = () => {
     if (agreepi === true) {
@@ -119,7 +124,10 @@ const Agree = () => {
           </a>
         </AgreeLabel>
       </AgreeBox>
-      <LoginButton className={agreepi && 'active'} onClick={nextHandler}>
+      <LoginButton
+        className={agreepi && complete && 'active'}
+        onClick={nextHandler}
+      >
         다음
       </LoginButton>
     </Wrap>
