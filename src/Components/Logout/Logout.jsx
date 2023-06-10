@@ -3,12 +3,17 @@ import styled from 'styled-components';
 import select from '../../Assets/Logout/selecticon.svg';
 import check from '../../Assets/Logout/check.svg';
 import { trainApi } from '../../apis/Instance';
+import { useNavigate } from 'react-router-dom';
+import { SmallToast } from '../Profile/Mypage';
 const Logout = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [reason, setReason] = useState('');
   const [password, setPassword] = useState('');
   const [isLocal, setIsLocal] = useState(false);
+  const [isEtc, setIsEtc] = useState(false);
   const [text, setText] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     getProfile();
   }, []);
@@ -45,28 +50,36 @@ const Logout = () => {
     const { value } = e.target;
     setPassword(value);
   };
-  console.log(reason);
+
   //회원탈퇴 핸들러
   const withDrawHandler = async () => {
     try {
       const id = localStorage.getItem('userId');
-      if (isLocal) {
-        const { data } = await trainApi.withdraw(id, reason, password);
-      } else {
-        const { data } = await trainApi.withdraw(id, reason, password);
-      }
 
       // reason이 기타이면 text로 보내고 아니면 reason 으로 보내기!
       if (reason === '기타') {
+        setIsEtc(true);
+      }
+      if (isEtc) {
         const { data } = await trainApi.withdraw(id, text, password);
+        if (data.result) {
+          setIsSuccess(true);
+          setTimeout(() => navigate('/'), 3000);
+        }
       } else {
         const { data } = await trainApi.withdraw(id, reason, password);
+        if (data.result) {
+          setIsSuccess(true);
+          setTimeout(() => navigate('/'), 3000);
+        }
       }
+      return setIsEtc(!isEtc);
     } catch (err) {}
   };
 
   return (
     <Wrap>
+      {isSuccess && <SmallToast>탈퇴 되었습니다.</SmallToast>}
       <div>
         <Span className="main">회원탈퇴</Span>
         <Span>를 원하시나요?</Span>
@@ -143,6 +156,7 @@ const Logout = () => {
         </label>
       </CheckBox>
       <Button
+        className={reason && isCheck ? 'active' : ''}
         disabled={reason && isCheck ? false : true}
         onClick={withDrawHandler}
       >
@@ -286,6 +300,9 @@ const Button = styled.button`
   font-size: 17px;
   font-weight: 500;
   color: #ffffff;
+  &.active {
+    background-color: #fa3a45;
+  }
 `;
 const TextArea = styled.textarea`
   outline: none;

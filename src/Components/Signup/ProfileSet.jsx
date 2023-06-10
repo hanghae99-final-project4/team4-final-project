@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import progress from '../../Assets/SetProfile/nextprogress.svg';
 import pendingbutton from '../../Assets/SetProfile/pendingbutton.svg';
@@ -38,6 +38,7 @@ const ProfileSet = () => {
   const fileref = useRef();
   const navigate = useNavigate();
   const [toast, setToast] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const profileuploadHandler = () => {
     navigate('/pickprofile');
   };
@@ -104,7 +105,9 @@ const ProfileSet = () => {
         '문자+숫자 포함 2글자 이상'
       ),
   });
-
+  useEffect(() => {
+    setTimeout(() => setConfirm(false), 3000);
+  }, [confirm]);
   //react-hook-form
   const {
     register,
@@ -120,14 +123,18 @@ const ProfileSet = () => {
 
   const duplicationConfirmHandler = async (data) => {
     setToast(false);
+    setConfirm(false);
     try {
       const response = await trainApi.duplicationNickname({
         nickname: data.nickname,
       });
       if (response.data) {
         setToast(true);
+        setConfirm(false);
       }
-    } catch (err) {}
+    } catch (err) {
+      setConfirm(true);
+    }
   };
 
   return (
@@ -183,7 +190,15 @@ const ProfileSet = () => {
         </button>
       </NicknameBox>
       <ErrorMessageBox>
-        <Errormessage>{errors?.nickname?.message}</Errormessage>
+        {errors?.nickname?.message ? (
+          <Errormessage>{errors?.nickname?.message}</Errormessage>
+        ) : !errors?.nickname?.message && confirm ? (
+          <Errormessage className="confirm">
+            {'중복된 닉네임 입니다.'}
+          </Errormessage>
+        ) : (
+          ''
+        )}
       </ErrorMessageBox>
 
       {image[0]?.image_url && toast ? (

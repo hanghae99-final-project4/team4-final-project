@@ -11,7 +11,11 @@ import { trainApi } from '../../apis/Instance';
 import Slick from '../Slick/Slick';
 import Kakao from '../Kakao/Kakao';
 import { useRecoilState } from 'recoil';
-import { useArriveState, useStationState } from '../../Recoil/userList';
+import {
+  useArriveState,
+  useStationState,
+  useUserState,
+} from '../../Recoil/userList';
 import { useStation } from '../../MyTools/quries/station';
 import { ModalCtn } from '../Modal/CounterProfileModal';
 import exit from '../../Assets/Modal/status.svg';
@@ -21,11 +25,10 @@ import downimg from '../../Assets/History/down.svg';
 import normalupimg from '../../Assets/History/normalup.svg';
 import normaldownimg from '../../Assets/History/normaldown.svg';
 import nomatchImg from '../../Assets/Matching/nomatch.svg';
-import useInfinite from '../../MyTools/quries/useInfinite';
-import useIntersection from '../../MyTools/Hooks/useIntersection';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
+
   const navigate = useNavigate();
 
   const [station, setStation] = useRecoilState(useStationState);
@@ -40,7 +43,8 @@ const Subway = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { data } = useStation(station?.place_name?.split('역')[0]);
   localStorage.setItem('line', data?.[0]?.line_number);
-  const pageEnd = useRef(null);
+
+  const target = useRef(null);
   useEffect(() => {
     getMatch();
     getProfile();
@@ -49,64 +53,67 @@ const Subway = () => {
   const naviHandler = () => {
     navigate('/stationselect');
   };
+
+  useEffect(() => {
+    let observer;
+    if (target) {
+      const observer = new IntersectionObserver(
+        onIntersect,
+
+        { threshold: 0 }
+      );
+      if (target.current) observer.observe(target?.current);
+    }
+
+    return () => observer && observer.disconnect();
+  }, [target, isLoaded]);
+
   // 무한 스크롤 타겟
   const getMoreItem = async () => {
     // 데이터를 받아오도록 true 로 변경
     setIsLoaded(true);
-
-    const { data } = trainApi.getInfinite(next);
-    console.log(data);
-    if (!data.error) {
-      setNext(data.nextcursor);
-      setMatch((match) => match.concat(data.result));
-    }
   };
 
+  //isLoaded 가 변할때 실행
   useEffect(() => {
-    // isLoaded가 true일 때 + 마지막 페이지가 아닌 경우 = 요청보내기
+    if (isLoaded) {
+      trainApi.getInfinite(next).then((res) => {
+        if (!res.data.error) {
+          setNext(res.data?.nextcursor);
+          setMatch((match) => match.concat(res.data?.result));
+          setIsLoaded(false);
+        }
+      });
+    }
   }, [isLoaded]);
 
   // 관찰자
   const onIntersect = async ([entry], observer) => {
-    if (entry.isIntersecting) {
+    if (entry.isIntersecting && !isLoaded) {
       observer.unobserve(entry.target);
       await getMoreItem();
 
       observer.observe(entry.target);
     }
-
-    // setMatch([...match, newData]);
   };
-  console.log(next);
+
   //Observer option
 
   // monitor
 
   //Observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      onIntersect,
 
-      { threshold: 1 }
-    );
-    if (pageEnd.current) observer.observe(pageEnd?.current);
-    return () => observer && observer.disconnect();
-  }, [pageEnd, isLoaded]);
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(callback, options);
-  // }, []);
-  //프로필 조회 함수
   const getProfile = useCallback(async () => {
     try {
       const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
+
       setProfile(data.userInfo);
     } catch (err) {
       return;
     }
   }, []);
-  console.log(match);
+
   const getMatch = useCallback(async () => {
     try {
       const Id = localStorage.getItem('userId');
@@ -364,9 +371,9 @@ const Subway = () => {
                     </LikeBox>
                   )}
                 </Comment>
-                <div ref={pageEnd}></div>
               </HistoryItem>
             ))}
+            <div ref={target}></div>
           </>
         ) : (
           <NoMatchBox>

@@ -180,4 +180,17 @@ export const Errormessage = styled.div`
   &.useable {
     color: #8fb398;
   }
+  &.confirm {
+    opacity: 0;
+    animation: fadeout 2s ease-in;
+
+    @keyframes fadeout {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+  }
 `;
