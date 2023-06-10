@@ -25,6 +25,7 @@ import downimg from '../../Assets/History/down.svg';
 import normalupimg from '../../Assets/History/normalup.svg';
 import normaldownimg from '../../Assets/History/normaldown.svg';
 import nomatchImg from '../../Assets/Matching/nomatch.svg';
+import revertImg from '../../Assets/Main/revert.svg';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
@@ -37,8 +38,17 @@ const Subway = () => {
   const [status, setStatus] = useState('');
   const [match, setMatch] = useState([]);
 
+  // 최신순 좋아요순 버튼 리스트
+  const revertItem = [
+    {
+      name: '최신순',
+      value: 'recent',
+    },
+    { name: '좋아요', value: 'like' },
+  ];
   // infinite scroll state
-  const [page, setPage] = useState(1);
+  const [isRevert, setIsRevert] = useState(false);
+  const [revert, setRevert] = useState('최신순');
   const [next, setNext] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const { data } = useStation(station?.place_name?.split('역')[0]);
@@ -189,6 +199,27 @@ const Subway = () => {
     [status.status]
   );
 
+  const reverHandler = (e) => {
+    setRevert((prev) => {
+      return e.target.name;
+    });
+
+    setIsRevert(false);
+  };
+
+  useEffect(() => {
+    if (revert === '좋아요') {
+      const like = Array.from(new Set(match)).sort((a, b) =>
+        a.reputation < b.reputation ? 1 : -1
+      );
+      setMatch(like);
+    } else if (revert === '최신순') {
+      const recent = Array.from(new Set(match)).sort((a, b) =>
+        a.createdAt < b.createdAt ? 1 : -1
+      );
+      setMatch(recent);
+    }
+  }, [revert]);
   return (
     <SubwayDiv>
       {bottomSheet && <ModalCtn></ModalCtn>}
@@ -310,9 +341,29 @@ const Subway = () => {
       <Slick />
 
       <HistoryBox>
-        <span>매칭이력</span>
+        <RevertBox>
+          <span>매칭이력</span>
+          <HistoryRevert onClick={() => setIsRevert(!isRevert)}>
+            <img src={revertImg} />
+            <span>{revert}</span>
+          </HistoryRevert>
+        </RevertBox>
+        {isRevert && (
+          <RevertItemBox>
+            {revertItem.map((item, i) => (
+              <RevertItem
+                onClick={reverHandler}
+                name={item.name}
+                className={item.name === revert ? 'revert' : ''}
+              >
+                {item.name}
+              </RevertItem>
+            ))}
+          </RevertItemBox>
+        )}
+
         {match ? (
-          <>
+          <HistoryItemBox>
             {match.map((item, i) => (
               <HistoryItem key={i}>
                 <MatchItem>
@@ -374,7 +425,7 @@ const Subway = () => {
               </HistoryItem>
             ))}
             <div ref={target}></div>
-          </>
+          </HistoryItemBox>
         ) : (
           <NoMatchBox>
             <img src={nomatchImg} />
@@ -783,4 +834,53 @@ const NoMatchBox = styled.div`
   width: 343px;
   height: 335px;
   gap: 20px;
+`;
+const HistoryItemBox = styled.div`
+  margin-top: 36px;
+`;
+const HistoryRevert = styled.div`
+  cursor: pointer;
+  height: 38px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  gap: 6.92px;
+  span {
+    font-family: Pretendard;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222222;
+    text-align: center;
+  }
+`;
+const RevertBox = styled.div`
+  width: 343px;
+  height: 38px;
+  display: flex;
+  justify-content: space-between;
+`;
+const RevertItem = styled.button`
+  cursor: pointer;
+  width: 100px;
+  height: 30px;
+  text-align: left;
+  padding-left: 10px;
+  background-color: #fff;
+  &.revert {
+    background-color: #f5f5f5;
+  }
+`;
+const RevertItemBox = styled.div`
+  background-color: #fff;
+  height: 70px;
+  width: 100px;
+  left: 69%;
+  box-shadow: 0px 1px 5px 2px rgba(186, 186, 186, 0.25);
+  border-radius: 4px;
+  align-items: flex-end;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
 `;

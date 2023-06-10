@@ -94,6 +94,8 @@ const Chatting = () => {
   const token = cookies.get('token');
   const thURL = process.env.REACT_APP_TH_S_HOST;
   const [cnt, setCnt] = useState(0);
+  const [coupon, setCoupon] = useState(false);
+  const [timeCnt, setTimeCnt] = useState(0);
   const [missBot, setMissBot] = useState(false);
   //챗봇 데이터 배열
   const [chatArray, setChatArray] = useState([
@@ -361,7 +363,13 @@ const Chatting = () => {
     setAddModal(true);
   };
   const addTimeFunction = () => {
-    setTimeReset(true);
+    if (timeCnt < 1) {
+      setTimeReset(true);
+      setTimeCnt((prev) => prev + 1);
+    } else {
+      setCoupon(true);
+    }
+
     setAddModal(!addModal);
   };
   //챗봇 노출 핸들러
@@ -377,9 +385,10 @@ const Chatting = () => {
     }
   };
   useEffect(() => {
+    setTimeout(() => setCoupon(false), 3000);
     setTimeout(() => setMissBot(false), 3000);
     setTimeout(() => setPrepare(false), 3000);
-  }, [missBot, prepare]);
+  }, [missBot, prepare, coupon]);
   const buttonHandler = (item, index) => {
     setDisabled([...disabled, index]);
     socket.emit('persnalchat', {
@@ -427,6 +436,9 @@ const Chatting = () => {
                   <br />
                   이제 대화를 이어가보세요!
                 </ToastMessage>
+              )}
+              {coupon && (
+                <ToastMessage>소유하고 계신 쿠폰이 없습니다!</ToastMessage>
               )}
               <ConversatonTime>
                 <span>대화 시간</span>
