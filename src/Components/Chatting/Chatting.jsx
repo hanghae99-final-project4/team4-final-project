@@ -367,12 +367,14 @@ const Chatting = () => {
   const addTimeHandler = () => {
     setAddModal(true);
   };
+  //타임 추가 핸들러
   const addTimeFunction = () => {
     const roomkey = localStorage.getItem('room');
     if (timeCnt < 1) {
       socket.emit('timeset', roomkey, name);
-
+      console.log('동작중');
       setTimeCnt((prev) => prev + 1);
+      setTimeReset(false);
     } else {
       setCoupon(true);
     }
@@ -392,10 +394,11 @@ const Chatting = () => {
     }
   };
   useEffect(() => {
+    setTimeout(() => setTimeReset(false), 2000);
     setTimeout(() => setCoupon(false), 3000);
     setTimeout(() => setMissBot(false), 3000);
     setTimeout(() => setPrepare(false), 3000);
-  }, [missBot, prepare, coupon]);
+  }, [missBot, prepare, coupon, timereset]);
   const buttonHandler = (item, index) => {
     setDisabled([...disabled, index]);
     socket.emit('persnalchat', {
@@ -585,17 +588,22 @@ const Chatting = () => {
                           <UserProfileDiv>
                             <UserProfileImg style={{ display: 'none' }} />
                             <ChatBoxTime>
-                              <Time>
-                                {String(new Date().getHours()).padStart(
-                                  2,
-                                  '0'
-                                ) +
-                                  ':' +
-                                  String(new Date().getMinutes()).padStart(
+                              {item.addtime !== true ? (
+                                <Time>
+                                  {String(new Date().getHours()).padStart(
                                     2,
                                     '0'
-                                  )}
-                              </Time>
+                                  ) +
+                                    ':' +
+                                    String(new Date().getMinutes()).padStart(
+                                      2,
+                                      '0'
+                                    )}
+                                </Time>
+                              ) : (
+                                ''
+                              )}
+
                               {item.msg ? (
                                 <ChatDiv
                                   className={name === item.nickname && 'owner'}
@@ -774,14 +782,6 @@ const Chatting = () => {
                                 // <div>img</div>
                               )}
                             </UserProfileNameChat>
-                            <Time>
-                              {String(new Date().getHours()).padStart(2, '0') +
-                                ':' +
-                                String(new Date().getMinutes()).padStart(
-                                  2,
-                                  '0'
-                                )}
-                            </Time>
                           </UserProfileDiv>
                         )}
 
