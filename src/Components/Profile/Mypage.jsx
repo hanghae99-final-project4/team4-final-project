@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import useInput from '../../MyTools/Hooks/UseInput';
-import { trainApi } from '../../apis/Instance';
+import { instance, trainApi } from '../../apis/Instance';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { useInfoState } from '../../Recoil/userList';
@@ -73,9 +73,17 @@ const MyPage = () => {
 
     setTimeout(() => setWarn(false), 4000);
   };
+  console.log(form);
   // 로그아웃 핸들러
-  const logoutHandler = () => {
-    navigate('/');
+  const logoutHandler = async () => {
+    const { data } = await instance.delete('/user/logout', {
+      data: {
+        account: form?.result?.account,
+      },
+    });
+    if (data.result) {
+      navigate('/');
+    }
   };
   //탈퇴하기 핸들러
   const withDrawHandler = () => {};
