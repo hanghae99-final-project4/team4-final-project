@@ -65,10 +65,21 @@ const Recycle = styled.div`
     gap: 22.5px;
     flex-direction: column;
     margin-top: 107px;
+    span {
+      font-family: Pretendard;
+      font-size: 13px;
+      font-weight: 400;
+
+      text-align: center;
+    }
   }
 `;
 const BotBox = styled.div`
   cursor: pointer;
   display: flex;
   gap: 11px;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
 `;
