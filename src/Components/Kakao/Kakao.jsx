@@ -59,7 +59,6 @@ function Kakao() {
     const ps = new kakao.maps.services.Places();
 
     const placesSearchCB = (data, status, _pagination) => {
-      console.log(data);
       setStart(data);
       setStation(data[0]);
       localStorage.setItem(

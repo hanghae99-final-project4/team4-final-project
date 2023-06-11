@@ -220,7 +220,6 @@ const Chatting = () => {
   // name handle socket 핸들러
 
   const handleSocketMessage = (message) => {
-    console.log(message);
     if (message.roomkey !== null) {
       setChattingBot(false);
       setCounter(message);
@@ -418,7 +417,7 @@ const Chatting = () => {
       profile: profile,
     });
   };
-  console.log(chatArr);
+
   return (
     <div
       style={{
