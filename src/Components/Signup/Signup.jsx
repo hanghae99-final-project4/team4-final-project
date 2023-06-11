@@ -183,7 +183,7 @@ const Signup = () => {
       setTimeout(() => setAuthCnt(0), 60000 * 5);
     }
   };
-  console.log(authComplete);
+
   return (
     <>
       {auth ? (
@@ -484,6 +484,9 @@ export const ToastMessage = styled.div`
 
       text-align: center;
     }
+  }
+  &.matching {
+    margin-left: 30px;
   }
   @keyframes fadeOut {
     0% {
