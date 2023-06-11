@@ -372,7 +372,7 @@ const Chatting = () => {
     const roomkey = localStorage.getItem('room');
     if (timeCnt < 1) {
       socket.emit('timeset', roomkey, name);
-      console.log('동작중');
+
       setTimeCnt((prev) => prev + 1);
       setTimeReset(false);
     } else {

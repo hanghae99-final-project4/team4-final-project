@@ -70,6 +70,7 @@ export const trainApi = {
   postProfile: (userId, payload) =>
     instance.post(`/user/edit/${userId}`, payload),
   authEmail: (email) => instance.post(`/user/email`, email),
+  checkEmail: (email) => instance.post(`/user/checkid`, email),
   authId: (email) => instance.post(`/user/checkid`, email),
   duplicationNickname: (nickname) =>
     instance.post(`/user/checknickname`, nickname),

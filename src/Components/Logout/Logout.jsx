@@ -58,9 +58,6 @@ const Logout = () => {
 
       // reason이 기타이면 text로 보내고 아니면 reason 으로 보내기!
       if (reason === '기타') {
-        setIsEtc(true);
-      }
-      if (isEtc) {
         const { data } = await trainApi.withdraw(id, text, password);
         if (data.result) {
           setIsSuccess(true);
@@ -76,6 +73,7 @@ const Logout = () => {
       return setIsEtc(!isEtc);
     } catch (err) {}
   };
+  console.log(text, isEtc);
 
   return (
     <Wrap>
