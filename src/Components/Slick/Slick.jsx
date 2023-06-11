@@ -20,7 +20,7 @@ const Slick = () => {
       <Slider {...settings}>
         <Img>
           <a
-            href="https://docs.google.com/forms/d/1hoBUJrI2Y90C3vdjEylpsJ2LCxJhf3dVIzjmtmX1yjU/edit?ts=64798dbe"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdRkqkKTAdcaYVJHmGAjyD-qV1f4lnuMgEkY8dbdHVcBh0Gzw/viewform?usp=sf_link"
             target="_unblank"
           >
             <img src={slick} alt="playstore" />
@@ -29,7 +29,7 @@ const Slick = () => {
         <Img>
           {' '}
           <a
-            href="https://docs.google.com/forms/d/1hoBUJrI2Y90C3vdjEylpsJ2LCxJhf3dVIzjmtmX1yjU/edit?ts=64798dbe"
+            href="hhttps://docs.google.com/forms/d/e/1FAIpQLSdRkqkKTAdcaYVJHmGAjyD-qV1f4lnuMgEkY8dbdHVcBh0Gzw/viewform?usp=sf_link"
             target="_unblank"
           >
             <img src={slick} alt="playstore" />
@@ -38,7 +38,7 @@ const Slick = () => {
         <Img>
           {' '}
           <a
-            href="https://docs.google.com/forms/d/1hoBUJrI2Y90C3vdjEylpsJ2LCxJhf3dVIzjmtmX1yjU/edit?ts=64798dbe"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdRkqkKTAdcaYVJHmGAjyD-qV1f4lnuMgEkY8dbdHVcBh0Gzw/viewform?usp=sf_link"
             target="_unblank"
           >
             <img src={slick} alt="playstore" />
