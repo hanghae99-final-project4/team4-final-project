@@ -44,7 +44,7 @@ const Agree = () => {
     setAgreepi(isChecked);
     setComplete(isChecked);
   };
-  console.log(agreepi, complete);
+  
 
   const nextHandler = () => {
     if (agreepi === true) {

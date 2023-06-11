@@ -11,11 +11,13 @@ import Header, { MessageBox, PointerBox } from '../Header/Header';
 import HeaderIcon from '../../Element/HeaderIcon';
 import { useRef } from 'react';
 import AuthTimer from '../Timer/AuthTimer';
+import { SmallToast } from '../Profile/Mypage';
 
 const Signup = () => {
   const navigator = useNavigate();
 
   const [auth, setAuth] = useState(false);
+  const [authComplete, setAuthComplete] = useState(false);
   const agreepi = useRecoilValue(useAgreeState);
   const inputRefs = useRef([]);
   // auth 잘못 치면 나오는 상태값
@@ -26,6 +28,8 @@ const Signup = () => {
   const [authTime, setAuthTime] = useState(false);
   // retry 토스트 메시지
   const [retry, setRetry] = useState(false);
+  // check id 실패시
+  const [checkId, setCheckId] = useState(false);
   //yup schema
   const schema = yup.object().shape({
     email: yup
@@ -103,14 +107,27 @@ const Signup = () => {
       setRetry(true);
     } catch (err) {}
   };
-
+  const checkEmailHandler = async () => {
+    try {
+      const { data } = await trainApi.checkEmail({ account: getFields.email });
+      if (data.msg === '사용 가능한 아이디 입니다.') {
+        await authHandler();
+      }
+    } catch (err) {
+      setCheckId(!checkId);
+      return setTimeout(() => setCheckId(!checkId), 2000);
+    }
+  };
   //
   const handleInputChange = (index, event) => {
     const { value } = event.target;
     if (value !== '') {
       const nextIndex = index + 1;
+      //  nextIndex 가 현재 input Ref length 보다 작을때만 진행
+      // nextIndex 가 작을때는 focus할게 존재한다는 의미.
       if (nextIndex < inputRefs.current.length) {
         inputRefs.current[nextIndex].focus();
+        // 다 채워지면 authCode 핸들러 동작
       } else {
         authCodeHandler();
       }
@@ -152,6 +169,7 @@ const Signup = () => {
             inputRefs.current[2]?.value,
         });
         setAuth(!auth);
+        setAuthComplete(!authComplete);
         // auth code 잘못 기입 했을 시
       } catch (err) {
         setMissAuth(true);
@@ -165,7 +183,7 @@ const Signup = () => {
       setTimeout(() => setAuthCnt(0), 60000 * 5);
     }
   };
-
+  console.log(authComplete);
   return (
     <>
       {auth ? (
@@ -249,6 +267,7 @@ const Signup = () => {
             </PointerBox>
             <MessageBox margin="94px">{'가입하기'}</MessageBox>
           </Header>
+          {checkId && <SmallToast>중복 된 이메일 입니다.</SmallToast>}
           <Wrap>
             <SignForm onSubmit={handleSubmit(onSignup)}>
               <InfoBox className="email">
@@ -266,7 +285,7 @@ const Signup = () => {
                         ? 'active'
                         : ''
                     }
-                    onClick={authHandler}
+                    onClick={checkEmailHandler}
                   >
                     인증
                   </span>
@@ -297,7 +316,8 @@ const Signup = () => {
                   !errors?.passwordconfirm?.message &&
                   getFields.email !== '' &&
                   getFields.password !== '' &&
-                  getFields.passwordconfirm !== ''
+                  getFields.passwordconfirm !== '' &&
+                  authComplete
                     ? 'active'
                     : ''
                 }
