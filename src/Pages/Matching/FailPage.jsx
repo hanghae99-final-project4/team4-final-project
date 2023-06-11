@@ -5,9 +5,18 @@ import styled from 'styled-components';
 import recycleimg from '../../Assets/Matching/recycle.svg';
 import { useNavigate } from 'react-router-dom';
 import homeimg from '../../Assets/Matching/home.svg';
+import { useRecoilState } from 'recoil';
+import { useBotState } from '../../Recoil/userList';
+import botimg from '../../Assets/Matching/bot.svg';
 const FailPage = () => {
   const navigate = useNavigate();
   const naviHandler = () => {
+    navigate('/chattingpage');
+  };
+
+  const [botMatching, setBotMatching] = useRecoilState(useBotState);
+  const botHandler = () => {
+    setBotMatching(true);
     navigate('/chattingpage');
   };
   return (
@@ -25,6 +34,13 @@ const FailPage = () => {
           src={homeimg}
           alt="homeimg"
         />
+      </Recycle>
+      <Recycle className="bot">
+        <span>매칭이 어렵다면?</span>
+        <BotBox onClick={() => botHandler()}>
+          봇과 테스트하기{' '}
+          <img onClick={() => botHandler()} src={botimg} alt="botimg" />{' '}
+        </BotBox>
       </Recycle>
     </MatchWrap>
   );
@@ -45,4 +61,14 @@ const Recycle = styled.div`
   &.home {
     margin-top: 31px;
   }
+  &.bot {
+    gap: 22.5px;
+    flex-direction: column;
+    margin-top: 107px;
+  }
+`;
+const BotBox = styled.div`
+  cursor: pointer;
+  display: flex;
+  gap: 11px;
 `;

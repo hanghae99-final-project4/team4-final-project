@@ -13,6 +13,7 @@ import Kakao from '../Kakao/Kakao';
 import { useRecoilState } from 'recoil';
 import {
   useArriveState,
+  useStartState,
   useStationState,
   useUserState,
 } from '../../Recoil/userList';
@@ -47,6 +48,7 @@ const Subway = () => {
     { name: '좋아요', value: 'like' },
   ];
   // infinite scroll state
+  const [start, setStart] = useRecoilState(useStartState);
   const [isRevert, setIsRevert] = useState(false);
   const [revert, setRevert] = useState('최신순');
   const [next, setNext] = useState('');

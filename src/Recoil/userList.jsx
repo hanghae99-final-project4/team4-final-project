@@ -50,6 +50,14 @@ const usePatchState = atom({
   key: 'patch',
   default: [],
 });
+const useBotState = atom({
+  key: 'bot',
+  default: false,
+});
+const useStartState = atom({
+  key: 'start',
+  default: [],
+});
 export {
   useInfoState,
   usePrimaryState,
@@ -61,4 +69,6 @@ export {
   useArriveState,
   useEmailState,
   usePatchState,
+  useBotState,
+  useStartState,
 };

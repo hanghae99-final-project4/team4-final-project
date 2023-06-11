@@ -19,8 +19,12 @@ import { ReactComponent as HeaderPointer } from '../../Assets/HeaderItem/HeaderP
 import sendbtn from '../../Assets/Chatting/trans.svg';
 import { trainApi, trainApi2 } from '../../apis/Instance';
 import Matching from '../../Pages/Matching/MatchingPage';
-import { useRecoilValue } from 'recoil';
-import { useArriveState, useStationState } from '../../Recoil/userList';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  useArriveState,
+  useBotState,
+  useStationState,
+} from '../../Recoil/userList';
 import chatbot from '../../Assets/Chatting/chatbot.svg';
 import ban from '../../Assets/Chatting/ban.svg';
 import Timer from '../Timer/Timer';
@@ -73,6 +77,7 @@ const Chatting = () => {
   // 시간 추가 reset
   const [timereset, setTimeReset] = useState(false);
 
+  const [chattingBot, setChattingBot] = useRecoilState(useBotState);
   // 도착역
   const arrive = useRecoilValue(useArriveState);
   const station = arrive?.station_name;
@@ -215,7 +220,9 @@ const Chatting = () => {
   // name handle socket 핸들러
 
   const handleSocketMessage = (message) => {
+    console.log(message);
     if (message.roomkey !== null) {
+      setChattingBot(false);
       setCounter(message);
 
       if (message.roomkey !== undefined) {
@@ -267,12 +274,15 @@ const Chatting = () => {
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
     socket.emit('nickname', JSON.parse(localStorage.getItem('nickname')).value);
-
-    socket.emit(
-      'updatelocation',
-      [lon, lat], //현재 위치 위도, 경도
-      [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
-    );
+    if (chattingBot) {
+      socket.emit('updatelocation_bot');
+    } else {
+      socket.emit(
+        'updatelocation',
+        [lon, lat], //현재 위치 위도, 경도
+        [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
+      );
+    }
 
     socket.once(`${name}`, handleSocketMessage);
     socket.on('broadcast', handleBroadcastMessage);
@@ -408,7 +418,7 @@ const Chatting = () => {
       profile: profile,
     });
   };
-
+  console.log(chatArr);
   return (
     <div
       style={{
@@ -601,7 +611,14 @@ const Chatting = () => {
                                     )}
                                 </Time>
                               ) : (
-                                ''
+                                <UserProfileDiv>
+                                  <AddMessage
+                                    className={item.addtime === true && 'add'}
+                                  >
+                                    <span>{item.nickname}</span> 님이 시간을
+                                    추가하셨습니다.
+                                  </AddMessage>
+                                </UserProfileDiv>
                               )}
 
                               {item.msg ? (
@@ -984,6 +1001,26 @@ const ChatDiv = styled.div`
       font-weight: 500;
       text-align: left;
     }
+  }
+`;
+const AddMessage = styled.div`
+  height: 37px;
+  margin-top: 40px;
+  background-color: #eee;
+  display: flex;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-weight: 400;
+  position: relative;
+  left: 124px;
+  width: 210px;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 500;
   }
 `;
 const ConversatonTime = styled.div`
