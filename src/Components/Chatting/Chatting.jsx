@@ -611,12 +611,14 @@ const Chatting = () => {
                                 </Time>
                               ) : (
                                 <UserProfileDiv>
-                                  <AddMessage
-                                    className={item.addtime === true && 'add'}
-                                  >
-                                    <span>{item.nickname}</span> 님이 시간을
-                                    추가하셨습니다.
-                                  </AddMessage>
+                                  <AddMessageBox className="owner">
+                                    <AddMessage
+                                      className={item.addtime === true && 'add'}
+                                    >
+                                      <span>{item.nickname}</span>
+                                      님이 시간을 추가하셨습니다.
+                                    </AddMessage>
+                                  </AddMessageBox>
                                 </UserProfileDiv>
                               )}
 
@@ -626,7 +628,7 @@ const Chatting = () => {
                                 >
                                   {item.msg}
                                 </ChatDiv>
-                              ) : (
+                              ) : item.addtime !== true ? (
                                 // <div>mp4</div>
                                 <>
                                   <ChatImg
@@ -636,6 +638,8 @@ const Chatting = () => {
                                     imgurl={item?.url}
                                   />
                                 </>
+                              ) : (
+                                ''
                               )}
                             </ChatBoxTime>
                           </UserProfileDiv>
@@ -763,10 +767,14 @@ const Chatting = () => {
                           </UserProfileDiv>
                         ) : item.addtime === true ? (
                           <UserProfileDiv>
-                            <ChatDiv className={item.addtime === true && 'add'}>
-                              <span>{item.nickname}</span> 님이 시간을
-                              추가하셨습니다.
-                            </ChatDiv>
+                            <AddMessageBox>
+                              <ChatDiv
+                                className={item.addtime === true && 'add'}
+                              >
+                                <span>{item.nickname}</span> 님이 시간을
+                                추가하셨습니다.
+                              </ChatDiv>
+                            </AddMessageBox>
                           </UserProfileDiv>
                         ) : (
                           <UserProfileDiv>
@@ -983,7 +991,7 @@ const ChatDiv = styled.div`
   }
   &.add {
     margin-top: 40px;
-    margin-left: 73px;
+
     max-height: 37px;
     max-width: 230px;
     background-color: #eeeeee;
@@ -1010,16 +1018,18 @@ const AddMessage = styled.div`
   font-family: Pretendard;
   font-size: 12px;
   font-weight: 400;
-  position: relative;
-  left: 124px;
-  width: 210px;
+
+  border-radius: 4px;
+
+  padding: 10px;
   align-items: center;
   justify-content: center;
 
   span {
     font-family: Pretendard;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
+    text-align: left;
   }
 `;
 const ConversatonTime = styled.div`
@@ -1095,8 +1105,8 @@ const ChatImg = styled.div`
   border-radius: 10%;
   border: none;
   @media only screen and (min-width: 320px) and (max-width: 650px) {
-    width: 200px;
-    height: 200px;
+    /* width: 200px;
+    height: 200px; */
   }
 `;
 
@@ -1110,11 +1120,21 @@ const ChatVideo = styled.video`
   border-radius: 10%;
   border: none;
   @media only screen and (min-width: 320px) and (max-width: 650px) {
-    width: 200px;
-    height: 200px;
+    /* width: 200px;
+    height: 200px; */
   }
 `;
-
+const AddMessageBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 343px;
+  height: 37px;
+  margin: 0 auto;
+  &.owner {
+    margin-right: 6px;
+  }
+`;
 const LoadingDiv = styled.div`
   margin: auto;
   overflow-y: hidden;
