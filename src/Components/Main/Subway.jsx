@@ -27,6 +27,8 @@ import normalupimg from '../../Assets/History/normalup.svg';
 import normaldownimg from '../../Assets/History/normaldown.svg';
 import nomatchImg from '../../Assets/Matching/nomatch.svg';
 import revertImg from '../../Assets/Main/revert.svg';
+import { SmallToast } from '../Profile/Mypage';
+import { ToastMessage } from '../Signup/Signup';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
@@ -53,9 +55,11 @@ const Subway = () => {
   const [revert, setRevert] = useState('최신순');
   const [next, setNext] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
+  //매칭 버튼 실패시 토스트 메시지 알림
+  const [toast, setToast] = useState(false);
   const { data } = useStation(station?.place_name?.split('역')[0]);
   localStorage.setItem('line', data?.[0]?.line_number);
-
+  console.log(start);
   const target = useRef(null);
   useEffect(() => {
     getMatch();
@@ -138,7 +142,7 @@ const Subway = () => {
     } catch (err) {
       return;
     }
-  }, [data]);
+  }, []);
 
   // localstorage 객체 배열로 만드는 함수
   function setItemWithExpireTime(keyName, keyValue, tts) {
@@ -155,10 +159,19 @@ const Subway = () => {
     window.localStorage.setItem(keyName, objString);
   }
   const buttonHandler = () => {
-    localStorage.setItem(arrive.station_name, arrive.line_number);
-    setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
-    setItemWithExpireTime('profile', profile?.images?.[0]?.image_url, 3000000);
-    navigate('/chattingpage');
+    if (start.length !== 0) {
+      localStorage.setItem(arrive.station_name, arrive.line_number);
+      setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
+      setItemWithExpireTime(
+        'profile',
+        profile?.images?.[0]?.image_url,
+        3000000
+      );
+      navigate('/chattingpage');
+    } else {
+      setToast(true);
+    }
+    return setTimeout(() => setToast(false), 3000);
   };
   const registerHandler = async () => {
     try {
@@ -246,6 +259,12 @@ const Subway = () => {
 
         <button onClick={registerHandler}>확인</button>
       </Modal>
+      {toast && (
+        <ToastMessage className="matching">
+          환승시민을 이용하기 위해서는
+          <br /> 위치 액세스를 허용해주세요!
+        </ToastMessage>
+      )}
       <GuideBox>
         <div>
           <span class="welcome">환영합니다!</span>
@@ -329,7 +348,12 @@ const Subway = () => {
         </Station>
       </StationBox>
       <div>
-        <MatchBtn onClick={() => buttonHandler()}>매칭</MatchBtn>
+        <MatchBtn
+          className={start.length !== 0 ? 'active' : ''}
+          onClick={() => buttonHandler()}
+        >
+          매칭
+        </MatchBtn>
       </div>
 
       {/* 이벤트 */}
@@ -664,10 +688,12 @@ const MatchBtn = styled.button`
   height: 40px;
   font-weight: 600;
   font-size: 16px;
-
   border-radius: 4px;
   color: #ffffff;
-  background-color: #fa3a45;
+  background: rgba(250, 58, 69, 0.3);
+  &.active {
+    background-color: #fa3a45;
+  }
 `;
 const Event = styled.div`
   margin-left: 16px;
