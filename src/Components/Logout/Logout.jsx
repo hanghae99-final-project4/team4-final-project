@@ -73,7 +73,6 @@ const Logout = () => {
       return setIsEtc(!isEtc);
     } catch (err) {}
   };
-  console.log(text, isEtc);
 
   return (
     <Wrap>

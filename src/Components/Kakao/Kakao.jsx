@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useRecoilState } from 'recoil';
-import { useStationState } from '../../Recoil/userList';
+import { useStartState, useStationState } from '../../Recoil/userList';
 
 const { kakao } = window;
 
@@ -18,6 +18,7 @@ function Kakao() {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const [station, setStation] = useRecoilState(useStationState);
+  const [start, setStart] = useRecoilState(useStartState);
 
   //------------------자기 위치 찾기 ----------------
   const getCurrentLocation = async () => {
@@ -49,7 +50,7 @@ function Kakao() {
       const options = {
         location: currentLocation,
         radius: 10000,
-        size: 6,
+
         sort: kakao.maps.services.SortBy.DISTANCE,
       };
       const keyword = '지하철';
@@ -58,6 +59,7 @@ function Kakao() {
     const ps = new kakao.maps.services.Places();
 
     const placesSearchCB = (data, status, _pagination) => {
+      setStart(data);
       setStation(data[0]);
       localStorage.setItem(
         data[0]?.place_name?.split('역')[0],
