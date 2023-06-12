@@ -182,7 +182,7 @@ const Subway = () => {
   const registerHandler = async () => {
     try {
       const id = localStorage.getItem('userId');
-      const { data } = await trainApi.postStatusmessage(id, {
+      const { data } = await trainApi.patchnickname(id, {
         introduction: status.status,
       });
       getProfile();
