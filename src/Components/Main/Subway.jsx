@@ -349,7 +349,8 @@ const Subway = () => {
       </StationBox>
       <div>
         <MatchBtn
-          className={start.length !== 0 ? 'active' : ''}
+          className={start.length !== 0 && arrive.length !== 0 ? 'active' : ''}
+          disabled={arrive.length !== 0 ? false : true}
           onClick={() => buttonHandler()}
         >
           매칭

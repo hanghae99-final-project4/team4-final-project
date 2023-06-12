@@ -139,6 +139,7 @@ const ProfileSet = () => {
 
   return (
     <Wrap>
+      <ToastMessage>프로필을 등록 하셔야 시작버튼이 나와요!</ToastMessage>
       {toast && <ToastMessage>사용 가능한 닉네임 입니다.</ToastMessage>}
       <GifBox>
         <ProgressImg src={progress} alt="progress" />
