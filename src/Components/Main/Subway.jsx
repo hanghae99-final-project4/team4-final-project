@@ -272,10 +272,7 @@ const Subway = () => {
         </ToastMessage>
       )}
       {confirmToast && (
-        <ToastMessage className="matching">
-          매칭 버튼 누르기 전에,
-          <br /> 도착역을 기입했는지 확인해주세요!
-        </ToastMessage>
+        <SmallToast className="matching">도착역을 입력해주세요</SmallToast>
       )}
       <GuideBox>
         <div>
