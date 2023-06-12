@@ -930,7 +930,7 @@ const UserProfileImg = styled.img`
 `;
 //이름 + 프로필 이미지 div
 const UserProfileDiv = styled.div`
-  margin-top: 50px;
+  margin-top: 10px;
   display: flex;
 
   flex-direction: row;
@@ -1098,6 +1098,7 @@ const ChatSendBtn = styled.img`
 `;
 //이미지 div
 const ChatImg = styled.div`
+  margin-top: 6px;
   background-size: cover;
   background-repeat: repeat;
   background-image: ${({ imgurl }) => `url(${imgurl})`};
