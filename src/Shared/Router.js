@@ -2,8 +2,6 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NaverLogin from '../Pages/NaverLogin';
 import ProfilePic from '../Components/Profile/ProfilePic';
-import ChattingPage from '../Pages/ChattingPage';
-import SubwayPage from '../Pages/Main/SubwayPage';
 import { Suspense, lazy } from 'react';
 import KakaoLogin from '../Pages/KakaoLogin';
 import GoogleLogin from '../Pages/GoogleLogin';
@@ -15,23 +13,23 @@ import AgreePage from '../Pages/Signup/AgreePage';
 import SignupPage from '../Pages/Signup/SignupPage';
 import SetGenderPage from '../Pages/Signup/SetGenderPage';
 import SetProfilePage from '../Pages/Signup/SetProfilePage';
-import PickProfilePage from '../Pages/Signup/PickProfilePage';
 import SetAgePage from '../Pages/Signup/SetAgePage';
 import StationSelectPage from '../Pages/Main/StationSelectPage';
 import Loading from '../Components/Loading/Loading';
 import StationSearchPage from '../Pages/Main/StationSearchPage';
 import FailPage from '../Pages/Matching/FailPage';
-import MypagePage from '../Pages/Mypage/MypagePage';
-import NamePage from '../Pages/Mypage/NamePage';
-import GuidePage from '../Pages/Guide/GuidePage';
-import ProfilePage from '../Pages/Mypage/ProfilePage';
-import PasswordPage from '../Pages/Mypage/PasswordPage';
-import LogoutPage from '../Pages/Logout/LogoutPage';
 import SocialAgreePage from '../Pages/Signup/SocialAgreePage';
 
 const LoginPage = lazy(() => import('../Pages/Login'));
-const ConversPage = lazy(() => import('../Pages/ConversPage'));
-const MyPage = lazy(() => import('../Components/Profile/Mypage'));
+const SubwayPage = lazy(() => import('../Pages/Main/SubwayPage'));
+const ChattingPage = lazy(() => import('../Pages/ChattingPage'));
+const PickProfilePage = lazy(() => import('../Pages/Signup/PickProfilePage'));
+const MypagePage = lazy(() => import('../Pages/Mypage/MypagePage'));
+const GuidePage = lazy(() => import('../Pages/Guide/GuidePage'));
+const ProfilePage = lazy(() => import('../Pages/Mypage/ProfilePage'));
+const PasswordPage = lazy(() => import('../Pages/Mypage/PasswordPage'));
+const LogoutPage = lazy(() => import('../Pages/Logout/LogoutPage'));
+const NamePage = lazy(() => import('../Pages/Mypage/NamePage'));
 
 const Router = () => {
   return (
@@ -59,13 +57,11 @@ const Router = () => {
           <Route path="/changename" element={<NamePage />} />
           <Route path="/guide" element={<GuidePage />} />
           <Route path="/changeprofile" element={<ProfilePage />} />
-          <Route path="profilepic" element={<ProfilePic />} />
           <Route path="changepw" element={<PasswordPage />} />
           {/* 메인페이지 라우터 */}
           <Route path="/subwaypage" element={<SubwayPage />} />
           <Route path="/stationselect" element={<StationSelectPage />} />
           <Route path="/stationsearch" element={<StationSearchPage />} />
-          <Route path="/converspage" element={<ConversPage />} />
           <Route path="/chattingpage" element={<ChattingPage />} />
           <Route path="/failpage" element={<FailPage />} />
           <Route path="/logoutpage" element={<LogoutPage />} />
