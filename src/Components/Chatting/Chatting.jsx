@@ -972,7 +972,7 @@ const ChatDiv = styled.div`
     margin-top: 40px;
     margin-left: 73px;
     max-height: 37px;
-    max-width: 230px;
+    max-width: 240px;
     background-color: #eeeeee;
     border-radius: 4px;
     padding: 10px;
@@ -983,7 +983,7 @@ const ChatDiv = styled.div`
     text-align: left;
     span {
       font-family: Pretendard;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
 
       text-align: left;
@@ -991,7 +991,7 @@ const ChatDiv = styled.div`
   }
   &.add {
     max-height: 37px;
-    max-width: 230px;
+    max-width: 240px;
     background-color: #eeeeee;
     border-radius: 4px;
     padding: 10px;
@@ -1002,7 +1002,7 @@ const ChatDiv = styled.div`
     text-align: left;
     span {
       font-family: Pretendard;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       text-align: left;
     }
