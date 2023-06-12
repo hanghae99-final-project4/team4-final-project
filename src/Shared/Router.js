@@ -1,25 +1,17 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NaverLogin from '../Pages/NaverLogin';
-import ProfilePic from '../Components/Profile/ProfilePic';
 import { Suspense, lazy } from 'react';
-import KakaoLogin from '../Pages/KakaoLogin';
-import GoogleLogin from '../Pages/GoogleLogin';
-import ResetPage from '../Pages/Login/ResetPage';
-import AuthPage from '../Pages/Login/AuthPage';
-import CompletePage from '../Pages/Login/CompletePage';
-import EmailPage from '../Pages/Login/EmailPage';
 import AgreePage from '../Pages/Signup/AgreePage';
 import SignupPage from '../Pages/Signup/SignupPage';
 import SetGenderPage from '../Pages/Signup/SetGenderPage';
-import SetProfilePage from '../Pages/Signup/SetProfilePage';
 import SetAgePage from '../Pages/Signup/SetAgePage';
 import StationSelectPage from '../Pages/Main/StationSelectPage';
 import Loading from '../Components/Loading/Loading';
 import StationSearchPage from '../Pages/Main/StationSearchPage';
 import FailPage from '../Pages/Matching/FailPage';
 import SocialAgreePage from '../Pages/Signup/SocialAgreePage';
-
+// 분기별로 잘 나눠야 ... 될거같다 ..
+// 모든 페이지를 로딩 해버리니 로딩 뜨는게 너무 거슬린다.
 const LoginPage = lazy(() => import('../Pages/Login'));
 const SubwayPage = lazy(() => import('../Pages/Main/SubwayPage'));
 const ChattingPage = lazy(() => import('../Pages/ChattingPage'));
@@ -30,6 +22,13 @@ const ProfilePage = lazy(() => import('../Pages/Mypage/ProfilePage'));
 const PasswordPage = lazy(() => import('../Pages/Mypage/PasswordPage'));
 const LogoutPage = lazy(() => import('../Pages/Logout/LogoutPage'));
 const NamePage = lazy(() => import('../Pages/Mypage/NamePage'));
+const KakaoLogin = lazy(() => import('../Pages/KakaoLogin'));
+const NaverLogin = lazy(() => import('../Pages/NaverLogin'));
+const GoogleLogin = lazy(() => import('../Pages/GoogleLogin'));
+const EmailPage = lazy(() => import('../Pages/Login/EmailPage'));
+const ResetPage = lazy(() => import('../Pages/Login/ResetPage'));
+const AuthPage = lazy(() => import('../Pages/Login/AuthPage'));
+const SetProfilePage = lazy(() => import('../Pages/Signup/SetProfilePage'));
 
 const Router = () => {
   return (
@@ -44,7 +43,6 @@ const Router = () => {
           <Route path="/email" element={<EmailPage />} />
           <Route path="/reset" element={<ResetPage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/complete" element={<CompletePage />} />
           {/* 회원가입 라우터 */}
           <Route path="/agree" element={<AgreePage />} />
           <Route path="/socialagree" element={<SocialAgreePage />} />
