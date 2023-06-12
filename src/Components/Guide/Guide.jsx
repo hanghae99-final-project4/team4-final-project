@@ -41,6 +41,18 @@ const Guide = () => {
           <ImgBox margin="20px">
             <img src={firstimg} />
           </ImgBox>
+          <Subspan>
+            ·위치 엑세스를 ‘허용’ 해주셔야 서비스 이용이 가능하십니다. 자세한
+            방법은 {''}
+            {''}
+            {''}
+            <a
+              href="https://support.google.com/chrome/answer/142065?hl=ko&co=GENIE.Platform%3DAndroid&oco=0"
+              target="_blank"
+            >
+              링크 클릭해주세요!
+            </a>
+          </Subspan>
           <TextBox margin="50px">
             <img src={second} alt="second" />
             <Text>{'매칭버튼을 눌러 매칭을 시작합니다.'}</Text>
@@ -113,4 +125,23 @@ const Text = styled.span`
 `;
 const ImgBox = styled.div`
   margin-top: ${(props) => props.margin};
+`;
+const Subspan = styled.div`
+  margin-top: 8px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #797979;
+
+  a {
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 14px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
 `;

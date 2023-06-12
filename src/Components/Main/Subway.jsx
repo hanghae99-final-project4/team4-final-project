@@ -296,7 +296,9 @@ const Subway = () => {
           </Img>
           <NicknameBox>
             <Nickname>{profile?.result?.nickname}</Nickname>
-            <ApplySet>
+            <ApplySet
+              className={profile?.result?.introduction === null ? 'first' : ''}
+            >
               <img
                 onClick={() => setBottomSheet(!bottomSheet)}
                 src={write}
@@ -306,7 +308,7 @@ const Subway = () => {
               <span onClick={() => setBottomSheet(!bottomSheet)}>
                 {profile?.result?.introduction !== null
                   ? profile?.result?.introduction
-                  : '반갑습니다. 프로필을 설정 해 주세요'}
+                  : '반갑습니다. 소개글을 작성해주세요.'}
               </span>
             </ApplySet>
           </NicknameBox>
@@ -322,7 +324,8 @@ const Subway = () => {
         </div>
 
         <span class="designate">
-          인연을 찾기 전 출발역과 도착역을 지정 해 주세요.
+          인연을 찾기 전 도착역을 지정해 주세요.
+          <br /> 출발역은 자동 입력됩니다.
         </span>
       </SearchBox>
       {/* 지하철 역 */}
@@ -574,6 +577,7 @@ export const Nickname = styled.span`
 export const ApplySet = styled.div`
   display: flex;
   gap: 6px;
+  transition: background-color 0.5s;
   span {
     cursor: pointer;
     font-size: 12px;
@@ -582,6 +586,12 @@ export const ApplySet = styled.div`
   }
   img {
     cursor: pointer;
+  }
+  &:hover {
+    background-color: #eeeeee;
+    opacity: 0.7;
+    box-shadow: 0px 1px 5px rgba(220, 220, 220, 0.25);
+    border-radius: 8px;
   }
 `;
 const Setting = styled.div`
@@ -618,7 +628,7 @@ const SearchBox = styled.div`
 const StationBox = styled.div`
   margin-left: 16px;
   padding-bottom: 20px;
-  margin-top: 17px;
+  margin-top: 40px;
   width: 343px;
   height: 218px;
   display: flex;
