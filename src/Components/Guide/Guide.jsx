@@ -143,5 +143,6 @@ const Subspan = styled.div`
     line-height: 14px;
     letter-spacing: 0em;
     text-align: left;
+    border-bottom: 1px solid #797979;
   }
 `;
