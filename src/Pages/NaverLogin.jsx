@@ -28,7 +28,7 @@ const NaverLogin = () => {
       if (data.token) {
         localStorage.setItem('userId', userId);
         localStorage.setItem('token', token);
-        !nickname ? navigate('/setgender') : navigate('/subwaypage');
+        !nickname ? navigate('/socialagree') : navigate('/subwaypage');
       }
     } catch (error) {
       return;

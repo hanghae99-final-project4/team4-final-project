@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NaverLogin from '../Pages/NaverLogin';
-import MainPage from '../Pages/MainPage';
 import ProfilePic from '../Components/Profile/ProfilePic';
 import ChattingPage from '../Pages/ChattingPage';
 import SubwayPage from '../Pages/Main/SubwayPage';
@@ -28,6 +27,7 @@ import GuidePage from '../Pages/Guide/GuidePage';
 import ProfilePage from '../Pages/Mypage/ProfilePage';
 import PasswordPage from '../Pages/Mypage/PasswordPage';
 import LogoutPage from '../Pages/Logout/LogoutPage';
+import SocialAgreePage from '../Pages/Signup/SocialAgreePage';
 
 const LoginPage = lazy(() => import('../Pages/Login'));
 const ConversPage = lazy(() => import('../Pages/ConversPage'));
@@ -49,6 +49,7 @@ const Router = () => {
           <Route path="/complete" element={<CompletePage />} />
           {/* 회원가입 라우터 */}
           <Route path="/agree" element={<AgreePage />} />
+          <Route path="/socialagree" element={<SocialAgreePage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/setgender" element={<SetGenderPage />} />
           <Route path="/setage" element={<SetAgePage />} />
@@ -64,7 +65,6 @@ const Router = () => {
           <Route path="/subwaypage" element={<SubwayPage />} />
           <Route path="/stationselect" element={<StationSelectPage />} />
           <Route path="/stationsearch" element={<StationSearchPage />} />
-          <Route path="/main" element={<MainPage />} />
           <Route path="/converspage" element={<ConversPage />} />
           <Route path="/chattingpage" element={<ChattingPage />} />
           <Route path="/failpage" element={<FailPage />} />
