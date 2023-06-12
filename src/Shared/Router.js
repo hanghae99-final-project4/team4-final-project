@@ -1,15 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import AgreePage from '../Pages/Signup/AgreePage';
-import SignupPage from '../Pages/Signup/SignupPage';
-import SetGenderPage from '../Pages/Signup/SetGenderPage';
-import SetAgePage from '../Pages/Signup/SetAgePage';
-import StationSelectPage from '../Pages/Main/StationSelectPage';
 import Loading from '../Components/Loading/Loading';
-import StationSearchPage from '../Pages/Main/StationSearchPage';
 import FailPage from '../Pages/Matching/FailPage';
-import SocialAgreePage from '../Pages/Signup/SocialAgreePage';
 // 분기별로 잘 나눠야 ... 될거같다 ..
 // 모든 페이지를 로딩 해버리니 로딩 뜨는게 너무 거슬린다.
 const LoginPage = lazy(() => import('../Pages/Login'));
@@ -29,6 +22,13 @@ const EmailPage = lazy(() => import('../Pages/Login/EmailPage'));
 const ResetPage = lazy(() => import('../Pages/Login/ResetPage'));
 const AuthPage = lazy(() => import('../Pages/Login/AuthPage'));
 const SetProfilePage = lazy(() => import('../Pages/Signup/SetProfilePage'));
+const AgreePage = lazy(() => import('../Pages/Signup/AgreePage'));
+const SignupPage = lazy(() => import('../Pages/Signup/SignupPage'));
+const SetGenderPage = lazy(() => import('../Pages/Signup/SetGenderPage'));
+const SetAgePage = lazy(() => import('../Pages/Signup/SetAgePage'));
+const StationSelectPage = lazy(() => import('../Pages/Main/StationSelectPage'));
+const StationSearchPage = lazy(() => import('../Pages/Main/StationSearchPage'));
+const SocialAgreePage = lazy(() => import('../Pages/Signup/SocialAgreePage'));
 
 const Router = () => {
   return (
