@@ -890,7 +890,7 @@ const FooterDiv = styled.form`
 const Forminput = styled.input`
   display: none;
 `;
-//닉네임 + 말풍선 div
+//닉네임 + 말풍선 div // margin 수정 x
 const UserChatDiv = styled.div`
   margin-top: 10px;
   /* border: 3px solid black;
@@ -992,8 +992,6 @@ const ChatDiv = styled.div`
     }
   }
   &.add {
-    margin-top: 40px;
-
     max-height: 37px;
     max-width: 230px;
     background-color: #eeeeee;
@@ -1014,7 +1012,7 @@ const ChatDiv = styled.div`
 `;
 const AddMessage = styled.div`
   height: 37px;
-  margin-top: 40px;
+
   background-color: #eee;
   display: flex;
   font-family: Pretendard;
