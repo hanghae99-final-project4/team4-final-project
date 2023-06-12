@@ -930,6 +930,7 @@ const UserProfileImg = styled.img`
 `;
 //이름 + 프로필 이미지 div
 const UserProfileDiv = styled.div`
+  margin-top: 50px;
   display: flex;
 
   flex-direction: row;
@@ -958,6 +959,7 @@ const ChatDiv = styled.div`
     margin-right: 16px;
   }
   &.bot {
+    margin-top: 30px;
     max-width: 240px;
     max-height: 185px;
     display: flex;

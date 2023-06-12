@@ -488,6 +488,10 @@ export const ToastMessage = styled.div`
   &.matching {
     margin-left: 30px;
   }
+  &.arrvie {
+    width: 330px;
+    padding: 10px;
+  }
   @keyframes fadeOut {
     0% {
       opacity: 1;

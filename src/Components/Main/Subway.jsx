@@ -57,6 +57,7 @@ const Subway = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   //매칭 버튼 실패시 토스트 메시지 알림
   const [toast, setToast] = useState(false);
+  const [confirmToast, setConfirmToast] = useState(false);
   const { data } = useStation(station?.place_name?.split('역')[0]);
   localStorage.setItem('line', data?.[0]?.line_number);
   console.log(start);
@@ -159,7 +160,7 @@ const Subway = () => {
     window.localStorage.setItem(keyName, objString);
   }
   const buttonHandler = () => {
-    if (start.length !== 0) {
+    if (start.length !== 0 && arrive.length !== 0) {
       localStorage.setItem(arrive.station_name, arrive.line_number);
       setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
       setItemWithExpireTime(
@@ -168,10 +169,15 @@ const Subway = () => {
         3000000
       );
       navigate('/chattingpage');
+    } else if (arrive.length === 0) {
+      setConfirmToast(true);
     } else {
       setToast(true);
     }
-    return setTimeout(() => setToast(false), 3000);
+    return (
+      setTimeout(() => setToast(false), 3000),
+      setTimeout(() => setConfirmToast(false), 3000)
+    );
   };
   const registerHandler = async () => {
     try {
@@ -265,6 +271,12 @@ const Subway = () => {
           <br /> 위치 액세스를 허용해주세요!
         </ToastMessage>
       )}
+      {confirmToast && (
+        <ToastMessage className="matching">
+          매칭 버튼 누르기 전에,
+          <br /> 도착역을 기입했는지 확인해주세요!
+        </ToastMessage>
+      )}
       <GuideBox>
         <div>
           <span class="welcome">환영합니다!</span>
@@ -350,7 +362,6 @@ const Subway = () => {
       <div>
         <MatchBtn
           className={start.length !== 0 && arrive.length !== 0 ? 'active' : ''}
-          disabled={arrive.length !== 0 ? false : true}
           onClick={() => buttonHandler()}
         >
           매칭

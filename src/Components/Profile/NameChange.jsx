@@ -28,12 +28,8 @@ const NameChange = () => {
   const [duplicFail, setDuplicFail] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    setTimeout(() => setDuplicSuccess(false), 2000);
-
-    setDuplicFail(false);
-    setToast(false);
     getProfile();
-  }, [duplicSuccess]);
+  }, []);
 
   const getProfile = async () => {
     try {
@@ -55,15 +51,17 @@ const NameChange = () => {
     [nickname.nickname]
   );
 
-  const patchnameHandler = async (data) => {
+  const patchnameHandler = async () => {
     const Id = localStorage.getItem('userId');
     try {
-      const response = await trainApi.postStatusmessage(Id, {
-        nickname: data,
+      const { data } = await trainApi.patchnickname(Id, {
+        nickname: getFields.nickname,
       });
-      setToast(true);
-
-      getProfile();
+      if (data) {
+        setToast(true);
+        setDuplicSuccess(false);
+        getProfile();
+      }
     } catch (err) {
       return;
     }
@@ -97,7 +95,6 @@ const NameChange = () => {
   const getValue = watch();
 
   const duplicationConfirmHandler = async (data) => {
-    setDuplicSuccess(false);
     const nickname = data.nickname;
     try {
       const response = await trainApi.duplicationNickname({
@@ -105,8 +102,9 @@ const NameChange = () => {
       });
 
       if (response.data) {
+        setToast(false);
+        setDuplicFail(false);
         setDuplicSuccess(true);
-        await patchnameHandler(nickname);
       }
     } catch (err) {
       setDuplicFail(true);
@@ -134,21 +132,27 @@ const NameChange = () => {
           name="nickname"
           placeholder="사용하실 닉네임"
         />
-        <button
-          disabled={
-            getFields.nickname !== '' && !errors?.nickname?.message
-              ? false
-              : true
-          }
-          className={
-            getFields.nickname !== '' && !errors?.nickname?.message
-              ? 'active'
-              : ''
-          }
-          onClick={patchnameHandler}
-        >
-          중복확인
-        </button>
+        <ButtonBox>
+          <button
+            disabled={
+              getFields.nickname !== '' && !errors?.nickname?.message
+                ? false
+                : true
+            }
+            className={
+              getFields.nickname !== '' && !errors?.nickname?.message
+                ? 'active'
+                : ''
+            }
+          >
+            중복확인
+          </button>
+          {duplicSuccess && (
+            <button onClick={patchnameHandler} className="change">
+              변경
+            </button>
+          )}
+        </ButtonBox>
       </NicknameBox>
       <ErrorMessageBox>
         {duplicFail ? (
@@ -201,4 +205,25 @@ const GifBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+const ButtonBox = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  button {
+    &.change {
+      position: absolute;
+      top: 330px;
+      background-color: #fa3a45;
+      transition: slider 1s ease-in;
+      @keyframes slider {
+        0% {
+          transform: translateY(100%);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
 `;
