@@ -60,7 +60,7 @@ const Subway = () => {
   const [confirmToast, setConfirmToast] = useState(false);
   const { data } = useStation(station?.place_name?.split('역')[0]);
   localStorage.setItem('line', data?.[0]?.line_number);
-  console.log(start);
+
   const target = useRef(null);
   useEffect(() => {
     getMatch();
