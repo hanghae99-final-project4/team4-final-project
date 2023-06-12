@@ -892,7 +892,6 @@ const Forminput = styled.input`
 `;
 //닉네임 + 말풍선 div // margin 수정 x
 const UserChatDiv = styled.div`
-  margin-top: 10px;
   /* border: 3px solid black;
   width: 300px;
   min-height: 104px;
@@ -959,7 +958,6 @@ const ChatDiv = styled.div`
     margin-right: 16px;
   }
   &.bot {
-    margin-top: 30px;
     max-width: 240px;
     max-height: 185px;
     display: flex;
