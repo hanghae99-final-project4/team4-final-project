@@ -2,8 +2,8 @@
 new transfercitizen is comming ~!
 # 💗 코드 네임 : 환승 시민 🚆 💗
 
-![로고오](https://user-images.git![환승시민_섬네일_1 (1)](https://github.com/wyswhsl21/team4-final-project/assets/108774881/21925ade-3105-4053-8fc7-c8b75cc5ae41)
-hubusercontent.com/113084907/207002677-d4828de8-61cd-43ca-950f-2d636a13e115.jpg)
+![로고오] ![환승시민_섬네일_1 (1)](https://github.com/wyswhsl21/team4-final-project/assets/108774881/1753bbac-c8a1-45b4-ad3d-d4b1a36c1065)
+
 > 환승시민은 **랜덤매칭 채팅 서비스** 입니다. <br>
 <br />
 
