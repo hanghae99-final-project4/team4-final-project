@@ -317,7 +317,7 @@ const Chatting = () => {
   const SubmitHandler = (e, callback) => {
     e.preventDefault();
 
-    if (message.msg !== '') {
+    if (message.msg !== '' && message.msg) {
       socket.emit('persnalchat', {
         roomkey: room,
         msg: message.msg,
@@ -954,6 +954,7 @@ const UserProfileNameChat = styled.div`
 `;
 // 말풍선
 const ChatDiv = styled.div`
+  word-break: break-all;
   margin-top: 6px;
   padding: 8px 10px 8px 10px;
   max-width: 163px;
