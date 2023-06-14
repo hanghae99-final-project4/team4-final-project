@@ -969,6 +969,10 @@ const ChatDiv = styled.div`
     background-color: #f3f3f3;
   }
   &.leave {
+    width: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 40px;
     margin-left: 73px;
     max-height: 37px;
@@ -990,8 +994,12 @@ const ChatDiv = styled.div`
     }
   }
   &.add {
+    width: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     max-height: 37px;
-    max-width: 240px;
+    max-width: 343px;
     background-color: #eeeeee;
     border-radius: 4px;
     padding: 10px;
@@ -1009,6 +1017,7 @@ const ChatDiv = styled.div`
   }
 `;
 const AddMessage = styled.div`
+  width: 240px;
   height: 37px;
 
   background-color: #eee;
@@ -1025,7 +1034,7 @@ const AddMessage = styled.div`
 
   span {
     font-family: Pretendard;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     text-align: left;
   }
@@ -1131,7 +1140,7 @@ const AddMessageBox = styled.div`
   height: 37px;
   margin: 0 auto;
   &.owner {
-    margin-right: 6px;
+    margin-right: 14px;
   }
 `;
 const LoadingDiv = styled.div`

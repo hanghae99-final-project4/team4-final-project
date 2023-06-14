@@ -113,6 +113,9 @@ const Subway = () => {
       observer.observe(entry.target);
     }
   };
+  const getInfinite = async (next) => {
+    const { data } = await trainApi.getInfinite(next);
+  };
 
   //Observer option
 
@@ -191,21 +194,34 @@ const Subway = () => {
       return;
     }
   };
-  const reputationDownHandler = async (Id) => {
+  const reputationDownHandler = async (Id, i) => {
     try {
       const { data } = await trainApi.patchreputation(Id, {
         reputation: false,
       });
-      getMatch();
+      const newArr = match.map((item, index) => {
+        if (index === i && item.id === Id) {
+          return { ...item, reputation: false };
+        }
+        return item;
+      });
+      setMatch(newArr);
     } catch (err) {
       return;
     }
   };
 
-  const reputationUpHandler = async (Id) => {
+  const reputationUpHandler = async (Id, i) => {
     try {
       const { data } = await trainApi.patchreputation(Id, { reputation: true });
-      getMatch();
+
+      const newArr = match.map((item, index) => {
+        if (index === i && item.id === Id) {
+          return { ...item, reputation: true };
+        }
+        return item;
+      });
+      setMatch(newArr);
     } catch (err) {
       return;
     }
@@ -402,7 +418,7 @@ const Subway = () => {
 
         {match ? (
           <HistoryItemBox>
-            {match.map((item, i) => (
+            {match?.map((item, i) => (
               <HistoryItem key={i}>
                 <MatchItem>
                   <MatchResultBox>
@@ -428,33 +444,33 @@ const Subway = () => {
                   {item.reputation ? (
                     <LikeBox>
                       <img
-                        onClick={() => reputationDownHandler(item.id)}
+                        onClick={() => reputationDownHandler(item.id, i)}
                         src={normaldownimg}
                       />
                       <img
-                        onClick={() => reputationUpHandler(item.id)}
+                        onClick={() => reputationUpHandler(item.id, i)}
                         src={upimg}
                       />
                     </LikeBox>
                   ) : item.reputation === null ? (
                     <LikeBox>
                       <img
-                        onClick={() => reputationDownHandler(item.id)}
+                        onClick={() => reputationDownHandler(item.id, i)}
                         src={normaldownimg}
                       />
                       <img
-                        onClick={() => reputationUpHandler(item.id)}
+                        onClick={() => reputationUpHandler(item.id, i)}
                         src={normalupimg}
                       />
                     </LikeBox>
                   ) : (
                     <LikeBox>
                       <img
-                        onClick={() => reputationDownHandler(item.id)}
+                        onClick={() => reputationDownHandler(item.id, i)}
                         src={downimg}
                       />
                       <img
-                        onClick={() => reputationUpHandler(item.id)}
+                        onClick={() => reputationUpHandler(item.id, i)}
                         src={normalupimg}
                       />
                     </LikeBox>
