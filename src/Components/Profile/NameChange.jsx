@@ -133,23 +133,24 @@ const NameChange = () => {
           placeholder="사용하실 닉네임"
         />
         <ButtonBox>
-          <button
-            disabled={
-              getFields.nickname !== '' && !errors?.nickname?.message
-                ? false
-                : true
-            }
-            className={
-              getFields.nickname !== '' && !errors?.nickname?.message
-                ? 'active'
-                : ''
-            }
-          >
-            중복확인
-          </button>
-          {duplicSuccess && (
-            <button onClick={patchnameHandler} className="change">
+          {duplicSuccess ? (
+            <button onClick={patchnameHandler} className="active">
               변경
+            </button>
+          ) : (
+            <button
+              disabled={
+                getFields.nickname !== '' && !errors?.nickname?.message
+                  ? false
+                  : true
+              }
+              className={
+                getFields.nickname !== '' && !errors?.nickname?.message
+                  ? 'active'
+                  : ''
+              }
+            >
+              중복확인
             </button>
           )}
         </ButtonBox>
