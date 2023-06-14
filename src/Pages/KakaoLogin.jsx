@@ -1,16 +1,10 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
 import { trainApi } from '../apis/Instance';
 import { useNavigate } from 'react-router-dom';
-import { setCookie } from '../MyTools/Hooks/MyCookie';
 import styled from 'styled-components';
-import Loadinglogo from '../Assets/Loading/Group 146.gif';
+import Loading from '../Components/Loading/Loading';
 const KakaoLogin = () => {
-  const kakao_restapikey = `${process.env.REACT_APP_KAKAO_KEY}`;
-  const REDIRECT_URI = `${process.env.REACT_APP_KAKAO_REDIRECT_URI}`;
   const code = new URL(window.location.href).searchParams.get('code');
-  const after1m = new Date();
-  const now = new Date();
   const navigate = useNavigate();
   useEffect(() => {
     kakaoLogin();
@@ -33,13 +27,7 @@ const KakaoLogin = () => {
     }
   };
 
-  return (
-    <Wrap>
-      <LoadingDiv>
-        <img src={Loadinglogo} alt="logo" />
-      </LoadingDiv>
-    </Wrap>
-  );
+  return <Loading />;
 };
 
 export default KakaoLogin;
