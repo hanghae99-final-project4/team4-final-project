@@ -45,7 +45,7 @@ const Wrap = styled.div`
     font-size: 1rem;
   } ;
 `;
-const LoadingDiv = styled.div`
+const Div = styled.div`
   height: 812px;
   align-items: center;
   justify-content: center;
