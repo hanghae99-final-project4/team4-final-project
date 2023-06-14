@@ -1,12 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import Loadinglogo from "../../Assets/Loading/Group 146.gif";
-
+import React from 'react';
+import styled from 'styled-components';
+import Loadinglogo from '../../Assets/Loading/logo_gif 1.gif';
+import textimg from '../../Assets/Loading/text.svg';
 const Loading = () => {
   return (
     <Wrap>
       <LoadingDiv>
         <img src={Loadinglogo} alt="logo" />
+        <img src={textimg} alt="text" />
       </LoadingDiv>
     </Wrap>
   );
@@ -32,4 +33,5 @@ export const LoadingDiv = styled.div`
   flex-direction: column;
   margin: 0 auto;
   background-color: #fa3a45;
+  gap: 10px;
 `;
