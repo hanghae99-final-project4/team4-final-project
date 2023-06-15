@@ -358,7 +358,7 @@ const Subway = () => {
               {start.length !== 0 ? (
                 <span>{station?.place_name?.split('역')[0]}</span>
               ) : (
-                <span className="deactive">위치 엑서스를 허용해주세요.</span>
+                <span className="deactive">위치 엑세스를 허용해주세요.</span>
               )}
             </div>
           </Start>
