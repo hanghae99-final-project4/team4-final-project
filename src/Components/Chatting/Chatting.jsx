@@ -1093,19 +1093,21 @@ const InputSendBox = styled.div`
   display: flex;
   padding-left: 17px;
   margin-left: 4px;
-  width: 267px;
+  width: 264px;
   height: 45px;
   justify-content: space-between;
   border-radius: 9999px;
   border: 1px solid #e7e7e7;
 `;
 //채팅 칸
-const ChatInput = styled.input`
+const ChatInput = styled.textarea`
   padding-left: 10px;
   font-weight: 400;
   font-size: 14px;
+  width: 240px;
   outline: none;
   border: none;
+  resize: none;
 `;
 //전송버튼
 const ChatSendBtn = styled.img`
