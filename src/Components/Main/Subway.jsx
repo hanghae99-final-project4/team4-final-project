@@ -355,10 +355,10 @@ const Subway = () => {
             <span>출발</span>
             <div>
               <img src={stationimg} alt="station" />
-              {station?.place_name?.length !== 0 ? (
+              {start.length !== 0 ? (
                 <span>{station?.place_name?.split('역')[0]}</span>
               ) : (
-                <span>출발역</span>
+                <span className="deactive">위치 엑서스를 허용해주세요.</span>
               )}
             </div>
           </Start>
@@ -676,6 +676,9 @@ const Start = styled.div`
     color: #4e4e4e;
     font-weight: 500;
     font-size: 18px;
+    &.deactive {
+      color: #fa3a45;
+    }
   }
   div {
     width: 293px;
