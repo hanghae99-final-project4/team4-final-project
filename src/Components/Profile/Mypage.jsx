@@ -73,7 +73,7 @@ const MyPage = () => {
 
     setTimeout(() => setWarn(false), 4000);
   };
-  
+
   // 로그아웃 핸들러
   const logoutHandler = async () => {
     const { data } = await instance.delete('/user/logout', {
@@ -136,7 +136,7 @@ const MyPage = () => {
       <TextBox height="60px">고객센터</TextBox>
       <TextBox height="50px" className="item">
         공지사항
-        <img onClick={() => warnHandler()} src={arrowimg} />
+        <img onClick={() => navigate('/announce')} src={arrowimg} />
       </TextBox>
       <TextBox height="50px" className="item">
         자주 묻는 질문

@@ -74,21 +74,33 @@ const Signup = () => {
 
     const password = data.password;
     const passwordconfirm = data.passwordconfirm;
-    try {
-      const { data } = await trainApi.postSubSign({
-        account: email,
-        password: password,
-        password2: passwordconfirm,
-        agreepi: agreepi,
-      });
+    if (
+      !errors?.email?.message &&
+      !errors?.password?.message &&
+      !errors?.passwordconfirm?.message &&
+      getFields.email !== '' &&
+      getFields.password !== '' &&
+      getFields.passwordconfirm !== '' &&
+      authComplete
+    ) {
+      try {
+        const { data } = await trainApi.postSubSign({
+          account: email,
+          password: password,
+          password2: passwordconfirm,
+          agreepi: agreepi,
+        });
 
-      const msg = data.msg;
-      if (msg === '성공') {
-        alert('회원가입이 되셨습니다.');
-        navigator('/');
+        const msg = data.msg;
+        if (msg === '성공') {
+          alert('회원가입이 되셨습니다.');
+          navigator('/');
+        }
+      } catch (err) {
+        window.alert(err.response.data.error);
       }
-    } catch (err) {
-      window.alert(err.response.data.error);
+    } else {
+      alert('이메일 인증을 완료해주세요!');
     }
   };
   //이메일 인증 핸들러

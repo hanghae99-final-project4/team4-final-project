@@ -29,6 +29,9 @@ const SetAgePage = lazy(() => import('../Pages/Signup/SetAgePage'));
 const StationSelectPage = lazy(() => import('../Pages/Main/StationSelectPage'));
 const StationSearchPage = lazy(() => import('../Pages/Main/StationSearchPage'));
 const SocialAgreePage = lazy(() => import('../Pages/Signup/SocialAgreePage'));
+const AnnouncementPage = lazy(() =>
+  import('../Pages/Announcement/AnnouncementPage')
+);
 
 const Router = () => {
   return (
@@ -56,6 +59,7 @@ const Router = () => {
           <Route path="/guide" element={<GuidePage />} />
           <Route path="/changeprofile" element={<ProfilePage />} />
           <Route path="changepw" element={<PasswordPage />} />
+          <Route path="/announce" element={<AnnouncementPage />} />
           {/* 메인페이지 라우터 */}
           <Route path="/subwaypage" element={<SubwayPage />} />
           <Route path="/stationselect" element={<StationSelectPage />} />
