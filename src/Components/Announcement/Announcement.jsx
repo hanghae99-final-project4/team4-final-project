@@ -1,17 +1,81 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { trainApi } from "../../apis/Instance";
 
 const Announcement = () => {
+  const [account, setAccount] = useState([]);
+  const [notice, setNotice] = useState([]);
+  const [description, setDescription] = useState([]);
+  const [isDes, setIsDes] = useState(false);
+  useEffect(() => {
+    getAnnounce();
+    getUser();
+  }, []);
+  const getUser = async () => {
+    const Id = localStorage.getItem("userId");
+    const { data } = await trainApi.getConvers(Id);
+    setAccount(data?.userInfo?.result?.account_type);
+  };
+  const getAnnounce = async () => {
+    const { data } = await trainApi.getNotice();
+    setNotice(data);
+  };
+
+  const navigate = useNavigate();
+
+  const descriptionHandler = async (Id) => {
+    const { data } = await trainApi.getDescription(Id);
+
+    setDescription([data]);
+    setIsDes(true);
+  };
+  const deleteNoticeHandler = async (Id) => {
+    const { data } = await trainApi.deleteAnnounce(Id);
+  };
   return (
     <Wrap>
-      <AnnounceItem>
-        <span className="tag">{'[이벤트]'}</span>
-        <span className="title">{'환승시민 이벤트 당첨자'}</span>
-        <div>
-          <span className="day">{'2023.06.15'}</span>
-          <span className="new">New</span>
-        </div>
-      </AnnounceItem>
+      {account === "admin" && (
+        <button onClick={() => navigate("/announcewrite")}>
+          공지사항 작성
+        </button>
+      )}
+
+      {isDes ? (
+        <>
+          {description?.map((item) => (
+            <>
+              <AnnounceItem className="description">
+                <span className="tag">{item.tag}</span>
+                <span className="title">{item.title}</span>
+                <div>
+                  <span className="day">{item.createdAt.slice(0, 10)}</span>
+                  <span className="new">New</span>
+                </div>
+              </AnnounceItem>
+              <DescriptionBox>{item.description}</DescriptionBox>
+            </>
+          ))}
+        </>
+      ) : (
+        <>
+          {notice.map((item) => (
+            <AnnounceItem onClick={() => descriptionHandler(item.id)}>
+              <span className="tag">{item.tag}</span>
+              <span className="title">{item.title}</span>
+              <div>
+                <span className="day">{item.createdAt.slice(0, 10)}</span>
+                <span className="new">New</span>
+              </div>
+              {account === "admin" && (
+                <button onClick={() => deleteNoticeHandler(item.id)}>
+                  삭제하기
+                </button>
+              )}
+            </AnnounceItem>
+          ))}
+        </>
+      )}
     </Wrap>
   );
 };
@@ -19,13 +83,20 @@ const Announcement = () => {
 export default Announcement;
 
 const Wrap = styled.div`
-  margin: 16px 0 0 20px;
   display: flex;
   flex-direction: column;
 `;
 const AnnounceItem = styled.div`
+  &.description {
+    cursor: default;
+  }
+  margin: 20px 0 0 16px;
   display: flex;
+  cursor: pointer;
+  width: 21.4375rem;
+  height: 4.8125rem;
   flex-direction: column;
+  border-bottom: 1px solid #e2e2e2;
   gap: 6px;
   div {
     display: flex;
@@ -70,4 +141,13 @@ const AnnounceItem = styled.div`
       text-align: left;
     }
   }
+`;
+const DescriptionBox = styled.div`
+  margin-top: 20px;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
 `;
