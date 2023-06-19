@@ -44,8 +44,7 @@ const Logout = () => {
     mode: "onChange",
   });
   const getFields = getValues();
-  console.log(getFields);
-  console.log(errors);
+
   const getProfile = async () => {
     try {
       const id = localStorage.getItem("userId");
@@ -104,7 +103,7 @@ const Logout = () => {
   useEffect(() => {
     getProfile();
   }, []);
-  console.log(errors);
+
   return (
     <Wrap onSubmit={handleSubmit(withDrawHandler)}>
       {isSuccess && <SmallToast>탈퇴 되었습니다.</SmallToast>}
