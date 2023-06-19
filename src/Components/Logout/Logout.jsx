@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import select from '../../Assets/Logout/selecticon.svg';
-import check from '../../Assets/Logout/check.svg';
-import { trainApi } from '../../apis/Instance';
-import { useNavigate } from 'react-router-dom';
-import { SmallToast } from '../Profile/Mypage';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import select from "../../Assets/Logout/selecticon.svg";
+import check from "../../Assets/Logout/check.svg";
+import { trainApi } from "../../apis/Instance";
+import { useNavigate } from "react-router-dom";
+import { SmallToast } from "../Profile/Mypage";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 
 const Logout = () => {
   const [isCheck, setIsCheck] = useState(false);
-  const [reason, setReason] = useState('');
-  const [password, setPassword] = useState('');
+  const [reason, setReason] = useState("");
+  const [password, setPassword] = useState("");
   const [isLocal, setIsLocal] = useState(false);
   const [isEtc, setIsEtc] = useState(false);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
@@ -24,15 +24,12 @@ const Logout = () => {
     password: yup
       .string() //문자열 체크
 
-      .required('비밀번호를 입력해주세요'), // 빈칸인지 체크
-    reason: yup
-      .string() //문자열 체크
+      .required("비밀번호를 입력해주세요"), // 빈칸인지 체크
 
-      .required('탈퇴 사유를 기입해주세요.'), // 빈칸인지 체크
     text: yup
       .string() //문자열 체크
 
-      .required('탈퇴 사유를 기입해주세요.'), // 빈칸인지 체크
+      .required("탈퇴 사유를 기입해주세요."), // 빈칸인지 체크
   });
 
   //react-hook-form
@@ -44,16 +41,16 @@ const Logout = () => {
     getValues,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'onChange',
+    mode: "onChange",
   });
   const getFields = getValues();
   console.log(getFields);
   console.log(errors);
   const getProfile = async () => {
     try {
-      const id = localStorage.getItem('userId');
+      const id = localStorage.getItem("userId");
       const { data } = await trainApi.getConvers(id);
-      if (data?.userInfo?.result?.account_type === 'local') {
+      if (data?.userInfo?.result?.account_type === "local") {
         setIsLocal(true);
       }
     } catch (err) {}
@@ -74,43 +71,40 @@ const Logout = () => {
     const { value } = e.target;
     setText(value);
   };
+  const selectHandler = (e) => {
+    const { value } = e.target;
+    setReason(value);
+  };
 
   //회원탈퇴 핸들러
-  const withDrawHandler = async () => {
+  const withDrawHandler = async (data) => {
+    const text = data.text;
+    const password = data.password;
+
     try {
-      const id = localStorage.getItem('userId');
+      const id = localStorage.getItem("userId");
 
       // reason이 기타이면 text로 보내고 아니면 reason 으로 보내기!
-      if (reason === '기타') {
-        const { data } = await trainApi.withdraw(
-          id,
-          getFields.text,
-          getFields.password
-        );
+      if (reason === "기타") {
+        const { data } = await trainApi.withdraw(id, text, password);
         if (data.result) {
           setIsSuccess(true);
-          setTimeout(() => navigate('/'), 3000);
+          setTimeout(() => navigate("/"), 3000);
         }
       } else {
-        const { data } = await trainApi.withdraw(
-          id,
-          getFields.reason,
-          getFields.password
-        );
+        const { data } = await trainApi.withdraw(id, reason, password);
         if (data.result) {
           setIsSuccess(true);
-          setTimeout(() => navigate('/'), 3000);
+          setTimeout(() => navigate("/"), 3000);
         }
       }
       return setIsEtc(!isEtc);
     } catch (err) {}
   };
   useEffect(() => {
-    const { reason } = getFields;
-    console.log(reason);
     getProfile();
-  }, [getFields.reason]);
-
+  }, []);
+  console.log(errors);
   return (
     <Wrap onSubmit={handleSubmit(withDrawHandler)}>
       {isSuccess && <SmallToast>탈퇴 되었습니다.</SmallToast>}
@@ -135,7 +129,8 @@ const Logout = () => {
             </Text>
           </TexBox>
           <Input
-            {...register('password')}
+            className={errors.password?.message && "error"}
+            {...register("password")}
             type="password"
             placeholder="현재 비밀번호를 입력해주세요"
           />
@@ -147,7 +142,7 @@ const Logout = () => {
         <Text className="essential">(필수)</Text>
       </TexBox>
       <SelectBox>
-        <Select {...register('reason')} background={select}>
+        <Select onChange={(e) => selectHandler(e)} background={select}>
           <option value="" disabled selected>
             선택해주세요
           </option>
@@ -164,35 +159,35 @@ const Logout = () => {
           <option value="기타">기타</option>
         </Select>
       </SelectBox>
-      {getFields.reason === '기타' ? (
+      {reason === "기타" ? (
         <TextArea
-          {...register('text')}
-          className="etc"
+          {...register("text")}
+          className={errors.text?.message ? "error" : "etc"}
           placeholder="계정을 삭제하려는 이유를 알려주세요."
         />
       ) : (
-        ''
+        ""
       )}
       <CheckBox>
-        {' '}
+        {" "}
         <input
           onChange={checkBoxHandler}
           ref={checkRef}
           id="check"
           type="checkbox"
-        />{' '}
+        />{" "}
         <label for="check">
           유의사항을 모두 확인 하였으며, 회원 탈퇴합니다.
         </label>
       </CheckBox>
       <Button
         className={
-          getFields.password !== '' && getFields.reason !== '' && isCheck
-            ? 'active'
-            : ''
+          getFields.password !== "" && getFields.reason !== "" && isCheck
+            ? "active"
+            : ""
         }
         disabled={
-          getFields.password !== '' && getFields.reason !== '' && isCheck
+          getFields.password !== "" && getFields.reason !== "" && isCheck
             ? false
             : true
         }
@@ -273,6 +268,9 @@ const Input = styled.input`
     border: 1px solid rgba(120, 120, 120, 0.470588);
     border-radius: 4px;
   }
+  &.error {
+    border: 1px solid #fa3a45;
+  }
 `;
 const TexBox = styled.div`
   margin-top: 41px;
@@ -350,6 +348,14 @@ const TextArea = styled.textarea`
     height: 71px;
     width: 343px;
     border: 1px solid rgba(120, 120, 120, 0.470588);
+    border-radius: 4px;
+    padding: 13px 10px;
+  }
+  &.error {
+    margin-top: 10px;
+    height: 71px;
+    width: 343px;
+    border: 1px solid #fa3a45;
     border-radius: 4px;
     padding: 13px 10px;
   }

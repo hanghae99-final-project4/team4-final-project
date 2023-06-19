@@ -23,16 +23,15 @@ const Announcement = () => {
   };
 
   const navigate = useNavigate();
-  console.log(notice);
+
   const descriptionHandler = async (Id) => {
     const { data } = await trainApi.getDescription(Id);
-    console.log(data);
+
     setDescription([data]);
     setIsDes(true);
   };
   const deleteNoticeHandler = async (Id) => {
     const { data } = await trainApi.deleteAnnounce(Id);
-    console.log(data);
   };
   return (
     <Wrap>
