@@ -91,6 +91,14 @@ export const trainApi = {
       password: password,
       newpassword: newPassword,
     }),
+  postNotice: (title, description, tag) =>
+    instance.post(`/notice`, {
+      title: title,
+      description: description,
+      tag: tag,
+    }),
+  getNotice: () => instance.get(`/notice`),
+  getDescription: (Id) => instance.get(`/notice/${Id}`),
 };
 // 인터셉터
 instance.interceptors.request.use(

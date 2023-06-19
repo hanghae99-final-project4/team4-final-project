@@ -32,6 +32,9 @@ const SocialAgreePage = lazy(() => import('../Pages/Signup/SocialAgreePage'));
 const AnnouncementPage = lazy(() =>
   import('../Pages/Announcement/AnnouncementPage')
 );
+const AnnounceWritePage = lazy(() =>
+  import('../Pages/Announcement/AnnounceWritePage')
+);
 
 const Router = () => {
   return (
@@ -60,6 +63,7 @@ const Router = () => {
           <Route path="/changeprofile" element={<ProfilePage />} />
           <Route path="changepw" element={<PasswordPage />} />
           <Route path="/announce" element={<AnnouncementPage />} />
+          <Route path="/announcewrite" element={<AnnounceWritePage />} />
           {/* 메인페이지 라우터 */}
           <Route path="/subwaypage" element={<SubwayPage />} />
           <Route path="/stationselect" element={<StationSelectPage />} />

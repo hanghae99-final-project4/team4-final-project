@@ -5,6 +5,10 @@ import check from '../../Assets/Logout/check.svg';
 import { trainApi } from '../../apis/Instance';
 import { useNavigate } from 'react-router-dom';
 import { SmallToast } from '../Profile/Mypage';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+
 const Logout = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [reason, setReason] = useState('');
@@ -14,10 +18,37 @@ const Logout = () => {
   const [text, setText] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    getProfile();
-  }, []);
 
+  //yup schema
+  const schema = yup.object().shape({
+    password: yup
+      .string() //문자열 체크
+
+      .required('비밀번호를 입력해주세요'), // 빈칸인지 체크
+    reason: yup
+      .string() //문자열 체크
+
+      .required('탈퇴 사유를 기입해주세요.'), // 빈칸인지 체크
+    text: yup
+      .string() //문자열 체크
+
+      .required('탈퇴 사유를 기입해주세요.'), // 빈칸인지 체크
+  });
+
+  //react-hook-form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    getValues,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+  });
+  const getFields = getValues();
+  console.log(getFields);
+  console.log(errors);
   const getProfile = async () => {
     try {
       const id = localStorage.getItem('userId');
@@ -38,17 +69,10 @@ const Logout = () => {
     }
   };
   //select bar 핸들러
-  const selectItemHandler = (e) => {
-    const { value } = e.target;
-    setReason(value);
-  };
+
   const TextHandler = (e) => {
     const { value } = e.target;
     setText(value);
-  };
-  const passwordHandler = (e) => {
-    const { value } = e.target;
-    setPassword(value);
   };
 
   //회원탈퇴 핸들러
@@ -58,13 +82,21 @@ const Logout = () => {
 
       // reason이 기타이면 text로 보내고 아니면 reason 으로 보내기!
       if (reason === '기타') {
-        const { data } = await trainApi.withdraw(id, text, password);
+        const { data } = await trainApi.withdraw(
+          id,
+          getFields.text,
+          getFields.password
+        );
         if (data.result) {
           setIsSuccess(true);
           setTimeout(() => navigate('/'), 3000);
         }
       } else {
-        const { data } = await trainApi.withdraw(id, reason, password);
+        const { data } = await trainApi.withdraw(
+          id,
+          getFields.reason,
+          getFields.password
+        );
         if (data.result) {
           setIsSuccess(true);
           setTimeout(() => navigate('/'), 3000);
@@ -73,9 +105,14 @@ const Logout = () => {
       return setIsEtc(!isEtc);
     } catch (err) {}
   };
+  useEffect(() => {
+    const { reason } = getFields;
+    console.log(reason);
+    getProfile();
+  }, [getFields.reason]);
 
   return (
-    <Wrap>
+    <Wrap onSubmit={handleSubmit(withDrawHandler)}>
       {isSuccess && <SmallToast>탈퇴 되었습니다.</SmallToast>}
       <div>
         <Span className="main">회원탈퇴</Span>
@@ -98,9 +135,7 @@ const Logout = () => {
             </Text>
           </TexBox>
           <Input
-            name="password"
-            value={password.password}
-            onChange={passwordHandler}
+            {...register('password')}
             type="password"
             placeholder="현재 비밀번호를 입력해주세요"
           />
@@ -112,8 +147,8 @@ const Logout = () => {
         <Text className="essential">(필수)</Text>
       </TexBox>
       <SelectBox>
-        <Select onChange={selectItemHandler} background={select}>
-          <option disabled selected>
+        <Select {...register('reason')} background={select}>
+          <option value="" disabled selected>
             선택해주세요
           </option>
           <option value="사용을 잘 안하게 돼요">사용을 잘 안하게 돼요</option>
@@ -129,11 +164,9 @@ const Logout = () => {
           <option value="기타">기타</option>
         </Select>
       </SelectBox>
-      {reason === '기타' ? (
+      {getFields.reason === '기타' ? (
         <TextArea
-          name="reason"
-          value={text}
-          onChange={TextHandler}
+          {...register('text')}
           className="etc"
           placeholder="계정을 삭제하려는 이유를 알려주세요."
         />
@@ -153,9 +186,17 @@ const Logout = () => {
         </label>
       </CheckBox>
       <Button
-        className={reason && isCheck ? 'active' : ''}
-        disabled={reason && isCheck ? false : true}
-        onClick={withDrawHandler}
+        className={
+          getFields.password !== '' && getFields.reason !== '' && isCheck
+            ? 'active'
+            : ''
+        }
+        disabled={
+          getFields.password !== '' && getFields.reason !== '' && isCheck
+            ? false
+            : true
+        }
+        type="submit"
       >
         환승시민 탈퇴
       </Button>
@@ -164,7 +205,7 @@ const Logout = () => {
 };
 
 export default Logout;
-const Wrap = styled.div`
+const Wrap = styled.form`
   margin-left: 16px;
   display: flex;
   flex-direction: column;
@@ -247,7 +288,7 @@ const SelectBox = styled.div`
     height: 24px;
   }
 `;
-const Select = styled.select`
+export const Select = styled.select`
   margin-top: 20px;
   height: 50px;
   width: 343px;
