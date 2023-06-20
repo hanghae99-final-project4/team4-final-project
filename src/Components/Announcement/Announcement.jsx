@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { trainApi } from "../../apis/Instance";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { trainApi } from '../../apis/Instance';
 
 const Announcement = () => {
-  const [account, setAccount] = useState([]);
   const [notice, setNotice] = useState([]);
   const [description, setDescription] = useState([]);
   const [isDes, setIsDes] = useState(false);
+  const [account, setAccount] = useState([]);
   useEffect(() => {
-    getAnnounce();
     getUser();
+    getAnnounce();
   }, []);
   const getUser = async () => {
-    const Id = localStorage.getItem("userId");
+    const Id = localStorage.getItem('userId');
     const { data } = await trainApi.getConvers(Id);
     setAccount(data?.userInfo?.result?.account_type);
   };
   const getAnnounce = async () => {
     const { data } = await trainApi.getNotice();
     setNotice(data);
+  };
+  const deleteNoticeHandler = async (Id) => {
+    const { data } = await trainApi.deleteAnnounce(Id);
   };
 
   const navigate = useNavigate();
@@ -30,13 +33,11 @@ const Announcement = () => {
     setDescription([data]);
     setIsDes(true);
   };
-  const deleteNoticeHandler = async (Id) => {
-    const { data } = await trainApi.deleteAnnounce(Id);
-  };
+
   return (
     <Wrap>
-      {account === "admin" && (
-        <button onClick={() => navigate("/announcewrite")}>
+      {account === 'admin' && (
+        <button onClick={() => navigate('/announcewrite')}>
           공지사항 작성
         </button>
       )}
@@ -67,7 +68,7 @@ const Announcement = () => {
                 <span className="day">{item.createdAt.slice(0, 10)}</span>
                 <span className="new">New</span>
               </div>
-              {account === "admin" && (
+              {account === 'admin' && (
                 <button onClick={() => deleteNoticeHandler(item.id)}>
                   삭제하기
                 </button>

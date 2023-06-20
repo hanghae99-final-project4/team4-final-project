@@ -258,7 +258,7 @@ const Subway = () => {
       setMatch(recent);
     }
   }, [revert]);
-  console.log(match);
+
   return (
     <SubwayDiv>
       {bottomSheet && <ModalCtn></ModalCtn>}
