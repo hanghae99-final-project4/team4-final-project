@@ -25,20 +25,23 @@ export const Modal = styled.div`
   }
   span {
     color: #383838;
-    margin-top: ${(props) => props.margin};
+
     &.add {
+      margin-top: 20px;
       font-family: Pretendard;
       font-size: 16px;
       font-weight: 500;
       text-align: center;
     }
     &.exit {
+      margin-top: ${(props) => props.margin};
       font-family: Pretendard;
       font-size: 14px;
       font-weight: 500;
       text-align: center;
     }
     &.sub {
+      margin-top: ${(props) => props.margin};
       font-family: Pretendard;
       font-size: 14px;
       font-weight: 400;
@@ -46,9 +49,19 @@ export const Modal = styled.div`
       text-align: center;
     }
     &.leave {
+      margin-top: ${(props) => props.margin};
       color: #fa3a45;
       font-weight: 500;
       font-size: 16px;
+    }
+    &.report {
+      margin-top: 20px;
+      font-family: Pretendard;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 19px;
+      letter-spacing: 0em;
+      text-align: left;
     }
   }
 `;

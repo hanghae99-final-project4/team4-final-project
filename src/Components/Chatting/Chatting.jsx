@@ -42,6 +42,8 @@ import chatImg from '../../Assets/Chatting/chatprofile.svg';
 import close from '../../Assets/ChattingModal/close.svg';
 import { SmallToast } from '../Profile/Mypage';
 import { ToastMessage } from '../Signup/Signup';
+import reportimg from '../../Assets/Chatting/report.svg';
+import { ref } from 'yup';
 
 // const socket = io(`${process.env.REACT_APP_SOCKET_URL}`);
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
@@ -69,6 +71,7 @@ const Chatting = () => {
   const [counterUser, setCounterUser] = useState([{}]);
   const [leave, setLeave] = useState(false);
   const [prepare, setPrepare] = useState(false);
+  const [report, setReport] = useState(false);
 
   // 시간 추가 모달
   const [addModal, setAddModal] = useState(false);
@@ -102,6 +105,7 @@ const Chatting = () => {
   const [coupon, setCoupon] = useState(false);
   const [timeCnt, setTimeCnt] = useState(0);
   const [missBot, setMissBot] = useState(false);
+  const buttonRef = useRef();
   //챗봇 데이터 배열
   const [chatArray, setChatArray] = useState([
     ['산', '바다'],
@@ -429,7 +433,12 @@ const Chatting = () => {
       profile: profile,
     });
   };
-
+  const onKeyPressHandler = (event) => {
+    if (event.charCode === 13 || event.keyCode === 13) {
+      event.preventDefault(); // 기본 동작인 줄 바꿈을 방지합니다.
+      buttonRef.current.click(); // 폼 제출을 수행하는 함수를 호출합니다.
+    }
+  };
   return (
     <div
       style={{
@@ -456,7 +465,7 @@ const Chatting = () => {
                 margin="15px"
                 src={chatbot}
               />
-              <Ban onClick={() => setPrepare(true)} src={ban} />
+              <Ban onClick={() => setReport(!report)} src={ban} />
             </Header>
 
             <AllChatDiv>
@@ -498,7 +507,23 @@ const Chatting = () => {
                     setIsModal={setIsModal}
                   />
                 )}
+                {report && (
+                  <ChattingModal>
+                    <img src={reportimg} />
+                    <span margin="20px" className="report">
+                      신고 페이지로 이동할까요?
+                    </span>
+                    <span margin="4px" className="sub">
+                      페이지로 이동 시 채팅방이 나가집니다.
+                    </span>
+                    <BtnBox margin="25px">
+                      <SubBtn onClick={() => setReport(!report)}>취소</SubBtn>
+                      <PriBtn onClick={() => navigate('/report')}>신고</PriBtn>
+                    </BtnBox>
+                  </ChattingModal>
+                )}
                 {/* 시간 추가 모달 */}
+
                 {addModal && (
                   <ChattingModal>
                     <Exit onClick={() => setAddModal(!addModal)} src={close} />
@@ -845,6 +870,7 @@ const Chatting = () => {
                 <ImageFormIcon inputRef={inputRef} />
                 <InputSendBox>
                   <ChatInput
+                    onKeyDown={onKeyPressHandler}
                     placeholder=""
                     type="text"
                     value={message.msg}
@@ -852,7 +878,11 @@ const Chatting = () => {
                     onChange={onChangeHandler}
                   />
                 </InputSendBox>
-                <ChatSendBtn src={sendbtn} onClick={(e) => SubmitHandler(e)} />
+                <ChatSendBtn
+                  ref={buttonRef}
+                  src={sendbtn}
+                  onClick={(e) => SubmitHandler(e)}
+                />
               </FooterDiv>
             </AllChatDiv>
           </div>
@@ -1101,6 +1131,7 @@ const InputSendBox = styled.div`
 `;
 //채팅 칸
 const ChatInput = styled.textarea`
+  margin-top: 11px;
   padding-left: 10px;
   font-weight: 400;
   font-size: 14px;
