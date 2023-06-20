@@ -35,6 +35,9 @@ const AnnouncementPage = lazy(() =>
 const AnnounceWritePage = lazy(() =>
   import('../Pages/Announcement/AnnounceWritePage')
 );
+const AnnounceDetailPage = lazy(() =>
+  import('../Pages/Announcement/AnnounceDetailPage')
+);
 
 const Router = () => {
   return (
@@ -71,6 +74,7 @@ const Router = () => {
           <Route path="/chattingpage" element={<ChattingPage />} />
           <Route path="/failpage" element={<FailPage />} />
           <Route path="/logoutpage" element={<LogoutPage />} />
+          <Route path="/announcedetail" element={<AnnounceDetailPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { trainApi } from '../../apis/Instance';
+import { useRecoilState } from 'recoil';
+import { useDetailState } from '../../Recoil/userList';
 
 const Announcement = () => {
   const [notice, setNotice] = useState([]);
-  const [description, setDescription] = useState([]);
+  const [description, setDescription] = useRecoilState(useDetailState);
   const [isDes, setIsDes] = useState(false);
   const [account, setAccount] = useState([]);
   useEffect(() => {
@@ -31,7 +33,7 @@ const Announcement = () => {
     const { data } = await trainApi.getDescription(Id);
 
     setDescription([data]);
-    setIsDes(true);
+    navigate('/announcedetail');
   };
 
   return (
@@ -41,42 +43,21 @@ const Announcement = () => {
           공지사항 작성
         </button>
       )}
-
-      {isDes ? (
-        <>
-          {description?.map((item) => (
-            <>
-              <AnnounceItem className="description">
-                <span className="tag">{item.tag}</span>
-                <span className="title">{item.title}</span>
-                <div>
-                  <span className="day">{item.createdAt.slice(0, 10)}</span>
-                  <span className="new">New</span>
-                </div>
-              </AnnounceItem>
-              <DescriptionBox>{item.description}</DescriptionBox>
-            </>
-          ))}
-        </>
-      ) : (
-        <>
-          {notice.map((item) => (
-            <AnnounceItem onClick={() => descriptionHandler(item.id)}>
-              <span className="tag">{item.tag}</span>
-              <span className="title">{item.title}</span>
-              <div>
-                <span className="day">{item.createdAt.slice(0, 10)}</span>
-                <span className="new">New</span>
-              </div>
-              {account === 'admin' && (
-                <button onClick={() => deleteNoticeHandler(item.id)}>
-                  삭제하기
-                </button>
-              )}
-            </AnnounceItem>
-          ))}
-        </>
-      )}
+      {notice.map((item) => (
+        <AnnounceItem onClick={() => descriptionHandler(item.id)}>
+          <span className="tag">{item.tag}</span>
+          <span className="title">{item.title}</span>
+          <div>
+            <span className="day">{item.createdAt.slice(0, 10)}</span>
+            <span className="new">New</span>
+          </div>
+          {account === 'admin' && (
+            <button onClick={() => deleteNoticeHandler(item.id)}>
+              삭제하기
+            </button>
+          )}
+        </AnnounceItem>
+      ))}
     </Wrap>
   );
 };
@@ -87,7 +68,7 @@ const Wrap = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const AnnounceItem = styled.div`
+export const AnnounceItem = styled.div`
   &.description {
     cursor: default;
   }
@@ -143,7 +124,7 @@ const AnnounceItem = styled.div`
     }
   }
 `;
-const DescriptionBox = styled.div`
+export const DescriptionBox = styled.div`
   margin-top: 20px;
   font-family: Pretendard;
   font-size: 14px;
