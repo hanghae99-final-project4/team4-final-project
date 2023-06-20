@@ -5,6 +5,7 @@ import guide from '../../Assets/Main/guidebutton.svg';
 import write from '../../Assets/Main/write.svg';
 import setting from '../../Assets/Main/setting.svg';
 import hand from '../../Assets/Main/hand.svg';
+import handsign from '../../Assets/Main/handsign.png';
 import line from '../../Assets/Main/line.svg';
 import stationimg from '../../Assets/Main/station.svg';
 import { trainApi } from '../../apis/Instance';
@@ -336,7 +337,7 @@ const Subway = () => {
       </ProfileBox>
       <SearchBox>
         <div>
-          <img src={hand} alt="hand" />
+          <img src={handsign} alt="hand" />
           <span class="search">인연 찾기</span>
         </div>
 
@@ -636,6 +637,11 @@ const SearchBox = styled.div`
   }
   div {
     display: flex;
+    gap: 4px;
+    img {
+      width: 24px;
+      height: 24px;
+    }
     span {
       font-weight: 500;
       font-size: 24px;
@@ -890,6 +896,8 @@ const LikeBox = styled.div`
   display: flex;
   gap: 15px;
   img {
+    width: 1.875rem;
+    height: 1.875rem;
     cursor: pointer;
   }
 `;
