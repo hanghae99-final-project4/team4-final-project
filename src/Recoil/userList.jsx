@@ -58,6 +58,10 @@ const useStartState = atom({
   key: 'start',
   default: [],
 });
+const useDetailState = atom({
+  key: 'detail',
+  default: [],
+});
 export {
   useInfoState,
   usePrimaryState,
@@ -71,4 +75,5 @@ export {
   usePatchState,
   useBotState,
   useStartState,
+  useDetailState,
 };
