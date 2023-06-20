@@ -8,10 +8,6 @@ const App = () => {
       hotjar.initialize(3528659, 6);
     }
   }, []);
-  module.exports = {
-    plugins:
-      process.env.NODE_ENV === 'production' ? ['transform-remove-console'] : [],
-  };
 
   return (
     <RecoilRoot>
