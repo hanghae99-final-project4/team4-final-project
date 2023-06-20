@@ -36,7 +36,6 @@ const AnnounceWrite = () => {
   });
   const getFields = getValues();
   const noticeHandler = async (data) => {
-    console.log(data);
     const tag = data.tag;
     const title = data.title;
     const description = data.description;
