@@ -1,35 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import guide from '../../Assets/Main/guidebutton.svg';
-import write from '../../Assets/Main/write.svg';
-import setting from '../../Assets/Main/setting.svg';
-import hand from '../../Assets/Main/hand.svg';
-import handsign from '../../Assets/Main/handsign.png';
-import line from '../../Assets/Main/line.svg';
-import stationimg from '../../Assets/Main/station.svg';
-import { trainApi } from '../../apis/Instance';
-import Slick from '../Slick/Slick';
-import Kakao from '../Kakao/Kakao';
-import { useRecoilState } from 'recoil';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import guide from "../../Assets/Main/guidebutton.svg";
+import write from "../../Assets/Main/write.svg";
+import setting from "../../Assets/Main/setting.svg";
+import hand from "../../Assets/Main/hand.svg";
+import handsign from "../../Assets/Main/handsign.png";
+import line from "../../Assets/Main/line.svg";
+import stationimg from "../../Assets/Main/station.svg";
+import { trainApi } from "../../apis/Instance";
+import Slick from "../Slick/Slick";
+import Kakao from "../Kakao/Kakao";
+import { useRecoilState } from "recoil";
 import {
   useArriveState,
   useStartState,
   useStationState,
   useUserState,
-} from '../../Recoil/userList';
-import { useStation } from '../../MyTools/quries/station';
-import { ModalCtn } from '../Modal/CounterProfileModal';
-import exit from '../../Assets/Modal/status.svg';
-import circleimg from '../../Assets/History/circle.svg';
-import upimg from '../../Assets/History/up.svg';
-import downimg from '../../Assets/History/down.svg';
-import normalupimg from '../../Assets/Main/normalup.png';
-import normaldownimg from '../../Assets/Main/normaldown.png';
-import nomatchImg from '../../Assets/Matching/nomatch.svg';
-import revertImg from '../../Assets/Main/revert.svg';
-import { SmallToast } from '../Profile/Mypage';
-import { ToastMessage } from '../Signup/Signup';
+} from "../../Recoil/userList";
+import { useStation } from "../../MyTools/quries/station";
+import { ModalCtn } from "../Modal/CounterProfileModal";
+import exit from "../../Assets/Modal/status.svg";
+import circleimg from "../../Assets/History/circle.svg";
+import upimg from "../../Assets/History/up.svg";
+import downimg from "../../Assets/History/down.svg";
+import normalupimg from "../../Assets/Main/normalup.png";
+import normaldownimg from "../../Assets/Main/normaldown.png";
+import nomatchImg from "../../Assets/Matching/nomatch.svg";
+import revertImg from "../../Assets/Main/revert.svg";
+import { SmallToast } from "../Profile/Mypage";
+import { ToastMessage } from "../Signup/Signup";
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
@@ -39,28 +39,28 @@ const Subway = () => {
   const [station, setStation] = useRecoilState(useStationState);
   const [arrive, setArrive] = useRecoilState(useArriveState);
   const [bottomSheet, setBottomSheet] = useState(false);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
   const [match, setMatch] = useState([]);
 
   // 최신순 좋아요순 버튼 리스트
   const revertItem = [
     {
-      name: '최신순',
-      value: 'recent',
+      name: "최신순",
+      value: "recent",
     },
-    { name: '좋아요', value: 'like' },
+    { name: "좋아요", value: "like" },
   ];
   // infinite scroll state
   const [start, setStart] = useRecoilState(useStartState);
   const [isRevert, setIsRevert] = useState(false);
-  const [revert, setRevert] = useState('최신순');
-  const [next, setNext] = useState('');
+  const [revert, setRevert] = useState("최신순");
+  const [next, setNext] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   //매칭 버튼 실패시 토스트 메시지 알림
   const [toast, setToast] = useState(false);
   const [confirmToast, setConfirmToast] = useState(false);
-  const { data } = useStation(station?.place_name?.split('역')[0]);
-  localStorage.setItem('line', data?.[0]?.line_number);
+  const { data } = useStation(station?.place_name?.split("역")[0]);
+  localStorage.setItem("line", data?.[0]?.line_number);
 
   const target = useRef(null);
   useEffect(() => {
@@ -69,7 +69,7 @@ const Subway = () => {
   }, []);
 
   const naviHandler = () => {
-    navigate('/stationselect');
+    navigate("/stationselect");
   };
 
   useEffect(() => {
@@ -126,7 +126,7 @@ const Subway = () => {
 
   const getProfile = useCallback(async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem("userId");
       const { data } = await trainApi.getConvers(userId);
 
       setProfile(data.userInfo);
@@ -137,7 +137,7 @@ const Subway = () => {
 
   const getMatch = useCallback(async () => {
     try {
-      const Id = localStorage.getItem('userId');
+      const Id = localStorage.getItem("userId");
       const { data } = await trainApi.getMatch(Id);
       if (data.nextcursor) {
         setNext(data.nextcursor);
@@ -166,13 +166,13 @@ const Subway = () => {
   const buttonHandler = () => {
     if (start.length !== 0 && arrive.length !== 0) {
       localStorage.setItem(arrive.station_name, arrive.line_number);
-      setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
+      setItemWithExpireTime("nickname", profile.result.nickname, 30000000);
       setItemWithExpireTime(
-        'profile',
+        "profile",
         profile?.images?.[0]?.image_url,
         3000000
       );
-      navigate('/chattingpage');
+      navigate("/chattingpage");
     } else if (arrive.length === 0) {
       setConfirmToast(true);
     } else {
@@ -185,7 +185,7 @@ const Subway = () => {
   };
   const registerHandler = async () => {
     try {
-      const id = localStorage.getItem('userId');
+      const id = localStorage.getItem("userId");
       const { data } = await trainApi.patchnickname(id, {
         introduction: status.status,
       });
@@ -246,12 +246,12 @@ const Subway = () => {
   };
 
   useEffect(() => {
-    if (revert === '좋아요') {
+    if (revert === "좋아요") {
       const like = Array.from(new Set(match)).sort((a, b) =>
         a.reputation < b.reputation ? 1 : -1
       );
       setMatch(like);
-    } else if (revert === '최신순') {
+    } else if (revert === "최신순") {
       const recent = Array.from(new Set(match)).sort((a, b) =>
         a.createdAt < b.createdAt ? 1 : -1
       );
@@ -262,7 +262,7 @@ const Subway = () => {
   return (
     <SubwayDiv>
       {bottomSheet && <ModalCtn></ModalCtn>}
-      <Modal className={bottomSheet ? 'open' : ''}>
+      <Modal className={bottomSheet ? "open" : ""}>
         <Status>
           <span>상태 메시지 수정</span>
           <Exit onClick={() => setBottomSheet(!bottomSheet)} src={exit} />
@@ -298,12 +298,12 @@ const Subway = () => {
           <span class="guide">환승시민 어떻게 이용하는지 모르시겠다면?</span>
         </div>
         <div>
-          <img onClick={() => navigate('/guide')} src={guide} alt="guide" />
+          <img onClick={() => navigate("/guide")} src={guide} alt="guide" />
         </div>
       </GuideBox>
       <ProfileBox>
         <Profile>
-          <Img onClick={() => navigate('/changeprofile')}>
+          <Img onClick={() => navigate("/changeprofile")}>
             <img
               src={
                 profile?.images?.filter((item) => item.is_primary === true)?.[0]
@@ -315,7 +315,7 @@ const Subway = () => {
           <NicknameBox>
             <Nickname>{profile?.result?.nickname}</Nickname>
             <ApplySet
-              className={profile?.result?.introduction === null ? 'first' : ''}
+              className={profile?.result?.introduction === null ? "first" : ""}
             >
               <img
                 onClick={() => setBottomSheet(!bottomSheet)}
@@ -326,11 +326,11 @@ const Subway = () => {
               <span onClick={() => setBottomSheet(!bottomSheet)}>
                 {profile?.result?.introduction !== null
                   ? profile?.result?.introduction
-                  : '반갑습니다. 소개글을 작성해주세요.'}
+                  : "반갑습니다. 소개글을 작성해주세요."}
               </span>
             </ApplySet>
           </NicknameBox>
-          <Setting onClick={() => navigate('/mypage')}>
+          <Setting onClick={() => navigate("/mypage")}>
             <img src={setting} alt="setting" />
           </Setting>
         </Profile>
@@ -358,7 +358,7 @@ const Subway = () => {
             <div>
               <img src={stationimg} alt="station" />
               {start.length !== 0 ? (
-                <span>{station?.place_name?.split('역')[0]}</span>
+                <span>{station?.place_name?.split("역")[0]}</span>
               ) : (
                 <span className="deactive">위치 엑세스를 허용해주세요.</span>
               )}
@@ -379,7 +379,7 @@ const Subway = () => {
       </StationBox>
       <div>
         <MatchBtn
-          className={start.length !== 0 && arrive.length !== 0 ? 'active' : ''}
+          className={start.length !== 0 && arrive.length !== 0 ? "active" : ""}
           onClick={() => buttonHandler()}
         >
           매칭
@@ -410,7 +410,7 @@ const Subway = () => {
               <RevertItem
                 onClick={reverHandler}
                 name={item.name}
-                className={item.name === revert ? 'revert' : ''}
+                className={item.name === revert ? "revert" : ""}
               >
                 {item.name}
               </RevertItem>
@@ -478,6 +478,18 @@ const Subway = () => {
                     </LikeBox>
                   )}
                 </Comment>
+                {item.reputation ? (
+                  <ButtonBox class="buttonbox">
+                    <button>대화하기</button>
+                  </ButtonBox>
+                ) : item.reputation === null ? (
+                  ""
+                ) : (
+                  <ButtonBox class="buttonbox">
+                    <button>차단하기</button>
+                    <button>신고하기</button>
+                  </ButtonBox>
+                )}
               </HistoryItem>
             ))}
             <div ref={target}></div>
@@ -844,7 +856,7 @@ const HistoryItem = styled.div`
   flex-direction: column;
 
   width: 343px;
-  height: 105px;
+  height: 160px;
   border-bottom: 1px solid #e2e2e2;
   font-family: Pretendard;
   font-size: 14px;
@@ -900,6 +912,8 @@ const LikeBox = styled.div`
     height: 1.875rem;
     cursor: pointer;
   }
+  button {
+  }
 `;
 const NoMatchBox = styled.div`
   display: flex;
@@ -915,12 +929,18 @@ const HistoryItemBox = styled.div`
 `;
 const HistoryRevert = styled.div`
   cursor: pointer;
+  width: 75px;
   height: 38px;
   background-color: #f5f5f5;
   border-radius: 4px;
-  padding: 10px;
+  align-items: center;
+  justify-content: center;
   display: flex;
   gap: 6.92px;
+  img {
+    width: 18px;
+    height: 14px;
+  }
   span {
     font-family: Pretendard;
     font-size: 14px;
@@ -958,4 +978,35 @@ const RevertItemBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+  height: 30px;
+
+  animation: slideIn 2s ease;
+  button {
+    width: 62px;
+    height: 30px;
+    background-color: #f4f4f4;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #333333;
+  }
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
