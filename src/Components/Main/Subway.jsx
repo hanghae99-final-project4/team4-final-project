@@ -257,6 +257,7 @@ const Subway = () => {
       setMatch(recent);
     }
   }, [revert]);
+  console.log(match);
   return (
     <SubwayDiv>
       {bottomSheet && <ModalCtn></ModalCtn>}
@@ -416,7 +417,7 @@ const Subway = () => {
           </RevertItemBox>
         )}
 
-        {match ? (
+        {match.length !== 0 ? (
           <HistoryItemBox>
             {match?.map((item, i) => (
               <HistoryItem key={i}>
