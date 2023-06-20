@@ -1,8 +1,9 @@
 ## 9기 4조 실전프로젝트, 항해 99
+new transfercitizen is comming ~!
+# 💗 코드 네임 : 환승 시민2 🚆 💗
 
-# 💗 코드 네임 : 환승 시민 🚆 💗
+ ![환승시민_섬네일_1 (1)](https://github.com/wyswhsl21/team4-final-project/assets/108774881/1753bbac-c8a1-45b4-ad3d-d4b1a36c1065)
 
-![로고오](https://user-images.githubusercontent.com/113084907/207002677-d4828de8-61cd-43ca-950f-2d636a13e115.jpg)
 > 환승시민은 **랜덤매칭 채팅 서비스** 입니다. <br>
 <br />
 

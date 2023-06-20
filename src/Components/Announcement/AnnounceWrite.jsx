@@ -1,26 +1,26 @@
-import React from 'react';
-import styled from 'styled-components';
-import Header from '../Header/Header';
-import { Select } from '../Logout/Logout';
-import selectimg from '../../Assets/Logout/selecticon.svg';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { trainApi } from '../../apis/Instance';
+import React from "react";
+import styled from "styled-components";
+import Header from "../Header/Header";
+import { Select } from "../Logout/Logout";
+import selectimg from "../../Assets/Logout/selecticon.svg";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { trainApi } from "../../apis/Instance";
 const AnnounceWrite = () => {
   const schema = yup.object().shape({
     tag: yup
       .string() //문자열 체크
 
-      .required('tag를 입력해주세요.'), // 빈칸인지 체크
+      .required("tag를 입력해주세요."), // 빈칸인지 체크
     title: yup
       .string() //문자열 체크
 
-      .required('제목을 입력해주세요.'), // 빈칸인지 체크
+      .required("제목을 입력해주세요."), // 빈칸인지 체크
     description: yup
       .string() //문자열 체크
 
-      .required('상세사유를 입력해주세요.'), // 빈칸인지 체크
+      .required("상세사유를 입력해주세요."), // 빈칸인지 체크
   });
 
   //react-hook-form
@@ -32,7 +32,7 @@ const AnnounceWrite = () => {
     getValues,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'onChange',
+    mode: "onChange",
   });
   const getFields = getValues();
   const noticeHandler = async (data) => {
@@ -49,20 +49,20 @@ const AnnounceWrite = () => {
         <Text>tag</Text>
       </div>
 
-      <Select {...register('tag')} background={selectimg}>
+      <Select {...register("tag")} background={selectimg}>
         <option value="" disabled selected>
           선택해주세요
         </option>
-        <option value="[이벤트]">{'[이벤트]'}</option>
-        <option value="[업데이트]">{'[업데이트]'}</option>
-        <option value="[공지]">{'[공지]'}</option>
+        <option value="[이벤트]">{"[이벤트]"}</option>
+        <option value="[업데이트]">{"[업데이트]"}</option>
+        <option value="[공지]">{"[공지]"}</option>
       </Select>
       <div>
         <Text>title</Text>
       </div>
-      <Title {...register('title')} />
+      <Title {...register("title")} />
       <div>description</div>
-      <Discription {...register('description')} />
+      <Discription {...register("description")} />
       <button type="submit">작성하기</button>
     </Wrap>
   );
