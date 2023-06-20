@@ -125,6 +125,7 @@ export const AnnounceItem = styled.div`
   }
 `;
 export const DescriptionBox = styled.div`
+  white-space: pre-line;
   margin-top: 20px;
   font-family: Pretendard;
   font-size: 14px;
