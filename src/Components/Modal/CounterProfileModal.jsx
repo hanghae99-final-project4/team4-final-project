@@ -126,15 +126,16 @@ export const ModalCtn = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
-
+  position: absolute;
   border: none;
   overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   top: 0;
+  left: 0;
   margin: 0 auto;
   z-index: 1000;
   &.profile {

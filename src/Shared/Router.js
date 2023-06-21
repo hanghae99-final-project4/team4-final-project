@@ -38,6 +38,7 @@ const AnnounceWritePage = lazy(() =>
 const AnnounceDetailPage = lazy(() =>
   import('../Pages/Announcement/AnnounceDetailPage')
 );
+const ReportPage = lazy(() => import('../Pages/Report/ReportPage'));
 
 const Router = () => {
   return (
@@ -75,6 +76,7 @@ const Router = () => {
           <Route path="/failpage" element={<FailPage />} />
           <Route path="/logoutpage" element={<LogoutPage />} />
           <Route path="/announcedetail" element={<AnnounceDetailPage />} />
+          <Route path="/report" element={<ReportPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

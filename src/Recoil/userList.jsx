@@ -62,6 +62,10 @@ const useDetailState = atom({
   key: 'detail',
   default: [],
 });
+const useReportState = atom({
+  key: 'reprot',
+  default: 0,
+});
 export {
   useInfoState,
   usePrimaryState,
@@ -76,4 +80,5 @@ export {
   useBotState,
   useStartState,
   useDetailState,
+  useReportState,
 };

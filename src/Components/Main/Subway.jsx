@@ -1,35 +1,39 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import guide from "../../Assets/Main/guidebutton.svg";
-import write from "../../Assets/Main/write.svg";
-import setting from "../../Assets/Main/setting.svg";
-import hand from "../../Assets/Main/hand.svg";
-import handsign from "../../Assets/Main/handsign.png";
-import line from "../../Assets/Main/line.svg";
-import stationimg from "../../Assets/Main/station.svg";
-import { trainApi } from "../../apis/Instance";
-import Slick from "../Slick/Slick";
-import Kakao from "../Kakao/Kakao";
-import { useRecoilState } from "recoil";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import guide from '../../Assets/Main/guidebutton.svg';
+import write from '../../Assets/Main/write.svg';
+import setting from '../../Assets/Main/setting.svg';
+import hand from '../../Assets/Main/hand.svg';
+import handsign from '../../Assets/Main/handsign.png';
+import line from '../../Assets/Main/line.svg';
+import stationimg from '../../Assets/Main/station.svg';
+import { trainApi } from '../../apis/Instance';
+import Slick from '../Slick/Slick';
+import Kakao from '../Kakao/Kakao';
+import { useRecoilState } from 'recoil';
 import {
   useArriveState,
+  useReportState,
   useStartState,
   useStationState,
   useUserState,
-} from "../../Recoil/userList";
-import { useStation } from "../../MyTools/quries/station";
-import { ModalCtn } from "../Modal/CounterProfileModal";
-import exit from "../../Assets/Modal/status.svg";
-import circleimg from "../../Assets/History/circle.svg";
-import upimg from "../../Assets/History/up.svg";
-import downimg from "../../Assets/History/down.svg";
-import normalupimg from "../../Assets/Main/normalup.png";
-import normaldownimg from "../../Assets/Main/normaldown.png";
-import nomatchImg from "../../Assets/Matching/nomatch.svg";
-import revertImg from "../../Assets/Main/revert.svg";
-import { SmallToast } from "../Profile/Mypage";
-import { ToastMessage } from "../Signup/Signup";
+} from '../../Recoil/userList';
+import { useStation } from '../../MyTools/quries/station';
+import { ModalCtn } from '../Modal/CounterProfileModal';
+import exit from '../../Assets/Modal/status.svg';
+import circleimg from '../../Assets/History/circle.svg';
+import upimg from '../../Assets/History/up.svg';
+import downimg from '../../Assets/History/down.svg';
+import normalupimg from '../../Assets/Main/normalup.png';
+import normaldownimg from '../../Assets/Main/normaldown.png';
+import nomatchImg from '../../Assets/Matching/nomatch.svg';
+import revertImg from '../../Assets/Main/revert.svg';
+import { SmallToast } from '../Profile/Mypage';
+import { ToastMessage } from '../Signup/Signup';
+import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
+import reportimg from '../../Assets/Chatting/report.svg';
+import blockimg from '../../Assets/Modal/block.svg';
 
 const Subway = () => {
   const [profile, setProfile] = useState([]);
@@ -39,28 +43,35 @@ const Subway = () => {
   const [station, setStation] = useRecoilState(useStationState);
   const [arrive, setArrive] = useRecoilState(useArriveState);
   const [bottomSheet, setBottomSheet] = useState(false);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState('');
   const [match, setMatch] = useState([]);
+  //차단하기 + 신고하기
+  const [block, setBlock] = useState(false);
+  const [counterUser, setCounterUser] = useState(0);
+  const [report, setReport] = useState(false);
+  const [counter, setCounter] = useRecoilState(useReportState);
+  const [counterNic, setCounterNic] = useState('');
+  const [isblock, setIsBlock] = useState(false);
 
   // 최신순 좋아요순 버튼 리스트
   const revertItem = [
     {
-      name: "최신순",
-      value: "recent",
+      name: '최신순',
+      value: 'recent',
     },
-    { name: "좋아요", value: "like" },
+    { name: '좋아요', value: 'like' },
   ];
   // infinite scroll state
   const [start, setStart] = useRecoilState(useStartState);
   const [isRevert, setIsRevert] = useState(false);
-  const [revert, setRevert] = useState("최신순");
-  const [next, setNext] = useState("");
+  const [revert, setRevert] = useState('최신순');
+  const [next, setNext] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   //매칭 버튼 실패시 토스트 메시지 알림
   const [toast, setToast] = useState(false);
   const [confirmToast, setConfirmToast] = useState(false);
-  const { data } = useStation(station?.place_name?.split("역")[0]);
-  localStorage.setItem("line", data?.[0]?.line_number);
+  const { data } = useStation(station?.place_name?.split('역')[0]);
+  localStorage.setItem('line', data?.[0]?.line_number);
 
   const target = useRef(null);
   useEffect(() => {
@@ -69,7 +80,7 @@ const Subway = () => {
   }, []);
 
   const naviHandler = () => {
-    navigate("/stationselect");
+    navigate('/stationselect');
   };
 
   useEffect(() => {
@@ -126,7 +137,7 @@ const Subway = () => {
 
   const getProfile = useCallback(async () => {
     try {
-      const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem('userId');
       const { data } = await trainApi.getConvers(userId);
 
       setProfile(data.userInfo);
@@ -137,7 +148,7 @@ const Subway = () => {
 
   const getMatch = useCallback(async () => {
     try {
-      const Id = localStorage.getItem("userId");
+      const Id = localStorage.getItem('userId');
       const { data } = await trainApi.getMatch(Id);
       if (data.nextcursor) {
         setNext(data.nextcursor);
@@ -166,13 +177,13 @@ const Subway = () => {
   const buttonHandler = () => {
     if (start.length !== 0 && arrive.length !== 0) {
       localStorage.setItem(arrive.station_name, arrive.line_number);
-      setItemWithExpireTime("nickname", profile.result.nickname, 30000000);
+      setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
       setItemWithExpireTime(
-        "profile",
+        'profile',
         profile?.images?.[0]?.image_url,
         3000000
       );
-      navigate("/chattingpage");
+      navigate('/chattingpage');
     } else if (arrive.length === 0) {
       setConfirmToast(true);
     } else {
@@ -185,7 +196,7 @@ const Subway = () => {
   };
   const registerHandler = async () => {
     try {
-      const id = localStorage.getItem("userId");
+      const id = localStorage.getItem('userId');
       const { data } = await trainApi.patchnickname(id, {
         introduction: status.status,
       });
@@ -246,12 +257,12 @@ const Subway = () => {
   };
 
   useEffect(() => {
-    if (revert === "좋아요") {
+    if (revert === '좋아요') {
       const like = Array.from(new Set(match)).sort((a, b) =>
         a.reputation < b.reputation ? 1 : -1
       );
       setMatch(like);
-    } else if (revert === "최신순") {
+    } else if (revert === '최신순') {
       const recent = Array.from(new Set(match)).sort((a, b) =>
         a.createdAt < b.createdAt ? 1 : -1
       );
@@ -259,250 +270,319 @@ const Subway = () => {
     }
   }, [revert]);
 
+  const blockHandler = (userId, nickname) => {
+    setBlock(!block);
+    setCounterUser(userId);
+    setCounterNic(nickname);
+  };
+  const userBlockHandler = async () => {
+    try {
+      const Id = localStorage.getItem('userId');
+      const { data } = await trainApi.blockuser(Id, counterUser);
+      if (data?.result === '성공') {
+        setIsBlock(true);
+      }
+      setBlock(true);
+      return (
+        setTimeout(() => setBlock(!block), 3000),
+        setTimeout(() => setIsBlock(false), 3000)
+      );
+    } catch (err) {
+      window.alert(err.response.data.error);
+    }
+  };
+  const reportHandler = (Id) => {
+    setReport(!report);
+    setCounter(Id);
+  };
+
   return (
-    <SubwayDiv>
-      {bottomSheet && <ModalCtn></ModalCtn>}
-      <Modal className={bottomSheet ? "open" : ""}>
-        <Status>
-          <span>상태 메시지 수정</span>
-          <Exit onClick={() => setBottomSheet(!bottomSheet)} src={exit} />
-        </Status>
-
-        <InputDiv>
-          <input
-            maxLength={20}
-            onChange={statusHandler}
-            value={status.status}
-            name="status"
-            placeholder="안녕하세요 잘 부탁드려요!"
-          />
-          <span className="sub">
-            {status?.status?.length}/{20}
-          </span>
-        </InputDiv>
-
-        <button onClick={registerHandler}>확인</button>
-      </Modal>
-      {toast && (
-        <ToastMessage className="matching">
-          환승시민을 이용하기 위해서는
-          <br /> 위치 액세스를 허용해주세요!
-        </ToastMessage>
+    <>
+      {report && (
+        <ChattingModal>
+          <img src={reportimg} />
+          <span className="report">신고 페이지로 이동 할까요?</span>
+          <span className="sub">신고버튼 시 신고페이지로 이동합니다.</span>
+          <BtnBox margin="21px">
+            <SubBtn onClick={() => setReport(!report)}>취소</SubBtn>
+            <PriBtn onClick={() => navigate('/report')}>신고</PriBtn>
+          </BtnBox>
+        </ChattingModal>
       )}
-      {confirmToast && (
-        <SmallToast className="matching">도착역을 입력해주세요</SmallToast>
+      {block && (
+        <ChattingModal>
+          <img src={blockimg} />
+          <span className="report">상대방을 차단 할까요?</span>
+          <span className="sub">차단하면 서로 매칭이 되지 않습니다.</span>
+          <BtnBox margin="20px">
+            <SubBtn onClick={() => setBlock(!block)}>취소</SubBtn>
+            <PriBtn onClick={userBlockHandler}>차단</PriBtn>
+          </BtnBox>
+        </ChattingModal>
       )}
-      <GuideBox>
-        <div>
-          <span class="welcome">환영합니다!</span>
-          <span class="guide">환승시민 어떻게 이용하는지 모르시겠다면?</span>
-        </div>
-        <div>
-          <img onClick={() => navigate("/guide")} src={guide} alt="guide" />
-        </div>
-      </GuideBox>
-      <ProfileBox>
-        <Profile>
-          <Img onClick={() => navigate("/changeprofile")}>
-            <img
-              src={
-                profile?.images?.filter((item) => item.is_primary === true)?.[0]
-                  ?.image_url
-              }
-              alt="profile"
+      <SubwayDiv>
+        {bottomSheet && <ModalCtn></ModalCtn>}
+        <Modal className={bottomSheet ? 'open' : ''}>
+          <Status>
+            <span>상태 메시지 수정</span>
+            <Exit onClick={() => setBottomSheet(!bottomSheet)} src={exit} />
+          </Status>
+
+          <InputDiv>
+            <input
+              maxLength={20}
+              onChange={statusHandler}
+              value={status.status}
+              name="status"
+              placeholder="안녕하세요 잘 부탁드려요!"
             />
-          </Img>
-          <NicknameBox>
-            <Nickname>{profile?.result?.nickname}</Nickname>
-            <ApplySet
-              className={profile?.result?.introduction === null ? "first" : ""}
-            >
-              <img
-                onClick={() => setBottomSheet(!bottomSheet)}
-                src={write}
-                alt="write"
-              />
+            <span className="sub">
+              {status?.status?.length}/{20}
+            </span>
+          </InputDiv>
 
-              <span onClick={() => setBottomSheet(!bottomSheet)}>
-                {profile?.result?.introduction !== null
-                  ? profile?.result?.introduction
-                  : "반갑습니다. 소개글을 작성해주세요."}
-              </span>
-            </ApplySet>
-          </NicknameBox>
-          <Setting onClick={() => navigate("/mypage")}>
-            <img src={setting} alt="setting" />
-          </Setting>
-        </Profile>
-      </ProfileBox>
-      <SearchBox>
+          <button onClick={registerHandler}>확인</button>
+        </Modal>
+        {toast && (
+          <ToastMessage className="matching">
+            환승시민을 이용하기 위해서는
+            <br /> 위치 액세스를 허용해주세요!
+          </ToastMessage>
+        )}
+        {confirmToast && (
+          <SmallToast className="matching">도착역을 입력해주세요</SmallToast>
+        )}
+        <GuideBox>
+          <div>
+            <span class="welcome">환영합니다!</span>
+            <span class="guide">환승시민 어떻게 이용하는지 모르시겠다면?</span>
+          </div>
+          <div>
+            <img onClick={() => navigate('/guide')} src={guide} alt="guide" />
+          </div>
+        </GuideBox>
+
+        <ProfileBox>
+          <Profile>
+            <Img onClick={() => navigate('/changeprofile')}>
+              <img
+                src={
+                  profile?.images?.filter(
+                    (item) => item.is_primary === true
+                  )?.[0]?.image_url
+                }
+                alt="profile"
+              />
+            </Img>
+            <NicknameBox>
+              <Nickname>{profile?.result?.nickname}</Nickname>
+              <ApplySet
+                className={
+                  profile?.result?.introduction === null ? 'first' : ''
+                }
+              >
+                <img
+                  onClick={() => setBottomSheet(!bottomSheet)}
+                  src={write}
+                  alt="write"
+                />
+
+                <span onClick={() => setBottomSheet(!bottomSheet)}>
+                  {profile?.result?.introduction !== null
+                    ? profile?.result?.introduction
+                    : '반갑습니다. 소개글을 작성해주세요.'}
+                </span>
+              </ApplySet>
+            </NicknameBox>
+            <Setting onClick={() => navigate('/mypage')}>
+              <img src={setting} alt="setting" />
+            </Setting>
+          </Profile>
+        </ProfileBox>
+        <SearchBox>
+          <div>
+            <img src={handsign} alt="hand" />
+            <span class="search">인연 찾기</span>
+          </div>
+
+          <span class="designate">
+            인연을 찾기 전 도착역을 지정해 주세요.
+            <br /> 출발역은 자동 입력됩니다.
+          </span>
+        </SearchBox>
+        {/* 지하철 역 */}
+        <StationBox>
+          <Line>
+            <img src={line} alt="line" />
+          </Line>
+
+          <Station onClick={naviHandler}>
+            <Start>
+              <span>출발</span>
+              <div>
+                <img src={stationimg} alt="station" />
+                {start.length !== 0 ? (
+                  <span>{station?.place_name?.split('역')[0]}</span>
+                ) : (
+                  <span className="deactive">위치 엑세스를 허용해주세요.</span>
+                )}
+              </div>
+            </Start>
+            <Arrive>
+              <span>도착</span>
+              <div>
+                <img src={stationimg} alt="station" />
+                {arrive?.station_name?.length !== 0 ? (
+                  <span>{arrive?.station_name}</span>
+                ) : (
+                  <span>도착역</span>
+                )}
+              </div>
+            </Arrive>
+          </Station>
+        </StationBox>
         <div>
-          <img src={handsign} alt="hand" />
-          <span class="search">인연 찾기</span>
+          <MatchBtn
+            className={
+              start.length !== 0 && arrive.length !== 0 ? 'active' : ''
+            }
+            onClick={() => buttonHandler()}
+          >
+            매칭
+          </MatchBtn>
         </div>
 
-        <span class="designate">
-          인연을 찾기 전 도착역을 지정해 주세요.
-          <br /> 출발역은 자동 입력됩니다.
-        </span>
-      </SearchBox>
-      {/* 지하철 역 */}
-      <StationBox>
-        <Line>
-          <img src={line} alt="line" />
-        </Line>
+        {/* 이벤트 */}
+        <Event>
+          <span>이벤트</span>
+          <span className="event">
+            행운이 팡팡 터지는 이벤트에 참여 해 보세요!
+          </span>
+        </Event>
+        {/* 슬라이더 */}
+        <Slick />
 
-        <Station onClick={naviHandler}>
-          <Start>
-            <span>출발</span>
-            <div>
-              <img src={stationimg} alt="station" />
-              {start.length !== 0 ? (
-                <span>{station?.place_name?.split("역")[0]}</span>
-              ) : (
-                <span className="deactive">위치 엑세스를 허용해주세요.</span>
-              )}
-            </div>
-          </Start>
-          <Arrive>
-            <span>도착</span>
-            <div>
-              <img src={stationimg} alt="station" />
-              {arrive?.station_name?.length !== 0 ? (
-                <span>{arrive?.station_name}</span>
-              ) : (
-                <span>도착역</span>
-              )}
-            </div>
-          </Arrive>
-        </Station>
-      </StationBox>
-      <div>
-        <MatchBtn
-          className={start.length !== 0 && arrive.length !== 0 ? "active" : ""}
-          onClick={() => buttonHandler()}
-        >
-          매칭
-        </MatchBtn>
-      </div>
+        <HistoryBox>
+          {isblock && (
+            <SmallToast>{counterNic} 님이 차단되었습니다.</SmallToast>
+          )}
+          <RevertBox>
+            <span>매칭이력</span>
+            <HistoryRevert onClick={() => setIsRevert(!isRevert)}>
+              <img src={revertImg} />
+              <span>{revert}</span>
+            </HistoryRevert>
+          </RevertBox>
+          {isRevert && (
+            <RevertItemBox>
+              {revertItem.map((item, i) => (
+                <RevertItem
+                  onClick={reverHandler}
+                  name={item.name}
+                  className={item.name === revert ? 'revert' : ''}
+                >
+                  {item.name}
+                </RevertItem>
+              ))}
+            </RevertItemBox>
+          )}
 
-      {/* 이벤트 */}
-      <Event>
-        <span>이벤트</span>
-        <span className="event">
-          행운이 팡팡 터지는 이벤트에 참여 해 보세요!
-        </span>
-      </Event>
-      {/* 슬라이더 */}
-      <Slick />
+          {match.length !== 0 ? (
+            <HistoryItemBox>
+              {match?.map((item, i) => (
+                <HistoryItem key={i}>
+                  <MatchItem>
+                    <MatchResultBox>
+                      <img src={circleimg} />
+                      <div>매칭성공</div>
+                    </MatchResultBox>
 
-      <HistoryBox>
-        <RevertBox>
-          <span>매칭이력</span>
-          <HistoryRevert onClick={() => setIsRevert(!isRevert)}>
-            <img src={revertImg} />
-            <span>{revert}</span>
-          </HistoryRevert>
-        </RevertBox>
-        {isRevert && (
-          <RevertItemBox>
-            {revertItem.map((item, i) => (
-              <RevertItem
-                onClick={reverHandler}
-                name={item.name}
-                className={item.name === revert ? "revert" : ""}
-              >
-                {item.name}
-              </RevertItem>
-            ))}
-          </RevertItemBox>
-        )}
-
-        {match.length !== 0 ? (
-          <HistoryItemBox>
-            {match?.map((item, i) => (
-              <HistoryItem key={i}>
-                <MatchItem>
-                  <MatchResultBox>
-                    <img src={circleimg} />
-                    <div>매칭성공</div>
-                  </MatchResultBox>
-
-                  <span>
-                    {`${item?.updatedAt.slice(0, 4)} /${item?.updatedAt.slice(
-                      5,
-                      7
-                    )}/${item?.updatedAt.slice(8, 10)}
+                    <span>
+                      {`${item?.updatedAt.slice(0, 4)} /${item?.updatedAt.slice(
+                        5,
+                        7
+                      )}/${item?.updatedAt.slice(8, 10)}
                  `}
-                  </span>
-                </MatchItem>
+                    </span>
+                  </MatchItem>
 
-                <MatchNic>
-                  {item?.User?.nickname}
-                  <span>님과 매칭 되었습니다.</span>
-                </MatchNic>
-                <Comment>
-                  <div>지속적으로 대화 하고 싶으신가요?</div>
+                  <MatchNic>
+                    {item?.User?.nickname}
+                    <span>님과 매칭 되었습니다.</span>
+                  </MatchNic>
+                  <Comment>
+                    <div>지속적으로 대화 하고 싶으신가요?</div>
+                    {item.reputation ? (
+                      <LikeBox>
+                        <img
+                          onClick={() => reputationDownHandler(item.id, i)}
+                          src={normaldownimg}
+                        />
+                        <img
+                          onClick={() => reputationUpHandler(item.id, i)}
+                          src={upimg}
+                        />
+                      </LikeBox>
+                    ) : item.reputation === null ? (
+                      <LikeBox>
+                        <img
+                          onClick={() => reputationDownHandler(item.id, i)}
+                          src={normaldownimg}
+                        />
+                        <img
+                          onClick={() => reputationUpHandler(item.id, i)}
+                          src={normalupimg}
+                        />
+                      </LikeBox>
+                    ) : (
+                      <LikeBox>
+                        <img
+                          onClick={() => reputationDownHandler(item.id, i)}
+                          src={downimg}
+                        />
+                        <img
+                          onClick={() => reputationUpHandler(item.id, i)}
+                          src={normalupimg}
+                        />
+                      </LikeBox>
+                    )}
+                  </Comment>
+
                   {item.reputation ? (
-                    <LikeBox>
-                      <img
-                        onClick={() => reputationDownHandler(item.id, i)}
-                        src={normaldownimg}
-                      />
-                      <img
-                        onClick={() => reputationUpHandler(item.id, i)}
-                        src={upimg}
-                      />
-                    </LikeBox>
+                    <ButtonBox class="buttonbox">
+                      <button>대화하기</button>
+                    </ButtonBox>
                   ) : item.reputation === null ? (
-                    <LikeBox>
-                      <img
-                        onClick={() => reputationDownHandler(item.id, i)}
-                        src={normaldownimg}
-                      />
-                      <img
-                        onClick={() => reputationUpHandler(item.id, i)}
-                        src={normalupimg}
-                      />
-                    </LikeBox>
+                    ''
                   ) : (
-                    <LikeBox>
-                      <img
-                        onClick={() => reputationDownHandler(item.id, i)}
-                        src={downimg}
-                      />
-                      <img
-                        onClick={() => reputationUpHandler(item.id, i)}
-                        src={normalupimg}
-                      />
-                    </LikeBox>
+                    <ButtonBox class="buttonbox">
+                      <button onClick={() => reportHandler(item.matched_user)}>
+                        신고하기
+                      </button>
+                      <button
+                        onClick={() =>
+                          blockHandler(item.matched_user, item.User.nickname)
+                        }
+                      >
+                        차단하기
+                      </button>
+                    </ButtonBox>
                   )}
-                </Comment>
-                {item.reputation ? (
-                  <ButtonBox class="buttonbox">
-                    <button>대화하기</button>
-                  </ButtonBox>
-                ) : item.reputation === null ? (
-                  ""
-                ) : (
-                  <ButtonBox class="buttonbox">
-                    <button>차단하기</button>
-                    <button>신고하기</button>
-                  </ButtonBox>
-                )}
-              </HistoryItem>
-            ))}
-            <div ref={target}></div>
-          </HistoryItemBox>
-        ) : (
-          <NoMatchBox>
-            <img src={nomatchImg} />
-            <div>매칭 이력이 없습니다</div>
-          </NoMatchBox>
-        )}
-      </HistoryBox>
-      <Kakao />
-    </SubwayDiv>
+                </HistoryItem>
+              ))}
+              <div ref={target}></div>
+            </HistoryItemBox>
+          ) : (
+            <NoMatchBox>
+              <img src={nomatchImg} />
+              <div>매칭 이력이 없습니다</div>
+            </NoMatchBox>
+          )}
+        </HistoryBox>
+
+        <Kakao />
+      </SubwayDiv>
+    </>
   );
 };
 

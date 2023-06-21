@@ -1,20 +1,54 @@
-import React from 'react';
-import { ModalCtn } from './CounterProfileModal';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const ChattingModal = ({ children }) => {
+  const modalRef = useRef(null);
+  const [modalHeight, setModalHeight] = useState('100%');
+  useEffect(() => {
+    const updateModalHeight = () => {
+      if (modalRef.current) {
+        const parentHeight = modalRef.current.parentNode.offsetHeight;
+        const contentHeight = modalRef.current.offsetHeight;
+        const calculatedHeight = (contentHeight / parentHeight) * 100 + '%';
+        setModalHeight(calculatedHeight);
+      }
+    };
+
+    updateModalHeight();
+    window.addEventListener('resize', updateModalHeight);
+    return () => {
+      window.removeEventListener('resize', updateModalHeight);
+    };
+  }, []);
+
   return (
-    <ModalCtn>
+    <ModalCtn ref={modalRef} modalHeight={modalHeight}>
       <Modal>{children}</Modal>
     </ModalCtn>
   );
 };
 
 export default ChattingModal;
+const ModalCtn = styled.div`
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+`;
+
 export const Modal = styled.div`
   width: 258px;
   height: 207px;
   background-color: #fff;
+
   border-radius: 4px;
   display: flex;
   flex-direction: column;
