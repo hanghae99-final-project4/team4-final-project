@@ -23,6 +23,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   useArriveState,
   useBotState,
+  useReportState,
   useStationState,
 } from '../../Recoil/userList';
 import chatbot from '../../Assets/Chatting/chatbot.svg';
@@ -105,6 +106,7 @@ const Chatting = () => {
   const [coupon, setCoupon] = useState(false);
   const [timeCnt, setTimeCnt] = useState(0);
   const [missBot, setMissBot] = useState(false);
+  const [Id, setId] = useRecoilState(useReportState);
   const buttonRef = useRef();
   //챗봇 데이터 배열
   const [chatArray, setChatArray] = useState([
@@ -439,6 +441,10 @@ const Chatting = () => {
       buttonRef.current.click(); // 폼 제출을 수행하는 함수를 호출합니다.
     }
   };
+  const reportHandler = () => {
+    setId(localStorage.getItem('fairId'));
+    navigate('/report');
+  };
   return (
     <div
       style={{
@@ -518,7 +524,7 @@ const Chatting = () => {
                     </span>
                     <BtnBox margin="25px">
                       <SubBtn onClick={() => setReport(!report)}>취소</SubBtn>
-                      <PriBtn onClick={() => navigate('/report')}>신고</PriBtn>
+                      <PriBtn onClick={reportHandler}>신고</PriBtn>
                     </BtnBox>
                   </ChattingModal>
                 )}
