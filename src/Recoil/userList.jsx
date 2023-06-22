@@ -66,6 +66,10 @@ const useReportState = atom({
   key: 'reprot',
   default: 0,
 });
+const useContinueState = atom({
+  key: 'continue',
+  default: [],
+});
 export {
   useInfoState,
   usePrimaryState,
@@ -81,4 +85,5 @@ export {
   useStartState,
   useDetailState,
   useReportState,
+  useContinueState,
 };
