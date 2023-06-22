@@ -23,6 +23,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   useArriveState,
   useBotState,
+  useContinueState,
   useReportState,
   useStationState,
 } from '../../Recoil/userList';
@@ -107,6 +108,9 @@ const Chatting = () => {
   const [timeCnt, setTimeCnt] = useState(0);
   const [missBot, setMissBot] = useState(false);
   const [Id, setId] = useRecoilState(useReportState);
+  const conversation = useRecoilValue(useContinueState);
+  //대화하기로 진입한 유저
+  const [iscontinue, setIsContinue] = useState(false);
   const buttonRef = useRef();
   //챗봇 데이터 배열
   const [chatArray, setChatArray] = useState([
@@ -262,6 +266,10 @@ const Chatting = () => {
     }
   };
 
+  const handleContinueMessage = (message) => {
+    socket.emit('joinroom', conversation.roomkey);
+  };
+
   // broad casting 핸들러
   const handleBroadcastMessage = (message) => {
     // 상대방 나갔을 시
@@ -290,23 +298,41 @@ const Chatting = () => {
   //매칭 시작 nickname 보내고 위도 경도 / 출발호선 출발역/ 도착호선 도착역 보낸 다음 socket.on 받는데 ..
   ///매칭 순서대로 randomjoin => maching => name
   useEffect(() => {
-    socket.emit('nickname', JSON.parse(localStorage.getItem('nickname')).value);
-    if (chattingBot) {
-      socket.emit('updatelocation_bot');
+    if (conversation.roomkey) {
+      localStorage.setItem('fairId', conversation.match);
+
+      setRoom(conversation.roomkey);
+      setIsContinue(!iscontinue);
+      getChatHandler(conversation.roomkey, conversation.match);
+      setSuccess(true);
+      handleContinueMessage();
+      socket.on('broadcast', handleBroadcastMessage);
+
+      return () => {
+        socket.off('broadcast', handleBroadcastMessage);
+      };
     } else {
       socket.emit(
-        'updatelocation',
-        [lon, lat], //현재 위치 위도, 경도
-        [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
+        'nickname',
+        JSON.parse(localStorage.getItem('nickname')).value
       );
+      if (chattingBot) {
+        socket.emit('updatelocation_bot');
+      } else {
+        socket.emit(
+          'updatelocation',
+          [lon, lat], //현재 위치 위도, 경도
+          [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
+        );
+      }
+
+      socket.once(`${name}`, handleSocketMessage);
+      socket.on('broadcast', handleBroadcastMessage);
+
+      return () => {
+        socket.off('broadcast', handleBroadcastMessage);
+      };
     }
-
-    socket.once(`${name}`, handleSocketMessage);
-    socket.on('broadcast', handleBroadcastMessage);
-
-    return () => {
-      socket.off('broadcast', handleBroadcastMessage);
-    };
   }, []);
 
   useEffect(() => {
@@ -336,6 +362,15 @@ const Chatting = () => {
         callback();
       }
     }
+  };
+  // 대화하기 후 진입 시 가져올 데이터
+  const getChatHandler = async (roomkey, Id) => {
+    try {
+      const { data } = await trainApi.getchatlist(roomkey);
+      setChatArr(data);
+      const response = await trainApi.getConvers(Id);
+      setCounter(response.data.userInfo);
+    } catch (err) {}
   };
 
   //이미지 비디오 보내는 로직
@@ -426,6 +461,7 @@ const Chatting = () => {
     setTimeout(() => setMissBot(false), 3000);
     setTimeout(() => setPrepare(false), 3000);
   }, [missBot, prepare, coupon, timereset]);
+
   const buttonHandler = (item, index) => {
     setDisabled([...disabled, index]);
     socket.emit('persnalchat', {
@@ -445,6 +481,7 @@ const Chatting = () => {
     setId(localStorage.getItem('fairId'));
     navigate('/report');
   };
+
   return (
     <div
       style={{
@@ -456,23 +493,52 @@ const Chatting = () => {
       {success ? (
         <FooterBox>
           <div style={{ height: '812px' }}>
-            <Header>
-              <PointerBox>
-                <HeaderPointer
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setIsExit(true)}
+            {conversation.roomkey ? (
+              <Header>
+                <PointerBox>
+                  <HeaderPointer
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setIsExit(true)}
+                  />
+                </PointerBox>
+                <ImgBox
+                  src={
+                    counter?.images?.filter(
+                      (item) => item.is_primary === true
+                    )?.[0]?.image_url
+                  }
+                  margin="63px"
                 />
-              </PointerBox>
-              <ImgBox src={counter?.profile} margin="63px" />
 
-              <MessageBox margin="6px">{counter?.fair}</MessageBox>
-              <Chatbot
-                onClick={() => chatBotHandler()}
-                margin="15px"
-                src={chatbot}
-              />
-              <Ban onClick={() => setReport(!report)} src={ban} />
-            </Header>
+                <MessageBox margin="6px">
+                  {counter?.result?.nickname}
+                </MessageBox>
+                <Chatbot
+                  onClick={() => chatBotHandler()}
+                  margin="15px"
+                  src={chatbot}
+                />
+                <Ban onClick={() => setReport(!report)} src={ban} />
+              </Header>
+            ) : (
+              <Header>
+                <PointerBox>
+                  <HeaderPointer
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setIsExit(true)}
+                  />
+                </PointerBox>
+                <ImgBox src={counter?.profile} margin="63px" />
+
+                <MessageBox margin="6px">{counter?.fair}</MessageBox>
+                <Chatbot
+                  onClick={() => chatBotHandler()}
+                  margin="15px"
+                  src={chatbot}
+                />
+                <Ban onClick={() => setReport(!report)} src={ban} />
+              </Header>
+            )}
 
             <AllChatDiv>
               {prepare && <SmallToast>준비중입니다.</SmallToast>}
@@ -486,18 +552,20 @@ const Chatting = () => {
               {coupon && (
                 <ToastMessage>소유하고 계신 쿠폰이 없습니다!</ToastMessage>
               )}
-              <ConversatonTime>
-                <span>대화 시간</span>
-                <Timer
-                  addModal={addModal}
-                  setAddModal={setAddModal}
-                  leave={leave}
-                  setLeave={setLeave}
-                  setTimeReset={setTimeReset}
-                  timereset={timereset}
-                  margin="80px"
-                />
-              </ConversatonTime>
+              {!conversation.roomkey && (
+                <ConversatonTime>
+                  <span>대화 시간</span>
+                  <Timer
+                    addModal={addModal}
+                    setAddModal={setAddModal}
+                    leave={leave}
+                    setLeave={setLeave}
+                    setTimeReset={setTimeReset}
+                    timereset={timereset}
+                    margin="80px"
+                  />
+                </ConversatonTime>
+              )}
 
               <ChatMainDiv ref={boxRef}>
                 {/* 상대방 프로필 모달 */}

@@ -108,6 +108,7 @@ export const trainApi = {
       reported: userId,
       description: title,
     }),
+  getchatlist: (roomkey) => instance.get(`/list/chat/${roomkey}`),
 };
 // 인터셉터
 instance.interceptors.request.use(

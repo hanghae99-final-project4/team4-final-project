@@ -13,6 +13,7 @@ import Kakao from '../Kakao/Kakao';
 import { useRecoilState } from 'recoil';
 import {
   useArriveState,
+  useContinueState,
   useReportState,
   useStartState,
   useStationState,
@@ -51,7 +52,8 @@ const Subway = () => {
   const [counter, setCounter] = useRecoilState(useReportState);
   const [counterNic, setCounterNic] = useState('');
   const [isblock, setIsBlock] = useState(false);
-
+  // 대화하기 요청 할 시
+  const [conversation, setConversation] = useRecoilState(useContinueState);
   // 최신순 좋아요순 버튼 리스트
   const revertItem = [
     {
@@ -175,6 +177,7 @@ const Subway = () => {
   }
   const buttonHandler = () => {
     if (start.length !== 0 && arrive.length !== 0) {
+      setConversation([]);
       localStorage.setItem(arrive.station_name, arrive.line_number);
       setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
       setItemWithExpireTime(
@@ -293,6 +296,12 @@ const Subway = () => {
   const reportHandler = (Id) => {
     setReport(!report);
     setCounter(Id);
+  };
+  const conversationHandler = (roomkey, matchId, nickname) => {
+    setConversation({ roomkey: roomkey, match: matchId, nickname: nickname });
+    setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
+    setItemWithExpireTime('profile', profile?.images?.[0]?.image_url, 3000000);
+    navigate('/chattingpage');
   };
 
   return (
@@ -549,7 +558,17 @@ const Subway = () => {
 
                   {item.reputation ? (
                     <ButtonBox class="buttonbox">
-                      <button>대화하기</button>
+                      <button
+                        onClick={() =>
+                          conversationHandler(
+                            item.roomkey,
+                            item.matched_user,
+                            item.User.nickname
+                          )
+                        }
+                      >
+                        대화하기
+                      </button>
                     </ButtonBox>
                   ) : item.reputation === null ? (
                     ''
