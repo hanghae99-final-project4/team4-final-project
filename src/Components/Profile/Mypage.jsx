@@ -142,10 +142,7 @@ const MyPage = () => {
         자주 묻는 질문
         <img onClick={() => warnHandler()} src={arrowimg} />
       </TextBox>
-      <TextBox height="50px" className="item">
-        신고하기
-        <img onClick={() => warnHandler()} src={arrowimg} />
-      </TextBox>
+
       <TextBox height="60px">기타</TextBox>
       <TextBox height="50px" className="item">
         로그아웃
