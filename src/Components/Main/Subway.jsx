@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import guide from '../../Assets/Main/guidebutton.svg';
 import write from '../../Assets/Main/write.svg';
 import setting from '../../Assets/Main/setting.svg';
-import hand from '../../Assets/Main/hand.svg';
 import handsign from '../../Assets/Main/handsign.png';
 import line from '../../Assets/Main/line.svg';
 import stationimg from '../../Assets/Main/station.svg';
