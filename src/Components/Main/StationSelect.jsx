@@ -26,7 +26,7 @@ const StationSelect = () => {
         </Line>
 
         <Station>
-          <Start>
+          <Start onClick={() => navigate('/startselect')}>
             <span>출발</span>
             <div>
               <img src={stationimg} alt="station" />
@@ -101,6 +101,7 @@ const Station = styled.div`
   gap: 30px;
 `;
 const Start = styled.div`
+  cursor: pointer;
   display: flex;
   gap: 13px;
   flex-direction: column;
