@@ -52,7 +52,7 @@ const StartSelect = () => {
     setStation(item);
     navigate("/stationselect");
   };
-  console.log(start);
+
   return (
     <>
       <Span>근처 역</Span>
