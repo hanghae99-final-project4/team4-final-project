@@ -1,44 +1,44 @@
-import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   useArriveState,
   useHistoryState,
   useSearchState,
   useStartState,
   useStationState,
-} from '../../Recoil/userList';
-import styled from 'styled-components';
-import searchimg from '../../Assets/Station/search.svg';
-import stationimg from '../../Assets/Main/station.svg';
-import result from '../../Assets/Station/result.svg';
-import { useNavigate } from 'react-router-dom';
-import remove from '../../Assets/Station/remove.svg';
+} from "../../Recoil/userList";
+import styled from "styled-components";
+import searchimg from "../../Assets/Station/search.svg";
+import stationimg from "../../Assets/Main/station.svg";
+import result from "../../Assets/Station/result.svg";
+import { useNavigate } from "react-router-dom";
+import remove from "../../Assets/Station/remove.svg";
 
 //호선 별 이미지
-import one from '../../Assets/Station/1.svg';
-import two from '../../Assets/Station/2.svg';
-import three from '../../Assets/Station/3.svg';
-import four from '../../Assets/Station/4.svg';
-import five from '../../Assets/Station/5.svg';
-import six from '../../Assets/Station/6.svg';
-import seven from '../../Assets/Station/7.svg';
-import eight from '../../Assets/Station/8.svg';
-import nine from '../../Assets/Station/9.svg';
-import sin from '../../Assets/Station/신분당.svg';
-import suin from '../../Assets/Station/수인분당.svg';
-import incheonone from '../../Assets/Station/인천1호선.svg';
-import incheontwo from '../../Assets/Station/인천2호선.svg';
-import kang from '../../Assets/Station/경강선.svg';
-import center from '../../Assets/Station/경의중앙.svg';
-import chun from '../../Assets/Station/경춘선.svg';
-import gold from '../../Assets/Station/김포골드.svg';
-import seohae from '../../Assets/Station/서해선.svg';
-import sinrim from '../../Assets/Station/신림선.svg';
-import woui from '../../Assets/Station/우이신설.svg';
-import ujungboo from '../../Assets/Station/의정부경전철.svg';
-import boosang from '../../Assets/Station/자기부상.svg';
-import airport from '../../Assets/Station/공항철도.svg';
-import yongin from '../../Assets/Station/용인경전철.svg';
+import one from "../../Assets/Station/1.svg";
+import two from "../../Assets/Station/2.svg";
+import three from "../../Assets/Station/3.svg";
+import four from "../../Assets/Station/4.svg";
+import five from "../../Assets/Station/5.svg";
+import six from "../../Assets/Station/6.svg";
+import seven from "../../Assets/Station/7.svg";
+import eight from "../../Assets/Station/8.svg";
+import nine from "../../Assets/Station/9.svg";
+import sin from "../../Assets/Station/신분당.svg";
+import suin from "../../Assets/Station/수인분당.svg";
+import incheonone from "../../Assets/Station/인천1호선.svg";
+import incheontwo from "../../Assets/Station/인천2호선.svg";
+import kang from "../../Assets/Station/경강선.svg";
+import center from "../../Assets/Station/경의중앙.svg";
+import chun from "../../Assets/Station/경춘선.svg";
+import gold from "../../Assets/Station/김포골드.svg";
+import seohae from "../../Assets/Station/서해선.svg";
+import sinrim from "../../Assets/Station/신림선.svg";
+import woui from "../../Assets/Station/우이신설.svg";
+import ujungboo from "../../Assets/Station/의정부경전철.svg";
+import boosang from "../../Assets/Station/자기부상.svg";
+import airport from "../../Assets/Station/공항철도.svg";
+import yongin from "../../Assets/Station/용인경전철.svg";
 
 const StartSelect = () => {
   const navigate = useNavigate();
@@ -50,9 +50,9 @@ const StartSelect = () => {
     setHistory([...history, item]);
 
     setStation(item);
-    navigate('/stationselect');
+    navigate("/stationselect");
   };
-
+  console.log(start);
   return (
     <>
       <Span>근처 역</Span>
@@ -64,81 +64,81 @@ const StartSelect = () => {
             <SearchList onClick={() => searchHandler(item)}>
               <img src={stationimg} alt="searchimg" />
               <Search>
-                <span className="">{item?.place_name?.split('역')[0]}</span>
+                <span className="">{item?.place_name?.split("역")[0]}</span>
               </Search>
-              {item?.place_name.split('역')[1]?.split(' ')[1] === '02호선' ? (
+              {item?.place_name.split("역")[1]?.split(" ")[1] === "02호선" ? (
                 <img src={two} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '수인분당선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "수인분당선" ? (
                 <img src={suin} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '07호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "7호선" ? (
                 <img src={seven} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '08호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "8호선" ? (
                 <img src={eight} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '신분당선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "신분당선" ? (
                 <img src={sin} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '05호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "5호선" ? (
                 <img src={five} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '경춘선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "경춘선" ? (
                 <img src={chun} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '경의선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "경의선" ? (
                 <img src={center} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '01호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "1호선" ? (
                 <img src={one} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '03호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "3호선" ? (
                 <img src={three} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '04호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "4호선" ? (
                 <img src={four} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '06호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "6호선" ? (
                 <img src={six} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '09호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "9호선" ? (
                 <img src={nine} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '공항철도' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "공항철도" ? (
                 <img src={airport} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '인천1호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "인천1호선" ? (
                 <img src={incheonone} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '인천2호선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "인천2호선" ? (
                 <img src={incheontwo} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '용인경전철' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "용인경전철" ? (
                 <img src={yongin} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '김포도시철도' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "김포도시철도" ? (
                 <img src={gold} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '신림선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "신림선" ? (
                 <img src={sinrim} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '우이신설경전철' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "우이신설경전철" ? (
                 <img src={woui} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '경강선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "경강선" ? (
                 <img src={kang} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '서해선' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "서해선" ? (
                 <img src={seohae} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '의정부경전철' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "의정부경전철" ? (
                 <img src={ujungboo} />
-              ) : item?.place_name?.split('역')[1]?.split(' ')[1] ===
-                '자기부상' ? (
+              ) : item?.place_name?.split("역")[1]?.split(" ")[1] ===
+                "자기부상" ? (
                 <img src={boosang} />
               ) : (
-                ''
+                ""
               )}
             </SearchList>
           ))}
