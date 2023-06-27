@@ -331,11 +331,10 @@ const Chatting = () => {
           [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
         );
       }
-      handleContinueMessage();
+
       socket.once(`${name}`, handleSocketMessage);
 
       socket.on('broadcast', handleBroadcastMessage);
-      console.log('작동중');
 
       return () => {
         socket.off('broadcast', handleBroadcastMessage);
