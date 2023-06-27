@@ -314,8 +314,11 @@ const Chatting = () => {
     } else {
       socket.emit(
         'nickname',
-        JSON.parse(localStorage.getItem('nickname')).value
+
+        JSON.parse(localStorage.getItem('nickname')).value,
+        localStorage.getItem('userId')
       );
+
       if (chattingBot) {
         socket.emit('updatelocation_bot');
       } else {
