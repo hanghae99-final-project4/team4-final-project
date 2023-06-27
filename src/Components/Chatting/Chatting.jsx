@@ -274,9 +274,9 @@ const Chatting = () => {
 
   // broad casting 핸들러
   const handleBroadcastMessage = (message) => {
-    console.log(' broadcast 작동중');
     // 상대방 나갔을 시
-    if (message.leave === true) {
+
+    if (!conversation.roomkey && message.leave === true) {
       setTimeout(() => setLeave(true), 2000);
     }
     if (message.addtime === true) {

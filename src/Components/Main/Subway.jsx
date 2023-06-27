@@ -498,7 +498,16 @@ const Subway = () => {
           {match.length !== 0 ? (
             <HistoryItemBox>
               {match?.map((item, i) => (
-                <HistoryItem key={i}>
+                <HistoryItem
+                  className={
+                    item.reputation
+                      ? 'active'
+                      : item.reputation === null
+                      ? ''
+                      : 'active'
+                  }
+                  key={i}
+                >
                   <MatchItem>
                     <MatchResultBox>
                       <img src={circleimg} />
@@ -954,12 +963,15 @@ const HistoryItem = styled.div`
   flex-direction: column;
 
   width: 343px;
-  height: 160px;
+  height: 105px;
   border-bottom: 1px solid #e2e2e2;
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
   color: #8fb398;
+  &.active {
+    height: 160px;
+  }
 `;
 const MatchNic = styled.div`
   margin-top: 12px;
