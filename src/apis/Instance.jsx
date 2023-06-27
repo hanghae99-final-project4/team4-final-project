@@ -86,6 +86,7 @@ export const trainApi = {
   patchreputation: (Id, payload) =>
     instance.patch(`/user/reputation/${Id}`, payload),
   patchnickname: (id, payload) => instance.patch(`/user/edit/${id}`, payload),
+  applychatrequset: (payload) => instance.patch('/user/chatstatus/', payload),
   patchPw: (id, password, newPassword) =>
     instance.patch(`/user/pw/${id}`, {
       password: password,

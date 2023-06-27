@@ -297,11 +297,40 @@ const Subway = () => {
     setReport(!report);
     setCounter(Id);
   };
+  //대화 하기 핸들러
   const conversationHandler = (roomkey, matchId, nickname) => {
     setConversation({ roomkey: roomkey, match: matchId, nickname: nickname });
     setItemWithExpireTime('nickname', profile.result.nickname, 30000000);
     setItemWithExpireTime('profile', profile?.images?.[0]?.image_url, 3000000);
     navigate('/chattingpage');
+  };
+  const conversationApplyHandler = async (item) => {
+    try {
+      const { data } = await trainApi.applychatrequset({
+        chatrequest: 'accept',
+        my_id: item?.user_id,
+        other_id: item?.User?.user_id,
+        my_nickname: profile?.result?.nickname,
+        other_nickname: item?.User?.nickname,
+        matchedlist_id: item.id,
+      });
+    } catch (err) {
+      return;
+    }
+  };
+  const conversationDenyHandler = async (item) => {
+    try {
+      const { data } = await trainApi.applychatrequset({
+        chatrequest: 'deny',
+        my_id: item?.user_id,
+        other_id: item?.User?.user_id,
+        my_nickname: profile?.result?.nickname,
+        other_nickname: item?.User?.nickname,
+        matchedlist_id: item.id,
+      });
+    } catch (err) {
+      return;
+    }
   };
 
   return (
@@ -564,8 +593,8 @@ const Subway = () => {
                       </LikeBox>
                     )}
                   </Comment>
-
-                  {item.reputation ? (
+                  {/* item 의 chat request 에 따른 삼항식 */}
+                  {item.reputation && item.chatrequest === 'accept' ? (
                     <ButtonBox class="buttonbox">
                       <button
                         onClick={() =>
@@ -579,7 +608,27 @@ const Subway = () => {
                         대화하기
                       </button>
                     </ButtonBox>
-                  ) : item.reputation === null ? (
+                  ) : item.reputation && item.chatrequest === 'deny' ? (
+                    <ButtonBox class="buttonbox">
+                      <button>상대방이 대화를 거절하였습니다.</button>
+                    </ButtonBox>
+                  ) : item.reputation && item.chatrequest === null ? (
+                    <ButtonBox class="buttonbox">
+                      <button onClick={() => conversationApplyHandler(item)}>
+                        대화 요청
+                      </button>
+                    </ButtonBox>
+                  ) : item.reputation === null &&
+                    item.chatrequest === 'accept' ? (
+                    <ButtonBox class="buttonbox">
+                      <button onClick={() => conversationApplyHandler(item)}>
+                        수락
+                      </button>
+                      <button onClick={() => conversationDenyHandler(item)}>
+                        거절
+                      </button>
+                    </ButtonBox>
+                  ) : item.reputation === null && item.chatrequest === null ? (
                     ''
                   ) : (
                     <ButtonBox class="buttonbox">

@@ -242,8 +242,6 @@ const Chatting = () => {
   // name handle socket 핸들러
 
   const handleSocketMessage = (message) => {
-    console.log('socket name 작동중');
-    console.log(message);
     if (message.roomkey !== null) {
       setChattingBot(false);
       setCounter(message);
@@ -376,7 +374,7 @@ const Chatting = () => {
       const { data } = await trainApi.getchatlist(roomkey);
       setChatArr(data);
       const response = await trainApi.getConvers(Id);
-      console.log(response);
+
       setCounter(response.data.userInfo);
     } catch (err) {}
   };
@@ -489,7 +487,6 @@ const Chatting = () => {
     setId(localStorage.getItem('fairId'));
     navigate('/report');
   };
-  console.log(chatArr);
 
   return (
     <div
