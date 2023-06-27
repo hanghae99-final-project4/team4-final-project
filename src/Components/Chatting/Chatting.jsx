@@ -242,6 +242,7 @@ const Chatting = () => {
   // name handle socket 핸들러
 
   const handleSocketMessage = (message) => {
+    console.log('socket name 작동중');
     console.log(message);
     if (message.roomkey !== null) {
       setChattingBot(false);
@@ -273,7 +274,7 @@ const Chatting = () => {
 
   // broad casting 핸들러
   const handleBroadcastMessage = (message) => {
-    console.log(message);
+    console.log(' broadcast 작동중');
     // 상대방 나갔을 시
     if (message.leave === true) {
       setTimeout(() => setLeave(true), 2000);
@@ -330,10 +331,10 @@ const Chatting = () => {
           [`${startStation}:${startLine}`, `${station}:${line}`] //출발역 출발호선  도착역 도착호선  // ["인천터미널:인천선", "서울대입구:2호선"]
         );
       }
-
+      handleContinueMessage();
       socket.once(`${name}`, handleSocketMessage);
 
-      socket.on(`${name}`, handleBroadcastMessage);
+      socket.on('broadcast', handleBroadcastMessage);
       console.log('작동중');
 
       return () => {
