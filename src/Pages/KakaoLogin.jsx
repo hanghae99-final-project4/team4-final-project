@@ -20,7 +20,9 @@ const KakaoLogin = () => {
       if (data.token) {
         localStorage.setItem('userId', userId);
         localStorage.setItem('token', token);
-        !nickname ? navigate('/socialagree') : navigate('/subwaypage');
+        nickname === 'default nickname'
+          ? navigate('/socialagree')
+          : navigate('/subwaypage');
       }
     } catch (error) {
       return;

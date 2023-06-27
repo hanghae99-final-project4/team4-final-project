@@ -242,6 +242,7 @@ const Chatting = () => {
   // name handle socket 핸들러
 
   const handleSocketMessage = (message) => {
+    console.log(message);
     if (message.roomkey !== null) {
       setChattingBot(false);
       setCounter(message);
@@ -272,6 +273,7 @@ const Chatting = () => {
 
   // broad casting 핸들러
   const handleBroadcastMessage = (message) => {
+    console.log(message);
     // 상대방 나갔을 시
     if (message.leave === true) {
       setTimeout(() => setLeave(true), 2000);
@@ -305,7 +307,7 @@ const Chatting = () => {
       setIsContinue(!iscontinue);
       getChatHandler(conversation.roomkey, conversation.match);
       setSuccess(true);
-      handleContinueMessage();
+      handleContinueMessage(); // JoinRoom
       socket.on('broadcast', handleBroadcastMessage);
 
       return () => {
@@ -330,7 +332,9 @@ const Chatting = () => {
       }
 
       socket.once(`${name}`, handleSocketMessage);
-      socket.on('broadcast', handleBroadcastMessage);
+
+      socket.on(`${name}`, handleBroadcastMessage);
+      console.log('작동중');
 
       return () => {
         socket.off('broadcast', handleBroadcastMessage);
@@ -372,6 +376,7 @@ const Chatting = () => {
       const { data } = await trainApi.getchatlist(roomkey);
       setChatArr(data);
       const response = await trainApi.getConvers(Id);
+      console.log(response);
       setCounter(response.data.userInfo);
     } catch (err) {}
   };
@@ -484,6 +489,7 @@ const Chatting = () => {
     setId(localStorage.getItem('fairId'));
     navigate('/report');
   };
+  console.log(chatArr);
 
   return (
     <div

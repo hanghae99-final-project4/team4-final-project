@@ -68,7 +68,7 @@ export const Modal = styled.div`
       text-align: center;
     }
     &.exit {
-      margin-top: ${(props) => props.margin};
+      margin-top: 10px;
       font-family: Pretendard;
       font-size: 14px;
       font-weight: 500;
@@ -83,7 +83,7 @@ export const Modal = styled.div`
       text-align: center;
     }
     &.leave {
-      margin-top: ${(props) => props.margin};
+      margin-top: 20px;
       color: #fa3a45;
       font-weight: 500;
       font-size: 16px;
