@@ -151,6 +151,7 @@ const Subway = () => {
     try {
       const Id = localStorage.getItem('userId');
       const { data } = await trainApi.getMatch(Id);
+
       if (data.nextcursor) {
         setNext(data.nextcursor);
       }
@@ -308,11 +309,11 @@ const Subway = () => {
     try {
       const { data } = await trainApi.applychatrequset({
         chatrequest: 'accept',
-        my_id: item?.user_id,
-        other_id: item?.User?.user_id,
-        my_nickname: profile?.result?.nickname,
-        other_nickname: item?.User?.nickname,
-        matchedlist_id: item.id,
+        my_id: item?.user_id, //나의 아이디
+        other_id: item?.matched_user, //상대방 아이디
+        my_nickname: profile?.result?.nickname, //내 닉네임
+        other_nickname: item?.User?.nickname, //상대 닉네임
+        matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트
       });
     } catch (err) {
       return;
@@ -326,13 +327,13 @@ const Subway = () => {
         other_id: item?.User?.user_id,
         my_nickname: profile?.result?.nickname,
         other_nickname: item?.User?.nickname,
-        matchedlist_id: item.id,
+        matchedlist_id: item?.matched_userlist_id,
       });
     } catch (err) {
       return;
     }
   };
-  console.log(match);
+
   return (
     <>
       {report && (
@@ -512,10 +513,10 @@ const Subway = () => {
           </RevertBox>
           {isRevert && (
             <RevertItemBox>
-              {revertItem.map((item, i) => (
+              {revertItem?.map((item, i) => (
                 <RevertItem
                   onClick={reverHandler}
-                  name={item.name}
+                  name={item?.name}
                   className={item.name === revert ? 'revert' : ''}
                 >
                   {item.name}
@@ -524,7 +525,7 @@ const Subway = () => {
             </RevertItemBox>
           )}
 
-          {match.length !== 0 ? (
+          {match?.length !== 0 ? (
             <HistoryItemBox>
               {match?.map((item, i) => (
                 <HistoryItem
@@ -533,6 +534,9 @@ const Subway = () => {
                       ? 'active'
                       : item.reputation === null
                       ? ''
+                      : item.reputation === null &&
+                        item?.chatrequest === 'accept'
+                      ? 'active'
                       : 'active'
                   }
                   key={i}
