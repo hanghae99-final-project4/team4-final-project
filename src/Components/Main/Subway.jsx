@@ -197,6 +197,7 @@ const Subway = () => {
       setTimeout(() => setConfirmToast(false), 3000)
     );
   };
+  // 상태메시지 등록 핸들러
   const registerHandler = async () => {
     try {
       const id = localStorage.getItem('userId');
@@ -209,6 +210,7 @@ const Subway = () => {
       return;
     }
   };
+  // 싫어요 핸들러
   const reputationDownHandler = async (Id, i) => {
     try {
       const { data } = await trainApi.patchreputation(Id, {
@@ -225,7 +227,7 @@ const Subway = () => {
       return;
     }
   };
-
+  // 좋아요 핸들러
   const reputationUpHandler = async (Id, i) => {
     try {
       const { data } = await trainApi.patchreputation(Id, { reputation: true });
@@ -305,6 +307,7 @@ const Subway = () => {
     setItemWithExpireTime('profile', profile?.images?.[0]?.image_url, 3000000);
     navigate('/chattingpage');
   };
+  // 대화 요청하기 핸들러
   const conversationApplyHandler = async (item) => {
     try {
       const { data } = await trainApi.applychatrequset({
@@ -318,6 +321,18 @@ const Subway = () => {
     } catch (err) {
       return;
     }
+  };
+  // 대화 수락하기 핸들러
+  const acceptConversationHandler = async (item, i) => {
+    await reputationUpHandler(item.id, i);
+    const { data } = await trainApi.applychatrequset({
+      chatrequest: 'accept',
+      my_id: item?.user_id, //나의 아이디
+      other_id: item?.matched_user, //상대방 아이디
+      my_nickname: profile?.result?.nickname, //내 닉네임
+      other_nickname: item?.User?.nickname, //상대 닉네임
+      matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
+    });
   };
   const conversationDenyHandler = async (item) => {
     try {
@@ -532,11 +547,11 @@ const Subway = () => {
                   className={
                     item.reputation
                       ? 'active'
-                      : item.reputation === null
-                      ? ''
                       : item.reputation === null &&
                         item?.chatrequest === 'accept'
                       ? 'active'
+                      : item.reputation === null
+                      ? ''
                       : 'active'
                   }
                   key={i}
@@ -625,7 +640,9 @@ const Subway = () => {
                   ) : item.reputation === null &&
                     item.chatrequest === 'accept' ? (
                     <ButtonBox class="buttonbox">
-                      <button onClick={() => conversationApplyHandler(item)}>
+                      <button
+                        onClick={() => acceptConversationHandler(item, i)}
+                      >
                         수락
                       </button>
                       <button onClick={() => conversationDenyHandler(item)}>
