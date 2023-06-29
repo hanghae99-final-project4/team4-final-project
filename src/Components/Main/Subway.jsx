@@ -311,12 +311,13 @@ const Subway = () => {
   const conversationApplyHandler = async (item) => {
     try {
       const { data } = await trainApi.applychatrequset({
-        chatrequest: 'accept',
+        chatrequest: 'requested',
         my_id: item?.user_id, //나의 아이디
         other_id: item?.matched_user, //상대방 아이디
         my_nickname: profile?.result?.nickname, //내 닉네임
         other_nickname: item?.User?.nickname, //상대 닉네임
         matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트
+        mymatchedlist_id: item?.id,
       });
     } catch (err) {
       return;
@@ -332,17 +333,19 @@ const Subway = () => {
       my_nickname: profile?.result?.nickname, //내 닉네임
       other_nickname: item?.User?.nickname, //상대 닉네임
       matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
+      mymatchedlist_id: item?.id,
     });
   };
   const conversationDenyHandler = async (item) => {
     try {
       const { data } = await trainApi.applychatrequset({
         chatrequest: 'deny',
-        my_id: item?.user_id,
-        other_id: item?.User?.user_id,
-        my_nickname: profile?.result?.nickname,
-        other_nickname: item?.User?.nickname,
-        matchedlist_id: item?.matched_userlist_id,
+        my_id: item?.user_id, //나의 아이디
+        other_id: item?.matched_user, //상대방 아이디
+        my_nickname: profile?.result?.nickname, //내 닉네임
+        other_nickname: item?.User?.nickname, //상대 닉네임
+        matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
+        mymatchedlist_id: item?.id,
       });
     } catch (err) {
       return;
@@ -579,14 +582,8 @@ const Subway = () => {
                     <div>지속적으로 대화 하고 싶으신가요?</div>
                     {item.reputation ? (
                       <LikeBox>
-                        <img
-                          onClick={() => reputationDownHandler(item.id, i)}
-                          src={normaldownimg}
-                        />
-                        <img
-                          onClick={() => reputationUpHandler(item.id, i)}
-                          src={upimg}
-                        />
+                        <img className="disable" src={normaldownimg} />
+                        <img className="disable" src={upimg} />
                       </LikeBox>
                     ) : item.reputation === null ? (
                       <LikeBox>
@@ -601,14 +598,8 @@ const Subway = () => {
                       </LikeBox>
                     ) : (
                       <LikeBox>
-                        <img
-                          onClick={() => reputationDownHandler(item.id, i)}
-                          src={downimg}
-                        />
-                        <img
-                          onClick={() => reputationUpHandler(item.id, i)}
-                          src={normalupimg}
-                        />
+                        <img className="disable" src={downimg} />
+                        <img className="disable" src={normalupimg} />
                       </LikeBox>
                     )}
                   </Comment>
@@ -627,6 +618,10 @@ const Subway = () => {
                         대화하기
                       </button>
                     </ButtonBox>
+                  ) : item.reputation && item.chatrequest === 'request' ? (
+                    <ButtonBox class="buttonbox">
+                      <button class="response">상대방 응답 기다리는중</button>
+                    </ButtonBox>
                   ) : item.reputation && item.chatrequest === 'deny' ? (
                     <ButtonBox class="buttonbox">
                       <button>상대방이 대화를 거절하였습니다.</button>
@@ -637,8 +632,10 @@ const Subway = () => {
                         대화 요청
                       </button>
                     </ButtonBox>
-                  ) : item.reputation === null &&
-                    item.chatrequest === 'accept' ? (
+                  ) : (item.reputation === null &&
+                      item.chatrequest === 'accept') ||
+                    (item.reputation === false &&
+                      item.chatrequest === 'accept') ? (
                     <ButtonBox class="buttonbox">
                       <button
                         onClick={() => acceptConversationHandler(item, i)}
@@ -1091,6 +1088,9 @@ const LikeBox = styled.div`
     width: 1.875rem;
     height: 1.875rem;
     cursor: pointer;
+    &.disable {
+      cursor: default;
+    }
   }
   button {
   }
@@ -1178,6 +1178,9 @@ const ButtonBox = styled.div`
     letter-spacing: 0em;
     text-align: center;
     color: #333333;
+    &.response {
+      width: 130px;
+    }
   }
   @keyframes slideIn {
     0% {

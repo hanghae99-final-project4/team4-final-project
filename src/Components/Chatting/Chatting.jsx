@@ -232,7 +232,9 @@ const Chatting = () => {
     setIsModal(true);
     try {
       const Id = localStorage.getItem('fairId');
+
       const { data } = await trainApi.getConvers(Id);
+
       setCounterUser(data.userInfo);
     } catch (err) {
       return;

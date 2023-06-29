@@ -92,6 +92,8 @@ export const trainApi = {
       password: password,
       newpassword: newPassword,
     }),
+  getalarm: (id) => instance.get(`/notice/alarm/${id}`),
+  patchalarm: (id) => instance.patch(`/notice/alarm/check/${id}`),
   postNotice: (title, description, tag) =>
     instance.post(`/notice`, {
       title: title,
