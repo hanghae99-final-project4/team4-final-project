@@ -325,16 +325,20 @@ const Subway = () => {
   };
   // 대화 수락하기 핸들러
   const acceptConversationHandler = async (item, i) => {
-    await reputationUpHandler(item.id, i);
-    const { data } = await trainApi.applychatrequset({
-      chatrequest: 'accept',
-      my_id: item?.user_id, //나의 아이디
-      other_id: item?.matched_user, //상대방 아이디
-      my_nickname: profile?.result?.nickname, //내 닉네임
-      other_nickname: item?.User?.nickname, //상대 닉네임
-      matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
-      mymatchedlist_id: item?.id,
-    });
+    try {
+      await reputationUpHandler(item.id, i);
+      const { data } = await trainApi.applychatrequset({
+        chatrequest: 'accept',
+        my_id: item?.user_id, //나의 아이디
+        other_id: item?.matched_user, //상대방 아이디
+        my_nickname: profile?.result?.nickname, //내 닉네임
+        other_nickname: item?.User?.nickname, //상대 닉네임
+        matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
+        mymatchedlist_id: item?.id,
+      });
+    } catch (err) {
+      return;
+    }
   };
   const conversationDenyHandler = async (item) => {
     try {
@@ -351,6 +355,7 @@ const Subway = () => {
       return;
     }
   };
+  console.log(match);
 
   return (
     <>
@@ -553,6 +558,9 @@ const Subway = () => {
                       : item.reputation === null &&
                         item?.chatrequest === 'accept'
                       ? 'active'
+                      : item.reputation === null &&
+                        item?.chatrequest === 'requested'
+                      ? 'active'
                       : item.reputation === null
                       ? ''
                       : 'active'
@@ -633,9 +641,9 @@ const Subway = () => {
                       </button>
                     </ButtonBox>
                   ) : (item.reputation === null &&
-                      item.chatrequest === 'accept') ||
+                      item.chatrequest === 'requested') ||
                     (item.reputation === false &&
-                      item.chatrequest === 'accept') ? (
+                      item.chatrequest === 'requested') ? (
                     <ButtonBox class="buttonbox">
                       <button
                         onClick={() => acceptConversationHandler(item, i)}
