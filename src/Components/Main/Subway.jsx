@@ -268,7 +268,7 @@ const Subway = () => {
     socket.on('chatstatus', socketChatStatus);
     socket.on('alram', socketAlarmHandler);
     console.log('작동하고 있음');
-  });
+  }, []);
   const statusHandler = useCallback(
     (e) => {
       const { name, value } = e.target;
