@@ -34,8 +34,14 @@ import { ToastMessage } from '../Signup/Signup';
 import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
 import reportimg from '../../Assets/Chatting/report.svg';
 import blockimg from '../../Assets/Modal/block.svg';
-
+import { io } from 'socket.io-client';
+const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
+  path: '/socket.io',
+  transports: ['websocket'],
+});
 const Subway = () => {
+  //소켓 연결
+
   const [profile, setProfile] = useState([]);
 
   const navigate = useNavigate();
@@ -135,6 +141,8 @@ const Subway = () => {
   // monitor
 
   //Observer
+
+  // socket 로직 정리
 
   const getProfile = useCallback(async () => {
     try {
@@ -243,7 +251,24 @@ const Subway = () => {
       return;
     }
   };
-
+  const socketChatStatus = (message) => {
+    console.log(message);
+  };
+  const socketAlarmHandler = (message) => {
+    console.log(message);
+  };
+  useEffect(() => {
+    socket.emit(
+      'nickname',
+      profile?.result?.nickname,
+      localStorage.getItem('userId')
+    );
+    socket.emit('test', localStorage.getItem('userId'));
+    socket.on('test', (message) => console.log(message));
+    socket.on('chatstatus', socketChatStatus);
+    socket.on('alram', socketAlarmHandler);
+    console.log('작동하고 있음');
+  });
   const statusHandler = useCallback(
     (e) => {
       const { name, value } = e.target;

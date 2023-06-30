@@ -23,7 +23,7 @@ const TransferHeader = ({ msg, margin }) => {
   useEffect(() => {
     momoizedAlarm();
   }, [momoizedAlarm]);
-
+  console.log(alarm);
   return (
     <div>
       {' '}
