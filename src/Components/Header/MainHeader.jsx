@@ -1,51 +1,115 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import transferlogo from '../../Assets/Main/transferlogo.svg';
 import alarmimg from '../../Assets/Main/alarm.svg';
+import disalarmimg from '../../Assets/Main/disalarm.svg';
 import { trainApi } from '../../apis/Instance';
-const TransferHeader = ({ msg, margin }) => {
-  const [alarm, setAlarm] = useState([]);
-  const [isalarm, setIsAlarm] = useState(false);
-  //알람 핸들러
+import MymemoizedAlarm from '../../MyTools/Hooks/MymemoizedAlarm';
+import { useRecoilState } from 'recoil';
+import {
+  useAlarmState,
+  useCursorState,
+  useStartState,
+} from '../../Recoil/userList';
+import { useMymemoizedAlarm } from '../../MyTools/Hooks/useMyMemoized';
 
+const TransferHeader = ({ msg, margin }) => {
+  const target = useRef(null);
+  const [alarm, setAlarm] = useRecoilState(useAlarmState);
+
+  const [isalarm, setIsAlarm] = useState(false);
+
+  const [next, setNext] = useRecoilState(useCursorState);
+  const [isLoaded, setIsLoaded] = useState(false);
+  // 무한 스크롤 타겟
+  const getMoreItem = async () => {
+    // 데이터를 받아오도록 true 로 변경
+    setIsLoaded(true);
+  };
+  // 관찰자
+
+  useEffect(() => {
+    let observer;
+
+    const onIntersect = async ([entry], observer) => {
+      if (entry.isIntersecting && !isLoaded) {
+        observer.unobserve(entry.target);
+        await getMoreItem();
+
+        observer.observe(entry.target);
+      }
+    };
+    if (target.current) {
+      observer = new IntersectionObserver(
+        onIntersect,
+
+        { threshold: 0 }
+      );
+      observer.observe(target?.current);
+    }
+
+    return () => {
+      if (observer) observer.disconnect();
+    };
+  }, [isLoaded]);
+
+  //isLoaded 가 변할때 실행
+  useEffect(() => {
+    if (isLoaded) {
+      trainApi.getalarmcursor(next).then((res) => {
+        if (!res.data.error) {
+          setNext(res.data?.nextcursor);
+          setAlarm((alarm) => alarm?.concat(res.data?.result));
+          setIsLoaded(false);
+        }
+      });
+    }
+  }, [isLoaded]);
+
+  //알람 핸들러
+  const fetch = useMymemoizedAlarm();
   const alarmHandler = async () => {
     const userId = localStorage.getItem('userId');
 
     setIsAlarm(!isalarm);
     const { data } = await trainApi.patchalarm(userId);
+    if (data) {
+      setIsLoaded(true);
+      fetch();
+    }
   };
-  const momoizedAlarm = useCallback(async () => {
-    const userId = localStorage.getItem('userId');
-    const { data } = await trainApi.getalarm(userId);
-    setAlarm(data);
-  }, []);
-  useEffect(() => {
-    momoizedAlarm();
-  }, [momoizedAlarm]);
-  console.log(alarm);
+
   return (
     <div>
       {' '}
       <MainHeader>
+        <MymemoizedAlarm />
         <PointerBox>
           <img src={transferlogo} alt="logo" />
         </PointerBox>
         <MessageBox margin={margin}>{msg}</MessageBox>
         <Alarm margin="12.875rem">
-          <img onClick={alarmHandler} src={alarmimg} alt="alarm" />
+          <img
+            onClick={alarmHandler}
+            src={
+              alarm?.filter((item) => item?.check === false)?.length !== 0
+                ? alarmimg
+                : disalarmimg
+            }
+            alt="alarm"
+          />
           {isalarm && (
-            <>
-              <AlarmBox>
-                {alarm?.map((item, i) => (
-                  <>
-                    <div>
-                      <span>{item.description}</span>
-                    </div>
-                  </>
-                ))}
-              </AlarmBox>
-            </>
+            <AlarmBox>
+              {alarm?.map((item, i) => (
+                <>
+                  <div>
+                    <span>{item.description}</span>
+                  </div>
+                </>
+              ))}
+              <div ref={target}></div>
+            </AlarmBox>
           )}
         </Alarm>
       </MainHeader>

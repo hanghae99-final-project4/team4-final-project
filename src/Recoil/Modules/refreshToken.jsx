@@ -1,11 +1,6 @@
 import mem from 'mem';
 
 import { instance } from '../../apis/Instance';
-import {
-  getCookie,
-  removeCookie,
-  setCookie,
-} from '../../MyTools/Hooks/MyCookie';
 
 const refreshTokenFn = async () => {
   const token = localStorage.getItem('token');

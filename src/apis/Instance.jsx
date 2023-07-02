@@ -1,8 +1,6 @@
 ////src/Redux/Modules/Instance.js
 import axios from 'axios';
-import { Cookies, useCookies } from 'react-cookie';
-import { getCookie, removeCookie, setCookie } from '../MyTools/Hooks/MyCookie';
-import mem from 'mem';
+
 import { memoizedRefreshToken } from './../Recoil/Modules/refreshToken';
 
 //instance 불러 쓸 때 브라우저쪽에 headers 일일이 안 넣어줘도 되지만,
@@ -93,6 +91,7 @@ export const trainApi = {
       newpassword: newPassword,
     }),
   getalarm: (id) => instance.get(`/notice/alarm/${id}`),
+  getalarmcursor: (next) => instance.get(`/notice/alarm/${next}`),
   patchalarm: (id) => instance.patch(`/notice/alarm/check/${id}`),
   postNotice: (title, description, tag) =>
     instance.post(`/notice`, {

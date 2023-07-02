@@ -521,11 +521,13 @@ const Chatting = () => {
                 <MessageBox margin="6px">
                   {counter?.result?.nickname}
                 </MessageBox>
-                <Chatbot
-                  onClick={() => chatBotHandler()}
-                  margin="15px"
-                  src={chatbot}
-                />
+                {!conversation.roomkey && (
+                  <Chatbot
+                    onClick={() => chatBotHandler()}
+                    margin="15px"
+                    src={chatbot}
+                  />
+                )}
                 <Ban onClick={() => setReport(!report)} src={ban} />
               </Header>
             ) : (
@@ -595,9 +597,13 @@ const Chatting = () => {
                     <span margin="20px" className="report">
                       신고 페이지로 이동할까요?
                     </span>
-                    <span margin="4px" className="sub">
-                      페이지로 이동 시 채팅방이 나가집니다.
-                    </span>
+                    {!conversation.roomkey ? (
+                      <span margin="4px" className="sub">
+                        페이지로 이동 시 채팅방이 나가집니다.
+                      </span>
+                    ) : (
+                      ''
+                    )}
                     <BtnBox margin="25px">
                       <SubBtn onClick={() => setReport(!report)}>취소</SubBtn>
                       <PriBtn onClick={reportHandler}>신고</PriBtn>
@@ -877,7 +883,7 @@ const Chatting = () => {
                             </Time>
                           </UserProfileDiv>
                         ) : // 상대방 나갔을 시
-                        item.leave === true ? (
+                        item.leave === true && !conversation.roomkey ? (
                           <UserProfileDiv>
                             <ChatDiv className={item.leave === true && 'leave'}>
                               <span>{item.nickname}</span> 님이 채팅방을
@@ -896,36 +902,7 @@ const Chatting = () => {
                             </AddMessageBox>
                           </UserProfileDiv>
                         ) : (
-                          <UserProfileDiv>
-                            <UserProfileImg
-                              onClick={(e) => CounterUserHandler(e)}
-                              src={
-                                'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/309/59932b0eb046f9fa3e063b8875032edd_crop.jpeg'
-                              }
-                            />
-                            <UserProfileNameChat>
-                              <UserProfileName>{item.nickname}</UserProfileName>
-                              {item.msg ? (
-                                <ChatDiv
-                                  className={name === item.nickname && 'owner'}
-                                >
-                                  {item.msg}
-                                </ChatDiv>
-                              ) : (
-                                // <div>mp4</div>
-                                <>
-                                  <ChatImg
-                                    className={
-                                      name === item.nickname && 'owner'
-                                    }
-                                    imgurl={item?.url}
-                                  />
-                                </>
-
-                                // <div>img</div>
-                              )}
-                            </UserProfileNameChat>
-                          </UserProfileDiv>
+                          ' '
                         )}
 
                         {/* 맨 처음에는 메시지가 없기때문에 문제가 되는군 */}

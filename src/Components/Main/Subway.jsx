@@ -35,6 +35,7 @@ import ChattingModal, { BtnBox, PriBtn, SubBtn } from '../Modal/ChattingModal';
 import reportimg from '../../Assets/Chatting/report.svg';
 import blockimg from '../../Assets/Modal/block.svg';
 import { io } from 'socket.io-client';
+import { useMymemoizedAlarm } from '../../MyTools/Hooks/useMyMemoized';
 const socket = io.connect(`${process.env.REACT_APP_SOCKET_URL}`, {
   path: '/socket.io',
   transports: ['websocket'],
@@ -154,6 +155,15 @@ const Subway = () => {
       return;
     }
   }, []);
+  //빈칸일때 나타내주는 박스
+  const Box = () => {
+    return (
+      <NoMatchBox>
+        <img src={nomatchImg} />
+        <div>매칭 이력이 없습니다</div>
+      </NoMatchBox>
+    );
+  };
 
   const getMatch = useCallback(async () => {
     try {
@@ -166,7 +176,9 @@ const Subway = () => {
 
       setMatch(data?.result);
     } catch (err) {
-      return;
+      if (err.response.data.error === '매칭된 리스트가 없습니다.') {
+        setMatch([]);
+      }
     }
   }, []);
 
@@ -252,10 +264,15 @@ const Subway = () => {
     }
   };
   const socketChatStatus = (message) => {
-    console.log(message);
+    if (message === 'requested' || message === 'accept' || message === 'deny') {
+      getMatch();
+    }
   };
+  const fetch = useMymemoizedAlarm();
   const socketAlarmHandler = (message) => {
-    console.log(message);
+    if (message) {
+      fetch();
+    }
   };
   useEffect(() => {
     socket.emit(
@@ -263,11 +280,9 @@ const Subway = () => {
       profile?.result?.nickname,
       localStorage.getItem('userId')
     );
-    socket.emit('test', localStorage.getItem('userId'));
-    socket.on('test', (message) => console.log(message));
+
     socket.on('chatstatus', socketChatStatus);
     socket.on('alram', socketAlarmHandler);
-    console.log('작동하고 있음');
   }, []);
   const statusHandler = useCallback(
     (e) => {
@@ -344,6 +359,9 @@ const Subway = () => {
         matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트
         mymatchedlist_id: item?.id,
       });
+      if (data) {
+        await getMatch();
+      }
     } catch (err) {
       return;
     }
@@ -361,6 +379,9 @@ const Subway = () => {
         matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
         mymatchedlist_id: item?.id,
       });
+      if (data) {
+        await getMatch();
+      }
     } catch (err) {
       return;
     }
@@ -376,11 +397,13 @@ const Subway = () => {
         matchedlist_id: item?.matched_userlist_id, // 상대 매칭 리스트})
         mymatchedlist_id: item?.id,
       });
+      if (data) {
+        await getMatch();
+      }
     } catch (err) {
       return;
     }
   };
-  console.log(match);
 
   return (
     <>
@@ -668,6 +691,8 @@ const Subway = () => {
                   ) : (item.reputation === null &&
                       item.chatrequest === 'requested') ||
                     (item.reputation === false &&
+                      item.chatrequest === 'requested') ||
+                    (item.reputation === true &&
                       item.chatrequest === 'requested') ? (
                     <ButtonBox class="buttonbox">
                       <button
@@ -700,10 +725,7 @@ const Subway = () => {
               <div ref={target}></div>
             </HistoryItemBox>
           ) : (
-            <NoMatchBox>
-              <img src={nomatchImg} />
-              <div>매칭 이력이 없습니다</div>
-            </NoMatchBox>
+            <Box />
           )}
         </HistoryBox>
 

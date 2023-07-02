@@ -70,6 +70,14 @@ const useContinueState = atom({
   key: 'continue',
   default: [],
 });
+const useAlarmState = atom({
+  key: 'alarm',
+  default: [],
+});
+const useCursorState = atom({
+  key: 'cursor',
+  default: '',
+});
 export {
   useInfoState,
   usePrimaryState,
@@ -86,4 +94,6 @@ export {
   useDetailState,
   useReportState,
   useContinueState,
+  useAlarmState,
+  useCursorState,
 };

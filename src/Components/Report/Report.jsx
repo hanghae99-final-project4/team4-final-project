@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import { useReportState } from '../../Recoil/userList';
 import { trainApi, trainApi2 } from '../../apis/Instance';
 import { SmallToast } from '../Profile/Mypage';
+import { useNavigate } from 'react-router-dom';
 
 const Report = () => {
+  const navigate = useNavigate();
   const [selectValue, setSelectValue] = useState('');
   const [text, setText] = useState('');
   const [toast, setToast] = useState(false);
@@ -56,7 +58,10 @@ const Report = () => {
           setToast(true);
         }
       }
-      return setTimeout(() => setToast(false), 3000);
+      return (
+        setTimeout(() => setToast(false), 3000),
+        setTimeout(() => navigate(-1), 3000)
+      );
     } catch (err) {}
   };
 
